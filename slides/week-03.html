@@ -1,0 +1,4103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 3: Loops and Iteration</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Loops and Iteration</h1>
+  <p class="subtitle">Week 3 — repeating work without repeating yourself</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">By the end of this week, you should be able to:</p>
+  <ul>
+    <li>Explain why repetition is an important programming concept.</li>
+    <li>Use <code>while</code>, <code>for</code>, and <code>do-while</code> loops in Java.</li>
+    <li>Identify the initialization, condition, and update portions of a loop.</li>
+    <li>Trace the execution of a loop by hand.</li>
+    <li>Use counters and accumulators.</li>
+  </ul>
+  <aside class="notes">
+    <p>These are the ten things Week 3 is accountable for. Read them at the start of the lecture and again at the end — they are the checklist students should revise against.</p>
+    <p>Notice the shape of the list. The first half is mechanical: three loop forms, three loop components, and the ability to trace one by hand. Counters and accumulators are the first two named patterns of the course.</p>
+    <p>Tracing is listed deliberately, exactly as it was in Week 1. A student who cannot trace a loop by hand cannot debug one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul>
+    <li>Process an unknown number of values using sentinel-controlled loops.</li>
+    <li>Write nested loops.</li>
+    <li>Recognize and prevent infinite loops.</li>
+    <li>Choose an appropriate loop structure for a given problem.</li>
+    <li>Use loops to solve simple computational problems.</li>
+  </ul>
+  <div class="box key"><span class="box-title">The last one is the real one</span>Everything above it is a construct. The last objective is the skill: taking a problem and recognising the repetition inside it.</div>
+  <aside class="notes">
+    <p>Sentinel-controlled loops are the objective students find hardest, because they require the priming-read pattern — reading once before the loop and again at the bottom of it.</p>
+    <p>Choosing an appropriate loop structure is a judgement objective, not a syntax objective. We will end the week with a table of situations and the loop each one suggests.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap — Parts I to XII</h2>
+  <div class="cols smaller">
+    <ol>
+      <li>Why We Repeat</li>
+      <li>The <code>while</code> Loop</li>
+      <li>Counters, Accumulators, and Sentinels</li>
+      <li>The <code>for</code> Loop</li>
+      <li>Loop Patterns: Sums, Maxima, FizzBuzz</li>
+      <li><code>do-while</code> and Input Validation</li>
+    </ol>
+    <ol start="7">
+      <li>Nested Loops</li>
+      <li>Simulation, <code>break</code>, and <code>continue</code></li>
+      <li>Common Loop Errors and Choosing a Loop</li>
+      <li>Worked Examples</li>
+      <li>Loops, Algorithms, and Reasoning</li>
+      <li>Checkpoints, Practice, and Review</li>
+    </ol>
+  </div>
+  <div class="chain">
+    <span>Sequence</span><span class="sep">→</span>
+    <span>Selection</span><span class="sep">→</span>
+    <span>Iteration</span>
+  </div>
+  <aside class="notes">
+    <p>Parts I through III build the <code>while</code> loop and the two patterns that live inside it — counters and accumulators. Part IV introduces <code>for</code>, which is the same machinery with the three components collected into one header.</p>
+    <p>Parts V through VIII are applications: sums and maxima, menus and validation, nested loops, and simulation. Parts IX through XI are the reflective half — errors, choosing a loop, and the beginning of reasoning about how much work a loop performs.</p>
+    <p>Recall the three basic control structures: sequence, selection, iteration. We studied selection using <code>if</code> and <code>else</code> in Week 2. This week we study iteration, another word for repetition.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Why We Repeat</h2>
+  <p class="part-sub">Writing 1,000 <code>println</code> statements would be tedious, difficult to maintain, and error-prone.</p>
+</section>
+
+<section>
+  <h2>Print the Numbers 1 Through 5</h2>
+  <p class="small">Consider the following task:</p>
+  <blockquote>Print the numbers 1 through 5.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">We could write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(1);
+System.out.println(2);
+System.out.println(3);
+System.out.println(4);
+System.out.println(5);
+</code></pre>
+      <p class="small">This works.</p>
+    </div>
+    <div>
+      <p class="small">But what if we want to print the numbers from 1 through 1,000?</p>
+      <div class="box pitfall"><span class="box-title">Why this fails</span>Writing 1,000 <code>println</code> statements would be tedious, difficult to maintain, and error-prone.</div>
+      <p class="small">Programming languages provide <strong>loops</strong> to repeat instructions.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider the following task: print the numbers 1 through 5. We could write five <code>println</code> statements. This works.</p>
+    <p>But what if we want to print the numbers from 1 through 1,000? Writing 1,000 <code>println</code> statements would be tedious, difficult to maintain, and error-prone. Push on each of those three words — tedious is about your time, difficult to maintain is about the next change, error-prone is about the typo you will not notice in line 617.</p>
+    <p>Programming languages provide loops to repeat instructions.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Loop Instead</h2>
+  <p class="small">A loop allows us to express:</p>
+  <blockquote>Repeat this operation while some condition is true.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int number = 1;
+
+while (number &lt;= 5) {
+    System.out.println(number);
+    number++;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+2
+3
+4
+5
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The program contains only a few lines, but those lines can execute many times.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-why-loops" tabindex="0">The full comparison</span>
+  </div>
+  <aside class="notes">
+    <p>A loop allows us to express: repeat this operation while some condition is true. Six lines of Java replace five <code>println</code> statements — and the same six lines would replace a thousand.</p>
+    <p>The program contains only a few lines, but those lines can execute many times. That gap between the size of the program text and the amount of work it performs is the whole point of the construct, and it is the thing that makes a program more than a transcript of its own output.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Repetition Is Everywhere</h2>
+  <p class="small">Most interesting programs perform repetition. Examples include:</p>
+  <div class="cols">
+    <ul class="small">
+      <li>Processing every student in a class.</li>
+      <li>Reading every line in a file.</li>
+      <li>Searching through a collection of values.</li>
+      <li>Calculating the average of many numbers.</li>
+    </ul>
+    <ul class="small">
+      <li>Simulating thousands of dice rolls.</li>
+      <li>Asking a user for input until valid input is entered.</li>
+      <li>Checking every item in a shopping cart.</li>
+      <li>Repeating a game until the player quits.</li>
+    </ul>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Loops are therefore one of the fundamental building blocks of programming.</div>
+  <details class="acc">
+    <summary>Which of these know their repetition count in advance?</summary>
+    <div class="acc-body">
+      <p>Processing every student, reading every line, and simulating thousands of dice rolls all have a count that is known or discoverable before the loop starts. Asking for input until valid input is entered, and repeating a game until the player quits, do not.</p>
+      <p>That distinction is the one that decides, in Part IV, whether you reach for <code>for</code> or for <code>while</code>. It is worth noticing here, before either construct has been introduced.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Most interesting programs perform repetition. Examples include processing every student in a class, reading every line in a file, searching through a collection of values, calculating the average of many numbers, simulating thousands of dice rolls, asking a user for input until valid input is entered, checking every item in a shopping cart, and repeating a game until the player quits.</p>
+    <p>Loops are therefore one of the fundamental building blocks of programming. Ask the class for two more examples from their own experience before moving on.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Three Basic Control Structures</h2>
+  <div class="cols-38">
+    <div>
+      <ol>
+        <li><strong>Sequence</strong></li>
+        <li><strong>Selection</strong></li>
+        <li><strong>Iteration</strong></li>
+      </ol>
+    </div>
+    <div>
+      <p class="small">We studied selection using <code>if</code> and <code>else</code>.</p>
+      <div class="def"><span class="term">Iteration:</span> another word for repetition. This week we study iteration.</div>
+      <p class="small">Sequence was Week 1: statements execute top to bottom. Selection was Week 2: a condition chooses a path. Iteration is Week 3: a condition chooses to go round again.</p>
+    </div>
+  </div>
+  <div class="chain">
+    <span>Week 1 · Sequence</span><span class="sep">→</span>
+    <span>Week 2 · Selection</span><span class="sep">→</span>
+    <span>Week 3 · Iteration</span>
+  </div>
+  <aside class="notes">
+    <p>Recall the three basic control structures: sequence, selection, and iteration. We studied selection using <code>if</code> and <code>else</code>. This week we study iteration, another word for repetition.</p>
+    <p>It is worth saying explicitly that this list is complete. Every program students write for the rest of the course is built out of these three, plus the ability to name a piece of code — which arrives next week as methods.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>The <code>while</code> Loop</h2>
+  <p class="part-sub">Initialization, condition, update — and the question you must always be able to answer.</p>
+</section>
+
+<section>
+  <h2>The <code>while</code> Loop</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The general syntax of a <code>while</code> loop is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+while (condition) {
+    statements;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The loop behaves as follows:</p>
+      <ol class="small">
+        <li>Evaluate the condition.</li>
+        <li>If the condition is <code>true</code>, execute the loop body.</li>
+        <li>Return to the condition.</li>
+        <li>Repeat.</li>
+        <li>When the condition becomes <code>false</code>, exit the loop.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>The condition is evaluated <em>before</em> the body, every single time — including the first.</div>
+  <aside class="notes">
+    <p>The general syntax of a <code>while</code> loop is the keyword <code>while</code>, a parenthesised condition, and a braced body of statements.</p>
+    <p>The loop behaves as follows: evaluate the condition; if the condition is true, execute the loop body; return to the condition; repeat; when the condition becomes false, exit the loop.</p>
+    <p>Step three is the one beginners omit from their mental model. They picture the body running and then the program continuing. Emphasise that control always goes back to the condition.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A First <code>while</code> Loop</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+
+while (x &lt;= 5) {
+    System.out.println(x);
+    x++;
+}
+</code></pre>
+      <p class="small">The variable <code>x</code> is often called the <strong>loop control variable</strong>.</p>
+    </div>
+    <div>
+      <p class="small">Execution proceeds approximately like this:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x = 1
+Is x &lt;= 5? yes
+print 1
+x becomes 2
+
+Is x &lt;= 5? yes
+print 2
+x becomes 3
+</code></pre>
+      <p class="smaller dim">…and so on until the condition fails.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-while-trace" tabindex="0">The complete execution trace</span>
+  </div>
+  <aside class="notes">
+    <p>Being able to say out loud what the machine does is the point of this slide. x is 1; is x less than or equal to 5? yes; print 1; x becomes 2. Then round again.</p>
+    <p>The variable <code>x</code> is often called the loop control variable. Name it out loud every time for the next few examples — students who do not have a name for it do not look for it.</p>
+    <p>Open the modal and read the full trace line by line. It is deliberately tedious; the tedium is the lesson, because the machine is doing exactly that and nothing more.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Three Important Parts of a Loop</h2>
+  <p class="small">A typical loop has three components.</p>
+  <div class="cols-3">
+    <div>
+      <h4>Initialization</h4>
+      <p class="smaller">Before the loop starts, initialize the variable that controls the loop.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+</code></pre>
+    </div>
+    <div>
+      <h4>Condition</h4>
+      <p class="smaller">The condition determines whether the loop continues.</p>
+<pre><code class="language-java" data-trim data-noescape>
+x &lt;= 5
+</code></pre>
+    </div>
+    <div>
+      <h4>Update</h4>
+      <p class="smaller">Something inside the loop must move the program toward termination.</p>
+<pre><code class="language-java" data-trim data-noescape>
+x++;
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The three parts, labelled in one program</summary>
+    <div class="acc-body">
+      <p>Together:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;              // initialization
+
+while (x &lt;= 5) {        // condition
+    System.out.println(x);
+    x++;                // update
+}
+</code></pre>
+      <p>When examining a loop, you should always be able to identify these three components. If you cannot find one of them, that is usually where the bug is.</p>
+    </div>
+  </details>
+  <div class="box key"><span class="box-title">Key idea</span>When examining a loop, you should always be able to identify these three components.</div>
+  <aside class="notes">
+    <p>A typical loop has three components. Initialization: before the loop starts, initialize the variable that controls the loop. Condition: the condition determines whether the loop continues. Update: something inside the loop must move the program toward termination.</p>
+    <p>When examining a loop, you should always be able to identify these three components. Make this a routine — point at each of the three parts of every loop we look at for the rest of the week. In Part IV the <code>for</code> loop collects all three into a single header, and students who never learned to name them separately find that header opaque.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Infinite Loops — Forgetting the Update</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+
+while (x &lt;= 5) {
+    System.out.println(x);
+}
+</code></pre>
+      <p class="small">What happens? <code>x</code> never changes.</p>
+    </div>
+    <div>
+      <p class="small">The condition <code>x &lt;= 5</code> therefore remains true forever. The program repeatedly prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+1
+1
+1
+1
+...
+</code></pre>
+    </div>
+  </div>
+  <div class="def"><span class="term">Infinite loop:</span> an infinite loop occurs when the condition controlling a loop never becomes false.</div>
+  <aside class="notes">
+    <p>Consider a <code>while</code> loop whose body prints x but never changes it. What happens? x never changes. The condition x less than or equal to 5 therefore remains true forever. The program repeatedly prints 1, 1, 1, 1, 1, and so on.</p>
+    <p>This is an infinite loop. An infinite loop occurs when the condition controlling a loop never becomes false. Demonstrate it live if you can, and show them how to stop it — Ctrl-C in a terminal, or the stop button in the IDE. Students who have never deliberately caused one are frightened of them.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Infinite Loops — Updating the Wrong Way</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Another example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+
+while (x &lt;= 5) {
+    System.out.println(x);
+    x--;
+}
+</code></pre>
+      <p class="small">This is also infinite.</p>
+    </div>
+    <div>
+      <p class="small">The programmer intended <code>x</code> to approach 5, but instead <code>x</code> moves farther away:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+0
+-1
+-2
+-3
+...
+</code></pre>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">Important question when designing loops</span>What changes on each iteration, and why will the condition eventually become false?</div>
+  <p class="small">If you cannot answer this question, examine the loop carefully.</p>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-infinite-loops" tabindex="0">Both infinite loops, side by side</span>
+  </div>
+  <aside class="notes">
+    <p>Another example: the same loop, but with <code>x--</code> as the update. This is also infinite. The programmer intended x to approach 5, but instead x moves farther away — 1, 0, minus 1, minus 2, minus 3, and onward.</p>
+    <p>This one is more dangerous than the first, because there <em>is</em> an update. The loop looks complete. Only the direction is wrong.</p>
+    <p>So ask, every time: what changes on each iteration, and why will the condition eventually become false? If you cannot answer this question, examine the loop carefully. This is the single most useful habit in the whole week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Loop Tracing</h2>
+  <p class="small">Being able to trace code is an important programming skill. Consider:</p>
+  <div class="cols-53">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 2;
+
+while (x &lt; 10) {
+    System.out.println(x);
+    x += 2;
+}
+</code></pre>
+      <p class="small">We can construct a trace table.</p>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2
+4
+6
+8
+</code></pre>
+    </div>
+  </div>
+  <table class="smaller">
+    <thead><tr><th>Iteration</th><th>x before body</th><th><code>x &lt; 10</code></th><th>Printed</th><th>x after update</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>2</td><td>true</td><td>2</td><td>4</td></tr>
+      <tr><td>2</td><td>4</td><td>true</td><td>4</td><td>6</td></tr>
+      <tr><td>3</td><td>6</td><td>true</td><td>6</td><td>8</td></tr>
+      <tr><td>4</td><td>8</td><td>true</td><td>8</td><td>10</td></tr>
+      <tr><td>—</td><td>10</td><td>false</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p class="small dim">Trace tables are especially useful when debugging loops.</p>
+  <aside class="notes">
+    <p>Being able to trace code is an important programming skill. Take the loop that starts x at 2 and adds 2 each time while x is less than 10, and construct a trace table with a row per iteration.</p>
+    <p>Note the final row. The condition is evaluated a fifth time, with x equal to 10, and that evaluation is false — so nothing is printed and the loop ends. Students routinely forget that last, unproductive evaluation, and that omission is exactly where off-by-one errors come from.</p>
+    <p>Trace tables are especially useful when debugging loops. Insist on the last row every time.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Increment, Decrement, and Compound Assignment</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides convenient operators for increasing or decreasing variables. Instead of:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x = x + 1;
+</code></pre>
+      <p class="small">we can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x++;
+</code></pre>
+      <p class="small">Similarly, <code>x--;</code> is equivalent to <code>x = x - 1;</code></p>
+    </div>
+    <div>
+      <p class="small">Java also provides compound assignment operators.</p>
+<pre><code class="language-java" data-trim data-noescape>
+x += 5;
+x -= 2;
+x *= 3;
+x /= 4;
+</code></pre>
+      <p class="small">For example, <code>x += 5;</code> means:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x = x + 5;
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The decrement form, spelled out</summary>
+    <div class="acc-body">
+      <p>Similarly:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x--;
+</code></pre>
+      <p>is equivalent to:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x = x - 1;
+</code></pre>
+      <p>These are the two operators you will see in almost every loop header for the rest of the course, so it is worth reading them aloud a few times: "x plus plus" is "add one to x".</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Java provides convenient operators for increasing or decreasing variables. Instead of x equals x plus 1, we can write x plus plus. Similarly, x minus minus is equivalent to x equals x minus 1.</p>
+    <p>Java also provides compound assignment operators: plus equals, minus equals, times equals, divide equals. For example, x plus equals 5 means x equals x plus 5.</p>
+    <p>These are not new capabilities — every one of them can be written the long way. They are abbreviations, and their value is that a reader recognises the shape of an update instantly.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting Down</h2>
+  <p class="small">Loops do not have to count upward. Example:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int count = 10;
+
+while (count &gt;= 1) {
+    System.out.println(count);
+    count--;
+}
+
+System.out.println("Blast off!");
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Blast off!
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Loops do not have to count upward. Start <code>count</code> at 10, continue while <code>count</code> is greater than or equal to 1, and decrement. The output counts down from 10 to 1 and then prints "Blast off!".</p>
+    <p>Notice where the final <code>println</code> sits — outside the loop body, so it runs exactly once, after the loop has finished. Ask the class what would happen if it were inside the braces. That question separates the students who are reading the indentation from the ones who are reading the braces.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Counters, Accumulators, and Sentinels</h2>
+  <p class="part-sub">What a loop remembers between iterations is what makes it useful.</p>
+</section>
+
+<section>
+  <h2>Counters</h2>
+  <div class="def"><span class="term">Counter:</span> a variable used to count how many times something occurs.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to count how many numbers from 1 through 100 are divisible by 7.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int number = 1;
+int count = 0;
+
+while (number &lt;= 100) {
+
+    if (number % 7 == 0) {
+        count++;
+    }
+
+    number++;
+}
+
+System.out.println("Count = " + count);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The variable:</p>
+<pre><code class="language-java" data-trim data-noescape>
+count
+</code></pre>
+      <p class="small">is a counter.</p>
+      <div class="box key"><span class="box-title">Key idea</span>It starts at zero and increases whenever a desired event occurs.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Two variables, two jobs</summary>
+    <div class="acc-body">
+      <p>This program has two <code>int</code> variables that both change on every pass, and they are doing entirely different jobs.</p>
+      <p><code>number</code> is the loop control variable: it drives the loop from 1 to 100 and it is the reason the loop terminates. <code>count</code> is the counter: it records something about what the loop found, and it has no influence on when the loop stops.</p>
+      <p>Beginners often merge the two — for instance by incrementing <code>number</code> inside the <code>if</code>. Watch for it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A counter is a variable used to count how many times something occurs. Suppose we want to count how many numbers from 1 through 100 are divisible by 7. We walk <code>number</code> from 1 to 100, and whenever <code>number % 7 == 0</code> we increment <code>count</code>.</p>
+    <p>The variable <code>count</code> is a counter. It starts at zero and increases whenever a desired event occurs. Zero is the right starting value precisely because at the moment before the loop begins, nothing has been counted yet.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Accumulators</h2>
+  <div class="def"><span class="term">Accumulator:</span> an accumulator stores a running total.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to compute:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1 + 2 + 3 + 4 + 5
+</code></pre>
+      <p class="small">We could write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int total = 0;
+int number = 1;
+
+while (number &lt;= 5) {
+    total = total + number;
+    number++;
+}
+
+System.out.println(total);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+15
+</code></pre>
+      <p class="small">A common abbreviated form is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+total += number;
+</code></pre>
+      <p class="small">The variable <code>total</code> is the accumulator.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>An accumulator stores a running total. Suppose we want to compute 1 plus 2 plus 3 plus 4 plus 5. We initialise <code>total</code> to 0 and <code>number</code> to 1, then repeatedly add <code>number</code> into <code>total</code> and increment <code>number</code>. The output is 15.</p>
+    <p>The variable <code>total</code> is the accumulator. A common abbreviated form of the update is <code>total += number;</code>.</p>
+    <p>Note the symmetry with the counter: both start at a value that means "nothing yet" — zero — and both are updated inside the body rather than in the loop header.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing the Accumulator</h2>
+  <p class="small">A trace:</p>
+  <div class="cols-38">
+    <table class="smaller">
+      <thead><tr><th>number</th><th>total before</th><th>total after</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>2</td><td>1</td><td>3</td></tr>
+        <tr><td>3</td><td>3</td><td>6</td></tr>
+        <tr><td>4</td><td>6</td><td>10</td></tr>
+        <tr><td>5</td><td>10</td><td>15</td></tr>
+      </tbody>
+    </table>
+    <div>
+      <p class="small">Read the middle column downward and you are reading the loop's memory: the value <code>total</code> carried in from the previous pass.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The accumulator is how a loop remembers something across iterations. Nothing else in the loop survives from one pass to the next.</div>
+      <p class="small">We will return to this in Part XI: after each iteration, <code>total</code> contains the total of all numbers processed so far — a statement that stays true throughout execution.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Walk the table row by row and read the "total before" column as the loop's memory. Everything declared inside the body is gone by the next iteration; the accumulator survives because it was declared outside.</p>
+    <p>This table is also the first place we can preview the idea of a loop invariant, which we return to at the end of the week: after each iteration, <code>total</code> contains the total of all numbers processed so far. That property holds at every row of this table, and it is what makes the final value correct.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Computing an Average</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we have five exam scores.</p>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner input = new Scanner(System.in);
+
+double total = 0;
+int count = 0;
+
+while (count &lt; 5) {
+
+    System.out.print("Enter score: ");
+    double score = input.nextDouble();
+
+    total += score;
+
+    count++;
+}
+
+double average = total / count;
+
+System.out.println("Average = " + average);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This program demonstrates an important programming pattern:</p>
+<pre><code class="language-text" data-trim data-noescape>
+initialize accumulator
+initialize counter
+
+repeat:
+    get a value
+    add value to accumulator
+    increase counter
+
+calculate result
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>This pattern appears constantly in programs.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we have five exam scores. We create a <code>Scanner</code>, an accumulator <code>total</code>, and a counter <code>count</code>; loop while <code>count</code> is less than 5; read a score, add it to the total, and increment the count. Afterwards we divide.</p>
+    <p>This program demonstrates an important programming pattern: initialize accumulator, initialize counter, repeat — get a value, add value to accumulator, increase counter — then calculate result. This pattern appears constantly in programs.</p>
+    <p>Point out that <code>total</code> is a <code>double</code>. If it were an <code>int</code>, the division at the end would be integer division and the average would silently lose its fractional part — the Week 1 pitfall, reappearing inside a loop.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counter-Controlled Loops</h2>
+  <div class="def"><span class="term">Counter-controlled:</span> a loop is counter-controlled when the number of repetitions is known in advance.</div>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+      <blockquote class="small">Ask the user to enter 10 numbers.</blockquote>
+<pre><code class="language-java" data-trim data-noescape>
+int count = 0;
+
+while (count &lt; 10) {
+    System.out.print("Enter number: ");
+    int number = input.nextInt();
+
+    count++;
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>We know before execution that the loop should execute exactly ten times.</div>
+      <p class="small">"Known in advance" does not mean known when you write the program — it means known before the loop starts running. A loop that repeats <code>n</code> times, where <code>n</code> was read from the user a moment earlier, is still counter-controlled.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>count &lt; 10</code> and not <code>count &lt;= 10</code>?</summary>
+    <div class="acc-body">
+      <p>Because <code>count</code> starts at 0. The values it takes inside the body are 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 — ten values. With <code>count &lt;= 10</code> the body would run eleven times.</p>
+      <p>This is the counting formula we meet formally in Part IV: <code>for (int i = 0; i &lt; n; i++)</code> executes exactly <code>n</code> times. It works the same way in a <code>while</code> loop.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A loop is counter-controlled when the number of repetitions is known in advance. For example: ask the user to enter 10 numbers. We initialise <code>count</code> to 0 and loop while <code>count</code> is less than 10, incrementing at the bottom of the body.</p>
+    <p>We know before execution that the loop should execute exactly ten times. That knowledge is what makes the loop counter-controlled, and in Part IV it will be the reason to prefer a <code>for</code> loop for this shape of problem.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Sentinel-Controlled Loops</h2>
+  <p class="small">Sometimes we do not know how many values will be processed. Suppose we want:</p>
+  <blockquote>Read numbers from the user until the user enters <code>-1</code>.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">Here, <code>-1</code> is a <strong>sentinel value</strong>.</p>
+      <div class="def"><span class="term">Sentinel:</span> a special value indicating that input is finished.</div>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner input = new Scanner(System.in);
+
+System.out.print("Enter a number (-1 to quit): ");
+int number = input.nextInt();
+
+while (number != -1) {
+
+    System.out.println("You entered " + number);
+
+    System.out.print("Enter a number (-1 to quit): ");
+    number = input.nextInt();
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Sometimes we do not know how many values will be processed. Suppose we want to read numbers from the user until the user enters minus 1. Here, minus 1 is a sentinel value. A sentinel is a special value indicating that input is finished.</p>
+    <p>The choice of sentinel matters: it must be a value that could never be legitimate data. Minus 1 works for scores and counts; it would be a terrible sentinel for temperatures.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Priming Read</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Notice that input occurs twice:</p>
+<pre><code class="language-java" data-trim data-noescape>
+number = input.nextInt();
+</code></pre>
+      <p class="small">once before the loop and once inside the loop.</p>
+      <div class="box key"><span class="box-title">Key idea</span>This is sometimes called a <strong>priming read</strong> pattern.</div>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Watch out</span>The condition tests a value, so a value must already exist the first time the condition is evaluated. That is what the read before the loop is for.</div>
+      <details class="acc">
+        <summary>Why the second read goes at the <em>bottom</em> of the body</summary>
+        <div class="acc-body">
+          <p>The loop condition is checked immediately after the body finishes. If the read were at the top of the body instead, the sentinel would be processed once before the condition got a chance to see it — the program would print "You entered -1" before stopping.</p>
+          <p>Reading last means the freshly read value is tested before anything is done with it.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Notice that input occurs twice — <code>number = input.nextInt();</code> — once before the loop and once inside the loop. This is sometimes called a priming read pattern.</p>
+    <p>Students almost always write it with a single read at the top of the body, and then discover that the sentinel gets processed as if it were data. Let them make that mistake, then show them the fix; it lands far better than being warned in advance.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Sentinel-Controlled Average</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose a professor wants to enter exam scores but does not know how many students there are.</p>
+      <p class="small">The user enters <code>-1</code> when finished.</p>
+      <div class="box note"><span class="box-title">Note</span>Same shape as the counter-controlled average, but the loop is now driven by the data instead of by a count.</div>
+    </div>
+    <div>
+      <p class="small">Notice the check:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (count &gt; 0)
+</code></pre>
+      <p class="small">Why is it necessary? Because otherwise we could perform:</p>
+<pre><code class="language-java" data-trim data-noescape>
+total / count
+</code></pre>
+      <p class="small">when <code>count</code> is zero.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-sentinel-average" tabindex="0">The complete program</span>
+  </div>
+  <aside class="notes">
+    <p>Suppose a professor wants to enter exam scores but does not know how many students there are. The user enters minus 1 when finished. The program keeps an accumulator and a counter exactly as before, but the loop condition tests the score against the sentinel rather than testing a count against a limit.</p>
+    <p>Notice the check <code>if (count &gt; 0)</code>. Why is it necessary? Because otherwise we could perform <code>total / count</code> when <code>count</code> is zero — which happens whenever the very first thing the user types is the sentinel.</p>
+    <p>Open the modal and walk through the whole program, including the <code>else</code> branch that prints "No scores entered."</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>The <code>for</code> Loop</h2>
+  <p class="part-sub">Counting loops, and why the three-part header exists.</p>
+</section>
+
+<section>
+  <h2>The Pattern Behind Many Loops</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Many loops follow the same pattern:</p>
+<pre><code class="language-java" data-trim data-noescape>
+initialize variable
+
+while (condition) {
+    statements
+    update variable
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int i = 1;
+
+while (i &lt;= 5) {
+    System.out.println(i);
+    i++;
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Because this pattern is so common, Java provides the <code>for</code> loop.</div>
+  <aside class="notes">
+    <p>Many loops follow the same pattern: initialize a variable, then while some condition holds, run some statements and update the variable. Almost every <code>while</code> loop we have written this week has exactly that shape.</p>
+    <p>Because this pattern is so common, Java provides the <code>for</code> loop. It is not a new capability — it is a way of writing the same three components where a reader can see all three at once.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>for</code> Loop</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Equivalent code:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 5; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <p class="small">General structure:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (initialization; condition; update) {
+    statements;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The three components appear together:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 5; i++)
+</code></pre>
+      <p class="small">which can be read as:</p>
+      <blockquote class="small">Start <code>i</code> at 1.<br>
+      Continue while <code>i &lt;= 5</code>.<br>
+      Increase <code>i</code> by 1 after each iteration.</blockquote>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The equivalent <code>for</code> loop puts the three components on one line, separated by semicolons: initialization, condition, update.</p>
+    <p>Read the header out loud in English every time until it becomes automatic: start i at 1; continue while i is less than or equal to 5; increase i by 1 after each iteration. Students who read the header as a single unfamiliar blob never develop confidence with it; students who read it as three separate clauses do so immediately.</p>
+    <p>Note the semicolons inside the parentheses, and note that there is no semicolon after the closing parenthesis. We will meet the consequences of getting that wrong in Part IX.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Understanding <code>for</code> Loop Execution</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 3; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <ul class="small">
+        <li>The initialization executes only once.</li>
+        <li>The condition executes before each iteration.</li>
+        <li>The update executes after each iteration.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">Execution order:</p>
+<pre><code class="language-text" data-trim data-noescape>
+int i = 1
+
+check i &lt;= 3
+
+execute body
+
+execute i++
+
+check i &lt;= 3
+
+execute body
+
+execute i++
+
+...
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider a <code>for</code> loop from 1 to 3. Execution order: <code>int i = 1</code>; check <code>i &lt;= 3</code>; execute body; execute <code>i++</code>; check <code>i &lt;= 3</code>; execute body; execute <code>i++</code>; and so on.</p>
+    <p>The initialization executes only once. The condition executes before each iteration. The update executes after each iteration.</p>
+    <p>The ordering that surprises students is that the update happens <em>after</em> the body, not before the next condition check in some separate step. Walk the trace on the board with the values of i written in a column.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Common <code>for</code> Loop Patterns</h2>
+  <div class="cols-3">
+    <div>
+      <h4>0 to 9</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>1 to 10</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>By 2</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt;= 20; i += 2) {
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="cols">
+    <div>
+      <h4>Counting backward</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 10; i &gt;= 1; i--) {
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Counting by 5</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt;= 100; i += 5) {
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-for-patterns" tabindex="0">All five patterns, with what each prints</span>
+  </div>
+  <aside class="notes">
+    <p>These five headers cover the overwhelming majority of the <code>for</code> loops students will write this semester: counting from 0 to 9, counting from 1 to 10, counting by 2, counting backward, and counting by 5.</p>
+    <p>Only three things vary between them — the starting value, the comparison, and the update. Ask the class to state, for each header, how many times the body runs. That is the exercise that turns these from shapes to be copied into headers to be reasoned about.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>while</code> Versus <code>for</code></h2>
+  <p class="small">These two loops can often perform exactly the same task.</p>
+  <div class="cols">
+    <div>
+      <span class="tag neutral"><code>while</code></span>
+<pre><code class="language-java" data-trim data-noescape>
+int i = 1;
+
+while (i &lt;= 10) {
+    System.out.println(i);
+    i++;
+}
+</code></pre>
+    </div>
+    <div>
+      <span class="tag neutral"><code>for</code></span>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Neither is faster. The difference is entirely in what a reader can see at a glance.</div>
+  <aside class="notes">
+    <p>These two loops can often perform exactly the same task. Put them side by side and have the class point to the initialization, the condition, and the update in each. The pieces are identical; only their positions differ.</p>
+    <p>In the <code>while</code> version the three parts are scattered across three lines and one of them is buried at the bottom of the body. In the <code>for</code> version they are collected in the header, which is precisely why an omitted update is far more common in <code>while</code> loops.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Choosing Between Them</h2>
+  <div class="cols">
+    <div>
+      <h4>Use a <code>for</code> loop when</h4>
+      <p class="small">The number of repetitions is known or naturally expressed using a counter.</p>
+      <blockquote class="small">Repeat 20 times.</blockquote>
+    </div>
+    <div>
+      <h4>Use a <code>while</code> loop when</h4>
+      <p class="small">The number of repetitions is not known in advance.</p>
+      <blockquote class="small">Continue asking for input until the user enters <code>"quit"</code>.</blockquote>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">Watch out</span>This is a guideline rather than a strict rule.</div>
+  <aside class="notes">
+    <p>A useful guideline is: use a <code>for</code> loop when the number of repetitions is known or naturally expressed using a counter — for example, repeat 20 times. Use a <code>while</code> loop when the number of repetitions is not known in advance — for example, continue asking for input until the user enters "quit".</p>
+    <p>This is a guideline rather than a strict rule. Say that plainly. Anything either loop can do, the other can do too; the choice is about communicating intent, and we return to it with a full table in Part IX.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Variable Scope in <code>for</code> Loops</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <p class="small">The variable <code>i</code> exists only inside the loop.</p>
+    </div>
+    <div>
+      <span class="tag no">Compilation error</span>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+
+System.out.println(i);
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>If the variable must be used afterward</summary>
+    <div class="acc-body">
+      <p>Declare it before the loop.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int i;
+
+for (i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+
+System.out.println(i);
+</code></pre>
+      <p>Note the header now begins <code>i = 0</code> rather than <code>int i = 0</code> — the declaration has moved out, but the initialization stays in the header where it belongs.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-scope" tabindex="0">Scope in <code>for</code> loops, in full</span>
+  </div>
+  <aside class="notes">
+    <p>The variable <code>i</code> declared in a <code>for</code> header exists only inside the loop. Printing it after the loop will therefore produce a compilation error.</p>
+    <p>If the variable must be used afterward, declare it before the loop and initialise it in the header. This is worth doing at least once in class, because the error message the compiler gives — "cannot find symbol" — is not obviously about scope to a beginner.</p>
+    <p>Most of the time the right response to this error is not to widen the scope but to ask why you needed the value afterwards at all.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Off-by-One Errors</h2>
+  <p class="small">A very common programming mistake is an <strong>off-by-one error</strong>. Consider:</p>
+  <div class="cols">
+    <div>
+      <span class="tag no">Prints 1 to 9</span>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt; 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <p class="small">Does this print 1 through 10? <strong>No.</strong> Because when <code>i</code> becomes 10, <code>i &lt; 10</code> is false.</p>
+    </div>
+    <div>
+      <span class="tag ok">Prints 1 to 10</span>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <p class="small">If we want 1 through 10, the condition must be <code>i &lt;= 10</code>.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What the first version actually prints</summary>
+    <div class="acc-body">
+      <p>It prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</code></pre>
+      <p>because when <code>i</code> becomes 10:</p>
+<pre><code class="language-java" data-trim data-noescape>
+i &lt; 10
+</code></pre>
+      <p>is false. Nine lines, not ten — and nothing in the program's behaviour announces that anything went wrong.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A very common programming mistake is an off-by-one error. Take the loop with <code>i &lt; 10</code>. Does this print 1 through 10? No. It prints 1 through 9, because when i becomes 10, i less than 10 is false.</p>
+    <p>The reason this error is so common is that the loop still runs, still terminates, and still prints plausible output. There is no crash and no compiler message. Only counting the lines reveals it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Designing Loop Bounds</h2>
+  <p class="small">When designing a loop, carefully ask:</p>
+  <ul>
+    <li>What is the first value?</li>
+    <li>What is the last value?</li>
+    <li>Should the condition use <code>&lt;</code> or <code>&lt;=</code>?</li>
+    <li>Exactly how many times should the loop execute?</li>
+  </ul>
+  <div class="box key"><span class="box-title">Key idea</span>Answer all four before you write the header, not after you look at the output.</div>
+  <details class="acc">
+    <summary>A quick way to check the fourth question</summary>
+    <div class="acc-body">
+      <p>For a loop that counts upward by 1, the number of iterations is the last value minus the first value, plus one if the condition uses <code>&lt;=</code>, and plus zero if it uses <code>&lt;</code>.</p>
+      <p>So <code>for (int i = 1; i &lt;= 10; i++)</code> runs 10 minus 1 plus 1, which is 10 times, and <code>for (int i = 1; i &lt; 10; i++)</code> runs 10 minus 1, which is 9 times.</p>
+      <p>The next slide gives the special case of this that you will use most often.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>When designing a loop, carefully ask: what is the first value? what is the last value? should the condition use less-than or less-than-or-equal? exactly how many times should the loop execute?</p>
+    <p>These four questions take about ten seconds and prevent the majority of off-by-one errors students will make this semester. The fourth is the one to insist on, because it is a number that can be checked against the output.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Useful Loop Counting Formula</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++)
+</code></pre>
+      <p class="small">Values of <code>i</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0 1 2 3 4 5 6 7 8 9
+</code></pre>
+      <p class="small">There are 10 iterations.</p>
+    </div>
+    <div>
+      <p class="small">This pattern:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++)
+</code></pre>
+      <p class="small">executes exactly <code>n</code> times.</p>
+      <div class="box key"><span class="box-title">Key idea</span>You will see this pattern constantly in Java. Later, when we study arrays, it will become especially important.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider <code>for (int i = 0; i &lt; 10; i++)</code>. The values of i are 0 through 9 — ten values, so ten iterations.</p>
+    <p>The pattern <code>for (int i = 0; i &lt; n; i++)</code> executes exactly n times. You will see this pattern constantly in Java. Later, when we study arrays, it will become especially important, because array positions are numbered from 0 to n minus 1 — exactly the values this header produces.</p>
+    <p>Tell them now that this is why Java counts from zero. It is not an arbitrary quirk; it is what makes this header work out cleanly.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Loop Patterns: Sums, Maxima, FizzBuzz</h2>
+  <p class="part-sub">Loops and <code>if</code> statements are frequently used together.</p>
+</section>
+
+<section>
+  <h2>Summation with a <code>for</code> Loop</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to compute:</p>
+      <span class="math">1 + 2 + 3 + ⋯ + 100</span>
+      <p class="small">We can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int total = 0;
+
+for (int i = 1; i &lt;= 100; i++) {
+    total += i;
+}
+
+System.out.println(total);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The result is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5050
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Same accumulator as Part III — the only change is that the counting has moved into the <code>for</code> header.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want to compute 1 plus 2 plus 3 and so on up to 100. We initialise <code>total</code> to 0, run <code>i</code> from 1 to 100 inclusive, and add each value into the accumulator. The result is 5050.</p>
+    <p>Compare this with the <code>while</code> version from Part III. The accumulator is unchanged; what disappeared is the separate declaration of the loop variable and the separate update at the bottom of the body. That is the whole benefit of <code>for</code>.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Finding a Maximum</h2>
+  <p class="small">Loops frequently keep track of the best, largest, smallest, or most recent value seen so far. Suppose the user enters five numbers.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.print("Enter number: ");
+int largest = input.nextInt();
+
+for (int i = 1; i &lt; 5; i++) {
+
+    System.out.print("Enter number: ");
+    int number = input.nextInt();
+
+    if (number &gt; largest) {
+        largest = number;
+    }
+}
+
+System.out.println("Largest = " + largest);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The key idea is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (number &gt; largest) {
+    largest = number;
+}
+</code></pre>
+      <p class="small">At every point in the loop, <code>largest</code> represents:</p>
+      <blockquote class="small">the largest value we have seen so far.</blockquote>
+      <p class="small">This idea appears frequently in algorithms.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the loop starts at <code>i = 1</code>, not <code>i = 0</code></summary>
+    <div class="acc-body">
+      <p>The first number is read before the loop, to give <code>largest</code> a starting value. That read is the first of the five, so the loop only needs to handle the remaining four — hence <code>for (int i = 1; i &lt; 5; i++)</code>, which runs four times.</p>
+      <p>This is the same shape as the priming read from Part III: one read before the loop so that the thing being compared already has a value.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Loops frequently keep track of the best, largest, smallest, or most recent value seen so far. The program reads the first number into <code>largest</code>, then reads four more, replacing <code>largest</code> whenever the new number is bigger.</p>
+    <p>The key idea is the three-line <code>if</code>: if number is greater than largest, then largest becomes number. At every point in the loop, <code>largest</code> represents the largest value we have seen so far. This idea appears frequently in algorithms — it returns in Week 11 as the inner step of selection sort.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting Values That Satisfy a Condition</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to determine how many integers from 1 to 100 are divisible by both 3 and 5.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int count = 0;
+
+for (int i = 1; i &lt;= 100; i++) {
+
+    if (i % 3 == 0 &amp;&amp; i % 5 == 0) {
+        count++;
+    }
+}
+
+System.out.println(count);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This combines two important concepts:</p>
+      <ul>
+        <li>iteration</li>
+        <li>selection</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>Loops and <code>if</code> statements are frequently used together.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want to determine how many integers from 1 to 100 are divisible by both 3 and 5. A <code>for</code> loop walks the range; an <code>if</code> with a logical AND decides whether each value counts.</p>
+    <p>This combines two important concepts: iteration and selection. Loops and <code>if</code> statements are frequently used together — the loop supplies the values, the <code>if</code> decides what to do with each one.</p>
+    <p>Ask the class what the answer is before running it. Multiples of 15 up to 100: 15, 30, 45, 60, 75, 90 — six of them.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: FizzBuzz</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For numbers 1 through 100:</p>
+      <ul class="smaller">
+        <li>Print <code>"Fizz"</code> if the number is divisible by 3.</li>
+        <li>Print <code>"Buzz"</code> if divisible by 5.</li>
+        <li>Print <code>"FizzBuzz"</code> if divisible by both.</li>
+        <li>Otherwise print the number.</li>
+      </ul>
+      <div class="box warn"><span class="box-title">Watch out</span>The more specific condition should come first.</div>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 100; i++) {
+
+    if (i % 3 == 0 &amp;&amp; i % 5 == 0) {
+        System.out.println("FizzBuzz");
+    } else if (i % 3 == 0) {
+        System.out.println("Fizz");
+    } else if (i % 5 == 0) {
+        System.out.println("Buzz");
+    } else {
+        System.out.println(i);
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why must we test divisibility by both 3 and 5 first?</summary>
+    <div class="acc-body">
+      <p>Suppose <code>i</code> is 15. If we first test:</p>
+<pre><code class="language-java" data-trim data-noescape>
+i % 3 == 0
+</code></pre>
+      <p>then Java enters that branch immediately and prints <code>"Fizz"</code>. The <code>else if</code> chain stops at the first true condition, so a later, more specific test never gets a chance to run.</p>
+      <p>The more specific condition should therefore come first.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-fizzbuzz" tabindex="0">FizzBuzz, fully explained</span>
+  </div>
+  <aside class="notes">
+    <p>FizzBuzz: for numbers 1 through 100, print "Fizz" if the number is divisible by 3, "Buzz" if divisible by 5, "FizzBuzz" if divisible by both, and otherwise print the number.</p>
+    <p>Why must we test divisibility by both 3 and 5 first? Suppose i is 15. If we first test <code>i % 3 == 0</code>, then Java enters that branch immediately and prints "Fizz". The more specific condition should therefore come first.</p>
+    <p>This is a Week 2 lesson about <code>else if</code> chains reappearing inside a Week 3 loop, and it is worth naming as such.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2><code>do-while</code> and Input Validation</h2>
+  <p class="part-sub">A loop that always executes at least once.</p>
+</section>
+
+<section>
+  <h2>The <code>do-while</code> Loop</h2>
+  <p class="small">Java also provides a third loop structure:</p>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+do {
+    statements;
+} while (condition);
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+
+do {
+    System.out.println(x);
+    x++;
+} while (x &lt;= 5);
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+2
+3
+4
+5
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The condition is checked <strong>after</strong> the loop body. Therefore, a <code>do-while</code> loop always executes at least once.</div>
+  <details class="acc">
+    <summary>The semicolon after <code>while (condition)</code></summary>
+    <div class="acc-body">
+      <p>A <code>do-while</code> loop is the one loop form that ends with a semicolon: <code>} while (condition);</code>. Leaving it off is a compile error.</p>
+      <p>This is the reverse of the situation in Part IX, where an <em>extra</em> semicolon after a <code>for</code> header silently creates an empty loop body. Here the semicolon is required; there it is a bug.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Java also provides a third loop structure: <code>do</code>, a braced body, then <code>while</code> and a condition. The example prints 1 through 5, exactly as the equivalent <code>while</code> loop did.</p>
+    <p>The important difference is that the condition is checked after the loop body. Therefore, a <code>do-while</code> loop always executes at least once.</p>
+    <p>That single sentence is the entire reason the construct exists, and the next slide makes the consequence concrete.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>while</code> Versus <code>do-while</code></h2>
+  <div class="cols">
+    <div>
+      <span class="tag neutral"><code>while</code></span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+
+while (x &lt; 5) {
+    System.out.println(x);
+}
+</code></pre>
+      <p class="small">The body executes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0 times
+</code></pre>
+    </div>
+    <div>
+      <span class="tag neutral"><code>do-while</code></span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+
+do {
+    System.out.println(x);
+} while (x &lt; 5);
+</code></pre>
+      <p class="small">The body executes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1 time
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>…even though the condition is false.</div>
+  <aside class="notes">
+    <p>Consider <code>int x = 10;</code> with the condition <code>x &lt; 5</code>. In the <code>while</code> version the body executes 0 times. In the <code>do-while</code> version the body executes 1 time — even though the condition is false.</p>
+    <p>Same variable, same condition, same body, different answer. This is the cleanest possible demonstration of the difference, and it is worth putting on the board side by side and asking the class to predict before you reveal.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Good Use Case: Menus</h2>
+  <p class="small">A menu is a common example.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int choice;
+
+do {
+
+    System.out.println("1. Add");
+    System.out.println("2. Delete");
+    System.out.println("3. Search");
+    System.out.println("4. Quit");
+
+    System.out.print("Choose an option: ");
+    choice = input.nextInt();
+
+    if (choice == 1) {
+        System.out.println("Adding...");
+    } else if (choice == 2) {
+        System.out.println("Deleting...");
+    } else if (choice == 3) {
+        System.out.println("Searching...");
+    }
+
+} while (choice != 4);
+
+System.out.println("Goodbye.");
+</code></pre>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-menu" tabindex="0">The menu program, explained</span>
+  </div>
+  <aside class="notes">
+    <p>A menu is a common example. The program prints four options, reads a choice, acts on it, and repeats until the user chooses 4.</p>
+    <p>The menu must appear at least once, making <code>do-while</code> a natural choice. Written as a <code>while</code> loop, you would either have to duplicate the menu-printing code before the loop or invent a fake initial value for <code>choice</code> — both of which are worse than the <code>do-while</code>.</p>
+    <p>Note also that <code>choice</code> is declared before the <code>do</code>, not inside it. It has to be, because the condition at the bottom refers to it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Input Validation with Loops</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Loops are useful for enforcing valid input. Suppose a score must be between 0 and 100.</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.print("Enter score: ");
+int score = input.nextInt();
+
+while (score &lt; 0 || score &gt; 100) {
+
+    System.out.println("Invalid score.");
+
+    System.out.print("Enter score again: ");
+    score = input.nextInt();
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The loop continues until a valid value is entered. Notice the condition:</p>
+<pre><code class="language-java" data-trim data-noescape>
+score &lt; 0 || score &gt; 100
+</code></pre>
+      <p class="small">This means:</p>
+      <blockquote class="small">Continue looping while the score is invalid.</blockquote>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the condition uses <code>||</code> and not <code>&amp;&amp;</code></summary>
+    <div class="acc-body">
+      <p>A score is invalid if it is below the range <em>or</em> above it. No single number can be both, so <code>score &lt; 0 &amp;&amp; score &gt; 100</code> would be false for every possible input and the loop would never run.</p>
+      <p>Reading the condition as "keep going while the input is bad" rather than "keep going while the input is good" is the habit to build here — it is the reverse of how students naturally state the requirement.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Loops are useful for enforcing valid input. Suppose a score must be between 0 and 100. Read once before the loop, then loop while the value is out of range, complaining and reading again each time.</p>
+    <p>The loop continues until a valid value is entered. Notice the condition: <code>score &lt; 0 || score &gt; 100</code>. This means continue looping while the score is invalid.</p>
+    <p>This is the priming-read pattern again, in a different costume: read once outside, test, read again inside.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Nested Loops</h2>
+  <p class="part-sub">For every one iteration of the outer loop, the inner loop completes all of its iterations.</p>
+</section>
+
+<section>
+  <h2>Nested Loops</h2>
+  <p class="small">A loop can appear inside another loop. This is called a <strong>nested loop</strong>. Example:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int row = 1; row &lt;= 3; row++) {
+
+    for (int column = 1; column &lt;= 4; column++) {
+        System.out.print("*");
+    }
+
+    System.out.println();
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+****
+****
+****
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The outer loop controls the rows. The inner loop controls the columns.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where the line break comes from</summary>
+    <div class="acc-body">
+      <p>The inner loop uses <code>System.out.print</code>, which does not move to a new line. The <code>System.out.println()</code> with no argument sits in the outer body, <em>after</em> the inner loop has finished, and it is what ends each row.</p>
+      <p>Move that statement inside the inner loop and you get twelve lines of one star each. Delete it and you get one line of twelve stars. Its position is the whole shape of the output.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A loop can appear inside another loop. This is called a nested loop. The example runs <code>row</code> from 1 to 3, and inside it runs <code>column</code> from 1 to 4 printing a star, then ends the line.</p>
+    <p>The outer loop controls the rows. The inner loop controls the columns. Say it that way every time — students who name the two loops by what they control stop confusing which one to change.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Understanding Nested Loop Execution</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 3; i++) {
+
+    for (int j = 1; j &lt;= 2; j++) {
+        System.out.println("i = " + i + ", j = " + j);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+i = 1, j = 1
+i = 1, j = 2
+i = 2, j = 1
+i = 2, j = 2
+i = 3, j = 1
+i = 3, j = 2
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>For every one iteration of the outer loop, the inner loop completes all of its iterations.</div>
+  <aside class="notes">
+    <p>Consider the loop that runs i from 1 to 3 and, inside it, j from 1 to 2, printing both values. The output shows i staying at 1 while j runs 1 then 2, then i becoming 2 while j runs 1 then 2 again, and so on.</p>
+    <p>For every one iteration of the outer loop, the inner loop completes all of its iterations. Notice in particular that j restarts at 1 each time — because <code>int j = 1</code> is in the inner header and therefore runs afresh on every outer pass.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting the Inner Iterations</h2>
+  <div class="cols">
+    <div>
+      <ul>
+        <li>The outer loop executes 3 times.</li>
+        <li>The inner loop executes 2 times for each outer iteration.</li>
+      </ul>
+      <p class="small">Therefore, the body of the inner loop executes:</p>
+      <span class="math">3 <span class="op">×</span> 2 = 6</span>
+      <p class="small">times.</p>
+    </div>
+    <div>
+      <div class="box note"><span class="box-title">Note</span>This idea becomes important later when we study algorithm efficiency.</div>
+      <p class="small">Two nested loops of 3 and 2 give 6 units of work. Two nested loops of 1,000 and 1,000 give a million. The program text grows by one line; the work grows by a factor of a thousand.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The outer loop executes 3 times. The inner loop executes 2 times for each outer iteration. Therefore, the body of the inner loop executes 3 times 2, which is 6, times.</p>
+    <p>This idea becomes important later when we study algorithm efficiency. We come back to it formally in Part XI of this week, and formally-with-notation in Week 11 when we introduce Big-O.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Pattern Printing: Rectangle</h2>
+  <p class="small">Nested loops can generate patterns.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int row = 0; row &lt; 4; row++) {
+
+    for (int column = 0; column &lt; 6; column++) {
+        System.out.print("*");
+    }
+
+    System.out.println();
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+******
+******
+******
+******
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Both headers count from 0 with <code>&lt;</code> — the <code>n</code>-iteration formula from Part IV, used twice.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Nested loops can generate patterns. The rectangle runs <code>row</code> from 0 to 3 and <code>column</code> from 0 to 5, giving four rows of six stars.</p>
+    <p>Compare the headers with the earlier three-by-four example, which counted from 1 with <code>&lt;=</code>. Both styles are correct; both appear in the notes. The point is to be able to read either one and say how many iterations it produces.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Pattern Printing: Triangle</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int row = 1; row &lt;= 5; row++) {
+
+    for (int column = 1; column &lt;= row; column++) {
+        System.out.print("*");
+    }
+
+    System.out.println();
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+*
+**
+***
+****
+*****
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Why is it a triangle?</span>The inner loop condition is <code>column &lt;= row</code>. As <code>row</code> increases, the number of iterations of the inner loop increases.</div>
+  <details class="acc">
+    <summary>The inner condition, on its own</summary>
+    <div class="acc-body">
+      <p>Ask yourself: why does the second program produce a triangle? The inner loop condition is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+column &lt;= row
+</code></pre>
+      <p>As <code>row</code> increases, the number of iterations of the inner loop increases: one star on row 1, two on row 2, and so on up to five on row 5.</p>
+      <p>This is the first example in the course where the inner loop's bound depends on the outer loop's variable. It is the trick behind almost every pattern exercise.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The triangle is the same nested structure with one change: the inner loop's limit is not a constant, it is <code>row</code>.</p>
+    <p>Ask yourself: why does the second program produce a triangle? The inner loop condition is <code>column &lt;= row</code>. As row increases, the number of iterations of the inner loop increases.</p>
+    <p>Have students predict the output of changing <code>column &lt;= row</code> to <code>column &lt;= 6 - row</code> before you run it. That is Problem 10 of the end-of-week set in disguise.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Multiplication Table</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Nested loops can also generate a multiplication table.</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int row = 1; row &lt;= 10; row++) {
+
+    for (int column = 1; column &lt;= 10; column++) {
+
+        int product = row * column;
+
+        System.out.print(product + "\t");
+    }
+
+    System.out.println();
+}
+</code></pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>The variable <code>row</code> determines one factor.</li>
+        <li>The variable <code>column</code> determines the other.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>The <code>"\t"</code> is a tab character, which lines the columns up without any arithmetic on your part.</div>
+      <p class="small">Note that <code>product</code> is declared inside the inner body. It is created fresh on every one of the hundred passes, and nothing needs to survive between them.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Nested loops can also generate a multiplication table. The variable <code>row</code> determines one factor; the variable <code>column</code> determines the other; their product is printed followed by a tab, and each row ends with an empty <code>println</code>.</p>
+    <p>This is the same skeleton as the rectangle of stars — the only difference is that the inner body computes something from both loop variables instead of printing a constant character.</p>
+    <p>The inner body runs ten times ten, which is one hundred times.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Simulation, <code>break</code>, and <code>continue</code></h2>
+  <p class="part-sub">Loops allow us to simulate repeated random events — and sometimes to leave early.</p>
+</section>
+
+<section>
+  <h2>Simulations</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Loops allow us to simulate repeated random events. Suppose we want to roll a six-sided die ten times.</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++) {
+
+    int roll = (int)(Math.random() * 6) + 1;
+
+    System.out.println(roll);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The expression:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Math.random()
+</code></pre>
+      <p class="small">produces a random <code>double</code> approximately in the range:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0.0 &lt;= value &lt; 1.0
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-random" tabindex="0">From <code>Math.random()</code> to a die roll</span>
+  </div>
+  <aside class="notes">
+    <p>Loops allow us to simulate repeated random events. Suppose we want to roll a six-sided die ten times: run a <code>for</code> loop ten times and, inside it, compute a roll and print it.</p>
+    <p>The expression <code>Math.random()</code> produces a random double approximately in the range 0.0 less than or equal to value, less than 1.0. Note the asymmetry — zero is possible, one is not. That asymmetry is exactly what makes the rest of the arithmetic work.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Building a Die Roll, Step by Step</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Multiply by 6</h4>
+      <p class="smaller">Multiplying by 6 gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0.0 &lt;= value &lt; 6.0
+</code></pre>
+    </div>
+    <div>
+      <h4>Cast to <code>int</code></h4>
+      <p class="smaller">Casting to <code>int</code> produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0, 1, 2, 3, 4, or 5
+</code></pre>
+    </div>
+    <div>
+      <h4>Add 1</h4>
+      <p class="smaller">Adding 1 gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1, 2, 3, 4, 5, or 6
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the cast truncates rather than rounds</summary>
+    <div class="acc-body">
+      <p>Casting a <code>double</code> to an <code>int</code> in Java discards the fractional part — it does not round. So 5.97 becomes 5, not 6.</p>
+      <p>That is what keeps the six outcomes equally likely. If the cast rounded, the values 0 and 6 would each come from only half as wide a slice of the range as the values in between, and the die would be loaded.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Walk the three steps. <code>Math.random()</code> gives a value in 0.0 up to but not including 1.0. Multiplying by 6 gives 0.0 up to but not including 6.0. Casting to int produces 0, 1, 2, 3, 4, or 5. Adding 1 gives 1, 2, 3, 4, 5, or 6.</p>
+    <p>This four-step recipe generalises: to get a random integer in a range of size n starting at s, write <code>(int)(Math.random() * n) + s</code>. Students will use it for the rest of the semester.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Simulation Example: Counting Sixes</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we roll a die 1,000 times and count how many times we obtain a 6.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int sixCount = 0;
+
+for (int i = 0; i &lt; 1000; i++) {
+
+    int roll = (int)(Math.random() * 6) + 1;
+
+    if (roll == 6) {
+        sixCount++;
+    }
+}
+
+System.out.println("Number of sixes: " + sixCount);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Because a fair die has six possible outcomes, we might expect approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1000 / 6 ≈ 167
+</code></pre>
+      <p class="small">sixes. However, the exact result will vary.</p>
+      <div class="box note"><span class="box-title">Note</span>A counter and a simulation, combined: the loop supplies the events, the counter records them.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we roll a die 1,000 times and count how many times we obtain a 6. This is the counter pattern from Part III with a random event in place of a divisibility test.</p>
+    <p>Because a fair die has six possible outcomes, we might expect approximately 1000 divided by 6, roughly 167, sixes. However, the exact result will vary. Run it three times in class and let them see three different answers.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Theoretical Versus Experimental</h2>
+  <div class="cols">
+    <div>
+      <h4>Theoretical result</h4>
+      <p class="small">About one-sixth of rolls should be sixes.</p>
+    </div>
+    <div>
+      <h4>Experimental result</h4>
+      <p class="small">The actual number obtained by the simulation.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>As the number of trials increases, experimental results often become closer to theoretical probabilities.</div>
+  <p class="small">This illustrates an important distinction — and it is the reason simulations are worth writing at all. The loop count is not decoration; it is what buys the accuracy.</p>
+  <aside class="notes">
+    <p>This illustrates an important distinction. The theoretical result: about one-sixth of rolls should be sixes. The experimental result: the actual number obtained by the simulation.</p>
+    <p>As the number of trials increases, experimental results often become closer to theoretical probabilities. Demonstrate by changing 1000 to 10 and then to 100000 and watching the ratio settle down.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Coin Toss Simulation</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int heads = 0;
+int tails = 0;
+
+for (int i = 0; i &lt; 1000; i++) {
+
+    int toss = (int)(Math.random() * 2);
+
+    if (toss == 0) {
+        heads++;
+    } else {
+        tails++;
+    }
+}
+
+System.out.println("Heads: " + heads);
+System.out.println("Tails: " + tails);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">A possible result might be:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Heads: 493
+Tails: 507
+</code></pre>
+      <p class="small">Running the program again may produce different results.</p>
+      <div class="box note"><span class="box-title">Note</span>Two counters this time, and they are exhaustive: every toss increments exactly one of them, so the two always sum to 1000.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The coin toss uses <code>(int)(Math.random() * 2)</code>, giving 0 or 1, and an if-else to increment one of two counters. A possible result might be 493 heads and 507 tails. Running the program again may produce different results.</p>
+    <p>Because the branch is <code>if</code>-<code>else</code> rather than two separate <code>if</code>s, exactly one counter increases per iteration. Ask the class what the two numbers must add up to — 1000, always — and use that as a sanity check on their own simulation code.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>break</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides the <code>break</code> statement to immediately exit a loop.</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 100; i++) {
+
+    if (i == 7) {
+        break;
+    }
+
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+2
+3
+4
+5
+6
+</code></pre>
+      <p class="small">When <code>i</code> becomes 7, the loop terminates.</p>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">Watch out</span><code>break</code> can be useful, but it should be used carefully. In many cases, a well-designed loop condition is easier to understand than multiple <code>break</code> statements.</div>
+  <aside class="notes">
+    <p>Java provides the <code>break</code> statement to immediately exit a loop. The example counts to 100 but breaks when i equals 7, so the output is 1 through 6. When i becomes 7, the loop terminates — before the <code>println</code> ever runs on that pass.</p>
+    <p><code>break</code> can be useful, but it should be used carefully. In many cases, a well-designed loop condition is easier to understand than multiple <code>break</code> statements. The one place it genuinely earns its keep is the prime test in Part X, where the loop is searching and can stop the moment it finds an answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>continue</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">The <code>continue</code> statement skips the remainder of the current iteration.</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 10; i++) {
+
+    if (i == 5) {
+        continue;
+    }
+
+    System.out.println(i);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+2
+3
+4
+6
+7
+8
+9
+10
+</code></pre>
+      <p class="small">The number 5 is skipped.</p>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">Watch out</span>Again, use <code>continue</code> carefully. Code can often be written more clearly without it.</div>
+  <details class="acc">
+    <summary><code>break</code> versus <code>continue</code>, in one line each</summary>
+    <div class="acc-body">
+      <p><code>break</code> leaves the loop entirely — no further iterations happen. <code>continue</code> abandons only the current pass and goes on to the update and the next condition check.</p>
+      <p>In the two examples on these slides, <code>break</code> at 7 gives six lines of output and <code>continue</code> at 5 gives nine. Same loop bounds; very different results.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The <code>continue</code> statement skips the remainder of the current iteration. The example prints 1 through 10 but skips 5, because when i equals 5 the <code>continue</code> jumps past the <code>println</code> to the update.</p>
+    <p>Again, use <code>continue</code> carefully. Code can often be written more clearly without it — here, an <code>if (i != 5)</code> around the print says the same thing with no jump.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Common Loop Errors and Choosing a Loop</h2>
+  <p class="part-sub">Six ways a loop goes wrong, and how to decide which loop to write.</p>
+</section>
+
+<section>
+  <h2>Errors 1 and 2: The Update</h2>
+  <div class="cols">
+    <div>
+      <h4>Error 1: Forgetting the update</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+
+while (x &lt;= 10) {
+    System.out.println(x);
+}
+</code></pre>
+      <p class="small">Result: infinite loop.</p>
+    </div>
+    <div>
+      <h4>Error 2: Updating in the wrong direction</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+
+while (x &lt;= 10) {
+    System.out.println(x);
+    x--;
+}
+</code></pre>
+      <p class="small">Result: infinite loop.</p>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">Watch out</span>Both of these are the Part II question going unanswered: what changes on each iteration, and why will the condition eventually become false?</div>
+  <aside class="notes">
+    <p>Error 1: forgetting the update. The body prints x but never changes it, so the condition stays true. Result: infinite loop.</p>
+    <p>Error 2: updating in the wrong direction. The body decrements x while the condition waits for x to exceed 10. Result: infinite loop.</p>
+    <p>These are the same two examples from Part II, deliberately repeated here in the errors catalogue. Repetition is the point — students meet them once as a concept and once as a diagnosis.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Error 3: Off-by-One</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt; 10; i++)
+</code></pre>
+      <p class="small">executes 9 times, not 10.</p>
+    </div>
+    <div>
+      <div class="box pitfall"><span class="box-title">Common error</span>The program compiles, runs, terminates, and produces plausible output. Nothing announces the mistake except counting.</div>
+      <p class="small">Return to the four questions from Part IV: what is the first value, what is the last value, should the condition use <code>&lt;</code> or <code>&lt;=</code>, and exactly how many times should the loop execute?</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Error 3: off-by-one. The header <code>for (int i = 1; i &lt; 10; i++)</code> executes 9 times, not 10.</p>
+    <p>Contrast this with errors 1 and 2. Those hang the program, which at least tells you something is wrong. This one produces a program that looks entirely healthy and is quietly wrong by one — which is why it is the error most likely to survive into submitted work.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Error 4: The Extra Semicolon</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++); {
+    System.out.println("Hello");
+}
+</code></pre>
+      <p class="small">Notice the semicolon after the <code>for</code> statement:</p>
+<pre><code class="language-java" data-trim data-noescape>
+i++);
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++) {
+    System.out.println("Hello");
+}
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>That semicolon represents an empty loop body. The following block is therefore not actually part of the loop. This code prints <code>"Hello"</code> only once.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Error 4: an extra semicolon. Notice the semicolon after the <code>for</code> statement. That semicolon represents an empty loop body. The following block is therefore not actually part of the loop. This code prints "Hello" only once.</p>
+    <p>It compiles without warning, because an empty loop body is legal Java — occasionally even useful. The braces that follow become an ordinary block, executed once.</p>
+    <p>Contrast with the <code>do-while</code> from Part VI, where a semicolon after the condition is required. Java's semicolon rules are positional, not decorative.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Errors 5 and 6: The Accumulator</h2>
+  <div class="cols">
+    <div>
+      <h4>Error 5: Incorrect initialization</h4>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+int total;
+
+for (int i = 1; i &lt;= 10; i++) {
+    total += i;
+}
+</code></pre>
+      <p class="smaller">This produces an error because <code>total</code> has not been initialized. Correct: <code>int total = 0;</code></p>
+    </div>
+    <div>
+      <h4>Error 6: Resetting inside the loop</h4>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 1; i &lt;= 10; i++) {
+
+    int total = 0;
+
+    total += i;
+}
+</code></pre>
+      <p class="smaller">The variable is reset to zero during every iteration.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The corrected accumulator</summary>
+    <div class="acc-body">
+      <p>Correct:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int total = 0;
+
+for (int i = 1; i &lt;= 10; i++) {
+    total += i;
+}
+</code></pre>
+      <p>The declaration and the initialization both live outside the loop, so <code>total</code> is created once and survives every pass. That is what makes it an accumulator rather than a temporary.</p>
+      <p>Error 5's fix is the single line:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int total = 0;
+</code></pre>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-loop-errors" tabindex="0">All six loop errors in one place</span>
+  </div>
+  <aside class="notes">
+    <p>Error 5: incorrect initialization. Declaring <code>int total;</code> and then writing <code>total += i;</code> produces an error because <code>total</code> has not been initialized. The correction is <code>int total = 0;</code>.</p>
+    <p>Error 6: resetting an accumulator inside the loop. If <code>int total = 0;</code> is written inside the body, the variable is reset to zero during every iteration.</p>
+    <p>These two are a matched pair, and it is worth saying so: error 5 is caught by the compiler, error 6 is not. Moving the declaration one line in either direction turns one into the other.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Choosing the Correct Loop</h2>
+  <p class="small">A useful rule of thumb:</p>
+  <table class="smaller">
+    <thead><tr><th>Situation</th><th>Suggested Loop</th></tr></thead>
+    <tbody>
+      <tr><td>Repeat exactly 10 times</td><td><code>for</code></td></tr>
+      <tr><td>Process numbers 1 through 100</td><td><code>for</code></td></tr>
+      <tr><td>Process each position in a sequence</td><td><code>for</code></td></tr>
+      <tr><td>Continue until user enters <code>-1</code></td><td><code>while</code></td></tr>
+      <tr><td>Continue until valid input appears</td><td><code>while</code></td></tr>
+      <tr><td>Run a menu at least once</td><td><code>do-while</code></td></tr>
+      <tr><td>Repeat until some condition changes</td><td><code>while</code></td></tr>
+    </tbody>
+  </table>
+  <div class="box key"><span class="box-title">Key idea</span>Do not choose a loop simply because one form is shorter. Choose the structure that best communicates the intent of the program.</div>
+  <aside class="notes">
+    <p>This table is the summary of the whole week's judgement. Counting situations take <code>for</code>; open-ended situations take <code>while</code>; situations that must happen at least once take <code>do-while</code>.</p>
+    <p>Do not choose a loop simply because one form is shorter. Choose the structure that best communicates the intent of the program. A reader who sees a <code>for</code> header expects a known number of repetitions; giving them one when the count is unknown is a small act of misdirection.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Problem-Solving Strategy for Loops</h2>
+  <p class="small">Before writing code, answer four questions.</p>
+  <div class="cols">
+    <div>
+      <h4>1 — What needs to repeat?</h4>
+      <blockquote class="smaller">Read a number and add it to a running total.</blockquote>
+      <h4>2 — When should repetition stop?</h4>
+      <blockquote class="smaller">Stop after 10 numbers.</blockquote>
+      <blockquote class="smaller">Stop when the user enters <code>-1</code>.</blockquote>
+    </div>
+    <div>
+      <h4>3 — What must be remembered between iterations?</h4>
+      <ul class="smaller">
+        <li>running total</li>
+        <li>count</li>
+        <li>largest value seen</li>
+        <li>smallest value seen</li>
+      </ul>
+      <h4>4 — What changes on every iteration?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+count++;
+</code></pre>
+      <p class="smaller">or:</p>
+<pre><code class="language-java" data-trim data-noescape>
+number = input.nextInt();
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Thinking through these questions before coding prevents many common loop errors.</div>
+  <aside class="notes">
+    <p>Before writing code, answer four questions. What needs to repeat — for example, read a number and add it to a running total. When should repetition stop — stop after 10 numbers, or stop when the user enters minus 1. What information must be remembered between iterations — a running total, a count, the largest value seen, the smallest value seen. What changes on every iteration — <code>count++;</code> or <code>number = input.nextInt();</code>.</p>
+    <p>Map the four questions onto the loop's parts: question 1 gives the body, question 2 gives the condition, question 3 gives the variables declared before the loop, question 4 gives the update. Answering them is designing the loop.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Worked Examples</h2>
+  <p class="part-sub">Five problems, worked from the statement to the program.</p>
+</section>
+
+<section>
+  <h2>Worked Example: Sum of Even Numbers</h2>
+  <div class="cols">
+    <div>
+      <h4>Problem</h4>
+      <p class="small">Calculate the sum of the even integers from 2 through 100.</p>
+      <h4>Step 1: Identify repetition</h4>
+      <p class="small">We need to examine a series of numbers.</p>
+      <h4>Step 2: Choose a loop</h4>
+      <p class="small">The range is known, so a <code>for</code> loop is natural.</p>
+      <h4>Step 3: Create an accumulator</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int sum = 0;
+</code></pre>
+    </div>
+    <div>
+      <h4>Solution 1</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int sum = 0;
+
+for (int i = 2; i &lt;= 100; i += 2) {
+    sum += i;
+}
+
+System.out.println(sum);
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The problem: calculate the sum of the even integers from 2 through 100. Step 1, identify repetition: we need to examine a series of numbers. Step 2, choose a loop: the range is known, so a <code>for</code> loop is natural. Step 3, create an accumulator: <code>int sum = 0;</code>.</p>
+    <p>Solution 1 starts at 2 and steps by 2, so every value it visits is already even. Note that the three design steps map exactly onto the four questions from Part IX — this is those questions being used, not a new method.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Second Solution — and Which Is Better?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We could also write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int sum = 0;
+
+for (int i = 1; i &lt;= 100; i++) {
+
+    if (i % 2 == 0) {
+        sum += i;
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Both solutions work.</p>
+      <p class="small">Which is preferable?</p>
+      <div class="box key"><span class="box-title">Key idea</span>The first is more direct because it generates only even numbers.</div>
+      <p class="small">The second visits 100 values and rejects half of them; the first visits 50 values and uses all of them. Same answer, half the work, and a header that states the intent.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We could also write a loop over every value from 1 to 100 with an <code>if</code> testing <code>i % 2 == 0</code>. Both solutions work. Which is preferable? The first is more direct because it generates only even numbers.</p>
+    <p>This is the first time in the course that two correct programs are compared on grounds other than correctness. Say that explicitly — it is the beginning of the habit of thought that becomes algorithm analysis in Week 11.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Number Guessing Game</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose the computer chooses a number from 1 through 100. The player keeps guessing until they find the number.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Here, we do not know how many guesses will be required. Therefore a <code>while</code> loop is a natural choice.</div>
+      <p class="small">The secret uses the same random recipe as the die roll: <code>(int)(Math.random() * 100) + 1</code>.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner input = new Scanner(System.in);
+
+int secret = (int)(Math.random() * 100) + 1;
+
+int guess = 0;
+
+while (guess != secret) {
+
+    System.out.print("Enter your guess: ");
+    guess = input.nextInt();
+
+    if (guess &lt; secret) {
+        System.out.println("Too low.");
+    } else if (guess &gt; secret) {
+        System.out.println("Too high.");
+    } else {
+        System.out.println("Correct!");
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-guessing-game" tabindex="0">Both versions of the game</span>
+  </div>
+  <aside class="notes">
+    <p>Suppose the computer chooses a number from 1 through 100. The player keeps guessing until they find the number. The loop condition is <code>guess != secret</code>, and <code>guess</code> is initialised to 0 so that the condition is true on the first check.</p>
+    <p>Here, we do not know how many guesses will be required. Therefore a <code>while</code> loop is a natural choice — straight from the table two slides ago.</p>
+    <p>Note the initialisation of <code>guess</code> to 0. It is a value the secret can never take, which is what makes it safe as a starting value; this is the same reasoning as choosing a sentinel.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Improving the Guessing Game</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can also count the number of attempts.</p>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner input = new Scanner(System.in);
+
+int secret = (int)(Math.random() * 100) + 1;
+
+int guess = 0;
+int attempts = 0;
+
+while (guess != secret) {
+
+    System.out.print("Enter your guess: ");
+    guess = input.nextInt();
+
+    attempts++;
+
+    if (guess &lt; secret) {
+        System.out.println("Too low.");
+    } else if (guess &gt; secret) {
+        System.out.println("Too high.");
+    }
+}
+
+System.out.println("Correct!");
+System.out.println("Attempts: " + attempts);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Notice that several ideas work together:</p>
+      <ul>
+        <li>loop</li>
+        <li>user input</li>
+        <li>conditionals</li>
+        <li>counter</li>
+        <li>random numbers</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>Programs become interesting when fundamental constructs are combined.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We can also count the number of attempts by adding a counter. Note two changes from the first version: <code>attempts++</code> inside the body, and the "Correct!" message moved out of the <code>else</code> branch to after the loop — because reaching that point is itself the proof that the guess was right.</p>
+    <p>Notice that several ideas work together: loop, user input, conditionals, counter, random numbers. Programs become interesting when fundamental constructs are combined.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Digit Sum — the Idea</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to add the digits of an integer. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5274
+</code></pre>
+      <p class="small">should produce:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5 + 2 + 7 + 4 = 18
+</code></pre>
+      <p class="small">We can repeatedly extract the last digit.</p>
+    </div>
+    <div>
+      <p class="small">Recall:</p>
+<pre><code class="language-java" data-trim data-noescape>
+5274 % 10
+</code></pre>
+      <p class="small">gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+4
+</code></pre>
+      <p class="small">And:</p>
+<pre><code class="language-java" data-trim data-noescape>
+5274 / 10
+</code></pre>
+      <p class="small">using integer division gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+527
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want to add the digits of an integer. For example, 5274 should produce 5 plus 2 plus 7 plus 4 equals 18. We can repeatedly extract the last digit.</p>
+    <p>Recall from Week 1 that <code>5274 % 10</code> gives 4, and <code>5274 / 10</code> using integer division gives 527. Remainder peels off the last digit; integer division throws it away. Together they let you walk a number digit by digit.</p>
+    <p>This is the payoff for the integer-division section of Week 1, which at the time looked like a curiosity.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Digit Sum — the Program</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int number = 5274;
+int sum = 0;
+
+while (number &gt; 0) {
+
+    int digit = number % 10;
+
+    sum += digit;
+
+    number /= 10;
+}
+
+System.out.println(sum);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Trace:</p>
+      <table class="smaller">
+        <thead><tr><th>number</th><th>digit</th><th>sum</th></tr></thead>
+        <tbody>
+          <tr><td>5274</td><td>4</td><td>4</td></tr>
+          <tr><td>527</td><td>7</td><td>11</td></tr>
+          <tr><td>52</td><td>2</td><td>13</td></tr>
+          <tr><td>5</td><td>5</td><td>18</td></tr>
+          <tr><td>0</td><td>—</td><td>18</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>This is an important example because the loop is not simply counting from one number to another. Instead, each iteration transforms the problem into a smaller version of itself.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-digit-sum" tabindex="0">Digit sum, worked in full</span>
+  </div>
+  <aside class="notes">
+    <p>The program initialises <code>number</code> to 5274 and <code>sum</code> to 0, then loops while <code>number</code> is greater than 0, extracting the last digit, adding it to the sum, and dividing the number by 10.</p>
+    <p>Walk the trace table row by row. Notice there is no loop counter at all — the loop control variable is the data itself, shrinking toward zero.</p>
+    <p>This is an important example because the loop is not simply counting from one number to another. Instead, each iteration transforms the problem into a smaller version of itself. Flag this sentence; it is the idea that becomes recursion in Week 10.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Prime Number Test — the Idea</h2>
+  <p class="small">An integer greater than 1 is prime if it has no positive divisors other than 1 and itself.</p>
+  <div class="cols-3">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+7
+</code></pre>
+      <p class="small">is prime.</p>
+    </div>
+    <div>
+      <p class="small">But:</p>
+<pre><code class="language-text" data-trim data-noescape>
+12
+</code></pre>
+      <p class="small">is not prime because:</p>
+    </div>
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+12 % 2 == 0
+</code></pre>
+    </div>
+  </div>
+  <div class="def"><span class="term">Prime:</span> an integer greater than 1 with no positive divisors other than 1 and itself.</div>
+  <aside class="notes">
+    <p>An integer greater than 1 is prime if it has no positive divisors other than 1 and itself. For example, 7 is prime. But 12 is not prime, because 12 modulo 2 equals 0.</p>
+    <p>Note the shape of the definition: it is a statement about <em>every</em> candidate divisor. That is what makes it a loop problem — you cannot check "no divisors" with a single test.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Prime Number Test — the Program</h2>
+  <div class="cols">
+    <div>
+      <p class="small">One basic approach is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int number = 17;
+boolean prime = true;
+
+for (int divisor = 2; divisor &lt; number; divisor++) {
+
+    if (number % divisor == 0) {
+        prime = false;
+        break;
+    }
+}
+
+if (prime) {
+    System.out.println(number + " is prime.");
+} else {
+    System.out.println(number + " is not prime.");
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box note"><span class="box-title">Note</span>This is not the most efficient prime-testing algorithm. That is intentional.</div>
+      <p class="small">At this stage, the important goal is understanding how loops can search for evidence that satisfies a condition.</p>
+      <p class="small">Later in the course, we will ask:</p>
+      <blockquote class="small">Can we make this algorithm faster?</blockquote>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-prime" tabindex="0">The prime test, explained</span>
+  </div>
+  <aside class="notes">
+    <p>The program assumes the number is prime, then loops over candidate divisors from 2 up to but not including the number. If any divisor divides evenly, it sets the flag to false and breaks out.</p>
+    <p>This is the legitimate use of <code>break</code> promised in Part VIII: once a single divisor is found, no further evidence can change the answer, so continuing would be wasted work.</p>
+    <p>This is not the most efficient prime-testing algorithm. That is intentional. At this stage, the important goal is understanding how loops can search for evidence that satisfies a condition. Later in the course, we will ask: can we make this algorithm faster?</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XI</p>
+  <h2>Loops, Algorithms, and Reasoning</h2>
+  <p class="part-sub">What is the algorithm, and how is the algorithm written in Java?</p>
+</section>
+
+<section>
+  <h2>Loops and Algorithms</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A loop is a programming construct.</p>
+      <div class="def"><span class="term">Algorithm:</span> a procedure for solving a problem.</div>
+      <p class="small">Loops are often used to implement algorithms. Consider finding the largest value among a series of numbers. Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+remember the first value as the largest
+
+for every remaining value:
+    if the value is larger than the remembered value:
+        remember this value instead
+
+report the remembered value
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This is an algorithm. Java provides syntax that allows us to implement the algorithm.</p>
+      <p class="small">One important goal of this course is to distinguish:</p>
+      <blockquote class="small">What is the algorithm?</blockquote>
+      <p class="small">from:</p>
+      <blockquote class="small">How is the algorithm written in Java?</blockquote>
+      <div class="box key"><span class="box-title">Key idea</span>The pseudocode on the left is the maximum-finding program from Part V with all the Java removed. What remains is the idea.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A loop is a programming construct. An algorithm is a procedure for solving a problem. Loops are often used to implement algorithms.</p>
+    <p>Consider finding the largest value among a series of numbers. Conceptually: remember the first value as the largest; for every remaining value, if the value is larger than the remembered value, remember this value instead; report the remembered value. This is an algorithm. Java provides syntax that allows us to implement the algorithm.</p>
+    <p>One important goal of this course is to distinguish "what is the algorithm?" from "how is the algorithm written in Java?". This is the same distinction drawn in Week 1 between algorithm and program, now with a loop in the middle of it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Repetition and Efficiency</h2>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <p class="smaller">The loop body executes 10 times.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 1000; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <p class="smaller">The body executes 1,000 times.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <p class="smaller">executes approximately <code>n</code> times.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Three programs of identical length doing wildly different amounts of work. The size of the source tells you nothing about the size of the computation.</div>
+  <aside class="notes">
+    <p>Consider a loop to 10: the loop body executes 10 times. A loop to 1,000: the body executes 1,000 times. A loop to n: it executes approximately n times.</p>
+    <p>Every one of these programs is three lines long. This is the observation that makes algorithm analysis necessary — you cannot judge cost by reading length.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Nested Loops and <code>n × n</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Now consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++) {
+
+    for (int j = 0; j &lt; n; j++) {
+        System.out.println(i + ", " + j);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The inner statement executes:</p>
+      <span class="math">n <span class="op">×</span> n = n²</span>
+      <p class="small">times.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The structure of loops strongly affects how much work a program performs.</div>
+      <p class="small">We will study this formally later when we introduce algorithm analysis and Big-O notation.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Now consider a loop over n containing another loop over n. The inner statement executes n times n, which is n squared, times.</p>
+    <p>We will study this formally later when we introduce algorithm analysis and Big-O notation. For now, notice: the structure of loops strongly affects how much work a program performs.</p>
+    <p>Give them a number. If n is a thousand, the single loop does a thousand units of work and the nested pair does a million. One extra line of source; a thousandfold difference in cost.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Debugging Loops</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When a loop does not behave as expected, print the important variables.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+
+while (x &lt; 20) {
+
+    System.out.println("Before update: x = " + x);
+
+    x *= 2;
+
+    System.out.println("After update: x = " + x);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Temporary debugging output can help answer:</p>
+      <ul class="small">
+        <li>Does the loop execute?</li>
+        <li>How many times?</li>
+        <li>What value does the control variable have?</li>
+        <li>Does the update occur?</li>
+        <li>When does the condition become false?</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>Do not simply stare at incorrect code. Gather evidence about what the program is actually doing.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>When a loop does not behave as expected, print the important variables. The example prints x before and after the update on every pass, which turns the loop's internal state into something you can read.</p>
+    <p>Temporary debugging output can help answer: does the loop execute? how many times? what value does the control variable have? does the update occur? when does the condition become false?</p>
+    <p>Do not simply stare at incorrect code. Gather evidence about what the program is actually doing. This is a printed trace table — the same tool as Part II, produced by the program instead of by hand.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Loop Invariants: A Preview</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int sum = 0;
+
+for (int i = 1; i &lt;= 5; i++) {
+    sum += i;
+}
+</code></pre>
+      <p class="small">After each iteration, <code>sum</code> contains the total of all numbers processed so far. For example, after processing 3:</p>
+<pre><code class="language-text" data-trim data-noescape>
+sum = 1 + 2 + 3
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This statement remains true throughout execution.</p>
+      <div class="def"><span class="term">Loop invariant:</span> such a property is related to an idea called a loop invariant.</div>
+      <p class="small">We will not formally prove loop correctness yet, but this style of reasoning is extremely useful:</p>
+      <blockquote class="small">What should be true after every iteration?</blockquote>
+      <p class="small">This question helps both when designing and debugging algorithms.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider the summation loop from 1 to 5. After each iteration, <code>sum</code> contains the total of all numbers processed so far. For example, after processing 3, <code>sum</code> equals 1 plus 2 plus 3. This statement remains true throughout execution.</p>
+    <p>Such a property is related to an idea called a loop invariant. We will not formally prove loop correctness yet, but this style of reasoning is extremely useful: what should be true after every iteration?</p>
+    <p>This question helps both when designing and debugging algorithms. Point back at the accumulator trace table from Part III — the invariant was visible in the columns there, before it had a name.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XII</p>
+  <h2>Checkpoints, Practice, and Review</h2>
+  <p class="part-sub">Six checkpoints, eight exercises, six patterns, and what happens next week.</p>
+</section>
+
+<section>
+  <h2>Checkpoints 1 and 2</h2>
+  <div class="cols">
+    <div>
+      <h4>Checkpoint 1 — What does this print?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 3;
+
+while (x &lt;= 7) {
+    System.out.print(x + " ");
+    x++;
+}
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+3 4 5 6 7
+</code></pre>
+          <p>Five values, because the condition is <code>&lt;=</code> and the range 3 to 7 inclusive contains five integers. Note <code>print</code> rather than <code>println</code>, so they land on one line.</p>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Checkpoint 2 — How many times does this loop execute?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 20; i++) {
+    System.out.println(i);
+}
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+20 times
+</code></pre>
+          <p>This is the <code>for (int i = 0; i &lt; n; i++)</code> formula from Part IV, with <code>n</code> equal to 20.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Checkpoint 1: a <code>while</code> loop from 3 to 7 printing each value followed by a space. The answer is 3 4 5 6 7.</p>
+    <p>Checkpoint 2: a <code>for</code> loop with <code>i &lt; 20</code> starting from 0. The answer is 20 times.</p>
+    <p>Run these as a cold call or a show-of-hands vote before opening the answers. The value of a checkpoint is entirely in the commitment students make before seeing the answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Checkpoints 3 and 4</h2>
+  <div class="cols">
+    <div>
+      <h4>Checkpoint 3 — What does this print?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 10; i &gt; 0; i -= 2) {
+    System.out.print(i + " ");
+}
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+10 8 6 4 2
+</code></pre>
+          <p>Counting backward with <code>i -= 2</code> and a strict <code>&gt;</code>, so the loop stops before reaching 0.</p>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Checkpoint 4 — What is wrong?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+
+while (x &gt; 0) {
+    System.out.println(x);
+    x++;
+}
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+          <p><code>x</code> is increasing. Therefore:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x &gt; 0
+</code></pre>
+          <p>continues to remain true. The loop does not terminate. It should probably contain:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x--;
+</code></pre>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Checkpoint 3: a <code>for</code> loop from 10 down to just above 0, stepping by minus 2. The answer is 10 8 6 4 2.</p>
+    <p>Checkpoint 4: x is increasing, therefore <code>x &gt; 0</code> continues to remain true. The loop does not terminate. It should probably contain <code>x--;</code>.</p>
+    <p>Checkpoint 4 is Error 2 from Part IX presented as a diagnosis rather than a warning. Ask the students to answer the Part II question out loud: what changes on each iteration, and why will the condition eventually become false?</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Checkpoints 5 and 6</h2>
+  <div class="cols">
+    <div>
+      <h4>Checkpoint 5 — What is the final value of <code>sum</code>?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int sum = 0;
+
+for (int i = 1; i &lt;= 4; i++) {
+    sum += i;
+}
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+10
+</code></pre>
+          <p>because:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1 + 2 + 3 + 4 = 10
+</code></pre>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Checkpoint 6 — How many times does <code>"Hello"</code> print?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 4; i++) {
+    for (int j = 0; j &lt; 3; j++) {
+        System.out.println("Hello");
+    }
+}
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+4 × 3 = 12 times
+</code></pre>
+          <p>Both headers use the count-from-zero form, so the outer runs 4 times and the inner 3 times per outer pass.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-checkpoints" tabindex="0">All six checkpoints with answers</span>
+  </div>
+  <aside class="notes">
+    <p>Checkpoint 5: the accumulator from 1 to 4 gives 10, because 1 plus 2 plus 3 plus 4 equals 10.</p>
+    <p>Checkpoint 6: nested loops of 4 and 3 print "Hello" 4 times 3, which is 12, times.</p>
+    <p>Checkpoint 6 is the multiplication rule from Part VII. If students get 7 rather than 12, they are adding the two loop counts instead of multiplying them — a common and worth-naming confusion.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Exercise: Trace the Program</h2>
+  <p class="small">Without running the program, determine the output.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 1;
+int total = 0;
+
+while (x &lt;= 4) {
+
+    total += x * 2;
+
+    System.out.println(
+        "x = " + x +
+        ", total = " + total
+    );
+
+    x++;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Construct a table:</p>
+      <table class="smaller">
+        <thead><tr><th>x</th><th><code>x * 2</code></th><th>total</th></tr></thead>
+        <tbody>
+          <tr><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <p class="small">Then compare your answer with the actual program.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Without running the program, determine the output. The loop runs x from 1 to 4, adding x times 2 into <code>total</code> and printing both values each pass.</p>
+    <p>Construct a table with columns for x, x times 2, and total, then compare your answer with the actual program. Four rows, because the condition is <code>x &lt;= 4</code> starting from 1.</p>
+    <p>Note that the <code>println</code> call is split across several lines. That is legal — Java ignores the line breaks inside the parentheses — and it is worth pointing out, because students often believe a statement must occupy one line.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Exercises: Write a Loop, and an Accumulator</h2>
+  <div class="cols">
+    <div>
+      <h4>Write a Loop</h4>
+      <p class="small">Write a program that prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5
+10
+15
+20
+25
+30
+35
+40
+45
+50
+</code></pre>
+      <p class="small">Try solving the problem using:</p>
+      <ol class="small">
+        <li>a <code>while</code> loop</li>
+        <li>a <code>for</code> loop</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Accumulator</h4>
+      <p class="small">Write a program that calculates:</p>
+      <span class="math">1² + 2² + 3² + ⋯ + 10²</span>
+      <p class="small">Expected structure:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int sum = 0;
+
+for (...) {
+    ...
+}
+
+System.out.println(sum);
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>Do not write ten separate addition statements.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The first exercise asks for the multiples of 5 from 5 to 50, written twice — once as a <code>while</code> loop and once as a <code>for</code> loop. Writing both is the point; it makes the equivalence from Part IV concrete rather than asserted.</p>
+    <p>The second is an accumulator over squares. The skeleton is given deliberately incomplete: the header and the body are exactly what the exercise is testing. Do not write ten separate addition statements.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Exercises: User Input and Sentinel Loop</h2>
+  <div class="cols">
+    <div>
+      <h4>User Input</h4>
+      <p class="small">Ask the user to enter five integers. Print:</p>
+      <ul class="small">
+        <li>their sum</li>
+        <li>their average</li>
+        <li>how many are positive</li>
+        <li>how many are negative</li>
+        <li>how many are zero</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>Think carefully about which variables must be initialized before the loop.</div>
+    </div>
+    <div>
+      <h4>Sentinel Loop</h4>
+      <p class="small">Write a program that repeatedly asks for integers. Stop when the user enters:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0
+</code></pre>
+      <p class="small">Afterward, report:</p>
+      <ul class="small">
+        <li>number of values entered</li>
+        <li>sum</li>
+        <li>average</li>
+        <li>largest value</li>
+      </ul>
+      <div class="box warn"><span class="box-title">Watch out</span>Do not include the sentinel value in the calculations.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-exercises" tabindex="0">All eight in-class exercises</span>
+  </div>
+  <aside class="notes">
+    <p>The user-input exercise needs one accumulator and three counters, all initialised before the loop. Think carefully about which variables must be initialized before the loop — that instruction is Error 6 from Part IX, phrased as advice.</p>
+    <p>The sentinel exercise combines the priming read, an accumulator, a counter, and a maximum tracker in one program. Do not include the sentinel value in the calculations — the zero must terminate the loop without being added, counted, or compared.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Nested Loops, and Reversing a Number</h2>
+  <div class="cols">
+    <div>
+      <h4>In-Class: Nested Loops</h4>
+      <p class="small">Use nested loops to produce:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+12
+123
+1234
+12345
+</code></pre>
+      <p class="small"><em>Hint:</em> the number of values printed by the inner loop depends on the current outer-loop value.</p>
+    </div>
+    <div>
+      <h4>Challenge: Reverse a Number</h4>
+      <p class="small">Given:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5729
+</code></pre>
+      <p class="small">produce:</p>
+<pre><code class="language-text" data-trim data-noescape>
+9275
+</code></pre>
+      <p class="small"><em>Hint:</em> repeatedly use <code>number % 10</code> and <code>number / 10</code>.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The two operators the challenge depends on</summary>
+    <div class="acc-body">
+      <p>Repeatedly use:</p>
+<pre><code class="language-java" data-trim data-noescape>
+number % 10
+</code></pre>
+      <p>and:</p>
+<pre><code class="language-java" data-trim data-noescape>
+number / 10
+</code></pre>
+      <p>Think about how you can construct the reversed value one digit at a time. The digit-sum program from Part X extracts exactly the same digits in exactly the same order — the only difference is what you do with each one as it comes out.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The nested-loop exercise asks for the triangle 1, 12, 123, 1234, 12345. The hint: the number of values printed by the inner loop depends on the current outer-loop value — which is the <code>column &lt;= row</code> trick from Part VII.</p>
+    <p>The challenge asks students to turn 5729 into 9275. Repeatedly use <code>number % 10</code> and <code>number / 10</code>. Think about how you can construct the reversed value one digit at a time — the accumulator here is built by multiplying by 10 and adding, rather than by adding alone.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Challenge Exercise: Guessing Strategy</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Imagine a secret integer lies between 1 and 100.</p>
+      <p class="small">Instead of guessing randomly, how could you systematically reduce the number of possibilities?</p>
+      <div class="box key"><span class="box-title">Key idea</span>This idea will later become an important algorithm called <strong>binary search</strong>.</div>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Is it 50?
+
+Too high.
+
+Now we know the answer is between 1 and 49.
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Imagine a secret integer lies between 1 and 100. Instead of guessing randomly, how could you systematically reduce the number of possibilities? For example: is it 50? Too high. Now we know the answer is between 1 and 49.</p>
+    <p>This idea will later become an important algorithm called binary search, in Week 11. Ask the class how many guesses this strategy needs in the worst case — seven — and contrast that with the hundred a linear scan might take.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Programming Patterns (1 of 2)</h2>
+  <p class="small">You should recognize the following patterns.</p>
+  <div class="cols-3">
+    <div>
+      <h4>Counting</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int count = 0;
+
+while (...) {
+    if (...) {
+        count++;
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Accumulating</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int total = 0;
+
+while (...) {
+    total += value;
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Fixed repetition</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++) {
+    ...
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>These are shapes, not programs. Learning to see the shape inside a problem statement is most of what this week is for.</div>
+  <aside class="notes">
+    <p>Counting: a counter initialised to zero outside the loop, incremented inside an <code>if</code>. Accumulating: a total initialised to zero outside the loop, increased by a value inside. Fixed repetition: the count-from-zero <code>for</code> header.</p>
+    <p>Say plainly that the ellipses are not Java. These are patterns, deliberately written with the problem-specific parts left blank, so that the shape is all that remains.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Programming Patterns (2 of 2)</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Sentinel processing</h4>
+<pre><code class="language-java" data-trim data-noescape>
+read value
+
+while (value != sentinel) {
+
+    process value
+
+    read next value
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Finding a maximum</h4>
+<pre><code class="language-java" data-trim data-noescape>
+largest = firstValue;
+
+while (...) {
+
+    if (value &gt; largest) {
+        largest = value;
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Input validation</h4>
+<pre><code class="language-java" data-trim data-noescape>
+while (inputIsInvalid) {
+    askForInputAgain();
+}
+</code></pre>
+      <p class="smaller dim">Conceptually, that is. We will study methods more formally next week.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-patterns" tabindex="0">All six patterns with worked instances</span>
+  </div>
+  <aside class="notes">
+    <p>Sentinel processing: read a value, then loop while it is not the sentinel, processing and reading again — the priming read. Finding a maximum: seed with the first value, then replace whenever a larger one appears. Input validation: keep asking while the input is invalid.</p>
+    <p>The validation pattern is written with a method call, <code>askForInputAgain()</code>, which we cannot yet write. Conceptually, that is — we will study methods more formally next week. Flag that as the bridge to Week 4.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>This week introduced <strong>iteration</strong>, one of the central ideas in programming.</li>
+    <li>Java provides three major loop constructs: <code>while</code>, <code>for</code>, and <code>do-while</code>.</li>
+    <li>A <code>while</code> loop is commonly used when the number of repetitions is not known in advance.</li>
+    <li>A <code>for</code> loop is commonly used when repetition can naturally be expressed using a counter.</li>
+    <li>A <code>do-while</code> loop guarantees that its body executes at least once.</li>
+    <li>Many algorithms use standard loop patterns: counters, accumulators, maximum/minimum tracking, sentinel processing, input validation, nested iteration.</li>
+    <li>The goal is not merely to memorize Java syntax — the deeper goal is to learn how to describe and reason about <strong>repeated computation</strong>.</li>
+  </ul>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-week3-summary" tabindex="0">Week 3 summary, in the notes' own words</span>
+  </div>
+  <aside class="notes">
+    <p>This week introduced iteration, one of the central ideas in programming. Java provides three major loop constructs: <code>while</code>, <code>for</code>, and <code>do-while</code>.</p>
+    <p>A <code>while</code> loop is commonly used when the number of repetitions is not known in advance. A <code>for</code> loop is commonly used when repetition can naturally be expressed using a counter. A <code>do-while</code> loop guarantees that its body executes at least once.</p>
+    <p>When reasoning about a loop, always ask: what is initialized? what condition controls repetition? what happens during each iteration? what changes after each iteration? why will the loop eventually stop? Those five questions are the exam-revision checklist for this week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Iteration</td><td>Repeated execution of instructions.</td></tr>
+        <tr><td>Loop</td><td>A programming structure used to perform iteration.</td></tr>
+        <tr><td>Loop body</td><td>The statements that execute repeatedly.</td></tr>
+        <tr><td>Loop condition</td><td>A boolean expression determining whether repetition continues.</td></tr>
+        <tr><td>Loop control variable</td><td>A variable whose value affects loop termination.</td></tr>
+        <tr><td>Counter</td><td>A variable used to count events or iterations.</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Accumulator</td><td>A variable used to maintain a running total.</td></tr>
+        <tr><td>Sentinel</td><td>A special value used to indicate the end of input.</td></tr>
+        <tr><td>Infinite loop</td><td>A loop that never terminates.</td></tr>
+        <tr><td>Nested loop</td><td>A loop contained inside another loop.</td></tr>
+        <tr><td>Off-by-one error</td><td>An error in which a loop executes one too many or one too few times.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Also introduced this week: <em>priming read</em>, <em>counter-controlled</em>, <em>sentinel-controlled</em>, and <em>loop invariant</em>.</div>
+  <aside class="notes">
+    <p>These eleven terms are the vocabulary list the notes ask students to know. Use them as the quiz list, and note that the first five are simply the anatomy of a loop — body, condition, control variable — which is exactly what Part II asked students to be able to point at.</p>
+    <p>The last three named ideas of the week, priming read, counter-controlled and sentinel-controlled, and loop invariant, are not on the notes' vocabulary list but appear in the body of the notes and are fair game.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Lab and Practice</h2>
+  <p class="small">Twelve end-of-week practice problems. A selection:</p>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><strong>1–2:</strong> print 100 down to 1; print multiples of 7 from 7 through 140.</li>
+        <li><strong>3–4:</strong> sum 1 through <code>n</code>; calculate <code>n!</code>.</li>
+        <li><strong>5–6:</strong> highest and lowest of ten scores; count evens and odds until <code>-1</code>.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>Problem 4:</div>
+<pre><code class="language-text" data-trim data-noescape>
+5! = 5 × 4 × 3 × 2 × 1 = 120
+</code></pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li><strong>7–9:</strong> primality; count digits; sum digits.</li>
+        <li><strong>10:</strong> nested loops to print a shrinking triangle.</li>
+        <li><strong>11–12:</strong> simulate two dice 10,000 times; a menu-driven calculator.</li>
+      </ul>
+      <p class="small">Problem 10 asks for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+*****
+****
+***
+**
+*
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m3-practice-problems" tabindex="0">All twelve problems in full</span>
+  </div>
+  <aside class="notes">
+    <p>The twelve problems are ordered roughly by the part of the week they exercise. Problems 1 and 2 are bare counting loops. Problems 3 through 6 are accumulators, counters, and sentinels. Problems 7 through 9 are the digit and divisor techniques from Part X. Problem 10 is nested loops, 11 is simulation, and 12 is the <code>do-while</code> menu.</p>
+    <p>Problem 10 is the triangle from Part VII turned upside down, which is why the inner bound must now shrink as the outer variable grows. Problem 12 is the menu program from Part VI with real arithmetic in the branches.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">So far, our programs have placed most of their logic inside the <code>main</code> method. As programs grow, this becomes difficult to manage.</p>
+      <p class="small">For example, rather than repeatedly writing code to determine whether a number is prime, we will eventually be able to write something conceptually like:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (isPrime(number)) {
+    ...
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Next week we will study <strong>methods and program decomposition</strong>. Instead of writing one long program, we will begin organizing programs into smaller reusable pieces.</p>
+      <div class="def"><span class="term">Week 4:</span> Methods and Program Decomposition</div>
+      <div class="box note"><span class="box-title">Note</span>This transition — from individual statements and loops to reusable operations — is an important step toward object-oriented programming.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>So far, our programs have placed most of their logic inside the <code>main</code> method. As programs grow, this becomes difficult to manage. Next week we will study methods and program decomposition. Instead of writing one long program, we will begin organizing programs into smaller reusable pieces.</p>
+    <p>For example, rather than repeatedly writing code to determine whether a number is prime, we will eventually be able to write something conceptually like <code>if (isPrime(number))</code>. Point back at the fifteen-line prime test from Part X — next week it becomes a single expression.</p>
+    <p>This transition, from individual statements and loops to reusable operations, is an important step toward object-oriented programming.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 3 — Loops and Iteration
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m3-why-loops"
+          data-kicker="Deep dive" data-title="Why do we need loops?">
+  <h4>The task</h4>
+  <p>Consider the following task:</p>
+  <p><em>Print the numbers 1 through 5.</em></p>
+  <h4>Without a loop</h4>
+  <p>We could write:</p>
+<pre><code class="language-java">System.out.println(1);
+System.out.println(2);
+System.out.println(3);
+System.out.println(4);
+System.out.println(5);</code></pre>
+  <p>This works.</p>
+  <p>But what if we want to print the numbers from 1 through 1,000?</p>
+  <p>Writing 1,000 <code>println</code> statements would be tedious, difficult to maintain, and error-prone.</p>
+  <h4>With a loop</h4>
+  <p>Programming languages provide <strong>loops</strong> to repeat instructions. A loop allows us to express:</p>
+  <p><em>Repeat this operation while some condition is true.</em></p>
+  <p>For example:</p>
+<pre><code class="language-java">int number = 1;
+
+while (number &lt;= 5) {
+    System.out.println(number);
+    number++;
+}</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">1
+2
+3
+4
+5</code></pre>
+  <div class="box key"><span class="box-title">Why it matters</span>The program contains only a few lines, but those lines can execute many times. Changing 5 to 1,000 changes one character; the version without a loop would need 995 more statements.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m3-while-trace"
+          data-kicker="Worked example" data-title="A while loop, traced line by line">
+  <h4>The program</h4>
+<pre><code class="language-java">int x = 1;
+
+while (x &lt;= 5) {
+    System.out.println(x);
+    x++;
+}</code></pre>
+  <h4>Execution proceeds approximately like this</h4>
+<pre><code class="language-text">x = 1
+Is x &lt;= 5? yes
+print 1
+x becomes 2
+
+Is x &lt;= 5? yes
+print 2
+x becomes 3
+
+Is x &lt;= 5? yes
+print 3
+x becomes 4
+
+Is x &lt;= 5? yes
+print 4
+x becomes 5
+
+Is x &lt;= 5? yes
+print 5
+x becomes 6
+
+Is x &lt;= 5? no
+stop</code></pre>
+  <h4>What to notice</h4>
+  <ul>
+    <li>The condition is evaluated six times, but the body runs only five times. The sixth evaluation is the one that ends the loop.</li>
+    <li>After the loop, <code>x</code> holds 6 — one past the last value that was printed. Students almost always expect 5.</li>
+    <li>The order inside each pass is fixed: test, body, update. Nothing else happens.</li>
+  </ul>
+  <p>The variable <code>x</code> is often called the <strong>loop control variable</strong>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m3-infinite-loops"
+          data-kicker="Common error" data-title="Two ways to write an infinite loop">
+  <h4>Forgetting the update</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">int x = 1;
+
+while (x &lt;= 5) {
+    System.out.println(x);
+}</code></pre>
+  <p>What happens? <code>x</code> never changes. The condition:</p>
+<pre><code class="language-java">x &lt;= 5</code></pre>
+  <p>therefore remains true forever. The program repeatedly prints:</p>
+<pre><code class="language-text">1
+1
+1
+1
+1
+...</code></pre>
+  <p>This is an <strong>infinite loop</strong>. An infinite loop occurs when the condition controlling a loop never becomes false.</p>
+  <h4>Updating in the wrong direction</h4>
+  <p>Another example:</p>
+<pre><code class="language-java">int x = 1;
+
+while (x &lt;= 5) {
+    System.out.println(x);
+    x--;
+}</code></pre>
+  <p>This is also infinite. The programmer intended <code>x</code> to approach 5, but instead <code>x</code> moves farther away:</p>
+<pre><code class="language-text">1
+0
+-1
+-2
+-3
+...</code></pre>
+  <h4>Important question when designing loops</h4>
+  <p>Ask:</p>
+  <p><em>What changes on each iteration, and why will the condition eventually become false?</em></p>
+  <p>If you cannot answer this question, examine the loop carefully.</p>
+  <div class="box warn"><span class="box-title">Watch out</span>The second example is the more dangerous of the two, because there <em>is</em> an update. A reader skimming for "does this loop change anything?" will answer yes and move on.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m3-sentinel-average"
+          data-kicker="Worked example" data-title="Sentinel-controlled average, in full">
+  <h4>The problem</h4>
+  <p>Suppose a professor wants to enter exam scores but does not know how many students there are. The user enters <code>-1</code> when finished.</p>
+  <h4>The program</h4>
+<pre><code class="language-java">Scanner input = new Scanner(System.in);
+
+double total = 0;
+int count = 0;
+
+System.out.print("Enter score (-1 to finish): ");
+double score = input.nextDouble();
+
+while (score != -1) {
+
+    total += score;
+    count++;
+
+    System.out.print("Enter score (-1 to finish): ");
+    score = input.nextDouble();
+}
+
+if (count &gt; 0) {
+    double average = total / count;
+
+    System.out.println("Number of scores: " + count);
+    System.out.println("Average: " + average);
+} else {
+    System.out.println("No scores entered.");
+}</code></pre>
+  <h4>Why the guard is necessary</h4>
+  <p>Notice the check:</p>
+<pre><code class="language-java">if (count &gt; 0)</code></pre>
+  <p>Why is it necessary? Because otherwise we could perform:</p>
+<pre><code class="language-java">total / count</code></pre>
+  <p>when <code>count</code> is zero — which is exactly what happens if the very first thing the user enters is the sentinel.</p>
+  <h4>The pieces, named</h4>
+  <ul>
+    <li><code>total</code> is the accumulator; <code>count</code> is the counter. Both are initialised before the loop.</li>
+    <li>The read before the loop is the <strong>priming read</strong>; the read at the bottom of the body keeps the pattern going.</li>
+    <li>The sentinel is never added to <code>total</code> and never counted, because the condition is tested before the body runs.</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m3-for-patterns"
+          data-kicker="Reference" data-title="Five common for-loop patterns">
+  <h4>Counting from 0 to 9</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}</code></pre>
+  <h4>Counting from 1 to 10</h4>
+<pre><code class="language-java">for (int i = 1; i &lt;= 10; i++) {
+    System.out.println(i);
+}</code></pre>
+  <h4>Counting by 2</h4>
+<pre><code class="language-java">for (int i = 0; i &lt;= 20; i += 2) {
+    System.out.println(i);
+}</code></pre>
+  <h4>Counting backward</h4>
+<pre><code class="language-java">for (int i = 10; i &gt;= 1; i--) {
+    System.out.println(i);
+}</code></pre>
+  <h4>Counting by 5</h4>
+<pre><code class="language-java">for (int i = 0; i &lt;= 100; i += 5) {
+    System.out.println(i);
+}</code></pre>
+  <h4>Reading any of them</h4>
+  <p>Every one of these headers answers the same three questions: where does the variable start, when does the loop keep going, and how does the variable change. The five patterns differ only in those three answers.</p>
+  <p>For each of them, ask how many times the body runs. In order: ten, ten, eleven, ten, and twenty-one. The two that surprise people are the ones that step by more than one, because the number of iterations is no longer the difference between the bounds.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m3-scope"
+          data-kicker="Deep dive" data-title="Variable scope in for loops">
+  <h4>The variable lives in the loop</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}</code></pre>
+  <p>The variable <code>i</code> exists only inside the loop.</p>
+  <h4>What breaks</h4>
+  <p>This will therefore produce a compilation error:</p>
+<pre><code class="language-java">for (int i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+
+System.out.println(i);</code></pre>
+  <h4>The fix</h4>
+  <p>If the variable must be used afterward, declare it before the loop.</p>
+<pre><code class="language-java">int i;
+
+for (i = 0; i &lt; 10; i++) {
+    System.out.println(i);
+}
+
+System.out.println(i);</code></pre>
+  <h4>Which should you prefer?</h4>
+  <p>Declare the variable in the header whenever you can. A variable that exists only where it is needed cannot be accidentally read, or accidentally reused, anywhere else — and the compiler will tell you immediately if you try.</p>
+  <p>Widen the scope only when the value genuinely matters after the loop ends: for instance, when you want to know the value the loop stopped at.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m3-fizzbuzz"
+          data-kicker="Worked example" data-title="FizzBuzz, and why order matters">
+  <h4>The problem</h4>
+  <p>For numbers 1 through 100:</p>
+  <ul>
+    <li>Print <code>"Fizz"</code> if the number is divisible by 3.</li>
+    <li>Print <code>"Buzz"</code> if divisible by 5.</li>
+    <li>Print <code>"FizzBuzz"</code> if divisible by both.</li>
+    <li>Otherwise print the number.</li>
+  </ul>
+  <h4>Solution</h4>
+<pre><code class="language-java">for (int i = 1; i &lt;= 100; i++) {
+
+    if (i % 3 == 0 &amp;&amp; i % 5 == 0) {
+        System.out.println("FizzBuzz");
+    } else if (i % 3 == 0) {
+        System.out.println("Fizz");
+    } else if (i % 5 == 0) {
+        System.out.println("Buzz");
+    } else {
+        System.out.println(i);
+    }
+}</code></pre>
+  <h4>Why must we test divisibility by both 3 and 5 first?</h4>
+  <p>Suppose <code>i</code> is 15. If we first test:</p>
+<pre><code class="language-java">i % 3 == 0</code></pre>
+  <p>then Java enters that branch immediately and prints <code>"Fizz"</code>.</p>
+  <p>The more specific condition should therefore come first.</p>
+  <div class="box key"><span class="box-title">The general rule</span>In an <code>else if</code> chain, only the first true condition runs. Order the branches from most specific to least specific, or the specific cases will be swallowed by the general ones.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m3-menu"
+          data-kicker="Worked example" data-title="A menu loop with do-while">
+  <h4>The program</h4>
+  <p>A menu is a common example.</p>
+<pre><code class="language-java">int choice;
+
+do {
+
+    System.out.println("1. Add");
+    System.out.println("2. Delete");
+    System.out.println("3. Search");
+    System.out.println("4. Quit");
+
+    System.out.print("Choose an option: ");
+    choice = input.nextInt();
+
+    if (choice == 1) {
+        System.out.println("Adding...");
+    } else if (choice == 2) {
+        System.out.println("Deleting...");
+    } else if (choice == 3) {
+        System.out.println("Searching...");
+    }
+
+} while (choice != 4);
+
+System.out.println("Goodbye.");</code></pre>
+  <h4>Why do-while</h4>
+  <p>The menu must appear at least once, making <code>do-while</code> a natural choice.</p>
+  <p>Written as a <code>while</code> loop, you would have to either print the menu once before the loop and again inside it, or invent a starting value for <code>choice</code> whose only purpose is to make the first condition check succeed. Both are worse.</p>
+  <h4>Details worth pointing at</h4>
+  <ul>
+    <li><code>int choice;</code> is declared <em>before</em> the <code>do</code>, because the condition at the bottom refers to it. A variable declared inside the body would not be visible there.</li>
+    <li>There is no branch for <code>choice == 4</code>. Choosing 4 simply lets the condition fail, and control falls through to the farewell message.</li>
+    <li>An unrecognised choice — 9, say — matches no branch, so the loop simply prints the menu again.</li>
+    <li>Note the semicolon after <code>while (choice != 4)</code>. A <code>do-while</code> is the one loop form that requires one.</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m3-random"
+          data-kicker="Deep dive" data-title="From Math.random() to a die roll">
+  <h4>The simulation</h4>
+  <p>Loops allow us to simulate repeated random events. Suppose we want to roll a six-sided die ten times.</p>
+<pre><code class="language-java">for (int i = 0; i &lt; 10; i++) {
+
+    int roll = (int)(Math.random() * 6) + 1;
+
+    System.out.println(roll);
+}</code></pre>
+  <h4>Step 1 — the raw value</h4>
+  <p>The expression:</p>
+<pre><code class="language-java">Math.random()</code></pre>
+  <p>produces a random <code>double</code> approximately in the range:</p>
+<pre><code class="language-text">0.0 &lt;= value &lt; 1.0</code></pre>
+  <h4>Step 2 — scale it</h4>
+  <p>Multiplying by 6 gives:</p>
+<pre><code class="language-text">0.0 &lt;= value &lt; 6.0</code></pre>
+  <h4>Step 3 — make it an integer</h4>
+  <p>Casting to <code>int</code> produces:</p>
+<pre><code class="language-text">0, 1, 2, 3, 4, or 5</code></pre>
+  <h4>Step 4 — shift the range</h4>
+  <p>Adding 1 gives:</p>
+<pre><code class="language-text">1, 2, 3, 4, 5, or 6</code></pre>
+  <div class="box key"><span class="box-title">The general recipe</span>Each of the four steps does exactly one job: produce randomness, set the width of the range, discard the fraction, and set where the range starts. Change the 6 to change how many outcomes there are; change the 1 to change what the lowest outcome is.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m3-guessing-game"
+          data-kicker="Worked example" data-title="The number guessing game, both versions">
+  <h4>The problem</h4>
+  <p>Suppose the computer chooses a number from 1 through 100. The player keeps guessing until they find the number.</p>
+  <h4>First version</h4>
+<pre><code class="language-java">Scanner input = new Scanner(System.in);
+
+int secret = (int)(Math.random() * 100) + 1;
+
+int guess = 0;
+
+while (guess != secret) {
+
+    System.out.print("Enter your guess: ");
+    guess = input.nextInt();
+
+    if (guess &lt; secret) {
+        System.out.println("Too low.");
+    } else if (guess &gt; secret) {
+        System.out.println("Too high.");
+    } else {
+        System.out.println("Correct!");
+    }
+}</code></pre>
+  <p>Here, we do not know how many guesses will be required. Therefore a <code>while</code> loop is a natural choice.</p>
+  <h4>Second version — counting the attempts</h4>
+  <p>We can also count the number of attempts.</p>
+<pre><code class="language-java">Scanner input = new Scanner(System.in);
+
+int secret = (int)(Math.random() * 100) + 1;
+
+int guess = 0;
+int attempts = 0;
+
+while (guess != secret) {
+
+    System.out.print("Enter your guess: ");
+    guess = input.nextInt();
+
+    attempts++;
+
+    if (guess &lt; secret) {
+        System.out.println("Too low.");
+    } else if (guess &gt; secret) {
+        System.out.println("Too high.");
+    }
+}
+
+System.out.println("Correct!");
+System.out.println("Attempts: " + attempts);</code></pre>
+  <h4>What changed</h4>
+  <ul>
+    <li>A counter, <code>attempts</code>, initialised to 0 before the loop and incremented immediately after each guess is read.</li>
+    <li>The <code>else</code> branch that printed "Correct!" is gone. Reaching the line after the loop already proves the guess was right, so the message moved there.</li>
+  </ul>
+  <p>Notice that several ideas work together: loop, user input, conditionals, counter, random numbers. Programs become interesting when fundamental constructs are combined.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m3-digit-sum"
+          data-kicker="Worked example" data-title="Digit sum — peeling a number apart">
+  <h4>The problem</h4>
+  <p>Suppose we want to add the digits of an integer. For example:</p>
+<pre><code class="language-text">5274</code></pre>
+  <p>should produce:</p>
+<pre><code class="language-text">5 + 2 + 7 + 4 = 18</code></pre>
+  <h4>The two operators</h4>
+  <p>We can repeatedly extract the last digit. Recall:</p>
+<pre><code class="language-java">5274 % 10</code></pre>
+  <p>gives:</p>
+<pre><code class="language-text">4</code></pre>
+  <p>And:</p>
+<pre><code class="language-java">5274 / 10</code></pre>
+  <p>using integer division gives:</p>
+<pre><code class="language-text">527</code></pre>
+  <h4>The program</h4>
+<pre><code class="language-java">int number = 5274;
+int sum = 0;
+
+while (number &gt; 0) {
+
+    int digit = number % 10;
+
+    sum += digit;
+
+    number /= 10;
+}
+
+System.out.println(sum);</code></pre>
+  <h4>Trace</h4>
+  <table>
+    <thead><tr><th>number</th><th>digit</th><th>sum</th></tr></thead>
+    <tbody>
+      <tr><td>5274</td><td>4</td><td>4</td></tr>
+      <tr><td>527</td><td>7</td><td>11</td></tr>
+      <tr><td>52</td><td>2</td><td>13</td></tr>
+      <tr><td>5</td><td>5</td><td>18</td></tr>
+      <tr><td>0</td><td>—</td><td>18</td></tr>
+    </tbody>
+  </table>
+  <div class="box key"><span class="box-title">Why this example matters</span>This is an important example because the loop is not simply counting from one number to another. Instead, each iteration transforms the problem into a smaller version of itself.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m3-prime"
+          data-kicker="Worked example" data-title="Testing whether a number is prime">
+  <h4>The definition</h4>
+  <p>An integer greater than 1 is prime if it has no positive divisors other than 1 and itself. For example:</p>
+<pre><code class="language-text">7</code></pre>
+  <p>is prime. But:</p>
+<pre><code class="language-text">12</code></pre>
+  <p>is not prime because:</p>
+<pre><code class="language-text">12 % 2 == 0</code></pre>
+  <h4>One basic approach</h4>
+<pre><code class="language-java">int number = 17;
+boolean prime = true;
+
+for (int divisor = 2; divisor &lt; number; divisor++) {
+
+    if (number % divisor == 0) {
+        prime = false;
+        break;
+    }
+}
+
+if (prime) {
+    System.out.println(number + " is prime.");
+} else {
+    System.out.println(number + " is not prime.");
+}</code></pre>
+  <h4>How it works</h4>
+  <ul>
+    <li>The flag <code>prime</code> starts as <code>true</code> — the loop is looking for evidence to the contrary.</li>
+    <li>Every candidate divisor from 2 up to (but not including) the number is tested.</li>
+    <li>The first divisor that divides evenly settles the question, so <code>break</code> leaves immediately. This is the case where <code>break</code> genuinely earns its place: no later evidence could change the answer.</li>
+  </ul>
+  <h4>On efficiency</h4>
+  <p>This is not the most efficient prime-testing algorithm. That is intentional. At this stage, the important goal is understanding how loops can search for evidence that satisfies a condition.</p>
+  <p>Later in the course, we will ask: <em>Can we make this algorithm faster?</em></p>
+</template>
+
+<template class="csc-modal-tpl" id="m3-loop-errors"
+          data-kicker="Reference" data-title="Six common loop errors">
+  <h4>Error 1: Forgetting the update</h4>
+<pre><code class="language-java">int x = 1;
+
+while (x &lt;= 10) {
+    System.out.println(x);
+}</code></pre>
+  <p>Result: infinite loop.</p>
+  <h4>Error 2: Updating in the wrong direction</h4>
+<pre><code class="language-java">int x = 1;
+
+while (x &lt;= 10) {
+    System.out.println(x);
+    x--;
+}</code></pre>
+  <p>Result: infinite loop.</p>
+  <h4>Error 3: Off-by-one error</h4>
+<pre><code class="language-java">for (int i = 1; i &lt; 10; i++)</code></pre>
+  <p>executes 9 times, not 10.</p>
+  <h4>Error 4: Extra semicolon</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">for (int i = 0; i &lt; 10; i++); {
+    System.out.println("Hello");
+}</code></pre>
+  <p>Notice the semicolon after the <code>for</code> statement:</p>
+<pre><code class="language-java">i++);</code></pre>
+  <p>That semicolon represents an empty loop body. The following block is therefore not actually part of the loop. This code prints <code>"Hello"</code> only once. Correct:</p>
+<pre><code class="language-java">for (int i = 0; i &lt; 10; i++) {
+    System.out.println("Hello");
+}</code></pre>
+  <h4>Error 5: Incorrect initialization</h4>
+<pre><code class="language-java">int total;
+
+for (int i = 1; i &lt;= 10; i++) {
+    total += i;
+}</code></pre>
+  <p>This produces an error because <code>total</code> has not been initialized. Correct:</p>
+<pre><code class="language-java">int total = 0;</code></pre>
+  <h4>Error 6: Resetting an accumulator inside the loop</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">for (int i = 1; i &lt;= 10; i++) {
+
+    int total = 0;
+
+    total += i;
+}</code></pre>
+  <p>The variable is reset to zero during every iteration. Correct:</p>
+<pre><code class="language-java">int total = 0;
+
+for (int i = 1; i &lt;= 10; i++) {
+    total += i;
+}</code></pre>
+  <div class="box pitfall"><span class="box-title">Which ones does the compiler catch?</span>Only error 5. Errors 1, 2 and 4 compile and run; errors 3 and 6 compile, run, terminate, and give a plausible wrong answer. That is why tracing matters.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m3-checkpoints"
+          data-kicker="Review" data-title="All six lecture checkpoints, with answers">
+  <h4>Checkpoint 1 — What does this print?</h4>
+<pre><code class="language-java">int x = 3;
+
+while (x &lt;= 7) {
+    System.out.print(x + " ");
+    x++;
+}</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">3 4 5 6 7</code></pre>
+  <h4>Checkpoint 2 — How many times does this loop execute?</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; 20; i++) {
+    System.out.println(i);
+}</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">20 times</code></pre>
+  <h4>Checkpoint 3 — What does this print?</h4>
+<pre><code class="language-java">for (int i = 10; i &gt; 0; i -= 2) {
+    System.out.print(i + " ");
+}</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">10 8 6 4 2</code></pre>
+  <h4>Checkpoint 4 — What is wrong?</h4>
+<pre><code class="language-java">int x = 5;
+
+while (x &gt; 0) {
+    System.out.println(x);
+    x++;
+}</code></pre>
+  <p><code>x</code> is increasing. Therefore:</p>
+<pre><code class="language-java">x &gt; 0</code></pre>
+  <p>continues to remain true. The loop does not terminate. It should probably contain:</p>
+<pre><code class="language-java">x--;</code></pre>
+  <h4>Checkpoint 5 — What is the final value of <code>sum</code>?</h4>
+<pre><code class="language-java">int sum = 0;
+
+for (int i = 1; i &lt;= 4; i++) {
+    sum += i;
+}</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">10</code></pre>
+  <p>because:</p>
+<pre><code class="language-text">1 + 2 + 3 + 4 = 10</code></pre>
+  <h4>Checkpoint 6 — How many times does <code>"Hello"</code> print?</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; 4; i++) {
+    for (int j = 0; j &lt; 3; j++) {
+        System.out.println("Hello");
+    }
+}</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">4 × 3 = 12 times</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m3-exercises"
+          data-kicker="Practice" data-title="The in-class exercises in full">
+  <h4>Trace the Program</h4>
+  <p>Without running the program, determine the output.</p>
+<pre><code class="language-java">int x = 1;
+int total = 0;
+
+while (x &lt;= 4) {
+
+    total += x * 2;
+
+    System.out.println(
+        "x = " + x +
+        ", total = " + total
+    );
+
+    x++;
+}</code></pre>
+  <p>Construct a table with columns for <code>x</code>, <code>x * 2</code>, and <code>total</code>, with one row per iteration. Then compare your answer with the actual program.</p>
+  <h4>Write a Loop</h4>
+  <p>Write a program that prints:</p>
+<pre><code class="language-text">5
+10
+15
+20
+25
+30
+35
+40
+45
+50</code></pre>
+  <p>Try solving the problem using a <code>while</code> loop, and then using a <code>for</code> loop.</p>
+  <h4>Accumulator</h4>
+  <p>Write a program that calculates:</p>
+  <p><span class="math">1² + 2² + 3² + ⋯ + 10²</span></p>
+  <p>Expected structure:</p>
+<pre><code class="language-java">int sum = 0;
+
+for (...) {
+    ...
+}
+
+System.out.println(sum);</code></pre>
+  <p>Do not write ten separate addition statements.</p>
+  <h4>User Input</h4>
+  <p>Ask the user to enter five integers. Print their sum, their average, how many are positive, how many are negative, and how many are zero.</p>
+  <p>Think carefully about which variables must be initialized before the loop.</p>
+  <h4>Sentinel Loop</h4>
+  <p>Write a program that repeatedly asks for integers. Stop when the user enters:</p>
+<pre><code class="language-text">0</code></pre>
+  <p>Afterward, report the number of values entered, the sum, the average, and the largest value. Do not include the sentinel value in the calculations.</p>
+  <h4>Nested Loops</h4>
+  <p>Use nested loops to produce:</p>
+<pre><code class="language-text">1
+12
+123
+1234
+12345</code></pre>
+  <p>Hint: the number of values printed by the inner loop depends on the current outer-loop value.</p>
+  <h4>Challenge — Reverse a Number</h4>
+  <p>Given:</p>
+<pre><code class="language-text">5729</code></pre>
+  <p>produce:</p>
+<pre><code class="language-text">9275</code></pre>
+  <p>Hint: repeatedly use:</p>
+<pre><code class="language-java">number % 10</code></pre>
+  <p>and:</p>
+<pre><code class="language-java">number / 10</code></pre>
+  <p>Think about how you can construct the reversed value one digit at a time.</p>
+  <h4>Challenge — Guessing Strategy</h4>
+  <p>Imagine a secret integer lies between 1 and 100. Instead of guessing randomly, how could you systematically reduce the number of possibilities? For example:</p>
+<pre><code class="language-text">Is it 50?
+
+Too high.
+
+Now we know the answer is between 1 and 49.</code></pre>
+  <p>This idea will later become an important algorithm called <strong>binary search</strong>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m3-patterns"
+          data-kicker="Reference" data-title="Key programming patterns from this week">
+  <p>You should recognize the following patterns.</p>
+  <h4>Counting</h4>
+<pre><code class="language-java">int count = 0;
+
+while (...) {
+    if (...) {
+        count++;
+    }
+}</code></pre>
+  <h4>Accumulating</h4>
+<pre><code class="language-java">int total = 0;
+
+while (...) {
+    total += value;
+}</code></pre>
+  <h4>Fixed repetition</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; n; i++) {
+    ...
+}</code></pre>
+  <h4>Sentinel processing</h4>
+<pre><code class="language-java">read value
+
+while (value != sentinel) {
+
+    process value
+
+    read next value
+}</code></pre>
+  <h4>Finding a maximum</h4>
+<pre><code class="language-java">largest = firstValue;
+
+while (...) {
+
+    if (value &gt; largest) {
+        largest = value;
+    }
+}</code></pre>
+  <h4>Input validation</h4>
+<pre><code class="language-java">while (inputIsInvalid) {
+    askForInputAgain();
+}</code></pre>
+  <p>Conceptually, that is. We will study methods more formally next week.</p>
+  <div class="box key"><span class="box-title">How to use this page</span>When you are given a problem, do not start with syntax. Ask which of these six shapes the problem is, then fill in the blanks. Most of the exercises in this week's practice set are one of these six, or two of them combined.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m3-practice-problems"
+          data-kicker="Practice" data-title="End-of-week practice problems, 1 to 12">
+  <h4>Problems 1 to 3</h4>
+  <ol>
+    <li>Print all integers from 100 down to 1.</li>
+    <li>Print all multiples of 7 from 7 through 140.</li>
+    <li>Calculate the sum of all integers from 1 through <code>n</code>, where <code>n</code> is entered by the user.</li>
+  </ol>
+  <h4>Problem 4</h4>
+  <p>Calculate <code>n!</code>. For example:</p>
+<pre><code class="language-text">5! = 5 × 4 × 3 × 2 × 1 = 120</code></pre>
+  <h4>Problems 5 to 7</h4>
+  <ol start="5">
+    <li>Ask for ten exam scores and report the highest and lowest scores.</li>
+    <li>Read integers until the user enters <code>-1</code>. Count how many entered values are even and how many are odd.</li>
+    <li>Determine whether a positive integer is prime.</li>
+  </ol>
+  <h4>Problem 8</h4>
+  <p>Count how many digits occur in an integer. Example:</p>
+<pre><code class="language-text">Input: 782941
+Output: 6 digits</code></pre>
+  <h4>Problem 9</h4>
+  <p>Calculate the sum of the digits of an integer. Example:</p>
+<pre><code class="language-text">Input: 7829
+Output: 26</code></pre>
+  <h4>Problem 10</h4>
+  <p>Use nested loops to print:</p>
+<pre><code class="language-text">*****
+****
+***
+**
+*</code></pre>
+  <h4>Problems 11 and 12</h4>
+  <ol start="11">
+    <li>Simulate rolling two dice 10,000 times. Count how many times their sum equals 7.</li>
+    <li>Write a simple menu-driven calculator that repeatedly lets the user choose addition, subtraction, multiplication, or division until the user chooses to quit.</li>
+  </ol>
+</template>
+
+<template class="csc-modal-tpl" id="m3-week3-summary"
+          data-kicker="Summary" data-title="Week 3 — the notes' own summary">
+  <h4>What the week introduced</h4>
+  <p>This week introduced iteration, one of the central ideas in programming.</p>
+  <h4>Three loop constructs</h4>
+  <p>Java provides three major loop constructs:</p>
+<pre><code class="language-java">while</code></pre>
+<pre><code class="language-java">for</code></pre>
+  <p>and:</p>
+<pre><code class="language-java">do-while</code></pre>
+  <p>A <code>while</code> loop is commonly used when the number of repetitions is not known in advance.</p>
+  <p>A <code>for</code> loop is commonly used when repetition can naturally be expressed using a counter.</p>
+  <p>A <code>do-while</code> loop guarantees that its body executes at least once.</p>
+  <h4>Standard loop patterns</h4>
+  <p>Many algorithms use standard loop patterns such as:</p>
+  <ul>
+    <li>counters</li>
+    <li>accumulators</li>
+    <li>maximum/minimum tracking</li>
+    <li>sentinel processing</li>
+    <li>input validation</li>
+    <li>nested iteration</li>
+  </ul>
+  <h4>Five questions to ask about any loop</h4>
+  <p>When reasoning about a loop, always ask:</p>
+  <ol>
+    <li>What is initialized?</li>
+    <li>What condition controls repetition?</li>
+    <li>What happens during each iteration?</li>
+    <li>What changes after each iteration?</li>
+    <li>Why will the loop eventually stop?</li>
+  </ol>
+  <div class="box key"><span class="box-title">The deeper goal</span>The goal is not merely to memorize Java syntax. The deeper goal is to learn how to describe and reason about <strong>repeated computation</strong>.</div>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

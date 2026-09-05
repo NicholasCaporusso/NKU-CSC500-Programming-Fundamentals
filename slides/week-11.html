@@ -1,0 +1,3963 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 11: Algorithm Analysis, Searching, and Sorting</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Algorithm Analysis, Searching, and Sorting</h1>
+  <p class="subtitle">Week 11 — from "does it work?" to "how well does it scale?"</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">By the end of this week, you should be able to:</p>
+  <ul class="small">
+    <li>explain what an algorithm is;</li>
+    <li>distinguish an algorithm from a particular Java implementation;</li>
+    <li>identify the input size of a problem;</li>
+    <li>count important operations in simple algorithms;</li>
+    <li>explain why we focus on growth rate rather than exact running time;</li>
+    <li>interpret common Big-O complexity classes;</li>
+    <li>analyze simple loops and nested loops;</li>
+    <li>implement linear search.</li>
+  </ul>
+  <aside class="notes">
+    <p>Fifteen objectives this week, and they fall into three blocks. The first block — the ones on this slide — is about analysis: what an algorithm is, how it differs from the code that implements it, what <em>n</em> means, and how to count work.</p>
+    <p>Read these out at the start and again at the end. The verb matters: "explain", "interpret", "analyze" are reasoning skills, and only "implement" is a typing skill. Week 11 is mostly a reasoning week.</p>
+    <p>Note that the very first objective — "explain what an algorithm is" — was also a Week 1 objective. We are returning to it with a sharper question attached.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul class="small">
+    <li>explain and implement binary search;</li>
+    <li>explain why binary search requires sorted data;</li>
+    <li>compare linear search and binary search;</li>
+    <li>implement selection sort;</li>
+    <li>implement insertion sort;</li>
+    <li>reason about the time complexity of simple searching and sorting algorithms;</li>
+    <li>recognize that different algorithms can solve the same problem with dramatically different efficiency.</li>
+  </ul>
+  <div class="box key"><span class="box-title">The last one is the real one</span>Everything else is a technique. The last objective — that different algorithms can solve the same problem with dramatically different efficiency — is the idea the whole week exists to deliver.</div>
+  <aside class="notes">
+    <p>The second block is the concrete algorithms: linear search, binary search, selection sort, insertion sort. Four algorithms, all short enough to hold in your head at once, all worth tracing by hand.</p>
+    <p>The final objective is the thesis of the week. Our main goal is not to memorize algorithms. The goal is to learn how to compare alternative solutions and reason about their performance.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap</h2>
+  <div class="cols small">
+    <ol>
+      <li>Algorithms and Efficiency</li>
+      <li>Big-O Notation</li>
+      <li>Analyzing Java Code</li>
+      <li>Searching and Linear Search</li>
+      <li>Binary Search</li>
+      <li>Sorting and Selection Sort</li>
+    </ol>
+    <ol start="7">
+      <li>Insertion Sort</li>
+      <li>Simple Sorts and the Standard Library</li>
+      <li>Measuring and Interpreting</li>
+      <li>Worked Examples and Common Mistakes</li>
+      <li>Choosing Algorithms, and Practice</li>
+    </ol>
+  </div>
+  <div class="box note"><span class="box-title">Three topics, one question</span>Algorithm analysis, searching, and sorting are three closely related topics. Searching and sorting are the case studies; analysis is the skill.</div>
+  <aside class="notes">
+    <p>The week is organised into eleven sections. Parts I through III build the analytical machinery — what efficiency means, what Big-O notation says, and how to read a growth rate off a piece of Java.</p>
+    <p>Parts IV through VII are the four algorithms: linear search, binary search, selection sort, insertion sort. Each one gets an idea, a trace, code, and an analysis.</p>
+    <p>Parts VIII through XI step back: why we implement sorts by hand when the library already sorts, how to measure experimentally, where students commonly go wrong, and how to choose.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Algorithms and Efficiency</h2>
+  <p class="part-sub">Two programs can produce exactly the same output and behave very differently as the data grows.</p>
+</section>
+
+<section>
+  <h2>A Second Question</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Up to this point in the course, we have mostly asked:</p>
+      <blockquote class="small">Can we write a program that solves the problem?</blockquote>
+    </div>
+    <div>
+      <p class="small">This week, we introduce a second question:</p>
+      <blockquote class="small">How efficiently does the program solve the problem?</blockquote>
+    </div>
+  </div>
+  <p class="small">Two programs can produce exactly the same output but behave very differently as the amount of input data grows.</p>
+  <div class="box key"><span class="box-title">Key idea</span>For a collection containing 10 elements, those differences may not matter. For a collection containing 10 million elements, they can matter enormously.</div>
+  <details class="acc">
+    <summary>What this week is actually for</summary>
+    <div class="acc-body">
+      <p>This week introduces three closely related topics:</p>
+      <ol>
+        <li><strong>Algorithm analysis</strong></li>
+        <li><strong>Searching</strong></li>
+        <li><strong>Sorting</strong></li>
+      </ol>
+      <p>Our main goal is not to memorize algorithms. The goal is to learn how to compare alternative solutions and reason about their performance.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Up to this point in the course, we have mostly asked: can we write a program that solves the problem? This week, we introduce a second question: how efficiently does the program solve the problem?</p>
+    <p>Two programs can produce exactly the same output but behave very differently as the amount of input data grows. For a collection containing 10 elements, those differences may not matter. For a collection containing 10 million elements, they can matter enormously.</p>
+    <p>This week introduces three closely related topics: algorithm analysis, searching, and sorting. Our main goal is not to memorize algorithms — the goal is to learn how to compare alternative solutions and reason about their performance.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Is an Algorithm?</h2>
+  <div class="def"><span class="term">Algorithm:</span> a precise sequence of steps for solving a problem.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Consider the problem:</p>
+      <blockquote class="small">Find the largest number in an array.</blockquote>
+    </div>
+    <div>
+      <p class="small">One algorithm is:</p>
+      <ol class="small">
+        <li>Assume the first element is the largest.</li>
+        <li>Examine every remaining element.</li>
+        <li>Whenever a larger element is found, remember it.</li>
+        <li>After all elements have been examined, return the remembered value.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Nothing in those four steps mentions Java. That is deliberate — the algorithm exists before any language does.</div>
+  <aside class="notes">
+    <p>An algorithm is a precise sequence of steps for solving a problem. Consider the problem: find the largest number in an array.</p>
+    <p>One algorithm is: assume the first element is the largest; examine every remaining element; whenever a larger element is found, remember it; after all elements have been examined, return the remembered value.</p>
+    <p>Ask the class to state that procedure back to you before showing the code. If they can say it in English, the Java is transcription.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Algorithm and Its Implementation</h2>
+  <p class="small">In Java:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int findMax(int[] values) {
+    int max = values[0];
+
+    for (int i = 1; i &lt; values.length; i++) {
+        if (values[i] &gt; max) {
+            max = values[i];
+        }
+    }
+
+    return max;
+}
+</code></pre>
+  <p class="small">The algorithm is the general procedure. The Java code is one <strong>implementation</strong> of that algorithm.</p>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-algorithm-vs-implementation" tabindex="0">Algorithm vs. implementation, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Here is the four-step procedure written in Java. Notice the loop starts at index 1, not 0 — element 0 is already the running maximum.</p>
+    <p>The algorithm is the general procedure. The Java code is one implementation of that algorithm. The distinction matters because the same algorithm could be implemented in Java, Python, C++, or another language.</p>
+    <p>This is the same distinction we drew in Week 1 between algorithm and program. What is new this week is that we will now measure the algorithm, not the program.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Does "Efficient" Mean?</h2>
+  <p class="small">There are several types of efficiency. Two especially important ones are:</p>
+  <ul class="small">
+    <li><strong>time efficiency</strong> — how much computation an algorithm performs;</li>
+    <li><strong>space efficiency</strong> — how much additional memory an algorithm uses.</li>
+  </ul>
+  <div class="box key"><span class="box-title">Scope for this course</span>In this course, we will focus primarily on <strong>time efficiency</strong>.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Algorithm A performs roughly:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n operations
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Algorithm B performs roughly:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n² operations
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>There are several types of efficiency. Two especially important ones are time efficiency — how much computation an algorithm performs — and space efficiency — how much additional memory an algorithm uses. In this course, we will focus primarily on time efficiency.</p>
+    <p>Suppose two algorithms solve the same problem. Algorithm A performs roughly n operations; Algorithm B performs roughly n squared operations. Hold those two shapes in mind — the next slide is the entire argument for why this week exists.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Small <em>n</em> Hides the Difference</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For small values of <code>n</code>, both might seem fast. If:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n = 10
+</code></pre>
+      <p class="small">then approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Algorithm A: 10 operations
+Algorithm B: 100 operations
+</code></pre>
+      <p class="small">That is not a major difference.</p>
+    </div>
+    <div>
+      <p class="small">But if:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n = 1,000,000
+</code></pre>
+      <p class="small">then approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Algorithm A: 1,000,000 operations
+Algorithm B: 1,000,000,000,000 operations
+</code></pre>
+      <p class="small">The difference becomes <strong>enormous</strong>.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>This is why computer scientists study how algorithms behave as the size of their input <em>increases</em> — not at one fixed size.</div>
+  <aside class="notes">
+    <p>For small values of n, both might seem fast. If n equals 10, then approximately Algorithm A does 10 operations and Algorithm B does 100. That is not a major difference — on a modern machine both finish before you notice.</p>
+    <p>But if n equals one million, then Algorithm A does about one million operations and Algorithm B does about one trillion. The difference becomes enormous. A million operations is instantaneous; a trillion is a coffee break at best.</p>
+    <p>This is why computer scientists study how algorithms behave as the size of their input increases. The interesting quantity is not the count at one size, it is the shape of the curve.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Input Size</h2>
+  <div class="cols-38">
+    <div>
+      <p class="small">When analyzing an algorithm, we usually represent the size of its input using the variable:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n
+</code></pre>
+      <p class="small">For an array:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int[] values;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">we usually define:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n = values.length
+</code></pre>
+      <p class="small">If the array contains 100 elements, then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n = 100
+</code></pre>
+      <p class="small">If it contains 1 million elements:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n = 1,000,000
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>When analyzing an algorithm, we usually represent the size of its input using the variable n. For an array declared as int bracket bracket values, we usually define n equals values dot length.</p>
+    <p>If the array contains 100 elements, then n equals 100. If it contains one million elements, n equals one million. That is all n is: a name for however much data we were handed.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Does <em>n</em> Represent?</h2>
+  <p class="small">Not every problem measures input size in exactly the same way. Examples:</p>
+  <table>
+    <thead><tr><th>Problem</th><th>Possible meaning of <code>n</code></th></tr></thead>
+    <tbody>
+      <tr><td>Searching an array</td><td>Number of elements</td></tr>
+      <tr><td>Sorting a list</td><td>Number of elements</td></tr>
+      <tr><td>Processing a string</td><td>Number of characters</td></tr>
+      <tr><td>Processing a file</td><td>Number of records</td></tr>
+      <tr><td>Working with a graph</td><td>Number of vertices and/or edges</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Before analyzing an algorithm, always ask:</p>
+  <blockquote class="small">What does <code>n</code> represent?</blockquote>
+  <aside class="notes">
+    <p>Not every problem measures input size in exactly the same way. Searching an array and sorting a list both measure n as a number of elements. Processing a string measures characters. Processing a file measures records. Working with a graph may measure vertices, edges, or both.</p>
+    <p>Before analyzing an algorithm, always ask: what does n represent? A complexity claim with no stated n is not a claim at all — it is a decoration.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting Operations: One Loop</h2>
+  <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}
+</code></pre>
+  <p class="small">If the array contains <code>n</code> elements, the body of the loop executes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n times
+</code></pre>
+  <p class="small">We therefore say the amount of work grows approximately in proportion to <code>n</code>.</p>
+  <aside class="notes">
+    <p>Consider a standard indexed for loop that prints every element. If the array contains n elements, the body of the loop executes n times.</p>
+    <p>We therefore say the amount of work grows approximately in proportion to n. Double the array, double the printing. That proportionality — not the exact count — is what we are after.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting Operations: Nested Loops</h2>
+  <p class="small">Now consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; values.length; j++) {
+        System.out.println(values[i] + " " + values[j]);
+    }
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">The outer loop runs <code>n</code> times. For every outer-loop iteration, the inner loop also runs <code>n</code> times. Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n × n = n²
+</code></pre>
+    </div>
+    <div>
+      <span class="math">n <span class="op">×</span> n = n²</span>
+      <p class="small">The body executes approximately <code>n²</code> times.</p>
+      <div class="box key"><span class="box-title">Key idea</span>This difference is one of the most important patterns to recognize in algorithm analysis.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Now consider two nested loops, each running over the whole array. The outer loop runs n times. For every outer-loop iteration, the inner loop also runs n times. Therefore n times n equals n squared — the body executes approximately n squared times.</p>
+    <p>This difference is one of the most important patterns to recognize in algorithm analysis. One loop over the data is linear; a loop inside a loop over the same data is quadratic. Train your eye to spot the nesting first, before reading what the body does.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exact Runtime Is Usually the Wrong Measure</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We could measure an algorithm using a stopwatch. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Program A took 0.27 seconds.
+Program B took 0.31 seconds.
+</code></pre>
+      <p class="small">But this tells us relatively little about the algorithms themselves.</p>
+    </div>
+    <div>
+      <p class="small">Actual execution time depends on:</p>
+      <ul class="smaller">
+        <li>processor speed;</li>
+        <li>memory;</li>
+        <li>operating system;</li>
+        <li>Java version;</li>
+        <li>compiler and JVM optimizations;</li>
+        <li>other programs running on the machine;</li>
+        <li>characteristics of the particular input.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Where this leads</span>We want a machine-independent way to describe how computational effort grows. This leads us to <strong>asymptotic analysis</strong> and <strong>Big-O notation</strong>.</div>
+  <aside class="notes">
+    <p>We could measure an algorithm using a stopwatch. For example: Program A took 0.27 seconds; Program B took 0.31 seconds. But this tells us relatively little about the algorithms themselves.</p>
+    <p>Actual execution time depends on processor speed, memory, operating system, Java version, compiler and JVM optimizations, other programs running on the machine, and characteristics of the particular input. Change any one of those and the numbers move.</p>
+    <p>Instead, we want a machine-independent way to describe how computational effort grows. This leads us to asymptotic analysis and Big-O notation — the subject of Part II.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>Big-O Notation</h2>
+  <p class="part-sub">A machine-independent vocabulary for how work grows with input size.</p>
+</section>
+
+<section>
+  <h2>Big-O: The Basic Idea</h2>
+  <p class="small">Big-O notation describes how the amount of work performed by an algorithm grows as the input size grows.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose an algorithm performs:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3n + 5
+</code></pre>
+      <p class="small">operations. As <code>n</code> becomes very large, the <code>3n</code> term dominates the constant <code>5</code>.</p>
+    </div>
+    <div>
+      <p class="small">We therefore classify the algorithm as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="small">Read this as:</p>
+      <blockquote class="small">Big-O of n</blockquote>
+      <p class="small">or:</p>
+      <blockquote class="small">Order n</blockquote>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The important idea is that we focus on the <strong>growth rate</strong>.</div>
+  <aside class="notes">
+    <p>Big-O notation describes how the amount of work performed by an algorithm grows as the input size grows. Suppose an algorithm performs 3n plus 5 operations. As n becomes very large, the 3n term dominates the constant 5.</p>
+    <p>We therefore classify the algorithm as O of n. Read this as "Big-O of n" or "Order n". Say both aloud — students will hear both in later courses.</p>
+    <p>The important idea is that we focus on the growth rate. The 3 and the 5 are real, but they do not change the shape of the curve.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Ignore Constant Factors</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Suppose one algorithm performs:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5n
+</code></pre>
+      <p class="small">operations.</p>
+    </div>
+    <div>
+      <p class="small">Another performs:</p>
+<pre><code class="language-text" data-trim data-noescape>
+100n
+</code></pre>
+      <p class="small">operations.</p>
+    </div>
+    <div>
+      <p class="small">Both are classified as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+  </div>
+  <p class="small">Why? Because doubling <code>n</code> approximately doubles the work for both algorithms. Their growth pattern is the same.</p>
+  <div class="box warn"><span class="box-title">Watch out</span>This does <strong>not</strong> mean constants never matter in real programs. It means Big-O deliberately ignores them so that we can reason about <em>scalability</em>.</div>
+  <aside class="notes">
+    <p>Suppose one algorithm performs 5n operations and another performs 100n operations. Both are classified as O of n. Why? Because doubling n approximately doubles the work for both algorithms. Their growth pattern is the same.</p>
+    <p>This does not mean constants never matter in real programs. A twenty-times constant factor is a very real difference to a user. It means Big-O deliberately ignores them so that we can reason about scalability — a question that constants cannot answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Ignore Lower-Order Terms</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose the number of operations is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+4n² + 7n + 12
+</code></pre>
+      <p class="small">For very large <code>n</code>, the <code>n²</code> term dominates. So we classify the algorithm as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Similarly:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n + 10       → O(n)
+
+3n² + n      → O(n²)
+
+7            → O(1)
+
+n³ + n² + n → O(n³)
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The mechanical rule, in two steps</summary>
+    <div class="acc-body">
+      <p>To classify an operation count:</p>
+      <ol>
+        <li>Drop every term except the fastest-growing one.</li>
+        <li>Drop the constant multiplier on the term that is left.</li>
+      </ol>
+      <p>Applied to <code>4n² + 7n + 12</code>: step one leaves <code>4n²</code>, step two leaves <code>n²</code>, so the class is <span class="pill">O(n²)</span>. Applied to the constant <code>7</code>: there is no <code>n</code> at all, so the class is <span class="pill">O(1)</span>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose the number of operations is 4n squared plus 7n plus 12. For very large n, the n squared term dominates. So we classify the algorithm as O of n squared.</p>
+    <p>Similarly: n plus 10 is O of n; 3n squared plus n is O of n squared; a bare 7 is O of 1; and n cubed plus n squared plus n is O of n cubed.</p>
+    <p>Work through each of those four out loud. Students who can do this mechanically will find the rest of the week much easier, because analysing code reduces to producing one of these expressions and then simplifying it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Common Complexity Classes</h2>
+  <p class="small">You should become familiar with the following growth rates:</p>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><span class="pill">O(1)</span> — constant time</li>
+        <li><span class="pill">O(log n)</span> — logarithmic time</li>
+        <li><span class="pill">O(n)</span> — linear time</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="small">
+        <li><span class="pill">O(n log n)</span> — many efficient sorts</li>
+        <li><span class="pill">O(n²)</span> — quadratic time</li>
+        <li><span class="pill">O(2ⁿ)</span> — exponential time</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Ordering</span>Reading down the list, each class grows faster than the one above it. The next six slides take them one at a time.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-growth-table" tabindex="0">Growth rates side by side</span>
+  </div>
+  <aside class="notes">
+    <p>You should become familiar with six growth rates: constant, logarithmic, linear, n log n, quadratic, and exponential. This slide is the index; the next six slides give each one an example and a complexity.</p>
+    <p>The ordering is the useful part. Any algorithm from a class higher in this list beats any algorithm from a class lower in it, once n is large enough. "Once n is large enough" is doing real work in that sentence, and we return to it in Part IX.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><span class="pill">O(1)</span> — Constant Time</h2>
+  <p class="small">The amount of work does not grow with the input size. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int first = values[0];
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">Accessing an array element by index takes roughly the same amount of time whether the array contains 10 elements or 10 million.</p>
+      <p class="small">Another example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+return values[values.length - 1];
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Complexity:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span><span class="pill">O(1)</span> does not mean "instant" or "one operation". It means "a number of operations that does not depend on <code>n</code>".</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The amount of work does not grow with the input size. Example: int first equals values sub zero. Accessing an array element by index takes roughly the same amount of time whether the array contains 10 elements or 10 million.</p>
+    <p>Another example: return values sub values dot length minus one. Reaching the last element is no more expensive than reaching the first, because an index is arithmetic, not a walk. Complexity: O of 1.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><span class="pill">O(log n)</span> — Logarithmic Time</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The problem gets significantly smaller after each operation.</p>
+      <p class="small"><strong>Binary search</strong> is the most important example we will study.</p>
+      <p class="small">For binary search, each step eliminates approximately half of the remaining possibilities.</p>
+    </div>
+    <div>
+      <p class="small">Complexity:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(log n)
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Logarithmic algorithms scale extremely well.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What "significantly smaller" means</summary>
+    <div class="acc-body">
+      <p>Not merely smaller by one — smaller by a <em>factor</em>. A loop that removes one element per step from a collection of <code>n</code> takes <code>n</code> steps. A loop that removes <em>half</em> the remaining elements per step takes about <span class="math">log₂ n</span> steps.</p>
+      <p>Part V derives this for binary search in detail. For now the shape is the point: halving is dramatically cheaper than decrementing.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The problem gets significantly smaller after each operation. Binary search is the most important example we will study. For binary search, each step eliminates approximately half of the remaining possibilities.</p>
+    <p>Complexity: O of log n. Logarithmic algorithms scale extremely well — in Part V we will see that a million-element array needs about twenty comparisons, and a billion-element array needs about thirty.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><span class="pill">O(n)</span> — Linear Time</h2>
+  <p class="small">The amount of work increases proportionally with the input size. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int value : values) {
+    System.out.println(value);
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">Complexity:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>If the input doubles, the amount of work roughly doubles.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The amount of work increases proportionally with the input size. The example is an enhanced for loop printing every value. Complexity: O of n.</p>
+    <p>If the input doubles, the amount of work roughly doubles. That is the definition of linear and it is the easiest of the six classes to check experimentally.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><span class="pill">O(n log n)</span> and <span class="pill">O(2ⁿ)</span></h2>
+  <div class="cols">
+    <div>
+      <h4>O(n log n)</h4>
+      <p class="small">Many efficient sorting algorithms have this complexity. Examples include:</p>
+      <ul class="small">
+        <li>merge sort;</li>
+        <li>heapsort;</li>
+        <li>average-case quicksort.</li>
+      </ul>
+      <p class="small">We will encounter these algorithms later in computer science courses. For now, recognize that:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n log n)
+</code></pre>
+      <p class="small">grows substantially more slowly than:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+    <div>
+      <h4>O(2ⁿ) — Exponential Time</h4>
+      <p class="small">The amount of work roughly doubles whenever <code>n</code> increases by 1.</p>
+      <p class="small">These algorithms become impractical very quickly.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>Certain naive recursive algorithms can exhibit exponential behavior.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Many efficient sorting algorithms are O of n log n: merge sort, heapsort, and average-case quicksort. We will encounter these algorithms later in computer science courses. For now, recognize that O of n log n grows substantially more slowly than O of n squared.</p>
+    <p>Exponential time, O of 2 to the n, is the other end of the scale: the amount of work roughly doubles whenever n increases by 1. These algorithms become impractical very quickly. Certain naive recursive algorithms can exhibit exponential behavior — students who wrote naive recursive Fibonacci in Week 10 have already met one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><span class="pill">O(n²)</span> — Quadratic Time</h2>
+  <p class="small">Quadratic behavior often appears when we process all pairs of input elements. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; n; j++) {
+        // constant-time work
+    }
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">Complexity:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Coming up</span>Selection sort and insertion sort have quadratic worst-case behavior.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Quadratic behavior often appears when we process all pairs of input elements. The example is the bare skeleton: two loops, each to n, with constant-time work inside. Complexity: O of n squared.</p>
+    <p>Selection sort and insertion sort have quadratic worst-case behavior. Both of them are two nested loops over the same array, so this is the shape students should already be primed to recognise when we reach Parts VI and VII.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Comparing Growth Rates</h2>
+  <p class="small">Consider these values:</p>
+  <table class="smaller">
+    <thead><tr><th>n</th><th>log₂ n</th><th>n</th><th>n log₂ n</th><th>n²</th></tr></thead>
+    <tbody>
+      <tr><td>10</td><td>~3</td><td>10</td><td>~33</td><td>100</td></tr>
+      <tr><td>100</td><td>~7</td><td>100</td><td>~664</td><td>10,000</td></tr>
+      <tr><td>1,000</td><td>~10</td><td>1,000</td><td>~9,966</td><td>1,000,000</td></tr>
+      <tr><td>1,000,000</td><td>~20</td><td>1,000,000</td><td>~20,000,000</td><td>1,000,000,000,000</td></tr>
+    </tbody>
+  </table>
+  <div class="cols">
+    <div>
+      <p class="small">Notice how slowly logarithmic growth increases. For one million elements:</p>
+<pre><code class="language-text" data-trim data-noescape>
+log₂(1,000,000) ≈ 20
+</code></pre>
+    </div>
+    <div>
+      <span class="math">log₂(1 000 000) <span class="op">≈</span> 20</span>
+      <div class="box key"><span class="box-title">Key idea</span>This fact explains the power of binary search.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>One million elements, class by class</summary>
+    <div class="acc-body">
+      <p>Read the bottom row of the table across. At <code>n = 1,000,000</code>:</p>
+      <ul>
+        <li><span class="pill">O(log n)</span> — about <strong>20</strong> operations;</li>
+        <li><span class="pill">O(n)</span> — about <strong>1,000,000</strong>;</li>
+        <li><span class="pill">O(n log n)</span> — about <strong>20,000,000</strong>;</li>
+        <li><span class="pill">O(n²)</span> — about <strong>1,000,000,000,000</strong>.</li>
+      </ul>
+      <p>That last figure is the same trillion we met in Part I as "Algorithm B" — this table is where it comes from.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Walk down the table one column at a time. As n goes from ten to a million — a hundred thousand times bigger — log base two of n goes from about three to about twenty. It barely moves.</p>
+    <p>Meanwhile n squared goes from one hundred to one trillion. The rightmost column is the one that makes students sit up.</p>
+    <p>Notice how slowly logarithmic growth increases. For one million elements, log base two of one million is approximately 20. This fact explains the power of binary search, which we reach in Part V.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Analyzing Java Code</h2>
+  <p class="part-sub">Nested loops multiply. Consecutive loops add. Everything else follows.</p>
+</section>
+
+<section>
+  <h2>Sequential Statements</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = values[0];
+
+for (int value : values) {
+    System.out.println(value);
+}
+</code></pre>
+      <p class="small">The first statement is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+      <p class="small">The loop is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Together:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1) + O(n)
+</code></pre>
+      <p class="small">The dominant term is <code>n</code>. Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Statements in sequence <em>add</em>, and addition is then simplified by dropping lower-order terms.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider an assignment followed by a loop. The first statement is O of 1. The loop is O of n. Together, O of 1 plus O of n.</p>
+    <p>The dominant term is n. Therefore the whole fragment is O of n. This is just the "ignore lower-order terms" rule from Part II applied to a piece of real code.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Consecutive Loops</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int value : values) {
+    System.out.println(value);
+}
+
+for (int value : values) {
+    System.out.println(value * 2);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Each loop runs <code>n</code> times. Total work:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n + n = 2n
+</code></pre>
+      <p class="small">Ignore the constant factor:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>A common mistake is to assume that two loops always mean <code>O(n²)</code>. They do not.</div>
+    </div>
+  </div>
+  <div class="chain">
+    <span>Nested loops multiply</span><span class="sep">·</span>
+    <span>Consecutive loops add</span>
+  </div>
+  <aside class="notes">
+    <p>Consider two loops one after the other, each over the whole array. Each loop runs n times. Total work: n plus n equals 2n. Ignore the constant factor and we get O of n.</p>
+    <p>A common mistake is to assume that two loops always mean O of n squared. They do not. Nested loops multiply; consecutive loops add. Write that pair of sentences on the board and leave it there for the rest of the lecture.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Nested Loops</h2>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; n; j++) {
+        System.out.println(i + ", " + j);
+    }
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">The outer loop executes <code>n</code> times. For each iteration, the inner loop executes <code>n</code> times. Total:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n × n = n²
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+      <span class="math">n <span class="op">×</span> n = n²</span>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The outer loop executes n times. For each iteration, the inner loop executes n times. Total: n times n equals n squared. Therefore O of n squared.</p>
+    <p>Compare this slide directly with the previous one. The code differs only by where a closing brace sits, and that one brace changes a million operations into a trillion.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Triangular Nested Loop</h2>
+  <p class="small">What about:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; i; j++) {
+        System.out.println(i + ", " + j);
+    }
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">The number of iterations is approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0 + 1 + 2 + 3 + ... + (n - 1)
+</code></pre>
+      <p class="small">This sum is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n(n - 1) / 2
+</code></pre>
+    </div>
+    <div>
+      <p class="small">which is approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n² / 2
+</code></pre>
+      <p class="small">Ignoring constants and lower-order terms:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The inner loop does not need to execute exactly <code>n</code> times for the overall algorithm to be quadratic.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-triangular-sum" tabindex="0">The triangular sum, worked out</span>
+  </div>
+  <aside class="notes">
+    <p>The inner loop here runs to i, not to n. So the number of iterations is approximately zero plus one plus two plus three, and so on up to n minus one. This sum is n times n minus one, all over two, which is approximately n squared over two.</p>
+    <p>Ignoring constants and lower-order terms, we get O of n squared. The inner loop does not need to execute exactly n times for the overall algorithm to be quadratic — half the work of the full square is still quadratic work.</p>
+    <p>This exact triangular pattern reappears twice this week: in the comparison count of selection sort, and in the worst-case shift count of insertion sort.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Searching and Linear Search</h2>
+  <p class="part-sub">Look at everything until you find it — simple, general, and sometimes exactly right.</p>
+</section>
+
+<section>
+  <h2>The Search Problem</h2>
+  <p class="small">A common computational problem is:</p>
+  <blockquote class="small">Given a collection of values and a target, determine whether the target appears in the collection.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Array:
+[14, 8, 21, 5, 17]
+
+Target:
+21
+</code></pre>
+    </div>
+    <div>
+      <p class="small">A search algorithm should determine that <code>21</code> appears in the array. It may return:</p>
+      <ul class="small">
+        <li><code>true</code> or <code>false</code>;</li>
+        <li>the index where the element occurs;</li>
+        <li>the element itself.</li>
+      </ul>
+      <div class="box key"><span class="box-title">Our convention</span>We will use the convention of returning the <strong>index</strong>, and returning <code>-1</code> if the element is not found.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A common computational problem is: given a collection of values and a target, determine whether the target appears in the collection. For example, in the array 14, 8, 21, 5, 17 with target 21, a search algorithm should determine that 21 appears in the array.</p>
+    <p>It may return true or false; the index where the element occurs; or the element itself. Which of those a method returns is an interface decision, not an algorithm decision.</p>
+    <p>We will use the convention of returning the index and returning minus one if the element is not found. Minus one is not a valid array index, which is exactly why it makes a safe "not found" signal.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Linear Search: The Idea</h2>
+  <p class="small">The simplest searching algorithm is <strong>linear search</strong>. The idea:</p>
+  <div class="cols">
+    <div>
+      <ol class="small">
+        <li>Start with the first element.</li>
+        <li>Compare it to the target.</li>
+        <li>If it matches, return its index.</li>
+        <li>Otherwise examine the next element.</li>
+        <li>Continue until the target is found or the array ends.</li>
+      </ol>
+    </div>
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Array:
+[12, 7, 19, 4, 25]
+
+Target:
+19
+</code></pre>
+    </div>
+  </div>
+  <div class="cols">
+    <div>
+      <p class="small">Search:</p>
+<pre><code class="language-text" data-trim data-noescape>
+12 → not 19
+ 7 → not 19
+19 → found
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The answer is index:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The simplest searching algorithm is linear search. Start with the first element; compare it to the target; if it matches, return its index; otherwise examine the next element; continue until the target is found or the array ends.</p>
+    <p>In the array 12, 7, 19, 4, 25 searching for 19: twelve is not nineteen, seven is not nineteen, nineteen is found. The answer is index 2 — not the value, the position.</p>
+    <p>Note the two ways this loop can end. One is success. The other is running off the end of the array, and that second exit is the one beginners forget to handle.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Linear Search in Java</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|2|3-5|8">
+public static int linearSearch(int[] values, int target) {
+    for (int i = 0; i &lt; values.length; i++) {
+        if (values[i] == target) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int[] numbers = {12, 7, 19, 4, 25};
+
+int index = linearSearch(numbers, 19);
+
+System.out.println(index);
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-linear-search-full" tabindex="0">Linear search: code, trace, and analysis</span>
+  </div>
+  <aside class="notes">
+    <p>Nine lines, and every one of them earns its place. The loop walks the indices; the if tests one element; the return inside the loop leaves the moment we succeed; and the return minus one after the loop is the only way to reach the end.</p>
+    <p>Click through the line numbers. The crucial structural point is that <code>return -1</code> sits <em>outside</em> the loop. A student who puts it inside the loop, in an else branch, writes a method that always reports failure after examining one element.</p>
+    <p>Running it on the example array prints 2, matching the hand trace on the previous slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Analyzing Linear Search</h2>
+  <p class="small">Suppose the array contains <code>n</code> elements.</p>
+  <div class="cols-3">
+    <div>
+      <h4>Best case</h4>
+      <p class="small">The target is the first element. Only one comparison is required.</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+    </div>
+    <div>
+      <h4>Worst case</h4>
+      <p class="small">The target is the last element, or not present at all. We must inspect all <code>n</code> elements.</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+    <div>
+      <h4>Average case</h4>
+      <p class="small">On average, we examine some constant fraction of the array. That is still linear growth.</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>So what do we say linear search "is"?</summary>
+    <div class="acc-body">
+      <p>When we state the complexity of linear search, we commonly say:</p>
+<pre><code class="language-text">O(n)</code></pre>
+      <p>The best case is genuinely <span class="pill">O(1)</span>, but a single lucky input is not a useful summary of an algorithm. Unless someone says otherwise, a stated complexity is the worst case.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose the array contains n elements. Best case: the target is the first element, only one comparison is required, O of 1. Worst case: the target is the last element or not present at all, we must inspect all n elements, O of n.</p>
+    <p>Average case: on average, we examine some constant fraction of the array — and that is still linear growth, so O of n.</p>
+    <p>When we state the complexity of linear search, we commonly say O of n. The worst case is the default because it is the only one that gives a guarantee.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Does Linear Search Require Sorted Data?</h2>
+  <p class="small"><strong>No.</strong> Linear search works on:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+[8, 17, 2, 91, 4]
+</code></pre>
+    </div>
+    <div>
+      <p class="small">and also on:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[2, 4, 8, 17, 91]
+</code></pre>
+    </div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="box good"><span class="box-title">Advantage</span>Its advantage is <strong>simplicity</strong>.</div>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Disadvantage</span>Its disadvantage is that it may have to examine <strong>every element</strong>.</div>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Contrast coming</span>Binary search reverses both of these: it is faster, and it demands something of the data first.</div>
+  <aside class="notes">
+    <p>Does linear search require sorted data? No. Linear search works on 8, 17, 2, 91, 4 and also on 2, 4, 8, 17, 91. It makes no assumption about order because it never uses order for anything.</p>
+    <p>Its advantage is simplicity. Its disadvantage is that it may have to examine every element. Keep both of those in mind — Part V introduces an algorithm that trades the first away to fix the second.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Binary Search</h2>
+  <p class="part-sub">Each comparison throws away half the data — but only if the data is sorted.</p>
+</section>
+
+<section>
+  <h2>The Key Idea</h2>
+  <p class="small">Suppose we want to find the number <code>73</code> in the following sorted array:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[4, 11, 19, 27, 32, 45, 58, 66, 73, 81, 90]
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">A linear search would start at the beginning. Binary search does something smarter — it looks near the middle. Suppose the middle value is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+45
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+73 &gt; 45
+</code></pre>
+      <p class="small">and the array is sorted, we know that <code>73</code> cannot appear anywhere to the left of <code>45</code>.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>We can immediately discard approximately half of the array. That is the crucial insight.</div>
+  <aside class="notes">
+    <p>Suppose we want to find the number 73 in a sorted eleven-element array. A linear search would start at the beginning. Binary search does something smarter: it looks near the middle.</p>
+    <p>Suppose the middle value is 45. Since 73 is greater than 45, and the array is sorted, we know that 73 cannot appear anywhere to the left of 45.</p>
+    <p>We can immediately discard approximately half of the array. That is the crucial insight, and everything else about binary search is bookkeeping around it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Binary Search Procedure</h2>
+  <p class="small">Given a <strong>sorted</strong> array:</p>
+  <ol class="small">
+    <li>Identify the middle element.</li>
+    <li>Compare the middle element with the target.</li>
+    <li>If they are equal, we are done.</li>
+    <li>If the target is smaller, search only the left half.</li>
+    <li>If the target is larger, search only the right half.</li>
+    <li>Repeat.</li>
+  </ol>
+  <div class="box key"><span class="box-title">Key idea</span>Each comparison removes approximately half of the remaining search space.</div>
+  <div class="chain">
+    <span>Look at the middle</span><span class="sep">→</span>
+    <span>Discard a half</span><span class="sep">→</span>
+    <span>Repeat</span>
+  </div>
+  <details class="acc">
+    <summary>Why "approximately" half?</summary>
+    <div class="acc-body">
+      <p>A range of even length splits into two equal halves. A range of odd length has a genuine middle element, so after removing it the two sides differ from a true half by one element.</p>
+      <p>That off-by-one never changes the growth rate — the number of steps is still governed by how many times <code>n</code> can be divided by two — which is why the procedure says "approximately".</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Given a sorted array: identify the middle element; compare it with the target; if they are equal we are done; if the target is smaller, search only the left half; if the target is larger, search only the right half; repeat.</p>
+    <p>Each comparison removes approximately half of the remaining search space. That word "approximately" is there because an odd-length range splits unevenly by one element — which does not change the growth rate.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Binary Search Example (1 of 2)</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Search for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+31
+</code></pre>
+      <p class="small">in:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 7, 12, 18, 22, 27, 31, 36, 42, 49, 55]
+</code></pre>
+    </div>
+    <div>
+      <p class="small">First range:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 7, 12, 18, 22, 27, 31, 36, 42, 49, 55]
+                    ^
+                   27
+</code></pre>
+    </div>
+  </div>
+  <div class="cols">
+    <div>
+      <p class="small">Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+31 &gt; 27
+</code></pre>
+      <p class="small">discard the left half.</p>
+    </div>
+    <div>
+      <p class="small">Remaining:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[31, 36, 42, 49, 55]
+         ^
+        42
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Search for 31 in an eleven-element sorted array. The first middle element is 27. Since 31 is greater than 27, discard the left half.</p>
+    <p>What remains is 31, 36, 42, 49, 55 — five elements, whose middle is 42. Notice we went from eleven candidates to five in one comparison.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Binary Search Example (2 of 2)</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+31 &lt; 42
+</code></pre>
+      <p class="small">discard the right half. Remaining:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[31, 36]
+ ^
+31
+</code></pre>
+      <p class="small"><strong>Found.</strong></p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Count the comparisons</span>We searched an 11-element array in only <strong>three</strong> comparisons.</div>
+      <p class="small">A linear search for <code>31</code> in the same array would have examined seven elements.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-binary-trace" tabindex="0">The whole trace, start to finish</span>
+  </div>
+  <aside class="notes">
+    <p>Since 31 is less than 42, discard the right half. What remains is 31 and 36, whose middle is 31. Found.</p>
+    <p>We searched an 11-element array in only three comparisons. Eleven, five, two — the range collapses fast, and this is the shape that produces a logarithm.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Binary Search in Java</h2>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="2-3|5|6|8-9|10-11|12-13|17">
+public static int binarySearch(int[] values, int target) {
+    int low = 0;
+    int high = values.length - 1;
+
+    while (low &lt;= high) {
+        int mid = low + (high - low) / 2;
+
+        if (values[mid] == target) {
+            return mid;
+        } else if (target &lt; values[mid]) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return -1;
+}
+</code></pre>
+  <aside class="notes">
+    <p>Nineteen lines. Walk the clicks: low and high bracket the region we still have to consider; the while condition says "the region is non-empty"; mid is its middle; then three cases — found, go left, go right.</p>
+    <p>The two assignments <code>high = mid - 1</code> and <code>low = mid + 1</code> are where the halving actually happens, and the minus-one and plus-one matter: they exclude the element we just compared, which is what guarantees the loop terminates.</p>
+    <p>As with linear search, <code>return -1</code> lives after the loop. Reaching it means low passed high — the region became empty and the target was never there.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Three Variables</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Three variables define the current search region:</p>
+<pre><code class="language-java" data-trim data-noescape>
+low
+high
+mid
+</code></pre>
+    </div>
+    <div>
+      <p class="small">At all times, if the target exists, it must be between:</p>
+<pre><code class="language-text" data-trim data-noescape>
+low and high
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>That sentence is an <em>invariant</em> — something the loop keeps true on every pass. It is why the algorithm is correct.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What happens when the target is absent</summary>
+    <div class="acc-body">
+      <p>Each pass either returns, or moves <code>low</code> up past <code>mid</code>, or moves <code>high</code> down past <code>mid</code>. The region therefore shrinks every time.</p>
+      <p>Eventually <code>low</code> becomes greater than <code>high</code>, the <code>while</code> condition fails, and control reaches <code>return -1</code>. The region has become empty, and an empty region provably cannot contain the target.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Three variables define the current search region: low, high, and mid. At all times, if the target exists, it must be between low and high.</p>
+    <p>That is the invariant that makes binary search correct. Every branch of the if preserves it: if the target is smaller than the middle value, everything from mid rightwards can be excluded, so high becomes mid minus one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Use This Formula for <code>mid</code>?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">You may see:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int mid = (low + high) / 2;
+</code></pre>
+      <p class="small">For many beginner programs, this works.</p>
+    </div>
+    <div>
+      <p class="small">A safer version is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int mid = low + (high - low) / 2;
+</code></pre>
+      <p class="small">The second version avoids possible <strong>integer overflow</strong> when <code>low</code> and <code>high</code> are very large.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The important conceptual point is simply that <code>mid</code> represents the middle of the current search interval.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-mid-formula" tabindex="0">Both formulas, side by side</span>
+  </div>
+  <aside class="notes">
+    <p>You may see mid computed as low plus high, all over two. For many beginner programs, this works. A safer version is low plus the quantity high minus low, all over two.</p>
+    <p>The second version avoids possible integer overflow when low and high are very large — the sum can exceed the range of int even when both values individually fit.</p>
+    <p>The important conceptual point is simply that mid represents the middle of the current search interval. Do not let the overflow discussion crowd out the idea.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Binary Search Requires Sorted Data</h2>
+  <p class="small">Binary search relies on statements like:</p>
+  <blockquote class="small">Since the target is greater than the middle value, it cannot be in the left half.</blockquote>
+  <p class="small">That reasoning only works if the values are ordered. Consider:</p>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+[40, 2, 99, 7, 15]
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Suppose the middle value is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+99
+</code></pre>
+    </div>
+    <div>
+      <p class="small">and we are looking for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+40
+</code></pre>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">What goes wrong</span>Because <code>40 &lt; 99</code>, binary search might discard the right side. But the relative position of <code>40</code> tells us nothing useful because the array is not sorted.</div>
+  <div class="def"><span class="term">Binary search requires sorted data.</span> This is a <strong>precondition</strong> of the algorithm.</div>
+  <details class="acc">
+    <summary>What a precondition is, and why the algorithm does not check it</summary>
+    <div class="acc-body">
+      <p>A precondition is something that must already be true before the algorithm is called. The algorithm does not check it, and cannot be blamed for its absence.</p>
+      <p>Checking sortedness would itself cost <span class="pill">O(n)</span> — which would defeat the purpose. A binary search that verified its own precondition would be linear, not logarithmic, and the whole advantage would be gone.</p>
+      <p>Watch out: an unsorted array does not make binary search crash. It makes binary search return the <em>wrong answer</em>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Binary search relies on statements like: since the target is greater than the middle value, it cannot be in the left half. That reasoning only works if the values are ordered.</p>
+    <p>Consider the unsorted array 40, 2, 99, 7, 15. Suppose the middle value is 99 and we are looking for 40. Because 40 is less than 99, binary search might discard the right side. But the relative position of 40 tells us nothing useful because the array is not sorted.</p>
+    <p>Therefore: binary search requires sorted data. This is a precondition of the algorithm. Point out that the algorithm does not crash — it returns minus one, confidently and wrongly, and silent wrong answers are worse than exceptions.</p>
+    <p>Preconditions are a recurring idea. A method may legitimately assume something about its inputs, provided that assumption is documented. Exercise 4 in Part XI asks students to find exactly this precondition in unlabelled code.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Is Binary Search <span class="pill">O(log n)</span>?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose an array contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1,024 elements
+</code></pre>
+      <p class="small">Each comparison approximately halves the remaining data:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1024
+512
+256
+128
+64
+32
+16
+8
+4
+2
+1
+</code></pre>
+    </div>
+    <div>
+      <p class="small">It takes roughly 10 halvings. Why? Because:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2¹⁰ = 1024
+</code></pre>
+      <p class="small">Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+log₂(1024) = 10
+</code></pre>
+      <span class="math">2¹⁰ = 1024</span>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The general statement</summary>
+    <div class="acc-body">
+      <p>In general, the number of times we can repeatedly divide <code>n</code> by 2 is approximately:</p>
+<pre><code class="language-text">log₂ n</code></pre>
+      <p>So binary search runs in:</p>
+<pre><code class="language-text">O(log n)</code></pre>
+      <p>"How many halvings?" and "what is the base-two logarithm?" are the same question.</p>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Why no base is written inside the O</summary>
+    <div class="acc-body">
+      <p>Logarithms in different bases differ only by a constant multiplier, and Big-O already ignores constant factors. So <span class="pill">O(log₂ n)</span> and <span class="pill">O(log n)</span> describe the same growth class, and the base is conventionally dropped.</p>
+      <p>When we <em>count</em> halvings, though, the base is two, because we are halving.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-halving" tabindex="0">The halving argument in full</span>
+  </div>
+  <aside class="notes">
+    <p>Suppose an array contains 1,024 elements. Each comparison approximately halves the remaining data: 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1.</p>
+    <p>Count the arrows, not the numbers — it takes roughly ten halvings to get from 1024 down to 1. Why ten? Because two to the tenth is 1024, so log base two of 1024 is 10.</p>
+    <p>In general, the number of times we can repeatedly divide n by 2 is approximately log base two of n. So binary search runs in O of log n.</p>
+    <p>Connect this back to the growth table in Part II: log base two of one million is about twenty. Twenty comparisons to find one record among a million is the reason this algorithm is worth the precondition it demands.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Linear Search vs. Binary Search</h2>
+  <table class="smaller">
+    <thead><tr><th>Property</th><th>Linear Search</th><th>Binary Search</th></tr></thead>
+    <tbody>
+      <tr><td>Requires sorted data?</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Worst-case complexity</td><td>O(n)</td><td>O(log n)</td></tr>
+      <tr><td>Easy to implement?</td><td>Very</td><td>Moderately</td></tr>
+      <tr><td>Works on unsorted arrays?</td><td>Yes</td><td>No</td></tr>
+      <tr><td>Eliminates half each step?</td><td>No</td><td>Yes</td></tr>
+    </tbody>
+  </table>
+  <div class="cols">
+    <div>
+      <h4>Linear search</h4>
+      <p class="small">For one million elements, potentially:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1,000,000 comparisons
+</code></pre>
+    </div>
+    <div>
+      <h4>Binary search</h4>
+      <p class="small">Approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20 comparisons
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-linear-vs-binary" tabindex="0">The comparison, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Read the table row by row. Linear search needs nothing of the data and is very easy to write; binary search needs sorted data and is moderately harder. In exchange, binary search is logarithmic.</p>
+    <p>For one million elements, linear search potentially performs a million comparisons; binary search performs approximately twenty. This is an enormous difference — five orders of magnitude.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>But Sorting Has a Cost</h2>
+  <p class="small">Suppose your data is not already sorted. You cannot simply say:</p>
+  <blockquote class="small">Binary search is faster, so always use binary search.</blockquote>
+  <p class="small">You might first have to <strong>sort</strong> the data. That sorting process itself takes time.</p>
+  <div class="cols">
+    <div>
+      <div class="box warn"><span class="box-title">Search once</span>If you need to search only once, sorting first may not be worthwhile.</div>
+    </div>
+    <div>
+      <div class="box good"><span class="box-title">Search many times</span>If you need to search the same dataset thousands of times, sorting once and then using binary search repeatedly may be extremely beneficial.</div>
+    </div>
+  </div>
+  <div class="def"><span class="term">An important principle:</span> the fastest individual operation does not always produce the best overall solution.</div>
+  <aside class="notes">
+    <p>Suppose your data is not already sorted. You cannot simply say "binary search is faster, so always use binary search". You might first have to sort the data, and that sorting process itself takes time.</p>
+    <p>If you need to search only once, sorting first may not be worthwhile. If you need to search the same dataset thousands of times, sorting once and then using binary search repeatedly may be extremely beneficial.</p>
+    <p>Algorithm choice depends on the larger context. This is an important principle: the fastest individual operation does not always produce the best overall solution. Part XI returns to this with the million-records example.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Sorting and Selection Sort</h2>
+  <p class="part-sub">Repeatedly choose the smallest remaining value, and the array grows sorted from the left.</p>
+</section>
+
+<section>
+  <h2>What Is Sorting?</h2>
+  <p class="small">Sorting means rearranging data according to some ordering.</p>
+  <div class="cols">
+    <div>
+      <p class="small">For numbers:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Before:
+[7, 2, 9, 1, 5]
+
+After:
+[1, 2, 5, 7, 9]
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For strings:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Before:
+["pear", "apple", "orange"]
+
+After:
+["apple", "orange", "pear"]
+</code></pre>
+    </div>
+  </div>
+  <div class="cols">
+    <div>
+      <p class="small">Sorting is useful because organized data is often easier to:</p>
+      <ul class="smaller">
+        <li>search;</li>
+        <li>display;</li>
+        <li>compare;</li>
+        <li>group;</li>
+        <li>analyze.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Many computer science problems involve sorting either directly or indirectly.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Sorting means rearranging data according to some ordering. For numbers, 7, 2, 9, 1, 5 becomes 1, 2, 5, 7, 9. For strings, pear, apple, orange becomes apple, orange, pear — alphabetical order is an ordering just as numeric order is.</p>
+    <p>Sorting is useful because organized data is often easier to search, display, compare, group, and analyze. Many computer science problems involve sorting either directly or indirectly.</p>
+    <p>"Indirectly" covers a lot: finding duplicates, finding a median, and — as we saw at the end of Part V — enabling binary search.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Selection Sort: The Idea</h2>
+  <p class="small">Selection sort repeatedly chooses the <strong>smallest remaining value</strong>. Suppose:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[29, 10, 14, 37, 13]
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">We divide the array conceptually into:</p>
+<pre><code class="language-text" data-trim data-noescape>
+sorted region | unsorted region
+</code></pre>
+      <p class="small">Initially:</p>
+<pre><code class="language-text" data-trim data-noescape>
+| 29 10 14 37 13
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Find the smallest element:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+</code></pre>
+      <p class="small">Swap it with the first position:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 | 29 14 37 13
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Selection sort repeatedly chooses the smallest remaining value. We divide the array conceptually into a sorted region and an unsorted region, with a bar marking the boundary.</p>
+    <p>Initially the sorted region is empty — the bar sits all the way to the left. Find the smallest element, 10, and swap it with the first position. Now the bar has moved one place right.</p>
+    <p>The bar notation is worth drawing on the board. Everything left of the bar is finished and will never move again; everything right of it is still unprocessed.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Selection Sort: Walking the Bar Right</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Now find the smallest value in the remaining unsorted region:</p>
+<pre><code class="language-text" data-trim data-noescape>
+13
+</code></pre>
+      <p class="small">Swap:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 13 | 14 37 29
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Continue:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 13 14 | 37 29
+</code></pre>
+      <p class="small">Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 13 14 29 | 37
+</code></pre>
+      <p class="small"><strong>Finished.</strong></p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-selection-walkthrough" tabindex="0">The whole walkthrough, uninterrupted</span>
+  </div>
+  <aside class="notes">
+    <p>Now find the smallest value in the remaining unsorted region, which is 13, and swap it into position. Continue: 14 is next, then 29, and the bar reaches the end.</p>
+    <p>Notice the last step. Once only one element remains to the right of the bar, it must already be the largest, so no work is needed. That is why the outer loop in the code runs to <code>values.length - 1</code> and not to <code>values.length</code>.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Selection Sort in Java</h2>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="2|4|6-10|12-14">
+public static void selectionSort(int[] values) {
+    for (int i = 0; i &lt; values.length - 1; i++) {
+
+        int minIndex = i;
+
+        for (int j = i + 1; j &lt; values.length; j++) {
+            if (values[j] &lt; values[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        int temp = values[i];
+        values[i] = values[minIndex];
+        values[minIndex] = temp;
+    }
+}
+</code></pre>
+  <details class="acc">
+    <summary>The three-line swap, and why it needs <code>temp</code></summary>
+    <div class="acc-body">
+<pre><code class="language-java">int temp = values[i];
+values[i] = values[minIndex];
+values[minIndex] = temp;</code></pre>
+      <p>The first line saves whatever is currently at position <code>i</code>. The second overwrites that slot with the smallest value. The third puts the saved value into the slot the smallest value came from.</p>
+      <p>Without <code>temp</code>, the second line destroys <code>values[i]</code> before the third line can read it, and one of the two values is lost.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Sixteen lines, and structurally it is two nested loops plus a three-line swap.</p>
+    <p>Click through: the outer loop chooses the position we are filling; minIndex starts as a guess that position i already holds the minimum; the inner loop scans the unsorted region for anything smaller; then the three-line swap puts the winner into place.</p>
+    <p>The three-line swap with a temporary variable is the standard Java idiom. Students who try <code>values[i] = values[minIndex]; values[minIndex] = values[i];</code> lose the original value — walk that failure through if anyone proposes it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Understanding Selection Sort</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The variable:</p>
+<pre><code class="language-java" data-trim data-noescape>
+i
+</code></pre>
+      <p class="small">represents the position we are currently filling.</p>
+    </div>
+    <div>
+      <p class="small">The variable:</p>
+<pre><code class="language-java" data-trim data-noescape>
+minIndex
+</code></pre>
+      <p class="small">stores the location of the smallest value found so far.</p>
+    </div>
+  </div>
+  <p class="small">The inner loop searches the unsorted region. Then we swap the smallest value into position <code>i</code>.</p>
+  <details class="acc">
+    <summary>Why <code>minIndex</code> holds an index, not a value</summary>
+    <div class="acc-body">
+      <p>The swap at the end of each pass needs to know <em>where</em> the smallest value lives, not merely what it is. Storing the index gives us both — <code>values[minIndex]</code> recovers the value whenever we need it, and <code>minIndex</code> itself tells us which slot to swap with.</p>
+      <p>Compare this with <code>findMax</code> from Part I, which stored the value because it only ever needed to return the value.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The variable i represents the position we are currently filling. The variable minIndex stores the location of the smallest value found so far.</p>
+    <p>The inner loop searches the unsorted region. Then we swap the smallest value into position i.</p>
+    <p>Map each variable onto the bar diagram from two slides ago: i is the bar; everything before i is sorted; the inner loop is the scan of everything after it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing Selection Sort (1 of 2)</h2>
+  <p class="small">Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[6, 3, 8, 2, 5]
+</code></pre>
+  <div class="cols">
+    <div>
+      <h4>Pass 1</h4>
+      <p class="small">Find smallest among:</p>
+<pre><code class="language-text" data-trim data-noescape>
+6 3 8 2 5
+</code></pre>
+      <p class="small">Smallest:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2
+</code></pre>
+      <p class="small">Swap with <code>6</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[2, 3, 8, 6, 5]
+</code></pre>
+    </div>
+    <div>
+      <h4>Pass 2</h4>
+      <p class="small">Search:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3 8 6 5
+</code></pre>
+      <p class="small">Smallest:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+</code></pre>
+      <p class="small">Already in correct position.</p>
+<pre><code class="language-text" data-trim data-noescape>
+[2, 3, 8, 6, 5]
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Trace selection sort on 6, 3, 8, 2, 5. Pass one: find the smallest among all five, which is 2, and swap it with 6. The array becomes 2, 3, 8, 6, 5.</p>
+    <p>Pass two: search 3, 8, 6, 5. The smallest is 3, and it is already in the correct position. The array is unchanged.</p>
+    <p>Point out that "unchanged" still cost a full scan of the unsorted region. Selection sort does not notice that it had nothing to do — a fact that matters on the complexity slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing Selection Sort (2 of 2)</h2>
+  <div class="cols">
+    <div>
+      <h4>Pass 3</h4>
+      <p class="small">Search:</p>
+<pre><code class="language-text" data-trim data-noescape>
+8 6 5
+</code></pre>
+      <p class="small">Smallest:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5
+</code></pre>
+      <p class="small">Swap:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[2, 3, 5, 6, 8]
+</code></pre>
+    </div>
+    <div>
+      <h4>Pass 4</h4>
+      <p class="small">Search:</p>
+<pre><code class="language-text" data-trim data-noescape>
+6 8
+</code></pre>
+      <p class="small">Smallest:</p>
+<pre><code class="language-text" data-trim data-noescape>
+6
+</code></pre>
+      <p class="small">Finished:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[2, 3, 5, 6, 8]
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-selection-trace" tabindex="0">All four passes on one page</span>
+  </div>
+  <aside class="notes">
+    <p>Pass three: search 8, 6, 5. The smallest is 5. Swap it into place and the array becomes 2, 3, 5, 6, 8 — already fully sorted.</p>
+    <p>Pass four: search 6 and 8. The smallest is 6, already in position. Finished.</p>
+    <p>The array was sorted after pass three, but the algorithm performed pass four anyway. Selection sort has no early exit, which is precisely why its best case is no better than its worst.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Complexity of Selection Sort</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The first pass examines approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n elements
+</code></pre>
+      <p class="small">The second examines approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n - 1
+</code></pre>
+      <p class="small">Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n - 2
+</code></pre>
+      <p class="small">and so on.</p>
+    </div>
+    <div>
+      <p class="small">Total comparisons are approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n + (n - 1) + (n - 2) + ... + 1
+</code></pre>
+      <p class="small">which is approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n² / 2
+</code></pre>
+      <p class="small">Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Notice something interesting</span>Even if the array is already sorted, selection sort still searches the remaining unsorted region on every pass. Its <strong>best and worst cases are therefore both quadratic</strong> in terms of comparisons.</div>
+  <details class="acc">
+    <summary>The same triangle we met in Part III</summary>
+    <div class="acc-body">
+      <p>Part III counted a triangular nested loop as:</p>
+<pre><code class="language-text">0 + 1 + 2 + 3 + ... + (n - 1)</code></pre>
+      <p>Selection sort counts the same triangle from the other end:</p>
+<pre><code class="language-text">n + (n - 1) + (n - 2) + ... + 1</code></pre>
+      <p>Both sums are approximately <code>n² / 2</code>, and both classify as <span class="pill">O(n²)</span>. The abstract pattern and the real algorithm are the same shape.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The first pass examines approximately n elements, the second approximately n minus 1, then n minus 2, and so on. Total comparisons are approximately n plus n minus one plus n minus two, down to one — which is approximately n squared over two.</p>
+    <p>Therefore selection sort is O of n squared. This is the same triangular sum we derived in Part III for the triangular nested loop; the shape has simply reappeared inside a real algorithm.</p>
+    <p>Notice something interesting: even if the array is already sorted, selection sort still searches the remaining unsorted region on every pass. Its best and worst cases are therefore both quadratic in terms of comparisons.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Insertion Sort</h2>
+  <p class="part-sub">The way people sort a hand of cards — and the only quadratic sort here with a fast best case.</p>
+</section>
+
+<section>
+  <h2>Insertion Sort: The Basic Idea</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Insertion sort works similarly to the way people often organize playing cards in their hands.</p>
+      <p class="small">Imagine you receive cards one at a time. You keep the cards already in your hand sorted.</p>
+      <p class="small">Whenever you receive a new card, you move it left until it reaches the correct position.</p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>That is essentially insertion sort.</div>
+      <div class="chain">
+        <span>Take next card</span><span class="sep">→</span>
+        <span>Slide it left</span><span class="sep">→</span>
+        <span>Drop it in place</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Insertion sort works similarly to the way people often organize playing cards in their hands. Imagine you receive cards one at a time. You keep the cards already in your hand sorted.</p>
+    <p>Whenever you receive a new card, you move it left until it reaches the correct position. That is essentially insertion sort.</p>
+    <p>Contrast the two sorts out loud. Selection sort searches for the right <em>value</em> to put in a fixed position. Insertion sort takes a fixed value and searches for the right <em>position</em>. They are duals of one another.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Insertion Sort Example</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Start with:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[7, 4, 5, 2]
+</code></pre>
+      <p class="small">Treat the first value as already sorted:</p>
+<pre><code class="language-text" data-trim data-noescape>
+7 | 4 5 2
+</code></pre>
+      <p class="small">Insert <code>4</code> into the sorted portion:</p>
+<pre><code class="language-text" data-trim data-noescape>
+4 7 | 5 2
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Insert <code>5</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+4 5 7 | 2
+</code></pre>
+      <p class="small">Insert <code>2</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2 4 5 7
+</code></pre>
+      <p class="small"><strong>Done.</strong></p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the sorted region starts with one element, not zero</summary>
+    <div class="acc-body">
+      <p>A single element is trivially sorted — there is nothing it could be out of order with. So insertion sort gets its sorted region for free and starts inserting from index 1.</p>
+      <p>That is why the outer loop in the Java code begins <code>for (int i = 1; ...)</code> rather than at 0.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Start with 7, 4, 5, 2. Treat the first value as already sorted — the bar sits after the 7. Insert 4 into the sorted portion, giving 4, 7 to the left of the bar.</p>
+    <p>Insert 5: it belongs between 4 and 7. Insert 2: it travels all the way to the front. Done — 2, 4, 5, 7.</p>
+    <p>The bar here means something different from the selection sort bar. In selection sort, elements left of the bar are in their <em>final</em> positions. In insertion sort, they are sorted relative to each other but may still shift right when a smaller value arrives.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Insertion Sort in Java</h2>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="2|4-5|7-10|12">
+public static void insertionSort(int[] values) {
+    for (int i = 1; i &lt; values.length; i++) {
+
+        int current = values[i];
+        int j = i - 1;
+
+        while (j &gt;= 0 &amp;&amp; values[j] &gt; current) {
+            values[j + 1] = values[j];
+            j--;
+        }
+
+        values[j + 1] = current;
+    }
+}
+</code></pre>
+  <details class="acc">
+    <summary>The two-part <code>while</code> condition</summary>
+    <div class="acc-body">
+<pre><code class="language-java">while (j &gt;= 0 &amp;&amp; values[j] &gt; current) {</code></pre>
+      <p>The first test, <code>j &gt;= 0</code>, stops the walk at the front of the array. The second, <code>values[j] &gt; current</code>, stops it as soon as we reach a value that <code>current</code> belongs after.</p>
+      <p>The order matters. Because <code>&amp;&amp;</code> short-circuits, Java never evaluates <code>values[j]</code> once <code>j</code> has gone negative — swap the two tests and the loop throws an <code>ArrayIndexOutOfBoundsException</code> whenever a value travels all the way to the front.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Fourteen lines. Click through: the outer loop starts at 1 because element 0 is already a sorted region of one; current saves the value being inserted before we start overwriting slots; j walks backwards from the element just left of it.</p>
+    <p>The while condition has two parts joined by and. The first, <code>j &gt;= 0</code>, stops us walking off the front of the array. The second, <code>values[j] &gt; current</code>, stops us once we find something that current belongs after. Short-circuit evaluation matters here: if j goes negative, Java never evaluates <code>values[j]</code>.</p>
+    <p>Finally <code>values[j + 1] = current</code> drops the saved value into the gap the shifts opened up.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Understanding the Code (1 of 2)</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 7, 9, 4, 8]
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-java" data-trim data-noescape>
+current = 4;
+</code></pre>
+      <p class="small">The left portion is already sorted:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 7, 9]
+</code></pre>
+      <p class="small">We need to insert <code>4</code>.</p>
+    </div>
+    <div>
+      <p class="small">Compare with <code>9</code>. Shift <code>9</code> right:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 7, 9, 9, 8]
+</code></pre>
+      <p class="small">Compare with <code>7</code>. Shift <code>7</code> right:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 7, 7, 9, 8]
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>The duplicated values are not a bug. The original <code>4</code> is safely held in <code>current</code>, so the slot it came from is free to be overwritten.</div>
+  <aside class="notes">
+    <p>Suppose the array is 3, 7, 9, 4, 8 and current holds 4. The left portion, 3, 7, 9, is already sorted, and we need to insert 4 into it.</p>
+    <p>Compare with 9: 9 is bigger, so shift 9 right. The array shows 3, 7, 9, 9, 8 — a duplicate 9, because the slot that held 4 has been overwritten. Compare with 7: also bigger, so shift 7 right, giving 3, 7, 7, 9, 8.</p>
+    <p>Students often find these transient duplicate values alarming. Say explicitly: the 4 is not lost, it is in the variable <code>current</code>, and it will be written back in a moment.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Understanding the Code (2 of 2)</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Compare with <code>3</code>. Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3 &lt; 4
+</code></pre>
+      <p class="small">stop shifting.</p>
+      <p class="small">Insert <code>4</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 4, 7, 9, 8]
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>The sorted region has grown by one element.</div>
+      <p class="small">The next pass will take <code>8</code> and do the same thing to it.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-insertion-walkthrough" tabindex="0">The insertion of 4, step by step</span>
+  </div>
+  <aside class="notes">
+    <p>Compare with 3. Since 3 is less than 4, stop shifting — we have found where 4 belongs. Insert 4, and the array becomes 3, 4, 7, 9, 8.</p>
+    <p>The sorted region has grown by one element: it is now 3, 4, 7, 9. The 8 at the end is the next value to be inserted.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Complexity of Insertion Sort</h2>
+  <div class="cols">
+    <div>
+      <h4>Worst case</h4>
+      <p class="small">The array may be in reverse order:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[5, 4, 3, 2, 1]
+</code></pre>
+      <p class="small">Each new value may need to move across nearly the entire sorted portion. The number of operations grows approximately as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1 + 2 + 3 + ... + (n - 1)
+</code></pre>
+      <p class="small">Therefore the worst-case complexity is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+    <div>
+      <h4>Best case</h4>
+      <p class="small">Suppose the array is already sorted:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[1, 2, 3, 4, 5]
+</code></pre>
+      <p class="small">The inner loop does almost no work. The algorithm can finish in approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="small">in the best case.</p>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>Insertion sort can therefore perform quite well on <strong>small or nearly sorted</strong> datasets.</div>
+  <details class="acc">
+    <summary>Why reverse order is the worst input</summary>
+    <div class="acc-body">
+      <p>In <code>[5, 4, 3, 2, 1]</code> every value is smaller than everything already in the sorted region, so every value must travel the whole way to the front. Each new value may need to move across nearly the entire sorted portion.</p>
+      <p>In <code>[1, 2, 3, 4, 5]</code> every value is larger than everything before it, so the very first comparison in the <code>while</code> fails and no shifting happens at all. The inner loop does almost no work.</p>
+      <p>Same code, same <code>n</code>, and the difference between <span class="pill">O(n²)</span> and <span class="pill">O(n)</span>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>In the worst case, the array may be in reverse order — 5, 4, 3, 2, 1. Each new value may need to move across nearly the entire sorted portion. The number of operations grows approximately as one plus two plus three up to n minus one, so the worst-case complexity is O of n squared.</p>
+    <p>However, insertion sort has an interesting advantage. Suppose the array is already sorted, 1, 2, 3, 4, 5. The inner loop does almost no work — the very first comparison fails and the while loop exits immediately. The algorithm can finish in approximately O of n in the best case.</p>
+    <p>Insertion sort can therefore perform quite well on small or nearly sorted datasets. This is a real practical fact: production sorting libraries often switch to insertion sort for small subarrays.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Selection Sort vs. Insertion Sort</h2>
+  <table class="smaller">
+    <thead><tr><th>Property</th><th>Selection Sort</th><th>Insertion Sort</th></tr></thead>
+    <tbody>
+      <tr><td>Worst case</td><td>O(n²)</td><td>O(n²)</td></tr>
+      <tr><td>Best case</td><td>O(n²)</td><td>O(n)</td></tr>
+      <tr><td>Main idea</td><td>Repeatedly select minimum</td><td>Insert each item into sorted region</td></tr>
+      <tr><td>Data movement</td><td>Relatively few swaps</td><td>Potentially many shifts</td></tr>
+      <tr><td>Good for teaching?</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Used for huge datasets?</td><td>Usually no</td><td>Usually no</td></tr>
+    </tbody>
+  </table>
+  <div class="box key"><span class="box-title">Key idea</span>The important point is <strong>not</strong> that one is universally better. The important point is that algorithms have different performance characteristics.</div>
+  <details class="acc">
+    <summary>Reading the "best case" row</summary>
+    <div class="acc-body">
+      <p>Selection sort is <span class="pill">O(n²)</span> in the best case because it has no way to notice that the data is already ordered — every pass scans the whole unsorted region regardless.</p>
+      <p>Insertion sort is <span class="pill">O(n)</span> in the best case because its inner <code>while</code> stops on the first comparison when nothing needs to move.</p>
+      <p>Both algorithms carry the same worst-case label, and the label hides a real difference in behaviour. That is why the row exists.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Read the table. Both sorts are quadratic in the worst case, but their best cases differ: selection sort stays quadratic, insertion sort drops to linear. Selection sort performs relatively few swaps; insertion sort may perform many shifts.</p>
+    <p>The last two rows are honest about status: both are excellent for teaching and neither is used for huge datasets.</p>
+    <p>The important point is not that one is universally better. The important point is that algorithms have different performance characteristics — and that a single Big-O label for an algorithm can hide a real difference in behaviour.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Simple Sorts and the Standard Library</h2>
+  <p class="part-sub">Java already sorts. So why are we writing sorts by hand?</p>
+</section>
+
+<section>
+  <h2>Why Do We Study Slow Sorting Algorithms?</h2>
+  <p class="small">If selection sort is <code>O(n²)</code>, and faster sorting algorithms exist, why study it?</p>
+  <div class="cols">
+    <div>
+      <p class="small">Because simple algorithms help us understand important concepts:</p>
+      <ul class="small">
+        <li>nested loops;</li>
+        <li>invariants;</li>
+        <li>swapping;</li>
+        <li>partitioning data into processed and unprocessed regions;</li>
+        <li>algorithm analysis;</li>
+        <li>comparison of alternative strategies.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Selection sort and insertion sort are conceptually manageable enough that we can understand <strong>every operation</strong>.</div>
+      <p class="small">Later, more sophisticated sorting algorithms build on similar reasoning.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A reasonable question: if selection sort is O of n squared, and faster sorting algorithms exist, why study it?</p>
+    <p>Because simple algorithms help us understand important concepts — nested loops, invariants, swapping, partitioning data into processed and unprocessed regions, algorithm analysis, and comparison of alternative strategies. Every one of those six appeared in the last two Parts.</p>
+    <p>Selection sort and insertion sort are conceptually manageable enough that we can understand every operation. Later, more sophisticated sorting algorithms build on similar reasoning.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Java Already Knows How to Sort</h2>
+  <p class="small">In normal Java programs, we often use a library method instead of implementing a sorting algorithm ourselves.</p>
+  <div class="cols">
+    <div>
+      <p class="small">For arrays:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.Arrays;
+
+int[] numbers = {7, 2, 9, 1, 5};
+
+Arrays.sort(numbers);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For lists:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.ArrayList;
+import java.util.Collections;
+
+ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
+
+numbers.add(7);
+numbers.add(2);
+numbers.add(9);
+
+Collections.sort(numbers);
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">A distinction that appears throughout computer science</span>
+    <p>In application development, use good libraries.</p>
+    <p>In computer science education, understand what those libraries are doing conceptually.</p>
+  </div>
+  <details class="acc">
+    <summary>So why implement sorting ourselves?</summary>
+    <div class="acc-body">
+      <p>Because our goal is not merely to produce a sorted array. Our goal is to <strong>understand how algorithms work</strong>.</p>
+      <p>This is not a licence to reimplement library code in real projects. On the job, calling <code>Arrays.sort</code> is the right answer almost every time — but you should know what it costs.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-library-sort" tabindex="0">Library sorting in full</span>
+  </div>
+  <aside class="notes">
+    <p>In normal Java programs, we often use a library method instead of implementing a sorting algorithm ourselves. For arrays, import java.util.Arrays and call Arrays.sort. For lists, import ArrayList and Collections, and call Collections.sort.</p>
+    <p>Note that both of these sort <em>in place</em> — they modify the array or list you hand them rather than returning a new one. That is a common source of confusion for students expecting a return value.</p>
+    <p>Why implement sorting ourselves in this class? Because our goal is not merely to produce a sorted array. Our goal is to understand how algorithms work.</p>
+    <p>This distinction appears throughout computer science: in application development, use good libraries; in computer science education, understand what those libraries are doing conceptually.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Measuring and Interpreting</h2>
+  <p class="part-sub">Big-O is a model. A stopwatch is an observation. You need both, and neither replaces the other.</p>
+</section>
+
+<section>
+  <h2>Theory and Experiment</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Big-O gives us a theoretical model. We can also measure algorithms experimentally. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+long start = System.nanoTime();
+
+selectionSort(values);
+
+long end = System.nanoTime();
+
+long elapsed = end - start;
+
+System.out.println(elapsed);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This produces an empirical measurement of running time. But individual measurements can be <strong>noisy</strong>.</p>
+      <p class="small">To perform a meaningful experiment, we might:</p>
+      <ol class="small">
+        <li>Generate arrays of different sizes.</li>
+        <li>Run the algorithm several times.</li>
+        <li>Average the measurements.</li>
+        <li>Compare how runtime changes as <code>n</code> increases.</li>
+      </ol>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why average several runs</summary>
+    <div class="acc-body">
+      <p>Individual measurements can be noisy. Run the identical call twice and you will get two different numbers, because the machine is doing other things between them.</p>
+      <p>Averaging several runs at each size damps that noise, so that the pattern you compare across sizes is the algorithm's and not the operating system's. Step 4 — compare how runtime changes as <code>n</code> increases — is the one that carries the information; steps 2 and 3 exist to make step 4 trustworthy.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Big-O gives us a theoretical model. We can also measure algorithms experimentally, by taking System.nanoTime before and after the call and subtracting.</p>
+    <p>This produces an empirical measurement of running time. But individual measurements can be noisy — run the same code twice and you will get two different numbers.</p>
+    <p>To perform a meaningful experiment, we might generate arrays of different sizes, run the algorithm several times, average the measurements, and compare how runtime changes as n increases. Step four is the one that matters: we are looking for a ratio, not a number.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>An Experiment</h2>
+  <p class="small">Suppose we time selection sort using arrays of increasing size. Imagine we observe:</p>
+  <div class="cols">
+    <div>
+      <table class="smaller">
+        <thead><tr><th>n</th><th>Approximate time</th></tr></thead>
+        <tbody>
+          <tr><td>1,000</td><td>2 ms</td></tr>
+          <tr><td>2,000</td><td>8 ms</td></tr>
+          <tr><td>4,000</td><td>32 ms</td></tr>
+          <tr><td>8,000</td><td>128 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p class="small">Notice what happens when <code>n</code> doubles:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1,000 → 2,000
+</code></pre>
+      <p class="small">Runtime increases by approximately four times. Why? Because:</p>
+<pre><code class="language-text" data-trim data-noescape>
+(2n)² = 4n²
+</code></pre>
+      <span class="math">(2n)² = 4n²</span>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>This behavior is consistent with an <span class="pill">O(n²)</span> algorithm.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-experiment" tabindex="0">The full empirical analysis</span>
+  </div>
+  <aside class="notes">
+    <p>Suppose we time selection sort using arrays of increasing size and observe 2 milliseconds at n of one thousand, 8 at two thousand, 32 at four thousand, and 128 at eight thousand.</p>
+    <p>Notice what happens when n doubles from one thousand to two thousand: runtime increases by approximately four times. Why? Because two n, all squared, is four n squared. Doubling the input quadruples the work.</p>
+    <p>This behavior is consistent with an O of n squared algorithm. This is the standard experimental signature of a quadratic algorithm, and students can check it on their own lab data.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Experiment Does Not Replace Analysis</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose an algorithm appears fast when tested on:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n = 100
+</code></pre>
+      <p class="small">That does <strong>not</strong> prove it scales well.</p>
+    </div>
+    <div>
+      <p class="small">Likewise, benchmarking can be influenced by:</p>
+      <ul class="smaller">
+        <li>JVM startup;</li>
+        <li>garbage collection;</li>
+        <li>caching;</li>
+        <li>processor scheduling;</li>
+        <li>other applications;</li>
+        <li>input distribution.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Use both</span>We therefore use both <strong>theoretical analysis</strong> and <strong>experimental measurement</strong> to understand algorithms.</div>
+  <aside class="notes">
+    <p>Suppose an algorithm appears fast when tested on n equals 100. That does not prove it scales well. Everything is fast at n of 100.</p>
+    <p>Likewise, benchmarking can be influenced by JVM startup, garbage collection, caching, processor scheduling, other applications, and input distribution. That list is the reason we said in Part I that a stopwatch tells us relatively little about the algorithm itself.</p>
+    <p>We therefore use both theoretical analysis and experimental measurement to understand algorithms. Analysis predicts the shape; measurement checks that the implementation actually has that shape.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Best, Worst, and Average Case</h2>
+  <p class="small">The same algorithm may require different amounts of work for different inputs. Consider <strong>linear search</strong> on the array:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[7, 4, 9, 3, 8]
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">Searching for <code>7</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+best case
+</code></pre>
+      <p class="small">One comparison.</p>
+    </div>
+    <div>
+      <p class="small">Searching for <code>100</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+worst case
+</code></pre>
+      <p class="small">Every element must be checked.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Convention</span>Unless otherwise specified, introductory discussions of Big-O frequently focus on the <strong>worst-case</strong> upper growth rate.</div>
+  <aside class="notes">
+    <p>The same algorithm may require different amounts of work for different inputs. Take linear search on 7, 4, 9, 3, 8. Searching for 7 is the best case — one comparison. Searching for 100 is the worst case — every element must be checked.</p>
+    <p>We therefore sometimes describe best-case complexity, worst-case complexity, and average-case complexity. Same algorithm, same code, three different answers depending on the input.</p>
+    <p>Unless otherwise specified, introductory discussions of Big-O frequently focus on the worst-case upper growth rate, because that is the one that gives a guarantee.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Big-O Is Not a Stopwatch</h2>
+  <div class="cols">
+    <div>
+      <p class="small">If algorithm A is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="small">and algorithm B is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+      <p class="small">that does not guarantee A is faster for <em>every</em> possible input size.</p>
+    </div>
+    <div>
+      <p class="small">For very small <code>n</code>, constants and implementation details can dominate.</p>
+      <p class="small">Big-O tells us primarily how algorithms behave as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+n becomes large.
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where the crossover sits</summary>
+    <div class="acc-body">
+      <p>An <span class="pill">O(n²)</span> algorithm with a tiny constant can beat an <span class="pill">O(n)</span> algorithm with a large one, right up until <em>n</em> passes some crossover point. Above that point the quadratic loses, and keeps losing by more.</p>
+      <p>This is exactly why production sort libraries fall back to insertion sort on small subarrays: below the crossover, the "worse" algorithm really is faster.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>If algorithm A is O of n and algorithm B is O of n squared, that does not guarantee A is faster for every possible input size. For very small n, constants and implementation details can dominate.</p>
+    <p>Big-O tells us primarily how algorithms behave as n becomes large. It is a statement about the limit, not about any particular run.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Big-O Describes Growth, Not Exact Work</h2>
+  <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; n; i++) {
+    doSomething();
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose <code>doSomething()</code> takes 500 machine instructions. The loop might really involve something like:</p>
+<pre><code class="language-text" data-trim data-noescape>
+500n
+</code></pre>
+      <p class="small">operations.</p>
+    </div>
+    <div>
+      <p class="small">But:</p>
+<pre><code class="language-text" data-trim data-noescape>
+500n
+</code></pre>
+      <p class="small">still has linear growth. So we write:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">Watch out</span>A <span class="pill">O(n)</span> label makes no promise about how expensive one iteration is — only about how the total changes when <code>n</code> changes.</div>
+  <aside class="notes">
+    <p>Consider a loop to n that calls doSomething. Suppose doSomething takes 500 machine instructions. The loop might really involve something like 500n operations.</p>
+    <p>But 500n still has linear growth. So we write O of n. The 500 disappears, exactly as the earlier 5n and 100n examples predicted it would.</p>
+    <p>Say plainly: this is a deliberate loss of information, not an oversight. We give up the constant in exchange for a statement that holds on every machine.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Worked Examples and Common Mistakes</h2>
+  <p class="part-sub">Six pieces of code to classify, and five beliefs to get rid of.</p>
+</section>
+
+<section>
+  <h2>Examples 1 and 2</h2>
+  <div class="cols">
+    <div>
+      <h4>Example 1</h4>
+      <p class="small">What is the complexity?</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(values[0]);
+</code></pre>
+      <p class="small">Answer:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+    </div>
+    <div>
+      <h4>Example 2</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}
+</code></pre>
+      <p class="small">Answer:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Method</span>Ask one question of every fragment: how many times does the work happen, expressed in terms of <code>n</code>?</div>
+  <aside class="notes">
+    <p>Example one: a single println of element zero. No loop, no dependence on the array length. The answer is O of 1.</p>
+    <p>Example two: one loop over the whole array. The body runs n times, so the answer is O of n.</p>
+    <p>These first two are deliberately easy. Have students answer them out loud before you reveal the answers — the goal is to establish the habit of asking "how many times?" before anything harder arrives.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example 3</h2>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; values.length; j++) {
+        System.out.println(values[i] + values[j]);
+    }
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">Answer:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Why</span>Both loops run to <code>values.length</code>, and one is inside the other. Nested loops multiply: <span class="math">n <span class="op">×</span> n = n²</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Example three: two loops, both to values dot length, one nested inside the other. The answer is O of n squared.</p>
+    <p>The body here adds two elements rather than printing a pair, but the body is irrelevant to the classification. What matters is how many times it runs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example 4</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}
+
+for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i] * 2);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The first loop:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="small">The second loop:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="small">Total:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n + n)
+</code></pre>
+      <p class="small">which becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Example four: two loops, one after the other. The first loop is O of n; the second loop is O of n; the total is O of n plus n, which becomes O of n.</p>
+    <p>Compare this slide against Example 3 directly. Same two loops, same bounds, different nesting — and the difference between linear and quadratic.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example 5</h2>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; 10; j++) {
+        System.out.println(values[i]);
+    }
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">The outer loop runs <code>n</code> times. The inner loop always runs exactly 10 times. Total:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10n
+</code></pre>
+      <p class="small">Ignore the constant:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+    <div>
+      <div class="box pitfall"><span class="box-title">Common error</span>A nested loop does <strong>not automatically mean O(n²)</strong>. The number of iterations matters.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Change the <code>10</code> to <code>values.length</code></summary>
+    <div class="acc-body">
+      <p>Replace the inner bound and this becomes Example 3:</p>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; values.length; j++) {
+        System.out.println(values[i]);
+    }
+}</code></pre>
+      <p>Now the inner loop runs <code>n</code> times rather than 10, the total is <code>n × n</code>, and the classification jumps from <span class="pill">O(n)</span> to <span class="pill">O(n²)</span>.</p>
+      <p>The indentation did not change. The loop bound did.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Example five: a nested loop, but the inner loop counts to 10, not to values dot length. The outer loop runs n times; the inner loop always runs exactly 10 times. Total: 10n. Ignore the constant, and we get O of n.</p>
+    <p>A nested loop does not automatically mean O of n squared. The number of iterations matters. Students who pattern-match on indentation rather than reading the loop bound get this one wrong every time.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example 6</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int n = values.length;
+
+while (n &gt; 1) {
+    n = n / 2;
+}
+</code></pre>
+      <p class="small">Every iteration halves <code>n</code>.</p>
+    </div>
+    <div>
+      <p class="small">The number of iterations is approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+log₂ n
+</code></pre>
+      <p class="small">Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(log n)
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>This same pattern appears in binary search.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-worked-examples" tabindex="0">All six worked examples together</span>
+  </div>
+  <aside class="notes">
+    <p>Example six: a while loop that divides n by two each pass. Every iteration halves n, so the number of iterations is approximately log base two of n. Therefore O of log n.</p>
+    <p>This same pattern appears in binary search. Point back at Part V: the halving list 1024, 512, 256 and so on is exactly the sequence of values this loop variable takes.</p>
+    <p>This is the one example where the loop is a while rather than a for, and the reason is that the loop variable does not step by a constant amount.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Mistake: "Every Loop Is <span class="pill">O(n)</span>"</h2>
+  <p class="small"><strong>No.</strong> Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; 100; i++) {
+    ...
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">This always performs 100 iterations regardless of the size of the input.</p>
+    </div>
+    <div>
+      <p class="small">Therefore, relative to input size <code>n</code>, it is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Complexity is measured <em>relative to n</em>. A loop whose bound never mentions <code>n</code> contributes a constant.</div>
+  <aside class="notes">
+    <p>First mistake: every loop is O of n. No. Consider a loop from zero to 100. This always performs 100 iterations regardless of the size of the input. Therefore, relative to input size n, it is O of 1.</p>
+    <p>A hundred iterations is a lot of work in absolute terms. It is still constant work, because it does not change when the data changes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Mistake: "Two Loops Mean <span class="pill">O(n²)</span>"</h2>
+  <p class="small"><strong>Not necessarily.</strong></p>
+  <div class="cols">
+    <div>
+      <p class="small">Consecutive loops:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (...) {
+}
+
+for (...) {
+}
+</code></pre>
+      <p class="small">often give:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n + n) = O(n)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Nested loops:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (...) {
+    for (...) {
+    }
+}
+</code></pre>
+      <p class="small">often give:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+  </div>
+  <div class="chain">
+    <span>Nested multiply</span><span class="sep">·</span>
+    <span>Consecutive add</span>
+  </div>
+  <aside class="notes">
+    <p>Second mistake: two loops mean O of n squared. Not necessarily. Consecutive loops often give O of n plus n, which is O of n. Nested loops often give O of n squared.</p>
+    <p>Note the word "often" in both statements. Example 5 was a nested loop that was only linear. The structure is a strong hint, but the loop bounds are the actual evidence.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Three More Mistakes</h2>
+  <div class="cols-3">
+    <div>
+      <h4>"Binary search works on any array"</h4>
+      <p class="small"><strong>False.</strong> Binary search requires:</p>
+<pre><code class="language-text" data-trim data-noescape>
+sorted data
+</code></pre>
+      <p class="small">Without sorting, comparing the target with the middle value tells us nothing about which half can safely be discarded.</p>
+    </div>
+    <div>
+      <h4>"O(n²) means exactly n² operations"</h4>
+      <p class="small"><strong>False.</strong> Big-O describes a growth <em>class</em>. An algorithm performing:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0.5n² + 20n + 7
+</code></pre>
+      <p class="small">is still:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+    <div>
+      <h4>"Faster Big-O always means faster for every input"</h4>
+      <p class="small"><strong>False.</strong></p>
+      <p class="small">For small data, implementation details may matter more.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Big-O is primarily a statement about <strong>scalability</strong>.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Restating the unsorted counterexample</summary>
+    <div class="acc-body">
+      <p>In the unsorted array <code>[40, 2, 99, 7, 15]</code>, the middle value is <code>99</code>. Searching for <code>40</code>, the comparison <code>40 &lt; 99</code> sends binary search into the left half — where <code>40</code> happens to be, this time, by luck.</p>
+      <p>Rearrange the same five values and the same comparison sends it the wrong way. An algorithm that is right by accident is not right.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-common-mistakes" tabindex="0">All five mistakes in one place</span>
+  </div>
+  <aside class="notes">
+    <p>Third mistake: binary search works on any array. False. Binary search requires sorted data. Without sorting, comparing the target with the middle value tells us nothing about which half can safely be discarded. This is the precondition from Part V, restated as a misconception because it is the one students most often forget under exam conditions.</p>
+    <p>Fourth mistake: O of n squared means exactly n squared operations. False. Big-O describes a growth class. An algorithm performing zero point five n squared plus 20n plus 7 is still O of n squared.</p>
+    <p>Fifth mistake: faster Big-O always means faster for every input. False. For small data, implementation details may matter more. Big-O is primarily a statement about scalability.</p>
+    <p>The last two are the sophisticated mistakes — students make them after they have understood the notation, not before. Worth returning to at revision time.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XI</p>
+  <h2>Choosing Algorithms, and Practice</h2>
+  <p class="part-sub">Knowing algorithms is a start. Knowing which one this situation wants is the skill.</p>
+</section>
+
+<section>
+  <h2>Algorithms Encode Tradeoffs</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose you have a million unsorted records and need to search them <strong>once</strong>.</p>
+      <div class="box good"><span class="box-title">Do this</span>Linear search may be completely reasonable.</div>
+    </div>
+    <div>
+      <p class="small">Suppose you have the same million records and need to search them <strong>one million times</strong>.</p>
+      <p class="small">Now it may be worthwhile to:</p>
+      <ol class="small">
+        <li>sort the records;</li>
+        <li>perform repeated binary searches.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>An important skill in computer science is not merely knowing algorithms. It is knowing: <em>which algorithm or data structure is appropriate for this situation?</em></div>
+  <details class="acc">
+    <summary>Beyond this course</summary>
+    <div class="acc-body">
+      <p>Later in computer science, you will encounter data structures that provide even more sophisticated tradeoffs. Examples include:</p>
+      <ul>
+        <li>hash tables;</li>
+        <li>balanced search trees;</li>
+        <li>heaps;</li>
+        <li>graphs.</li>
+      </ul>
+      <p>Several of these appear in Weeks 12 through 14 of this very course.</p>
+    </div>
+  </details>
+  <div class="chain">
+    <span>Know the algorithms</span><span class="sep">→</span>
+    <span>Know their costs</span><span class="sep">→</span>
+    <span>Choose deliberately</span>
+  </div>
+  <aside class="notes">
+    <p>Suppose you have a million unsorted records and need to search them once. Linear search may be completely reasonable — a single pass over a million elements is fast, and sorting first would cost far more than it saves.</p>
+    <p>Suppose you have the same million records and need to search them one million times. Now it may be worthwhile to sort the records and perform repeated binary searches. The sorting cost is paid once and amortised across every query.</p>
+    <p>This is the concrete form of the principle from Part V: the fastest individual operation does not always produce the best overall solution.</p>
+    <p>An important skill in computer science is not merely knowing algorithms. It is knowing which algorithm or data structure is appropriate for this situation. That question is the through-line of the rest of the semester.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercise 1: Count the Work</h2>
+  <p class="small">Determine the Big-O complexity.</p>
+  <div class="cols">
+    <div>
+      <h4>A</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = values[0];
+</code></pre>
+      <h4>B</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>C</h4>
+<pre><code class="language-java" data-trim data-noescape>
+for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; values.length; j++) {
+        System.out.println(values[i] * values[j]);
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Part D, and the answers</summary>
+    <div class="acc-body">
+      <h4>D</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}
+
+for (int j = 0; j &lt; values.length; j++) {
+    System.out.println(values[j]);
+}</code></pre>
+      <h4>Answers</h4>
+<pre><code class="language-text">A: O(1)
+B: O(n)
+C: O(n²)
+D: O(n)</code></pre>
+      <p>Note that D uses two different loop variables, <code>i</code> and <code>j</code>, but the loops are still consecutive rather than nested — so they add.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Exercise one asks students to classify four fragments. A is a single assignment; B is one loop; C is a nested pair; D is a consecutive pair.</p>
+    <p>The answers are O of 1, O of n, O of n squared, and O of n. Fragment D is the interesting one: the second loop uses j instead of i, which sometimes tricks students into reading it as nested.</p>
+    <p>Give the class two minutes on this before opening the accordion. It is a direct repeat of the Part X worked examples in a different order.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercise 2: Trace Linear Search</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Given:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[18, 5, 11, 23, 7, 31]
+</code></pre>
+      <p class="small">Trace a linear search for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+23
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Questions:</p>
+      <ol class="small">
+        <li>Which indices are examined?</li>
+        <li>How many comparisons occur?</li>
+        <li>What index is returned?</li>
+      </ol>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Answer</summary>
+    <div class="acc-body">
+<pre><code class="language-text">Indices: 0, 1, 2, 3
+Comparisons: 4
+Return value: 3</code></pre>
+      <p>Four comparisons for four indices — one comparison per element examined, and the fourth one succeeds.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Exercise two: trace a linear search for 23 in the array 18, 5, 11, 23, 7, 31. Which indices are examined, how many comparisons occur, and what index is returned?</p>
+    <p>Indices 0, 1, 2 and 3 are examined; four comparisons occur; the return value is 3. Students who answer "23" to the third question have confused the value with its index — a very common slip worth catching here.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercise 3: Trace Binary Search</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Given:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[4, 8, 13, 17, 22, 29, 35, 41, 48, 53, 60]
+</code></pre>
+      <p class="small">Search for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+41
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Record the values of:</p>
+<pre><code class="language-text" data-trim data-noescape>
+low
+high
+mid
+values[mid]
+</code></pre>
+      <p class="small">after each iteration.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">How to present it</span>A four-column table, one row per pass through the <code>while</code> loop, is the clearest way to write this up.</div>
+  <aside class="notes">
+    <p>Exercise three: search for 41 in an eleven-element sorted array, recording low, high, mid and values sub mid after each iteration.</p>
+    <p>This exercise is about the bookkeeping, not the answer. Insist on the table. Students who track the three variables explicitly stop making off-by-one errors in the assignments to low and high.</p>
+    <p>Do the first row together on the board so everyone has the format, then let them finish.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercise 4: Find the Precondition</h2>
+  <p class="small">Why does this algorithm not always work?</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int search(int[] values, int target) {
+    int low = 0;
+    int high = values.length - 1;
+
+    while (low &lt;= high) {
+        int mid = (low + high) / 2;
+
+        if (values[mid] == target) {
+            return mid;
+        }
+
+        if (target &lt; values[mid]) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return -1;
+}
+</code></pre>
+  <details class="acc">
+    <summary>Answer</summary>
+    <div class="acc-body">
+      <p>The algorithm assumes that:</p>
+<pre><code class="language-text">values is sorted</code></pre>
+      <p>That is a <strong>precondition</strong>. Nothing in the method signature, the parameter names, or the body states it — which is exactly the problem. A precondition that is not documented is a bug waiting to be filed.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Exercise four gives students a binary search with no name that hints at binary search, and asks why it does not always work.</p>
+    <p>The answer is that the algorithm assumes values is sorted. That is a precondition. Note that this version uses the unsafe mid formula from Part V as well, so a sharp student may raise overflow — accept that as a second, different answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercises 5 and 6: Trace the Sorts</h2>
+  <div class="cols">
+    <div>
+      <h4>Exercise 5 — selection sort</h4>
+      <p class="small">Trace selection sort on:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[9, 4, 7, 2, 6]
+</code></pre>
+      <p class="small">Write the complete array after every outer-loop iteration.</p>
+      <details class="acc">
+        <summary>Expected sequence</summary>
+        <div class="acc-body">
+<pre><code class="language-text">[2, 4, 7, 9, 6]
+[2, 4, 7, 9, 6]
+[2, 4, 6, 9, 7]
+[2, 4, 6, 7, 9]</code></pre>
+          <p>The second line is identical to the first — pass two found that <code>4</code> was already in place.</p>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Exercise 6 — insertion sort</h4>
+      <p class="small">Trace insertion sort on:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[8, 3, 6, 4, 7]
+</code></pre>
+      <p class="small">Write the array after every insertion.</p>
+      <details class="acc">
+        <summary>Expected progression</summary>
+        <div class="acc-body">
+<pre><code class="language-text">[3, 8, 6, 4, 7]
+[3, 6, 8, 4, 7]
+[3, 4, 6, 8, 7]
+[3, 4, 6, 7, 8]</code></pre>
+          <p>Four insertions for a five-element array, because element 0 starts out as the sorted region.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-exercises" tabindex="0">All six in-class exercises</span>
+  </div>
+  <aside class="notes">
+    <p>Exercise five traces selection sort on 9, 4, 7, 2, 6, writing the complete array after every outer-loop iteration. Exercise six traces insertion sort on 8, 3, 6, 4, 7, writing the array after every insertion.</p>
+    <p>Run these two side by side on the board if time allows. Watching the same five-element problem solved by two different strategies is the clearest way to make the "algorithms have different characteristics" point stick.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Concept Check (1 of 2)</h2>
+  <div class="cols small">
+    <div>
+      <p><strong>1.</strong> What does <code>n</code> normally represent when analyzing an array algorithm?</p>
+      <p class="dim">The number of elements in the array.</p>
+      <p><strong>2.</strong> What does Big-O describe?</p>
+      <p class="dim">How the computational work of an algorithm grows as input size increases.</p>
+      <p><strong>3.</strong> What is the complexity of accessing <code>values[5]</code>?</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+    </div>
+    <div>
+      <p><strong>4.</strong> What is the worst-case complexity of linear search?</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p><strong>5.</strong> What is the complexity of binary search?</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(log n)
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Five short questions with short answers. What does n normally represent? The number of elements in the array. What does Big-O describe? How the computational work of an algorithm grows as input size increases.</p>
+    <p>What is the complexity of accessing values sub 5? O of 1 — indexed access does not depend on the array's length. Worst-case linear search? O of n. Binary search? O of log n.</p>
+    <p>Use these as a rapid-fire warm-up at the start of the next class rather than at the end of this one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Concept Check (2 of 2)</h2>
+  <div class="cols small">
+    <div>
+      <p><strong>6.</strong> What condition must hold before binary search can be used?</p>
+      <p class="dim">The collection must be sorted according to the ordering used by the search.</p>
+      <p><strong>7.</strong> What is the worst-case complexity of selection sort?</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+      <p><strong>8.</strong> What is the worst-case complexity of insertion sort?</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+    </div>
+    <div>
+      <p><strong>9.</strong> What is insertion sort's best-case complexity on an already sorted array?</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p><strong>10.</strong> Do two consecutive <code>O(n)</code> loops produce <code>O(n²)</code>? <strong>No.</strong></p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n) + O(n) = O(2n) = O(n)
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-concept-check" tabindex="0">All ten questions and answers</span>
+  </div>
+  <aside class="notes">
+    <p>Question six: what condition must hold before binary search can be used? The collection must be sorted according to the ordering used by the search. Note the second half of that answer — sorted by the same ordering the search compares with.</p>
+    <p>Seven and eight: selection sort and insertion sort are both O of n squared in the worst case. Nine: insertion sort's best case on an already sorted array is O of n. Ten: no — O of n plus O of n equals O of 2n equals O of n.</p>
+  </aside>
+</section>
+
+<!-- ==================== BACK MATTER ==================== -->
+
+<section>
+  <h2>Key Takeaways (1 of 2)</h2>
+  <ol class="small">
+    <li><strong>Correctness is not the only property of a program that matters.</strong> We also care about efficiency.</li>
+    <li><strong>Big-O describes growth.</strong> It tells us how the amount of computational work changes as the input becomes larger.</li>
+    <li><strong>Constant factors and lower-order terms are ignored in asymptotic analysis.</strong> For example:</li>
+  </ol>
+<pre><code class="language-text" data-trim data-noescape>
+5n + 20 → O(n)
+</code></pre>
+  <ol class="small" start="4">
+    <li><strong>Linear search is <span class="pill">O(n)</span>.</strong> It may need to examine every item.</li>
+    <li><strong>Binary search is <span class="pill">O(log n)</span>.</strong> It repeatedly removes half of the remaining search space.</li>
+  </ol>
+  <aside class="notes">
+    <p>Correctness is not the only property of a program that matters — we also care about efficiency. That sentence is the whole reason Week 11 exists.</p>
+    <p>Big-O describes growth: how the amount of computational work changes as the input becomes larger. Constant factors and lower-order terms are ignored, so 5n plus 20 is O of n.</p>
+    <p>Linear search is O of n and may need to examine every item. Binary search is O of log n because it repeatedly removes half of the remaining search space.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways (2 of 2)</h2>
+  <ol class="small" start="6">
+    <li><strong>Binary search requires sorted data.</strong></li>
+    <li><strong>Selection sort is <span class="pill">O(n²)</span>.</strong></li>
+    <li><strong>Insertion sort is <span class="pill">O(n²)</span> in the worst case but <span class="pill">O(n)</span> in the best case.</strong></li>
+    <li><strong>Algorithm choice depends on context.</strong> The best solution depends on the size and organization of the data and on what operations will be performed.</li>
+    <li><strong>Efficiency becomes increasingly important as data grows.</strong></li>
+  </ol>
+  <div class="box key"><span class="box-title">The sentence to remember</span>A solution that is perfectly acceptable for 100 values may be unusable for 100 million values.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-takeaways" tabindex="0">All ten takeaways in full</span>
+  </div>
+  <aside class="notes">
+    <p>Binary search requires sorted data. Selection sort is O of n squared. Insertion sort is O of n squared in the worst case but O of n in the best case.</p>
+    <p>Algorithm choice depends on context: the best solution depends on the size and organization of the data and on what operations will be performed.</p>
+    <p>Efficiency becomes increasingly important as data grows. A solution that is perfectly acceptable for 100 values may be unusable for 100 million values. End the lecture on that sentence.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <table class="smaller">
+    <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>Algorithm</td><td>A precise sequence of steps for solving a problem.</td></tr>
+      <tr><td>Implementation</td><td>One expression of an algorithm in a particular programming language.</td></tr>
+      <tr><td>Time efficiency</td><td>How much computation an algorithm performs.</td></tr>
+      <tr><td>Space efficiency</td><td>How much additional memory an algorithm uses.</td></tr>
+      <tr><td>Input size (<code>n</code>)</td><td>The measure of how much data the algorithm was given.</td></tr>
+      <tr><td>Asymptotic analysis</td><td>Machine-independent description of how computational effort grows.</td></tr>
+      <tr><td>Big-O notation</td><td>How the amount of work grows as the input size grows.</td></tr>
+      <tr><td>Growth rate</td><td>The shape of that growth, with constants and lower-order terms dropped.</td></tr>
+      <tr><td>Linear search</td><td>Examine elements one at a time until the target is found or the array ends.</td></tr>
+      <tr><td>Binary search</td><td>Repeatedly compare with the middle of a sorted range and discard half.</td></tr>
+      <tr><td>Precondition</td><td>Something that must already be true before an algorithm is called.</td></tr>
+      <tr><td>Selection sort</td><td>Repeatedly choose the smallest remaining value and swap it into place.</td></tr>
+      <tr><td>Insertion sort</td><td>Insert each item into an already sorted region, shifting larger values right.</td></tr>
+      <tr><td>Best / worst / average case</td><td>The work required for the most, least, and typically favourable inputs.</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">
+    <p>Fourteen terms. Every one of them was introduced this week, and students should be able to define each in one sentence without looking.</p>
+    <p>The pair worth drilling hardest is algorithm versus implementation, because it is the distinction that makes the whole idea of analysis possible. We do not time Java; we count operations in a procedure.</p>
+    <p>Precondition is the term most likely to be new. Point out that it will reappear whenever we write a method that legitimately assumes something about its inputs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Lab: Searching and Sorting Experiment</h2>
+  <p class="small">Write a Java program that compares searching and sorting algorithms.</p>
+  <div class="cols">
+    <div>
+      <h4>Part 1 — create the data</h4>
+      <p class="small">Create arrays containing random integers. Test sizes such as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1,000
+5,000
+10,000
+20,000
+</code></pre>
+      <h4>Part 3 — measure</h4>
+      <p class="small">Measure execution time using:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.nanoTime()
+</code></pre>
+    </div>
+    <div>
+      <h4>Part 2 — implement</h4>
+<pre><code class="language-java" data-trim data-noescape>
+linearSearch()
+binarySearch()
+selectionSort()
+insertionSort()
+</code></pre>
+      <h4>Part 4 — compare</h4>
+      <ul class="smaller">
+        <li>linear search on unsorted data;</li>
+        <li>binary search on sorted data;</li>
+        <li>selection sort;</li>
+        <li>insertion sort.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m11-lab" tabindex="0">Full lab brief, including Part 5</span>
+  </div>
+  <aside class="notes">
+    <p>The lab has five parts. Create arrays of random integers at four sizes; implement the four algorithms from this week; measure with System.nanoTime; compare the four measurements; and write a short analysis.</p>
+    <p>The test sizes double roughly, which is deliberate — it lets students check the quadrupling signature from Part IX directly against their own data.</p>
+    <p>Part 5, the written analysis, is where the learning is. Open the modal for the five questions it asks.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <p class="small">This week we compared algorithms that operate on <strong>arrays</strong>. Next, we will begin examining a deeper question:</p>
+  <blockquote class="small">How should data itself be organized?</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">Arrays provide one way to store collections, but they are not always ideal.</p>
+      <p class="small">We will introduce <strong>dynamic data structures</strong>, including lists and linked structures, and examine how the organization of data affects the efficiency of operations such as:</p>
+      <ul class="smaller">
+        <li>insertion;</li>
+        <li>deletion;</li>
+        <li>searching;</li>
+        <li>traversal.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="def"><span class="term">One of the central themes of computer science:</span> algorithms and data structures must be designed together.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This week we compared algorithms that operate on arrays. Next, we will begin examining a deeper question: how should data itself be organized?</p>
+    <p>Arrays provide one way to store collections, but they are not always ideal. We will introduce dynamic data structures, including lists and linked structures, and examine how the organization of data affects the efficiency of operations such as insertion, deletion, searching, and traversal.</p>
+    <p>This leads to one of the central themes of computer science: algorithms and data structures must be designed together. Everything students learned about Big-O this week becomes the measuring instrument for that comparison.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 11 — Algorithm Analysis, Searching, and Sorting
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m11-algorithm-vs-implementation"
+          data-kicker="Deep dive" data-title="Algorithm vs. implementation">
+  <h4>The problem</h4>
+  <p>An <strong>algorithm</strong> is a precise sequence of steps for solving a problem. Consider the problem:</p>
+  <blockquote>Find the largest number in an array.</blockquote>
+  <h4>The algorithm</h4>
+  <ol>
+    <li>Assume the first element is the largest.</li>
+    <li>Examine every remaining element.</li>
+    <li>Whenever a larger element is found, remember it.</li>
+    <li>After all elements have been examined, return the remembered value.</li>
+  </ol>
+  <h4>One implementation of it</h4>
+<pre><code class="language-java">public static int findMax(int[] values) {
+    int max = values[0];
+
+    for (int i = 1; i &lt; values.length; i++) {
+        if (values[i] &gt; max) {
+            max = values[i];
+        }
+    }
+
+    return max;
+}</code></pre>
+  <h4>Why the distinction matters</h4>
+  <p>The algorithm is the general procedure. The Java code is one <strong>implementation</strong> of that algorithm.</p>
+  <p>The distinction matters because the same algorithm could be implemented in Java, Python, C++, or another language.</p>
+  <p>It also matters for analysis. When we say this procedure is <span class="pill">O(n)</span>, we are making a claim about the four numbered steps, not about Java. Rewrite it in another language and the claim still holds.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-growth-table"
+          data-kicker="Reference" data-title="Comparing growth rates">
+  <h4>The six classes</h4>
+  <p>You should become familiar with the following growth rates.</p>
+  <ul>
+    <li><span class="pill">O(1)</span> — constant time. The amount of work does not grow with the input size.</li>
+    <li><span class="pill">O(log n)</span> — logarithmic time. The problem gets significantly smaller after each operation.</li>
+    <li><span class="pill">O(n)</span> — linear time. The amount of work increases proportionally with the input size.</li>
+    <li><span class="pill">O(n log n)</span> — many efficient sorting algorithms.</li>
+    <li><span class="pill">O(n²)</span> — quadratic time. Often appears when we process all pairs of input elements.</li>
+    <li><span class="pill">O(2ⁿ)</span> — exponential time. The amount of work roughly doubles whenever <code>n</code> increases by 1.</li>
+  </ul>
+  <h4>The numbers</h4>
+  <p>Consider these values:</p>
+  <table>
+    <thead><tr><th>n</th><th>log₂ n</th><th>n</th><th>n log₂ n</th><th>n²</th></tr></thead>
+    <tbody>
+      <tr><td>10</td><td>~3</td><td>10</td><td>~33</td><td>100</td></tr>
+      <tr><td>100</td><td>~7</td><td>100</td><td>~664</td><td>10,000</td></tr>
+      <tr><td>1,000</td><td>~10</td><td>1,000</td><td>~9,966</td><td>1,000,000</td></tr>
+      <tr><td>1,000,000</td><td>~20</td><td>1,000,000</td><td>~20,000,000</td><td>1,000,000,000,000</td></tr>
+    </tbody>
+  </table>
+  <h4>What to notice</h4>
+  <p>Notice how slowly logarithmic growth increases. For one million elements:</p>
+<pre><code class="language-text">log₂(1,000,000) ≈ 20</code></pre>
+  <p>This fact explains the power of binary search.</p>
+  <p>At the other end of the table, <span class="pill">O(n²)</span> at one million elements is one trillion operations — the same figure we used in Part I to show why growth rate matters at all.</p>
+  <h4>Where you will meet each one</h4>
+  <p><span class="pill">O(1)</span>: array indexing. <span class="pill">O(log n)</span>: binary search. <span class="pill">O(n)</span>: linear search, one pass over an array. <span class="pill">O(n log n)</span>: merge sort, heapsort, average-case quicksort — <em>we will encounter these algorithms later in computer science courses</em>. <span class="pill">O(n²)</span>: selection sort, insertion sort. <span class="pill">O(2ⁿ)</span>: certain naive recursive algorithms.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-triangular-sum"
+          data-kicker="Derivation" data-title="The triangular nested loop">
+  <h4>The code</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; i; j++) {
+        System.out.println(i + ", " + j);
+    }
+}</code></pre>
+  <h4>Counting the iterations</h4>
+  <p>The inner loop runs to <code>i</code>, not to <code>n</code>. So on the outer pass where <code>i</code> is 0 it runs zero times, where <code>i</code> is 1 it runs once, and so on. The number of iterations is approximately:</p>
+<pre><code class="language-text">0 + 1 + 2 + 3 + ... + (n - 1)</code></pre>
+  <h4>Closing the sum</h4>
+  <p>This sum is:</p>
+<pre><code class="language-text">n(n - 1) / 2</code></pre>
+  <p><span class="math">n(n <span class="op">−</span> 1) <span class="op">÷</span> 2</span></p>
+  <p>which is approximately:</p>
+<pre><code class="language-text">n² / 2</code></pre>
+  <h4>Classifying it</h4>
+  <p>Ignoring constants and lower-order terms:</p>
+<pre><code class="language-text">O(n²)</code></pre>
+  <p>The inner loop does not need to execute exactly <code>n</code> times for the overall algorithm to be quadratic.</p>
+  <h4>Where this reappears</h4>
+  <p>Twice more this week, both times inside a real algorithm.</p>
+  <p><strong>Selection sort.</strong> The first pass examines approximately <code>n</code> elements, the second <code>n - 1</code>, then <code>n - 2</code>, and so on — the same triangle counted from the other end, and also approximately <code>n² / 2</code>.</p>
+  <p><strong>Insertion sort, worst case.</strong> On a reversed array each new value moves across nearly the entire sorted portion, giving <code>1 + 2 + 3 + ... + (n - 1)</code>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-linear-search-full"
+          data-kicker="Algorithm" data-title="Linear search: idea, code, and analysis">
+  <h4>The idea</h4>
+  <ol>
+    <li>Start with the first element.</li>
+    <li>Compare it to the target.</li>
+    <li>If it matches, return its index.</li>
+    <li>Otherwise examine the next element.</li>
+    <li>Continue until the target is found or the array ends.</li>
+  </ol>
+  <h4>A hand trace</h4>
+<pre><code class="language-text">Array:
+[12, 7, 19, 4, 25]
+
+Target:
+19</code></pre>
+  <p>Search:</p>
+<pre><code class="language-text">12 → not 19
+ 7 → not 19
+19 → found</code></pre>
+  <p>The answer is index:</p>
+<pre><code class="language-text">2</code></pre>
+  <h4>The code</h4>
+<pre><code class="language-java">public static int linearSearch(int[] values, int target) {
+    for (int i = 0; i &lt; values.length; i++) {
+        if (values[i] == target) {
+            return i;
+        }
+    }
+
+    return -1;
+}</code></pre>
+  <h4>Calling it</h4>
+<pre><code class="language-java">int[] numbers = {12, 7, 19, 4, 25};
+
+int index = linearSearch(numbers, 19);
+
+System.out.println(index);</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">2</code></pre>
+  <h4>Analysis</h4>
+  <p>Suppose the array contains <code>n</code> elements.</p>
+  <p><strong>Best case.</strong> The target is the first element. Only one comparison is required: <span class="pill">O(1)</span>.</p>
+  <p><strong>Worst case.</strong> The target is the last element, or not present at all. We must inspect all <code>n</code> elements: <span class="pill">O(n)</span>.</p>
+  <p><strong>Average case.</strong> On average, we examine some constant fraction of the array. That is still linear growth: <span class="pill">O(n)</span>.</p>
+  <p>When we state the complexity of linear search, we commonly say:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <h4>Does it require sorted data?</h4>
+  <p>No. Linear search works on:</p>
+<pre><code class="language-text">[8, 17, 2, 91, 4]</code></pre>
+  <p>and also on:</p>
+<pre><code class="language-text">[2, 4, 8, 17, 91]</code></pre>
+  <p>Its advantage is simplicity. Its disadvantage is that it may have to examine every element.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-binary-trace"
+          data-kicker="Worked example" data-title="Binary search, traced end to end">
+  <h4>The setup</h4>
+  <p>Search for:</p>
+<pre><code class="language-text">31</code></pre>
+  <p>in:</p>
+<pre><code class="language-text">[3, 7, 12, 18, 22, 27, 31, 36, 42, 49, 55]</code></pre>
+  <h4>Step 1</h4>
+  <p>First range:</p>
+<pre><code class="language-text">[3, 7, 12, 18, 22, 27, 31, 36, 42, 49, 55]
+                    ^
+                   27</code></pre>
+  <p>Since:</p>
+<pre><code class="language-text">31 &gt; 27</code></pre>
+  <p>discard the left half.</p>
+  <h4>Step 2</h4>
+  <p>Remaining:</p>
+<pre><code class="language-text">[31, 36, 42, 49, 55]
+         ^
+        42</code></pre>
+  <p>Since:</p>
+<pre><code class="language-text">31 &lt; 42</code></pre>
+  <p>discard the right half.</p>
+  <h4>Step 3</h4>
+  <p>Remaining:</p>
+<pre><code class="language-text">[31, 36]
+ ^
+31</code></pre>
+  <p>Found.</p>
+  <h4>The result</h4>
+  <p>We searched an 11-element array in only three comparisons.</p>
+  <p>Compare that with the earlier key-idea example: finding <code>73</code> in the sorted array</p>
+<pre><code class="language-text">[4, 11, 19, 27, 32, 45, 58, 66, 73, 81, 90]</code></pre>
+  <p>where the middle value is</p>
+<pre><code class="language-text">45</code></pre>
+  <p>and since</p>
+<pre><code class="language-text">73 &gt; 45</code></pre>
+  <p>the whole left half disappears in one comparison. We can immediately discard approximately half of the array. That is the crucial insight.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-mid-formula"
+          data-kicker="Detail" data-title="Two ways to compute mid">
+  <h4>The version you will often see</h4>
+<pre><code class="language-java">int mid = (low + high) / 2;</code></pre>
+  <p>For many beginner programs, this works.</p>
+  <h4>The safer version</h4>
+<pre><code class="language-java">int mid = low + (high - low) / 2;</code></pre>
+  <p>The second version avoids possible integer overflow when <code>low</code> and <code>high</code> are very large.</p>
+  <h4>The point that actually matters</h4>
+  <p>The important conceptual point is simply that <code>mid</code> represents the middle of the current search interval.</p>
+  <h4>Where mid sits in the algorithm</h4>
+<pre><code class="language-java">public static int binarySearch(int[] values, int target) {
+    int low = 0;
+    int high = values.length - 1;
+
+    while (low &lt;= high) {
+        int mid = low + (high - low) / 2;
+
+        if (values[mid] == target) {
+            return mid;
+        } else if (target &lt; values[mid]) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return -1;
+}</code></pre>
+  <p>Three variables define the current search region:</p>
+<pre><code class="language-java">low
+high
+mid</code></pre>
+  <p>At all times, if the target exists, it must be between:</p>
+<pre><code class="language-text">low and high</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m11-halving"
+          data-kicker="Derivation" data-title="Why binary search is O(log n)">
+  <h4>Count the halvings</h4>
+  <p>Suppose an array contains:</p>
+<pre><code class="language-text">1,024 elements</code></pre>
+  <p>Each comparison approximately halves the remaining data:</p>
+<pre><code class="language-text">1024
+512
+256
+128
+64
+32
+16
+8
+4
+2
+1</code></pre>
+  <p>It takes roughly 10 halvings.</p>
+  <h4>Why ten?</h4>
+  <p>Because:</p>
+<pre><code class="language-text">2¹⁰ = 1024</code></pre>
+  <p>Therefore:</p>
+<pre><code class="language-text">log₂(1024) = 10</code></pre>
+  <p><span class="math">2¹⁰ = 1024 <span class="op">⇒</span> log₂(1024) = 10</span></p>
+  <h4>The general statement</h4>
+  <p>In general, the number of times we can repeatedly divide <code>n</code> by 2 is approximately:</p>
+<pre><code class="language-text">log₂ n</code></pre>
+  <p>So binary search runs in:</p>
+<pre><code class="language-text">O(log n)</code></pre>
+  <h4>The same pattern in a bare loop</h4>
+  <p>The halving shape is not special to searching. It appears in any loop of this form:</p>
+<pre><code class="language-java">int n = values.length;
+
+while (n &gt; 1) {
+    n = n / 2;
+}</code></pre>
+  <p>Every iteration halves <code>n</code>, so the number of iterations is approximately <span class="math">log₂ n</span> and the loop is <span class="pill">O(log n)</span>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-linear-vs-binary"
+          data-kicker="Comparison" data-title="Linear search vs. binary search">
+  <h4>Property by property</h4>
+  <table>
+    <thead><tr><th>Property</th><th>Linear Search</th><th>Binary Search</th></tr></thead>
+    <tbody>
+      <tr><td>Requires sorted data?</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Worst-case complexity</td><td>O(n)</td><td>O(log n)</td></tr>
+      <tr><td>Easy to implement?</td><td>Very</td><td>Moderately</td></tr>
+      <tr><td>Works on unsorted arrays?</td><td>Yes</td><td>No</td></tr>
+      <tr><td>Eliminates half each step?</td><td>No</td><td>Yes</td></tr>
+    </tbody>
+  </table>
+  <h4>One million elements</h4>
+  <p><strong>Linear search.</strong> Potentially:</p>
+<pre><code class="language-text">1,000,000 comparisons</code></pre>
+  <p><strong>Binary search.</strong> Approximately:</p>
+<pre><code class="language-text">20 comparisons</code></pre>
+  <p>This is an enormous difference.</p>
+  <h4>But sorting has a cost</h4>
+  <p>Suppose your data is not already sorted. You cannot simply say:</p>
+  <blockquote>Binary search is faster, so always use binary search.</blockquote>
+  <p>You might first have to sort the data. That sorting process itself takes time.</p>
+  <p>If you need to search only once, sorting first may not be worthwhile.</p>
+  <p>If you need to search the same dataset thousands of times, sorting once and then using binary search repeatedly may be extremely beneficial.</p>
+  <p>Algorithm choice depends on the larger context. This is an important principle:</p>
+  <blockquote>The fastest individual operation does not always produce the best overall solution.</blockquote>
+</template>
+
+<template class="csc-modal-tpl" id="m11-selection-walkthrough"
+          data-kicker="Worked example" data-title="Selection sort on [29, 10, 14, 37, 13]">
+  <h4>The idea</h4>
+  <p>Selection sort repeatedly chooses the smallest remaining value. Suppose:</p>
+<pre><code class="language-text">[29, 10, 14, 37, 13]</code></pre>
+  <p>We divide the array conceptually into:</p>
+<pre><code class="language-text">sorted region | unsorted region</code></pre>
+  <h4>Pass by pass</h4>
+  <p>Initially:</p>
+<pre><code class="language-text">| 29 10 14 37 13</code></pre>
+  <p>Find the smallest element:</p>
+<pre><code class="language-text">10</code></pre>
+  <p>Swap it with the first position:</p>
+<pre><code class="language-text">10 | 29 14 37 13</code></pre>
+  <p>Now find the smallest value in the remaining unsorted region:</p>
+<pre><code class="language-text">13</code></pre>
+  <p>Swap:</p>
+<pre><code class="language-text">10 13 | 14 37 29</code></pre>
+  <p>Continue:</p>
+<pre><code class="language-text">10 13 14 | 37 29</code></pre>
+  <p>Then:</p>
+<pre><code class="language-text">10 13 14 29 | 37</code></pre>
+  <p>Finished.</p>
+  <h4>The code that does this</h4>
+<pre><code class="language-java">public static void selectionSort(int[] values) {
+    for (int i = 0; i &lt; values.length - 1; i++) {
+
+        int minIndex = i;
+
+        for (int j = i + 1; j &lt; values.length; j++) {
+            if (values[j] &lt; values[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        int temp = values[i];
+        values[i] = values[minIndex];
+        values[minIndex] = temp;
+    }
+}</code></pre>
+  <h4>Reading the variables</h4>
+  <p>The variable:</p>
+<pre><code class="language-java">i</code></pre>
+  <p>represents the position we are currently filling.</p>
+  <p>The variable:</p>
+<pre><code class="language-java">minIndex</code></pre>
+  <p>stores the location of the smallest value found so far.</p>
+  <p>The inner loop searches the unsorted region. Then we swap the smallest value into position <code>i</code>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-selection-trace"
+          data-kicker="Trace" data-title="Selection sort on [6, 3, 8, 2, 5], all four passes">
+  <p>Consider:</p>
+<pre><code class="language-text">[6, 3, 8, 2, 5]</code></pre>
+  <h4>Pass 1</h4>
+  <p>Find smallest among:</p>
+<pre><code class="language-text">6 3 8 2 5</code></pre>
+  <p>Smallest:</p>
+<pre><code class="language-text">2</code></pre>
+  <p>Swap with <code>6</code>:</p>
+<pre><code class="language-text">[2, 3, 8, 6, 5]</code></pre>
+  <h4>Pass 2</h4>
+  <p>Search:</p>
+<pre><code class="language-text">3 8 6 5</code></pre>
+  <p>Smallest:</p>
+<pre><code class="language-text">3</code></pre>
+  <p>Already in correct position.</p>
+<pre><code class="language-text">[2, 3, 8, 6, 5]</code></pre>
+  <h4>Pass 3</h4>
+  <p>Search:</p>
+<pre><code class="language-text">8 6 5</code></pre>
+  <p>Smallest:</p>
+<pre><code class="language-text">5</code></pre>
+  <p>Swap:</p>
+<pre><code class="language-text">[2, 3, 5, 6, 8]</code></pre>
+  <h4>Pass 4</h4>
+  <p>Search:</p>
+<pre><code class="language-text">6 8</code></pre>
+  <p>Smallest:</p>
+<pre><code class="language-text">6</code></pre>
+  <p>Finished:</p>
+<pre><code class="language-text">[2, 3, 5, 6, 8]</code></pre>
+  <h4>What the trace shows about cost</h4>
+  <p>Passes 2 and 4 changed nothing, but both performed a full scan of the unsorted region anyway.</p>
+  <p>Even if the array is already sorted, selection sort still searches the remaining unsorted region on every pass. Its best and worst cases are therefore both quadratic in terms of comparisons.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-insertion-walkthrough"
+          data-kicker="Worked example" data-title="Inserting 4 into [3, 7, 9]">
+  <h4>The situation</h4>
+  <p>Suppose:</p>
+<pre><code class="language-text">[3, 7, 9, 4, 8]</code></pre>
+  <p>and:</p>
+<pre><code class="language-java">current = 4;</code></pre>
+  <p>The left portion is already sorted:</p>
+<pre><code class="language-text">[3, 7, 9]</code></pre>
+  <p>We need to insert <code>4</code>.</p>
+  <h4>Shifting</h4>
+  <p>Compare with <code>9</code>. Shift <code>9</code> right:</p>
+<pre><code class="language-text">[3, 7, 9, 9, 8]</code></pre>
+  <p>Compare with <code>7</code>. Shift <code>7</code> right:</p>
+<pre><code class="language-text">[3, 7, 7, 9, 8]</code></pre>
+  <h4>Stopping</h4>
+  <p>Compare with <code>3</code>. Since:</p>
+<pre><code class="language-text">3 &lt; 4</code></pre>
+  <p>stop shifting.</p>
+  <p>Insert <code>4</code>:</p>
+<pre><code class="language-text">[3, 4, 7, 9, 8]</code></pre>
+  <p>The sorted region has grown by one element.</p>
+  <h4>The code</h4>
+<pre><code class="language-java">public static void insertionSort(int[] values) {
+    for (int i = 1; i &lt; values.length; i++) {
+
+        int current = values[i];
+        int j = i - 1;
+
+        while (j &gt;= 0 &amp;&amp; values[j] &gt; current) {
+            values[j + 1] = values[j];
+            j--;
+        }
+
+        values[j + 1] = current;
+    }
+}</code></pre>
+  <h4>The card-hand picture</h4>
+  <p>Insertion sort works similarly to the way people often organize playing cards in their hands. Imagine you receive cards one at a time. You keep the cards already in your hand sorted. Whenever you receive a new card, you move it left until it reaches the correct position.</p>
+  <p>A smaller example, from start to finish:</p>
+<pre><code class="language-text">[7, 4, 5, 2]</code></pre>
+  <p>Treat the first value as already sorted:</p>
+<pre><code class="language-text">7 | 4 5 2</code></pre>
+  <p>Insert <code>4</code> into the sorted portion:</p>
+<pre><code class="language-text">4 7 | 5 2</code></pre>
+  <p>Insert <code>5</code>:</p>
+<pre><code class="language-text">4 5 7 | 2</code></pre>
+  <p>Insert <code>2</code>:</p>
+<pre><code class="language-text">2 4 5 7</code></pre>
+  <p>Done.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-library-sort"
+          data-kicker="Practice" data-title="Java already knows how to sort">
+  <h4>For arrays</h4>
+<pre><code class="language-java">import java.util.Arrays;
+
+int[] numbers = {7, 2, 9, 1, 5};
+
+Arrays.sort(numbers);</code></pre>
+  <h4>For lists</h4>
+<pre><code class="language-java">import java.util.ArrayList;
+import java.util.Collections;
+
+ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
+
+numbers.add(7);
+numbers.add(2);
+numbers.add(9);
+
+Collections.sort(numbers);</code></pre>
+  <h4>So why implement sorting ourselves?</h4>
+  <p>In normal Java programs, we often use a library method instead of implementing a sorting algorithm ourselves.</p>
+  <p>Because our goal is not merely to produce a sorted array. Our goal is to understand how algorithms work.</p>
+  <p>This distinction appears throughout computer science:</p>
+  <blockquote>In application development, use good libraries.<br>
+  In computer science education, understand what those libraries are doing conceptually.</blockquote>
+  <h4>And why the slow sorts are still worth studying</h4>
+  <p>If selection sort is <code>O(n²)</code>, and faster sorting algorithms exist, why study it? Because simple algorithms help us understand important concepts:</p>
+  <ul>
+    <li>nested loops;</li>
+    <li>invariants;</li>
+    <li>swapping;</li>
+    <li>partitioning data into processed and unprocessed regions;</li>
+    <li>algorithm analysis;</li>
+    <li>comparison of alternative strategies.</li>
+  </ul>
+  <p>Selection sort and insertion sort are conceptually manageable enough that we can understand every operation. Later, more sophisticated sorting algorithms build on similar reasoning.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-experiment"
+          data-kicker="Method" data-title="Empirical analysis: theory and experiment">
+  <h4>Timing code</h4>
+  <p>Big-O gives us a theoretical model. We can also measure algorithms experimentally. For example:</p>
+<pre><code class="language-java">long start = System.nanoTime();
+
+selectionSort(values);
+
+long end = System.nanoTime();
+
+long elapsed = end - start;
+
+System.out.println(elapsed);</code></pre>
+  <p>This produces an empirical measurement of running time. But individual measurements can be noisy.</p>
+  <h4>Designing the experiment</h4>
+  <p>To perform a meaningful experiment, we might:</p>
+  <ol>
+    <li>Generate arrays of different sizes.</li>
+    <li>Run the algorithm several times.</li>
+    <li>Average the measurements.</li>
+    <li>Compare how runtime changes as <code>n</code> increases.</li>
+  </ol>
+  <h4>What the numbers look like</h4>
+  <p>Suppose we time selection sort using arrays of increasing size. Imagine we observe:</p>
+  <table>
+    <thead><tr><th>n</th><th>Approximate time</th></tr></thead>
+    <tbody>
+      <tr><td>1,000</td><td>2 ms</td></tr>
+      <tr><td>2,000</td><td>8 ms</td></tr>
+      <tr><td>4,000</td><td>32 ms</td></tr>
+      <tr><td>8,000</td><td>128 ms</td></tr>
+    </tbody>
+  </table>
+  <p>Notice what happens when <code>n</code> doubles:</p>
+<pre><code class="language-text">1,000 → 2,000</code></pre>
+  <p>Runtime increases by approximately four times. Why? Because:</p>
+<pre><code class="language-text">(2n)² = 4n²</code></pre>
+  <p>This behavior is consistent with an:</p>
+<pre><code class="language-text">O(n²)</code></pre>
+  <p>algorithm.</p>
+  <h4>The limits of measurement</h4>
+  <p>Suppose an algorithm appears fast when tested on:</p>
+<pre><code class="language-text">n = 100</code></pre>
+  <p>That does not prove it scales well.</p>
+  <p>Likewise, benchmarking can be influenced by JVM startup, garbage collection, caching, processor scheduling, other applications, and input distribution.</p>
+  <p>We therefore use both <strong>theoretical analysis</strong> and <strong>experimental measurement</strong> to understand algorithms.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-worked-examples"
+          data-kicker="Practice" data-title="Six worked examples">
+  <h4>Example 1</h4>
+  <p>What is the complexity?</p>
+<pre><code class="language-java">System.out.println(values[0]);</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">O(1)</code></pre>
+  <h4>Example 2</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <h4>Example 3</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; values.length; j++) {
+        System.out.println(values[i] + values[j]);
+    }
+}</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">O(n²)</code></pre>
+  <h4>Example 4</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}
+
+for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i] * 2);
+}</code></pre>
+  <p>The first loop:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>The second loop:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>Total:</p>
+<pre><code class="language-text">O(n + n)</code></pre>
+  <p>which becomes:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <h4>Example 5</h4>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; 10; j++) {
+        System.out.println(values[i]);
+    }
+}</code></pre>
+  <p>The outer loop runs <code>n</code> times. The inner loop always runs exactly 10 times. Total:</p>
+<pre><code class="language-text">10n</code></pre>
+  <p>Ignore the constant:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>A nested loop does <strong>not automatically mean O(n²)</strong>. The number of iterations matters.</p>
+  <h4>Example 6</h4>
+<pre><code class="language-java">int n = values.length;
+
+while (n &gt; 1) {
+    n = n / 2;
+}</code></pre>
+  <p>Every iteration halves <code>n</code>. The number of iterations is approximately:</p>
+<pre><code class="language-text">log₂ n</code></pre>
+  <p>Therefore:</p>
+<pre><code class="language-text">O(log n)</code></pre>
+  <p>This same pattern appears in binary search.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m11-common-mistakes"
+          data-kicker="Checklist" data-title="Five common mistakes">
+  <h4>1. "Every loop is O(n)"</h4>
+  <p>No. Consider:</p>
+<pre><code class="language-java">for (int i = 0; i &lt; 100; i++) {
+    ...
+}</code></pre>
+  <p>This always performs 100 iterations regardless of the size of the input. Therefore, relative to input size <code>n</code>, it is:</p>
+<pre><code class="language-text">O(1)</code></pre>
+  <h4>2. "Two loops mean O(n²)"</h4>
+  <p>Not necessarily. Consecutive loops:</p>
+<pre><code class="language-java">for (...) {
+}
+
+for (...) {
+}</code></pre>
+  <p>often give:</p>
+<pre><code class="language-text">O(n + n) = O(n)</code></pre>
+  <p>Nested loops:</p>
+<pre><code class="language-java">for (...) {
+    for (...) {
+    }
+}</code></pre>
+  <p>often give:</p>
+<pre><code class="language-text">O(n²)</code></pre>
+  <h4>3. "Binary search works on any array"</h4>
+  <p>False. Binary search requires:</p>
+<pre><code class="language-text">sorted data</code></pre>
+  <p>Without sorting, comparing the target with the middle value tells us nothing about which half can safely be discarded.</p>
+  <h4>4. "O(n²) means exactly n² operations"</h4>
+  <p>False. Big-O describes a growth class. An algorithm performing:</p>
+<pre><code class="language-text">0.5n² + 20n + 7</code></pre>
+  <p>is still:</p>
+<pre><code class="language-text">O(n²)</code></pre>
+  <h4>5. "Faster Big-O always means faster for every input"</h4>
+  <p>False. For small data, implementation details may matter more. Big-O is primarily a statement about scalability.</p>
+  <h4>The related caution</h4>
+  <p>If algorithm A is <span class="pill">O(n)</span> and algorithm B is <span class="pill">O(n²)</span>, that does not guarantee A is faster for every possible input size. For very small <code>n</code>, constants and implementation details can dominate. Big-O tells us primarily how algorithms behave as:</p>
+<pre><code class="language-text">n becomes large.</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m11-exercises"
+          data-kicker="In class" data-title="All six in-class exercises">
+  <h4>Exercise 1: Count the Work</h4>
+  <p>Determine the Big-O complexity.</p>
+  <p><strong>A</strong></p>
+<pre><code class="language-java">int x = values[0];</code></pre>
+  <p><strong>B</strong></p>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}</code></pre>
+  <p><strong>C</strong></p>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    for (int j = 0; j &lt; values.length; j++) {
+        System.out.println(values[i] * values[j]);
+    }
+}</code></pre>
+  <p><strong>D</strong></p>
+<pre><code class="language-java">for (int i = 0; i &lt; values.length; i++) {
+    System.out.println(values[i]);
+}
+
+for (int j = 0; j &lt; values.length; j++) {
+    System.out.println(values[j]);
+}</code></pre>
+  <p><strong>Answers</strong></p>
+<pre><code class="language-text">A: O(1)
+B: O(n)
+C: O(n²)
+D: O(n)</code></pre>
+  <h4>Exercise 2: Trace Linear Search</h4>
+  <p>Given:</p>
+<pre><code class="language-text">[18, 5, 11, 23, 7, 31]</code></pre>
+  <p>Trace a linear search for:</p>
+<pre><code class="language-text">23</code></pre>
+  <p>Questions:</p>
+  <ol>
+    <li>Which indices are examined?</li>
+    <li>How many comparisons occur?</li>
+    <li>What index is returned?</li>
+  </ol>
+  <p>Answer:</p>
+<pre><code class="language-text">Indices: 0, 1, 2, 3
+Comparisons: 4
+Return value: 3</code></pre>
+  <h4>Exercise 3: Trace Binary Search</h4>
+  <p>Given:</p>
+<pre><code class="language-text">[4, 8, 13, 17, 22, 29, 35, 41, 48, 53, 60]</code></pre>
+  <p>Search for:</p>
+<pre><code class="language-text">41</code></pre>
+  <p>Record the values of:</p>
+<pre><code class="language-text">low
+high
+mid
+values[mid]</code></pre>
+  <p>after each iteration.</p>
+  <h4>Exercise 4: Find the Precondition</h4>
+  <p>Why does this algorithm not always work?</p>
+<pre><code class="language-java">public static int search(int[] values, int target) {
+    int low = 0;
+    int high = values.length - 1;
+
+    while (low &lt;= high) {
+        int mid = (low + high) / 2;
+
+        if (values[mid] == target) {
+            return mid;
+        }
+
+        if (target &lt; values[mid]) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return -1;
+}</code></pre>
+  <p>Answer: the algorithm assumes that:</p>
+<pre><code class="language-text">values is sorted</code></pre>
+  <p>That is a <strong>precondition</strong>.</p>
+  <h4>Exercise 5: Trace Selection Sort</h4>
+  <p>Trace selection sort on:</p>
+<pre><code class="language-text">[9, 4, 7, 2, 6]</code></pre>
+  <p>Write the complete array after every outer-loop iteration. Expected sequence:</p>
+<pre><code class="language-text">[2, 4, 7, 9, 6]
+[2, 4, 7, 9, 6]
+[2, 4, 6, 9, 7]
+[2, 4, 6, 7, 9]</code></pre>
+  <h4>Exercise 6: Trace Insertion Sort</h4>
+  <p>Trace insertion sort on:</p>
+<pre><code class="language-text">[8, 3, 6, 4, 7]</code></pre>
+  <p>Write the array after every insertion. Expected progression:</p>
+<pre><code class="language-text">[3, 8, 6, 4, 7]
+[3, 6, 8, 4, 7]
+[3, 4, 6, 8, 7]
+[3, 4, 6, 7, 8]</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m11-lab"
+          data-kicker="Lab" data-title="Suggested lab: searching and sorting experiment">
+  <h4>The task</h4>
+  <p>Write a Java program that compares searching and sorting algorithms.</p>
+  <h4>Part 1</h4>
+  <p>Create arrays containing random integers. Test sizes such as:</p>
+<pre><code class="language-text">1,000
+5,000
+10,000
+20,000</code></pre>
+  <h4>Part 2</h4>
+  <p>Implement:</p>
+<pre><code class="language-java">linearSearch()
+binarySearch()
+selectionSort()
+insertionSort()</code></pre>
+  <h4>Part 3</h4>
+  <p>Measure execution time using:</p>
+<pre><code class="language-java">System.nanoTime()</code></pre>
+  <h4>Part 4</h4>
+  <p>Compare:</p>
+  <ul>
+    <li>linear search on unsorted data;</li>
+    <li>binary search on sorted data;</li>
+    <li>selection sort;</li>
+    <li>insertion sort.</li>
+  </ul>
+  <h4>Part 5</h4>
+  <p>Write a short analysis answering:</p>
+  <ol>
+    <li>How does runtime change as array size increases?</li>
+    <li>Which observations agree with the theoretical Big-O analysis?</li>
+    <li>When does binary search noticeably outperform linear search?</li>
+    <li>How do selection sort and insertion sort compare?</li>
+    <li>Why should individual timing measurements be interpreted cautiously?</li>
+  </ol>
+</template>
+
+<template class="csc-modal-tpl" id="m11-concept-check"
+          data-kicker="Review" data-title="Concept check: ten short questions">
+  <h4>Question 1</h4>
+  <p>What does <code>n</code> normally represent when analyzing an array algorithm?</p>
+  <p><strong>Answer:</strong> The number of elements in the array.</p>
+  <h4>Question 2</h4>
+  <p>What does Big-O describe?</p>
+  <p><strong>Answer:</strong> How the computational work of an algorithm grows as input size increases.</p>
+  <h4>Question 3</h4>
+  <p>What is the complexity of accessing <code>values[5]</code>?</p>
+  <p><strong>Answer:</strong></p>
+<pre><code class="language-text">O(1)</code></pre>
+  <h4>Question 4</h4>
+  <p>What is the worst-case complexity of linear search?</p>
+  <p><strong>Answer:</strong></p>
+<pre><code class="language-text">O(n)</code></pre>
+  <h4>Question 5</h4>
+  <p>What is the complexity of binary search?</p>
+  <p><strong>Answer:</strong></p>
+<pre><code class="language-text">O(log n)</code></pre>
+  <h4>Question 6</h4>
+  <p>What condition must hold before binary search can be used?</p>
+  <p><strong>Answer:</strong> The collection must be sorted according to the ordering used by the search.</p>
+  <h4>Question 7</h4>
+  <p>What is the worst-case complexity of selection sort?</p>
+  <p><strong>Answer:</strong></p>
+<pre><code class="language-text">O(n²)</code></pre>
+  <h4>Question 8</h4>
+  <p>What is the worst-case complexity of insertion sort?</p>
+  <p><strong>Answer:</strong></p>
+<pre><code class="language-text">O(n²)</code></pre>
+  <h4>Question 9</h4>
+  <p>What is insertion sort's best-case complexity on an already sorted array?</p>
+  <p><strong>Answer:</strong></p>
+<pre><code class="language-text">O(n)</code></pre>
+  <h4>Question 10</h4>
+  <p>Do two consecutive O(n) loops produce O(n²)?</p>
+  <p><strong>Answer:</strong> No.</p>
+<pre><code class="language-text">O(n) + O(n) = O(2n) = O(n)</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m11-takeaways"
+          data-kicker="Summary" data-title="Week 11 — the ten key takeaways">
+  <p>The most important ideas from this week are:</p>
+  <h4>1. Correctness is not the only property of a program that matters.</h4>
+  <p>We also care about efficiency.</p>
+  <h4>2. Big-O describes growth.</h4>
+  <p>It tells us how the amount of computational work changes as the input becomes larger.</p>
+  <h4>3. Constant factors and lower-order terms are ignored in asymptotic analysis.</h4>
+  <p>For example:</p>
+<pre><code class="language-text">5n + 20 → O(n)</code></pre>
+  <h4>4. Linear search is O(n).</h4>
+  <p>It may need to examine every item.</p>
+  <h4>5. Binary search is O(log n).</h4>
+  <p>It repeatedly removes half of the remaining search space.</p>
+  <h4>6. Binary search requires sorted data.</h4>
+  <h4>7. Selection sort is O(n²).</h4>
+  <h4>8. Insertion sort is O(n²) in the worst case but O(n) in the best case.</h4>
+  <h4>9. Algorithm choice depends on context.</h4>
+  <p>The best solution depends on the size and organization of the data and on what operations will be performed.</p>
+  <h4>10. Efficiency becomes increasingly important as data grows.</h4>
+  <p>A solution that is perfectly acceptable for 100 values may be unusable for 100 million values.</p>
+  <h4>Looking ahead</h4>
+  <p>This week we compared algorithms that operate on arrays. Next, we will begin examining a deeper question:</p>
+  <blockquote>How should data itself be organized?</blockquote>
+  <p>This leads to one of the central themes of computer science:</p>
+  <blockquote>Algorithms and data structures must be designed together.</blockquote>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

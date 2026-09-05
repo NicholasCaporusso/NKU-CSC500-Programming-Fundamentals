@@ -1,0 +1,3311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 1: Computational Thinking and Java Basics</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Computational Thinking and Java Basics</h1>
+  <p class="subtitle">Week 1 — from problem, to algorithm, to a program that runs</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">By the end of Week 1, students should be able to:</p>
+  <ul>
+    <li>Explain what a computer program is.</li>
+    <li>Describe, at a high level, how Java source code becomes an executing program.</li>
+    <li>Distinguish between source code, compiled code, and program output.</li>
+    <li>Write, compile, and run a simple Java program.</li>
+    <li>Use variables to store information.</li>
+    <li>Work with basic Java primitive data types.</li>
+    <li>Construct arithmetic expressions.</li>
+  </ul>
+  <aside class="notes">
+    <p>These are the thirteen things Week 1 is accountable for. Read them out loud at the start of the lecture and again at the end — they are the checklist students should use when they revise.</p>
+    <p>Notice the shape of the list: it starts conceptual (what a program is, how source becomes execution), then becomes concrete and mechanical (write it, compile it, run it, declare a variable, build an expression).</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul>
+    <li>Use assignment statements.</li>
+    <li>Produce console output.</li>
+    <li>Read simple input from the keyboard.</li>
+    <li>Trace the execution of a short Java program by hand.</li>
+    <li>Identify syntax errors, runtime errors, and logic errors.</li>
+    <li>Begin thinking about programming as the precise specification of a computational process.</li>
+  </ul>
+  <div class="box key"><span class="box-title">The last one is the real one</span>Everything else on this list is a skill. The last objective is a habit of mind — and it is the one the rest of the course is built on.</div>
+  <aside class="notes">
+    <p>The final objective — begin thinking about programming as the precise specification of a computational process — is the one that carries into Weeks 2 through 16. The syntax is small; the discipline of precision is the actual subject.</p>
+    <p>Tracing by hand is listed deliberately. Students who only ever run their programs never develop a model of what the machine is doing, and they debug by guessing.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap</h2>
+  <div class="cols small">
+    <ol>
+      <li>Problems, Algorithms, and Programs</li>
+      <li>A First Java Program</li>
+      <li>From Source Code to Execution</li>
+      <li>Console Output</li>
+      <li>Variables, Assignment, and Types</li>
+      <li>Arithmetic and Expressions</li>
+    </ol>
+    <ol start="7">
+      <li>Printing Results and Reading Input</li>
+      <li>Tracing, Errors, and Debugging</li>
+      <li>Computational Thinking in Practice</li>
+      <li>Execution, State, and Abstraction</li>
+      <li>Practice and Common Mistakes</li>
+      <li>Lab, Homework, and Key Ideas</li>
+    </ol>
+  </div>
+  <aside class="notes">
+    <p>The week is organised into twelve sections. The first four build the machinery: what a program is, how Java gets from a text file to a running process, and how to make the program say something.</p>
+    <p>Sections five through seven are the hands-on core — variables, types, arithmetic, input and output. Sections eight through eleven turn from writing code to reasoning about it: tracing, the three categories of error, debugging discipline, comments and style, and the reflective material on program state and abstraction.</p>
+    <p>Point out that Parts I to III are conceptual and Part IV onward is hands-on. Students who find the first block abstract should be told the payoff arrives at Part IV.</p>
+  </aside>
+</section>
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Problems, Algorithms, and Programs</h2>
+  <p class="part-sub">A computer executes instructions according to precisely defined rules — and nothing else.</p>
+</section>
+
+<section>
+  <h2>Programs as Precise Instructions</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A computer does <strong>not</strong> understand:</p>
+      <ul class="small">
+        <li>what you intended,</li>
+        <li>what you probably meant,</li>
+        <li>whether your result makes sense,</li>
+        <li>or whether a particular instruction is a good idea.</li>
+      </ul>
+      <p class="small">It executes instructions according to precisely defined rules.</p>
+    </div>
+    <div>
+      <blockquote class="small">Calculate the average of three exam scores.</blockquote>
+      <p class="small">A human may immediately understand what to do. A computer needs a much more explicit procedure.</p>
+      <div class="box key"><span class="box-title">Key idea</span>That explicit procedure is an example of an <strong>algorithm</strong>.</div>
+    </div>
+  </div>
+  <div class="def"><span class="term">Programming:</span> the process of expressing a solution to a problem in a form that a computer can execute.</div>
+  <details class="acc">
+    <summary>The procedure a computer needs, spelled out</summary>
+    <div class="acc-body">
+      <ol>
+        <li>Obtain the first score.</li>
+        <li>Obtain the second score.</li>
+        <li>Obtain the third score.</li>
+        <li>Add the three scores.</li>
+        <li>Divide the sum by 3.</li>
+        <li>Display the result.</li>
+      </ol>
+      <p>This sequence of steps is an example of an <strong>algorithm</strong>. Notice what the English sentence left implicit and the six steps supply: order, granularity, and the commitment that nothing is assumed.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A computer is extremely fast, but it is not intelligent in the way humans normally use that word. It does not understand what you intended, what you probably meant, whether your result makes sense, or whether a particular instruction is a good idea.</p>
+    <p>It executes instructions according to precisely defined rules. Programming is therefore the process of expressing a solution to a problem in a form that a computer can execute.</p>
+    <p>Consider the instruction: calculate the average of three exam scores. A human may immediately understand what to do. A computer needs a much more explicit procedure — six numbered steps, each of which does exactly one thing. This sequence of steps is an example of an algorithm.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Algorithms</h2>
+  <div class="def"><span class="term">Algorithm:</span> a finite sequence of well-defined steps for solving a problem or performing a computation.</div>
+  <div class="cols">
+    <div>
+      <h4>Area of a rectangle</h4>
+      <ol class="small">
+        <li>Obtain the width.</li>
+        <li>Obtain the height.</li>
+        <li>Multiply width by height.</li>
+        <li>Report the result.</li>
+      </ol>
+      <span class="math">A = w <span class="op">×</span> h</span>
+    </div>
+    <div>
+      <p class="small">Algorithms exist independently of programming languages. We could implement the same algorithm in Java, Python, C++, or another language.</p>
+      <p class="small"><strong>Algorithm:</strong> the method used to solve the problem.<br>
+      <strong>Program:</strong> an implementation of that method in a programming language.</p>
+    </div>
+  </div>
+  <div class="chain">
+    <span>Problem</span><span class="sep">→</span>
+    <span>Algorithm</span><span class="sep">→</span>
+    <span>Program</span><span class="sep">→</span>
+    <span>Execution</span><span class="sep">→</span>
+    <span>Result</span>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-algorithm-vs-program" tabindex="0">Algorithm vs. program, in full</span>
+  </div>
+  <aside class="notes">
+    <p>An algorithm is a finite sequence of well-defined steps for solving a problem or performing a computation. Algorithms exist independently of programming languages.</p>
+    <p>For example, an algorithm for computing the area of a rectangle could be: obtain the width, obtain the height, multiply width by height, report the result. We might express the algorithm mathematically as A = w times h. We could implement the same algorithm in Java, Python, C++, or another language.</p>
+    <p>This distinction is important. The algorithm is the method used to solve the problem; the program is an implementation of that method in a programming language. Throughout CSC500 we will repeatedly move through the process problem, algorithm, program, execution, result.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>A First Java Program</h2>
+  <p class="part-sub">Hello, world: a class, a method, and a statement.</p>
+</section>
+
+<section>
+  <h2>Hello, World</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A traditional first Java program is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">When executed, the program displays:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Hello, world!
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>At first, some parts of this program will look mysterious. That is expected. For now, focus on its structure.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-hello-anatomy" tabindex="0">Line-by-line anatomy</span>
+  </div>
+  <aside class="notes">
+    <p>A traditional first Java program is the four-line Hello class. When executed, the program displays Hello, world! on one line.</p>
+    <p>At first, some parts of this program will look mysterious. That is expected. For now, focus on its structure: a class containing a method containing a statement. Three nested layers, and each one gets its own section over the next two Parts.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Class</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public class Hello {
+</code></pre>
+      <ul class="small">
+        <li>Java programs are organized around entities called <strong>classes</strong>.</li>
+        <li>Classes will become one of the central ideas of this course when we study object-oriented programming.</li>
+        <li>For now, think of a class as a container that holds part of a Java program.</li>
+      </ul>
+      <p class="small">Here, the class is named:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Hello
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Java is case-sensitive. Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Hello
+hello
+HELLO
+</code></pre>
+      <p class="small">are three different names.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Naming the source file</summary>
+    <div class="acc-body">
+      <p>If the class is declared as:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Hello
+</code></pre>
+      <p>the source file should normally be named:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Hello.java
+</code></pre>
+      <p>The compiler uses the file name to locate the public class, so a mismatch is reported as an error before any of your logic is even examined.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Java programs are organized around entities called classes. Classes will become one of the central ideas of this course when we study object-oriented programming. For now, think of a class as a container that holds part of a Java program. Here, the class is named Hello.</p>
+    <p>Java is case-sensitive. Therefore Hello, hello, and HELLO are three different names. This is the source of a large fraction of first-week compiler errors.</p>
+    <p>If the class is declared as public class Hello, the source file should normally be named Hello.java.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section>
+  <h2>Where Execution Begins</h2>
+  <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args) {
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">When we run this Java application, execution begins in the <code>main</code> method. For Week 1, treat this line as a required pattern.</p>
+      <p class="small">Later in the course we will understand what each part means:</p>
+      <ul class="small">
+        <li><code>public</code></li>
+        <li><code>static</code></li>
+        <li><code>void</code></li>
+        <li><code>String[]</code></li>
+        <li><code>args</code></li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">For now, remember:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args)
+</code></pre>
+      <p class="small">defines the starting point of a basic Java application.</p>
+      <div class="box note"><span class="box-title">Note</span>Copy it exactly. Every token is required, and each one has a reason we will get to later.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>When we run this Java application, execution begins in the main method. For Week 1, treat this line as a required pattern.</p>
+    <p>Later in the course we will understand what each part means: public, static, void, String bracket bracket, and args. For now, remember that public static void main open paren String bracket bracket args close paren defines the starting point of a basic Java application.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Statements</h2>
+  <p class="small">Inside <code>main</code>, we have:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Hello, world!");
+</code></pre>
+  <p class="small">This is a Java <strong>statement</strong>. A statement tells the computer to perform some action. Here, the action is:</p>
+  <blockquote>Display the text <code>Hello, world!</code></blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">Most Java statements end with a semicolon:</p>
+<pre><code class="language-java" data-trim data-noescape>
+;
+</code></pre>
+    </div>
+    <div>
+      <div class="box pitfall"><span class="box-title">Common error</span>Forgetting the semicolon is a common beginning programming error.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Inside main we have System.out.println of the string Hello, world!. This is a Java statement. A statement tells the computer to perform some action; here, the action is to display the text Hello, world!.</p>
+    <p>Most Java statements end with a semicolon. Forgetting the semicolon is a common beginning programming error — we will meet it again in Part XXV as the canonical syntax error and in Part XXXVI as the first common beginner mistake.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>From Source Code to Execution</h2>
+  <p class="part-sub">How a text file becomes a running process, and why the JVM sits in the middle.</p>
+</section>
+
+<section>
+  <h2>Source Code and Compilation</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The Java code that we write is called <strong>source code</strong>. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}
+</code></pre>
+      <p class="small">might be stored in:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Hello.java
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The Java compiler translates source code into another representation called <strong>bytecode</strong>. Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Hello.java
+    |
+    | Java compiler
+    v
+Hello.class
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The computer does not directly execute Java source code. Instead, Java normally uses a two-stage process.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Running the compiler from a terminal</summary>
+    <div class="acc-body">
+      <p>The command-line Java compiler is called:</p>
+<pre><code class="language-text" data-trim data-noescape>
+javac
+</code></pre>
+      <p>For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+javac Hello.java
+</code></pre>
+      <p>If compilation succeeds, Java produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Hello.class
+</code></pre>
+      <p>Note the word "succeeds". If compilation fails there is no class file at all — which is why a syntax error means the program never runs, rather than running badly.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-compile-run" tabindex="0">The whole compile-and-run pipeline</span>
+  </div>
+  <aside class="notes">
+    <p>The Java code that we write is called source code. For example, the Hello class might be stored in Hello.java. The computer does not directly execute Java source code; instead, Java normally uses a two-stage process.</p>
+    <p>The Java compiler translates source code into another representation called bytecode. Conceptually, Hello.java goes through the Java compiler and out comes Hello.class.</p>
+    <p>The command-line Java compiler is called javac. For example, javac Hello.java. If compilation succeeds, Java produces Hello.class.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Java Virtual Machine</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The <code>.class</code> file contains Java bytecode. The bytecode is executed by the <strong>Java Virtual Machine</strong>, or JVM. Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Java source code
+      |
+      v
+   Compiler
+      |
+      v
+   Bytecode
+      |
+      v
+     JVM
+      |
+      v
+Program execution
+</code></pre>
+    </div>
+    <div>
+      <p class="small">To run the program from a terminal, we might use:</p>
+<pre><code class="language-text" data-trim data-noescape>
+java Hello
+</code></pre>
+      <p class="small">Notice that we write:</p>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-text" data-trim data-noescape>
+java Hello
+</code></pre>
+      <p class="small">not:</p>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-text" data-trim data-noescape>
+java Hello.java
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>java Hello</code> and not <code>java Hello.java</code>?</summary>
+    <div class="acc-body">
+      <p>We write <code>java Hello</code> — not <code>java Hello.java</code> — when executing the compiled class in the traditional compile-then-run workflow. The argument is the <em>class name</em>, not a file name: the JVM goes looking for <code>Hello.class</code> itself.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The .class file contains Java bytecode. The bytecode is executed by the Java Virtual Machine, or JVM. The full conceptual chain is source code, compiler, bytecode, JVM, program execution.</p>
+    <p>To run the program from a terminal we might use java Hello. Notice that we write java Hello, not java Hello.java, when executing the compiled class in the traditional compile-then-run workflow.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section>
+  <h2>Portability</h2>
+  <p class="small">One of Java's historical design goals is portability. The idea is approximately:</p>
+  <blockquote>Compile Java source into a standard bytecode format, then run that bytecode using an appropriate JVM on each platform.</blockquote>
+  <p class="small">Therefore, Java bytecode can often run across operating systems without recompiling the source for each CPU architecture. This idea is sometimes summarized by the phrase:</p>
+  <blockquote>Write once, run anywhere.</blockquote>
+  <details class="acc">
+    <summary>Is "write once, run anywhere" literally true?</summary>
+    <div class="acc-body">
+      <p>In reality, platform differences still matter in some situations, but the JVM provides a useful level of abstraction between the Java program and the underlying machine.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>One of Java's historical design goals is portability. The idea is approximately: compile Java source into a standard bytecode format, then run that bytecode using an appropriate JVM on each platform. Therefore, Java bytecode can often run across operating systems without recompiling the source for each CPU architecture.</p>
+    <p>This idea is sometimes summarized by the phrase "write once, run anywhere". In reality, platform differences still matter in some situations, but the JVM provides a useful level of abstraction between the Java program and the underlying machine.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Console Output</h2>
+  <p class="part-sub"><code>print</code>, <code>println</code>, and where the output line ends.</p>
+</section>
+
+<section>
+  <h2><code>System.out.println</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can print text using:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Welcome to CSC500");
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Welcome to CSC500
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We can print multiple lines:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("CSC500");
+System.out.println("Programming Fundamentals");
+System.out.println("Week 1");
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+CSC500
+Programming Fundamentals
+Week 1
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Each call to <code>println</code> ends the current output line.</div>
+  <aside class="notes">
+    <p>We can print text using System.out.println with a string argument. We can print multiple lines by issuing several calls, one after another.</p>
+    <p>Each call to println ends the current output line. That single sentence is the whole difference between println and print, which is the next section.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>print</code> versus <code>println</code></h2>
+  <p class="small">Java also provides <code>System.out.print(...)</code>. Unlike <code>println</code>, <code>print</code> does not automatically move to the next line.</p>
+  <div class="cols">
+    <div>
+      <h4>Using <code>print</code></h4>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.print("Hello ");
+System.out.print("world");
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+Hello world
+</code></pre>
+    </div>
+    <div>
+      <h4>Using <code>println</code></h4>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Hello");
+System.out.println("world");
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+Hello
+world
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-print-vs-println" tabindex="0">Side-by-side comparison</span>
+  </div>
+  <aside class="notes">
+    <p>Java also provides System.out.print. Unlike println, print does not automatically move to the next line.</p>
+    <p>Compare the two blocks: two print calls produce Hello world on one line; two println calls produce Hello and world on separate lines. Note the trailing space inside the first string — without it the output would read Helloworld. That is worth pausing on, because it is the first time students see that a space is a character like any other.</p>
+  </aside>
+</section>
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Variables, Assignment, and Types</h2>
+  <p class="part-sub">Named storage, what <code>=</code> really means, and why Java insists on declared types.</p>
+</section>
+
+<section>
+  <h2>Programs Need Memory</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Programs often need to remember information. Suppose we want to calculate someone's age next year. We need somewhere to store the current age. Java provides <strong>variables</strong> for this purpose.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int age = 25;
+</code></pre>
+      <p class="small">This declares a variable named <code>age</code> and gives it the value <code>25</code>.</p>
+    </div>
+    <div>
+      <div class="def"><span class="term">Variable:</span> a named location in which a program stores a value.</div>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int students = 20;
+double temperature = 72.5;
+</code></pre>
+      <p class="small">We have two variables, <code>students</code> and <code>temperature</code>, with values <code>20</code> and <code>72.5</code>. The variable names allow us to refer to those values later.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Reading the declaration piece by piece</summary>
+    <div class="acc-body">
+      <p>The statement <code>int age = 25;</code> declares a variable named:</p>
+<pre><code class="language-text" data-trim data-noescape>
+age
+</code></pre>
+      <p>and gives it the value:</p>
+<pre><code class="language-text" data-trim data-noescape>
+25
+</code></pre>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Two variables, two values</summary>
+    <div class="acc-body">
+      <p>After <code>int students = 20;</code> and <code>double temperature = 72.5;</code> we have two variables:</p>
+<pre><code class="language-text" data-trim data-noescape>
+students
+temperature
+</code></pre>
+      <p>with corresponding values:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+72.5
+</code></pre>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Programs often need to remember information. Suppose we want to calculate someone's age next year — we need somewhere to store the current age. Java provides variables for this purpose.</p>
+    <p>A useful first mental model is: a variable is a named location in which a program stores a value. The variable names allow us to refer to those values later. That is the whole point of naming: without a name, a value computed on line 3 is unreachable on line 9.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section>
+  <h2>Declaring a Variable</h2>
+  <p class="small">In Java, variables have types. The general form is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+type variableName;
+</code></pre>
+  <div class="cols-3">
+    <div>
+      <h4>Declare</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int count;
+</code></pre>
+      <p class="smaller">Declares a variable named <code>count</code> capable of storing an integer.</p>
+    </div>
+    <div>
+      <h4>Assign later</h4>
+<pre><code class="language-java" data-trim data-noescape>
+count = 10;
+</code></pre>
+      <p class="smaller">We can later assign a value.</p>
+    </div>
+    <div>
+      <h4>Or do both</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int count = 10;
+</code></pre>
+      <p class="smaller">Declare and initialize at the same time.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>In Java, variables have types. The general form of a declaration is a type followed by a variable name. For example, int count declares a variable named count capable of storing an integer.</p>
+    <p>We can later assign a value with count = 10, or we can declare and initialize the variable at the same time with int count = 10. The third form is what you will use almost always.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Assignment</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+x = 12;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">After the first statement:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x contains 5
+</code></pre>
+      <p class="small">After the second statement:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x contains 12
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The old value has been replaced. A variable holds exactly one value at a time.</div>
+  <aside class="notes">
+    <p>Consider int x = 5 followed by x = 12. After the first statement, x contains 5. After the second statement, x contains 12. The old value has been replaced.</p>
+    <p>This is the first place where students meet destruction of information: the 5 is simply gone. If you need both values, you need two variables.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section>
+  <h2>Understanding <code>=</code></h2>
+  <div class="cols">
+    <div>
+      <h4>In mathematics</h4>
+      <span class="math">x = 5</span>
+      <p class="small">usually expresses an equality.</p>
+      <h4>In Java</h4>
+<pre><code class="language-java" data-trim data-noescape>
+x = 5;
+</code></pre>
+      <p class="small">means:</p>
+      <blockquote class="small">Evaluate the expression on the right and store the resulting value in the variable on the left.</blockquote>
+    </div>
+    <div>
+      <h4>The statement that proves it</h4>
+<pre><code class="language-java" data-trim data-noescape>
+x = x + 1;
+</code></pre>
+      <p class="small">Mathematically, <span class="math">x = x + 1</span> would be impossible. In programming, however, it means:</p>
+      <ol class="small">
+        <li>Read the current value of <code>x</code>.</li>
+        <li>Add 1.</li>
+        <li>Store the result back into <code>x</code>.</li>
+      </ol>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Show me the numbers</summary>
+    <div class="acc-body">
+      <p>If:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x = 10
+</code></pre>
+      <p>before the statement, then after:</p>
+<pre><code class="language-java" data-trim data-noescape>
+x = x + 1;
+</code></pre>
+      <p>we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x = 11
+</code></pre>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-assignment-not-algebra" tabindex="0">Assignment is not algebra — full treatment</span>
+  </div>
+  <aside class="notes">
+    <p>In mathematics, x = 5 usually expresses an equality. In Java, x = 5 means: evaluate the expression on the right and store the resulting value in the variable on the left.</p>
+    <p>This distinction becomes especially important when we write x = x + 1. Mathematically that would be impossible. In programming it means read the current value of x, add 1, and store the result back into x. If x is 10 before the statement, then afterwards x is 11.</p>
+    <p>This is also the answer to conceptual question 11 at the end of the week: why is x = x + 1 valid Java?</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section>
+  <h2>Why Types Matter</h2>
+  <p class="small">A program works with different kinds of data. Examples include:</p>
+  <ul class="small">
+    <li>whole numbers,</li>
+    <li>decimal numbers,</li>
+    <li>characters,</li>
+    <li>true/false values.</li>
+  </ul>
+  <div class="def"><span class="term">Statically typed language:</span> variables have declared types. The compiler uses these types to determine what operations are valid.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-primitive-types" tabindex="0">All four primitives, side by side</span>
+  </div>
+  <aside class="notes">
+    <p>A program works with different kinds of data: whole numbers, decimal numbers, characters, true/false values.</p>
+    <p>Java is a statically typed language. This means that variables have declared types. The compiler uses these types to determine what operations are valid — which is why a type error is caught before the program ever runs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>int</code> and <code>double</code></h2>
+  <div class="cols">
+    <div>
+      <h4>int — integers</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int students = 24;
+int temperature = -5;
+int year = 2026;
+</code></pre>
+      <p class="smaller">Valid integer values include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0
+17
+-92
+5000
+</code></pre>
+    </div>
+    <div>
+      <h4>double — floating-point</h4>
+<pre><code class="language-java" data-trim data-noescape>
+double price = 19.99;
+double temperature = 72.5;
+double pi = 3.14159;
+</code></pre>
+      <p class="smaller">A <code>double</code> can represent fractional quantities.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>int price = 19.99;</code> is invalid</summary>
+    <div class="acc-body">
+      <p>An <code>int</code> does not store fractional values. This is invalid:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int price = 19.99;
+</code></pre>
+      <p>The compiler rejects it because the value on the right is a floating-point literal and the variable on the left can hold only whole numbers.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The int type stores integers: int students = 24, int temperature = -5, int year = 2026. Valid integer values include 0, 17, -92, 5000. An int does not store fractional values, so int price = 19.99 is invalid.</p>
+    <p>The double type stores floating-point numbers: double price = 19.99, double temperature = 72.5, double pi = 3.14159. A double can represent fractional quantities.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>boolean</code> and <code>char</code></h2>
+  <div class="cols">
+    <div>
+      <h4>boolean</h4>
+      <p class="smaller">A boolean represents one of two logical values:</p>
+<pre><code class="language-text" data-trim data-noescape>
+true
+false
+</code></pre>
+<pre><code class="language-java" data-trim data-noescape>
+boolean enrolled = true;
+boolean finished = false;
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Booleans will become extremely important when we introduce decision-making in Week 2.</div>
+    </div>
+    <div>
+      <h4>char</h4>
+      <p class="smaller">A <code>char</code> stores a single character.</p>
+<pre><code class="language-java" data-trim data-noescape>
+char grade = 'A';
+</code></pre>
+      <p class="smaller">Notice the single quotation marks:</p>
+<pre><code class="language-java" data-trim data-noescape>
+'A'
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>A character differs from a string</summary>
+    <div class="acc-body">
+      <p>Character:</p>
+<pre><code class="language-java" data-trim data-noescape>
+'A'
+</code></pre>
+      <p>String:</p>
+<pre><code class="language-java" data-trim data-noescape>
+"A"
+</code></pre>
+      <p>Single quotes make a <code>char</code>; double quotes make a <code>String</code>. They look almost identical on the page and behave quite differently.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A boolean represents one of two logical values, true and false. For example boolean enrolled = true and boolean finished = false. Booleans will become extremely important when we introduce decision-making in Week 2.</p>
+    <p>A char stores a single character, for example char grade = 'A'. Notice the single quotation marks. A character differs from a string: 'A' with single quotes is a character, "A" with double quotes is a string.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XI ==================== -->
+
+<section>
+  <h2>Text Data</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java represents sequences of characters using the <code>String</code> type.</p>
+<pre><code class="language-java" data-trim data-noescape>
+String name = "Ada";
+</code></pre>
+      <p class="small">Another example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String course = "CSC500";
+</code></pre>
+    </div>
+    <div>
+      <div class="box note"><span class="box-title">Note</span>Strictly speaking, <code>String</code> is not a primitive type. It is a class. We will understand the significance of that distinction later.</div>
+      <p class="small">For now, it is fine to think of <code>String</code> as the standard Java type for text.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java represents sequences of characters using the String type: String name = "Ada", String course = "CSC500".</p>
+    <p>Strictly speaking, String is not a primitive type. It is a class. We will understand the significance of that distinction later. For now, it is fine to think of String as the standard Java type for text. Note also the capital S — it is the one type name this week that begins with an uppercase letter, and that is not an accident.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XII ==================== -->
+
+<section>
+  <h2>Legal Names</h2>
+  <p class="small">Java identifiers can include letters, digits, underscore <code>_</code>, and dollar sign <code>$</code>. However, an identifier cannot begin with a digit.</p>
+  <div class="cols">
+    <div>
+      <span class="tag ok">Valid</span>
+<pre><code class="language-java" data-trim data-noescape>
+age
+studentCount
+exam2
+total_score
+</code></pre>
+    </div>
+    <div>
+      <span class="tag no">Invalid</span>
+<pre><code class="language-java" data-trim data-noescape>
+2exam
+student-count
+class
+</code></pre>
+    </div>
+  </div>
+  <p class="small">Beyond legality, prefer <strong>meaningful</strong> names. Good variable names make programs easier to read, understand, test, and maintain.</p>
+  <details class="acc">
+    <summary>Why is <code>class</code> invalid?</summary>
+    <div class="acc-body">
+      <p>The last example is invalid because <code>class</code> is a Java keyword. Keywords are reserved by the language; you cannot reuse one as a variable name. Note also that <code>2exam</code> fails because an identifier cannot begin with a digit, and <code>student-count</code> fails because the hyphen is the subtraction operator, not a letter.</p>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Poor names and better names</summary>
+    <div class="acc-body">
+      <p>Poor:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double x;
+double y;
+</code></pre>
+      <p>Better:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double width;
+double height;
+</code></pre>
+      <p>Poor:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int a;
+</code></pre>
+      <p>Better:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int studentCount;
+</code></pre>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>The Java naming convention</summary>
+    <div class="acc-body">
+      <p>Java programmers normally use <strong>camelCase</strong> for variable names:</p>
+<pre><code class="language-java" data-trim data-noescape>
+studentCount
+maximumScore
+monthlyPayment
+</code></pre>
+      <p>The first word starts with a lowercase letter, while subsequent words begin with uppercase letters. Class names normally begin with uppercase letters:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student
+BankAccount
+CourseRegistration
+</code></pre>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-naming" tabindex="0">Naming: rules, quality, and convention</span>
+  </div>
+  <aside class="notes">
+    <p>Java identifiers can include letters, digits, underscore, and dollar sign. However, an identifier cannot begin with a digit. Valid names include age, studentCount, exam2, total_score. Invalid names include 2exam, student-count, and class. The last example is invalid because class is a Java keyword.</p>
+    <p>Prefer meaningful variable names. Instead of double x and double y, write double width and double height. Instead of int a, write int studentCount. Good variable names make programs easier to read, understand, test, and maintain.</p>
+    <p>Java programmers normally use camelCase for variable names, such as studentCount, maximumScore, monthlyPayment. The first word starts with a lowercase letter, while subsequent words begin with uppercase letters. Class names normally begin with uppercase letters: Student, BankAccount, CourseRegistration.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Arithmetic and Expressions</h2>
+  <p class="part-sub">Operators, precedence, integer division, remainders, and constants.</p>
+</section>
+
+<section>
+  <h2>Basic Arithmetic Operators</h2>
+  <div class="cols">
+    <div>
+      <table>
+        <thead><tr><th>Operation</th><th>Java</th></tr></thead>
+        <tbody>
+          <tr><td>Addition</td><td><code>+</code></td></tr>
+          <tr><td>Subtraction</td><td><code>-</code></td></tr>
+          <tr><td>Multiplication</td><td><code>*</code></td></tr>
+          <tr><td>Division</td><td><code>/</code></td></tr>
+          <tr><td>Remainder</td><td><code>%</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+int y = 3;
+
+int sum = x + y;
+int difference = x - y;
+int product = x * y;
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java supports familiar arithmetic operators: plus for addition, minus for subtraction, asterisk for multiplication, forward slash for division, and percent for remainder.</p>
+    <p>Note which two are missing from the example: division and remainder. That is deliberate — they each get their own Part, because they are the two that surprise people.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Expression Evaluation</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+int y = 2;
+int z = x + y * 3;
+</code></pre>
+      <p class="small">Java follows operator precedence. Multiplication happens before addition:</p>
+<pre><code class="language-text" data-trim data-noescape>
+y * 3
+2 * 3
+6
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x + 6
+5 + 6
+11
+</code></pre>
+      <p class="small">Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+z = 11
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Making the order explicit with parentheses</summary>
+    <div class="acc-body">
+      <p>Parentheses can make the intended order explicit:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int z = (x + y) * 3;
+</code></pre>
+      <p>Now:</p>
+<pre><code class="language-text" data-trim data-noescape>
+(5 + 2) * 3
+7 * 3
+21
+</code></pre>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose int x = 5, int y = 2, int z = x + y * 3. Java follows operator precedence, so multiplication happens before addition: y times 3 is 2 times 3 is 6. Then x plus 6 is 5 plus 6 is 11. Therefore z is 11.</p>
+    <p>Parentheses can make the intended order explicit. With int z = (x + y) * 3, we get (5 + 2) times 3, which is 7 times 3, which is 21. Encourage students to use parentheses even where precedence would have done the right thing — it costs nothing and removes doubt for the reader.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XIV ==================== -->
+
+<section>
+  <h2>An Important Java Rule</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+int y = 2;
+
+System.out.println(x / y);
+</code></pre>
+      <p class="small">Many new programmers expect:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2.5
+</code></pre>
+      <p class="small">But Java prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Why</span>Both operands are integers. Therefore Java performs integer division. The fractional part is discarded.</div>
+      <div class="box warn"><span class="box-title">Watch out</span>Nothing is rounded. The fractional part is simply thrown away.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider int x = 5, int y = 2, and then printing x divided by y. Many new programmers expect 2.5, but Java prints 2.</p>
+    <p>Why? Both operands are integers. Therefore Java performs integer division. The fractional part is discarded. Stress "discarded", not "rounded" — 5 / 2 is 2, and so is 5 / 3.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Producing Floating-Point Division</h2>
+  <div class="cols">
+    <div>
+      <p class="small">If at least one operand is floating-point:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(5.0 / 2);
+</code></pre>
+      <p class="small">the output is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2.5
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Similarly:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double result = 5.0 / 2.0;
+</code></pre>
+      <p class="small">produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2.5
+</code></pre>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>This distinction will cause many bugs if students do not understand it.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-integer-division" tabindex="0">Integer division in full</span>
+  </div>
+  <aside class="notes">
+    <p>If at least one operand is floating-point, the division is floating-point. System.out.println of 5.0 divided by 2 gives 2.5. Similarly double result = 5.0 / 2.0 produces 2.5.</p>
+    <p>This distinction will cause many bugs if students do not understand it. We will see it again in Part XXIX, where writing 5 / 9 instead of 5.0 / 9.0 silently destroys a temperature conversion.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XV ==================== -->
+
+<section>
+  <h2><code>%</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">The <code>%</code> operator computes the remainder after integer division. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int remainder = 10 % 3;
+</code></pre>
+      <p class="small">Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 = 3 × 3 + 1
+</code></pre>
+      <p class="small">we get:</p>
+<pre><code class="language-text" data-trim data-noescape>
+remainder = 1
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+8 % 2 = 0
+9 % 2 = 1
+17 % 5 = 2
+</code></pre>
+      <p class="small">The remainder operator becomes useful for problems such as:</p>
+      <ul class="smaller">
+        <li>determining whether a number is even,</li>
+        <li>extracting digits,</li>
+        <li>cyclic calculations,</li>
+        <li>time calculations.</li>
+      </ul>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where you will meet <code>%</code> this week</summary>
+    <div class="acc-body">
+      <p>Lab Exercise D asks for a seconds converter, and the hint is exactly a pair of <code>/</code> and <code>%</code> operations:</p>
+<pre><code class="language-java" data-trim data-noescape>
+minutes = totalSeconds / 60;
+remainingSeconds = totalSeconds % 60;
+</code></pre>
+      <p>Integer division gives the whole units; the remainder gives what is left over. That is the "time calculations" bullet made concrete.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The percent operator computes the remainder after integer division. For example int remainder = 10 % 3. Since 10 equals 3 times 3 plus 1, remainder is 1. Further examples: 8 % 2 is 0, 9 % 2 is 1, 17 % 5 is 2.</p>
+    <p>The remainder operator becomes useful for problems such as determining whether a number is even, extracting digits, cyclic calculations, and time calculations.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XVI ==================== -->
+
+<section>
+  <h2>Values That Should Not Change</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose a program uses a tax rate:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double taxRate = 0.07;
+</code></pre>
+      <p class="small">If the value should not change while the program runs, Java allows us to declare it as a constant:</p>
+<pre><code class="language-java" data-trim data-noescape>
+final double TAX_RATE = 0.07;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The keyword:</p>
+<pre><code class="language-java" data-trim data-noescape>
+final
+</code></pre>
+      <p class="small">means the variable cannot later be assigned another value.</p>
+      <p class="small">By convention, constants are often written in uppercase:</p>
+<pre><code class="language-java" data-trim data-noescape>
+MAX_SCORE
+TAX_RATE
+SECONDS_PER_MINUTE
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose a program uses a tax rate: double taxRate = 0.07. If the value should not change while the program runs, Java allows us to declare it as a constant: final double TAX_RATE = 0.07.</p>
+    <p>The keyword final means the variable cannot later be assigned another value. By convention, constants are often written in uppercase, with underscores between words: MAX_SCORE, TAX_RATE, SECONDS_PER_MINUTE. Contrast this deliberately with the camelCase convention from Part XII — the different shape is a signal to the reader.</p>
+  </aside>
+</section>
+<!-- ==================== PART XVII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Printing Results and Reading Input</h2>
+  <p class="part-sub">Concatenation, a first calculation program, and reading the keyboard with <code>Scanner</code>.</p>
+</section>
+
+<section>
+  <h2>Printing Values</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can print variables directly.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int age = 30;
+
+System.out.println(age);
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+30
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We can also print expressions:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+int y = 20;
+
+System.out.println(x + y);
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+30
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Both print <code>30</code>, but for different reasons: one prints a stored value, the other prints a value computed on the spot.</div>
+  <aside class="notes">
+    <p>We can print variables directly: int age = 30, then System.out.println(age) prints 30. We can also print expressions: with int x = 10 and int y = 20, System.out.println(x + y) prints 30.</p>
+    <p>The coincidence that both examples print 30 is worth using. Ask the class what is different. The second computes a value that is never stored anywhere.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Combining Text and Values</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose <code>int age = 30;</code>. We can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Age: " + age);
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Age: 30
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Here, <code>+</code> performs string concatenation.</div>
+    </div>
+    <div>
+      <p class="small">Another example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String name = "Grace";
+int age = 27;
+
+System.out.println(name + " is " + age + " years old.");
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Grace is 27 years old.
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The same <code>+</code>, two different jobs</summary>
+    <div class="acc-body">
+      <p>In <code>System.out.println(x + y);</code> from the previous slide, <code>+</code> added two integers. In <code>System.out.println("Age: " + age);</code> the same operator performs string concatenation, because one operand is a <code>String</code>.</p>
+      <p>The declaration is unchanged; only the context around the <code>+</code> is different.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int age = 30;
+</code></pre>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose int age = 30. We can write System.out.println of "Age: " plus age, and the output is Age: 30. Here, plus performs string concatenation.</p>
+    <p>Another example: String name = "Grace", int age = 27, then printing name plus " is " plus age plus " years old." produces Grace is 27 years old. Note the spaces inside the quoted fragments — students who omit them get Graceis27years old.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XVIII ==================== -->
+
+<section>
+  <h2>Rectangle Area</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|3-4|6|8">
+public class RectangleArea {
+    public static void main(String[] args) {
+        double width = 5.0;
+        double height = 3.0;
+
+        double area = width * height;
+
+        System.out.println("Area = " + area);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Area = 15.0
+</code></pre>
+      <p class="small">Trace the program carefully:</p>
+<pre><code class="language-text" data-trim data-noescape>
+width  → 5.0
+height → 3.0
+
+area = width * height
+     = 5.0 * 3.0
+     = 15.0
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-rectangle-area" tabindex="0">Full program and trace</span>
+  </div>
+  <aside class="notes">
+    <p>This is the first program that computes something. It declares two variables, forms an expression, stores the result, and prints it with string concatenation — four of the week's ideas in eight lines.</p>
+    <p>Trace the program carefully: width becomes 5.0, height becomes 3.0, then area equals width times height, which is 5.0 times 3.0, which is 15.0. The output is Area = 15.0. Point out the .0 — the result is a double, so it prints with a decimal point even though the value is whole.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XIX ==================== -->
+
+<section>
+  <h2>Hard-Coded Data</h2>
+  <p class="small">The previous program contains:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double width = 5.0;
+double height = 3.0;
+</code></pre>
+  <p class="small">These values are written directly into the program.</p>
+  <div class="def"><span class="term">Hard-coding:</span> writing values directly into the source of a program rather than obtaining them while it runs.</div>
+  <p class="small">Often, however, we want users to provide values while the program is running.</p>
+  <aside class="notes">
+    <p>The previous program contains double width = 5.0 and double height = 3.0. These values are written directly into the program. This is called hard-coding.</p>
+    <p>Often, however, we want users to provide values while the program is running. Ask the class what they would have to do to compute the area of a different rectangle with this program — recompile it. That is the motivation for Scanner.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XX ==================== -->
+
+<section>
+  <h2>Reading Keyboard Input</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|5|7|8|10">
+import java.util.Scanner;
+
+public class Greeting {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter your name: ");
+        String name = input.nextLine();
+
+        System.out.println("Hello, " + name + "!");
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Java provides a class called <code>Scanner</code>. We first import it:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.Scanner;
+</code></pre>
+      <p class="small">Then create a <code>Scanner</code>:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner input = new Scanner(System.in);
+</code></pre>
+      <p class="small">Possible interaction:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Enter your name: Maya
+Hello, Maya!
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>print</code> and not <code>println</code> for the prompt?</summary>
+    <div class="acc-body">
+      <p>Unlike <code>println</code>, <code>print</code> does not automatically move to the next line — so the cursor stays on the same line as <code>Enter your name:</code> and the user types their answer there. That is exactly the interaction shown above.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-scanner" tabindex="0">Scanner: import, create, read</span>
+  </div>
+  <aside class="notes">
+    <p>Java provides a class called Scanner. We first import it with import java.util.Scanner, then create one with Scanner input = new Scanner(System.in). For Week 1, treat both lines as patterns, exactly as we did with the main method signature. The words new and System.in will be explained properly later in the course.</p>
+    <p>This is the first interactive program. It imports Scanner, creates one, prompts with print, reads a line of text with input.nextLine, and greets the user with concatenation.</p>
+    <p>In the possible interaction, the user typed Maya and the program responded Hello, Maya!. Note that the prompt used print rather than println so the typed input appears on the same line.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXI ==================== -->
+
+<section>
+  <h2>Reading an <code>int</code> and a <code>double</code></h2>
+  <div class="cols">
+    <div>
+      <h4>Reading an integer</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int age = input.nextInt();
+</code></pre>
+      <p class="smaller">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.print("Enter your age: ");
+int age = input.nextInt();
+
+System.out.println("You entered " + age);
+</code></pre>
+    </div>
+    <div>
+      <h4>Reading a double</h4>
+<pre><code class="language-java" data-trim data-noescape>
+double price = input.nextDouble();
+</code></pre>
+      <p class="smaller">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.print("Enter the price: ");
+double price = input.nextDouble();
+
+System.out.println("Price = " + price);
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The pattern is always the same three lines</summary>
+    <div class="acc-body">
+      <p>Prompt with <code>print</code>, read with the method that matches the type you want, then use the value. <code>nextLine</code> gives a <code>String</code>, <code>nextInt</code> gives an <code>int</code>, <code>nextDouble</code> gives a <code>double</code>. The type of the variable on the left must match the method you call on the right.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>To read an integer we write int age = input.nextInt(). For example, print the prompt Enter your age, read with nextInt, then print You entered followed by age.</p>
+    <p>To read a double we write double price = input.nextDouble(). For example, print Enter the price, read with nextDouble, then print Price = followed by price.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXII ==================== -->
+
+<section>
+  <h2>Complete Example</h2>
+  <div class="cols-53">
+    <div>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|5|7-11|13|15">
+import java.util.Scanner;
+
+public class RectangleArea {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter width: ");
+        double width = input.nextDouble();
+
+        System.out.print("Enter height: ");
+        double height = input.nextDouble();
+
+        double area = width * height;
+
+        System.out.println("Area = " + area);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Example execution:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Enter width: 5
+Enter height: 3
+Area = 15.0
+</code></pre>
+      <div class="chain">
+        <span>INPUT</span><span class="sep">→</span>
+        <span>PROCESSING</span><span class="sep">→</span>
+        <span>OUTPUT</span>
+      </div>
+      <p class="smaller">Many programs can initially be understood using this model.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-interactive-rectangle" tabindex="0">The IPO pattern, in full</span>
+  </div>
+  <aside class="notes">
+    <p>This is the hard-coded rectangle program from Part XVIII rewritten to ask the user for its data. Compare the two side by side: the arithmetic and the output line are identical; only the source of width and height changed.</p>
+    <p>This program demonstrates a basic computational pattern: input, then processing, then output. Many programs can initially be understood using this model.</p>
+    <p>Note the example execution: the user typed 5 and 3, and the answer came back as 15.0 rather than 15, because the variables are doubles.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Tracing, Errors, and Debugging</h2>
+  <p class="part-sub">Predicting what code does, the three kinds of failure, and writing code the next reader can follow.</p>
+</section>
+
+<section>
+  <h2>Why Trace Code?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">One of the most important programming skills is predicting exactly what a program will do.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Do not rely only on running the program. You should also be able to reason about execution by hand.</div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 4;
+int y = 2;
+
+x = x + y;
+y = x * 2;
+
+System.out.println(x);
+System.out.println(y);
+</code></pre>
+    </div>
+    <div>
+      <h4>Trace</h4>
+      <p class="smaller">Initially:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x = 4
+y = 2
+</code></pre>
+      <p class="smaller">After <code>x = x + y;</code> we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x = 6
+y = 2
+</code></pre>
+      <p class="smaller">Then <code>y = x * 2;</code> gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x = 6
+y = 12
+</code></pre>
+      <p class="smaller">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+6
+12
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>One of the most important programming skills is predicting exactly what a program will do. Do not rely only on running the program; you should also be able to reason about execution by hand.</p>
+    <p>Trace the example: initially x is 4 and y is 2. After x = x + y, x is 6 and y is still 2. Then y = x times 2 gives x is 6 and y is 12. The output is 6 then 12.</p>
+    <p>The trap is the second statement. Students who use the original x of 4 get 8 instead of 12. Sequence matters.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXIV ==================== -->
+
+<section>
+  <h2>A Systematic Technique</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For larger examples, use a trace table. Program:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int a = 3;
+int b = 4;
+
+a = a + b;
+b = a - b;
+a = a - b;
+</code></pre>
+      <div class="box key"><span class="box-title">Notice what happened</span>The two values were swapped.</div>
+    </div>
+    <div>
+      <table>
+        <thead><tr><th>Statement</th><th><code>a</code></th><th><code>b</code></th></tr></thead>
+        <tbody>
+          <tr><td>initial values</td><td>3</td><td>4</td></tr>
+          <tr><td><code>a = a + b</code></td><td>7</td><td>4</td></tr>
+          <tr><td><code>b = a - b</code></td><td>7</td><td>3</td></tr>
+          <tr><td><code>a = a - b</code></td><td>4</td><td>3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Before and after</summary>
+    <div class="acc-body">
+      <p>Initially:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a = 3
+b = 4
+</code></pre>
+      <p>Finally:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a = 4
+b = 3
+</code></pre>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-trace-table" tabindex="0">The swap, step by step</span>
+  </div>
+  <aside class="notes">
+    <p>For larger examples, use a trace table: one column per variable, one row per statement, and you fill it in top to bottom without skipping.</p>
+    <p>Notice what happened in this example. The two values were swapped. Initially a is 3 and b is 4; finally a is 4 and b is 3 — and no third variable was used.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXV ==================== -->
+
+<section>
+  <h2>Programming Errors</h2>
+  <p class="small">Programs can fail in several different ways. It is useful to distinguish among:</p>
+  <ol>
+    <li><strong>syntax errors</strong>,</li>
+    <li><strong>runtime errors</strong>,</li>
+    <li><strong>logic errors</strong>.</li>
+  </ol>
+  <div class="chain">
+    <span>Won't compile</span><span class="sep">·</span>
+    <span>Compiles, crashes</span><span class="sep">·</span>
+    <span>Compiles, runs, lies</span>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-error-types" tabindex="0">All three kinds of error</span>
+  </div>
+  <aside class="notes">
+    <p>Programs can fail in several different ways. It is useful to distinguish among syntax errors, runtime errors, and logic errors.</p>
+    <p>The three-way distinction is the answer to conceptual question 14, and it is worth learning as a diagnostic ladder: did it compile? did it finish? did it give the right answer? Each "no" points at a different category.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Syntax Errors</h2>
+  <div class="def"><span class="term">Syntax error:</span> occurs when code violates the grammatical rules of Java.</div>
+  <div class="cols">
+    <div>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Hello")
+</code></pre>
+      <p class="smaller">The semicolon is missing.</p>
+    </div>
+    <div>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = ;
+</code></pre>
+      <p class="smaller">The compiler cannot understand the statement.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Syntax errors are usually detected during compilation.</div>
+  <aside class="notes">
+    <p>A syntax error occurs when code violates the grammatical rules of Java. In the first example the semicolon is missing. In the second, int x = semicolon, the compiler cannot understand the statement.</p>
+    <p>Syntax errors are usually detected during compilation — which means, as we said in Part IV, that no class file is produced and nothing runs at all.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Runtime Errors and Logic Errors</h2>
+  <div class="cols">
+    <div>
+      <h4>Runtime error</h4>
+      <p class="smaller">A program may compile successfully but fail while it is executing.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+int y = 0;
+
+System.out.println(x / y);
+</code></pre>
+      <p class="smaller">The program compiles. But attempting integer division by zero causes an exception during execution.</p>
+    </div>
+    <div>
+      <h4>Logic error</h4>
+      <p class="smaller">Logic errors are often more difficult. The program runs, but produces an incorrect answer.</p>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+double width = 5;
+double height = 3;
+
+double area = width + height;
+</code></pre>
+      <p class="smaller">This program compiles. It runs. But the formula is wrong.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What the programmer intended</summary>
+    <div class="acc-body">
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+double area = width * height;
+</code></pre>
+      <p>The computer faithfully executes what we wrote, not what we intended. Note also that the compiler cannot save you from the runtime error either — nothing about <code>x / y</code> is ungrammatical; the problem only exists once <code>y</code> actually holds 0.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A program may compile successfully but fail while it is executing. With int x = 10 and int y = 0, printing x divided by y compiles fine, but attempting integer division by zero causes an exception during execution. This is a runtime error.</p>
+    <p>Logic errors are often more difficult. The program runs, but produces an incorrect answer. In this example, area is computed as width plus height instead of width times height. The program compiles, it runs, but the formula is wrong. The programmer intended double area = width times height.</p>
+    <p>The computer faithfully executes what we wrote, not what we intended. That sentence is the whole reason tracing and testing exist.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXVI ==================== -->
+
+<section>
+  <h2>What Is Debugging?</h2>
+  <div class="def"><span class="term">Debugging:</span> the process of identifying and correcting defects in a program.</div>
+  <p class="small">Useful debugging habits include:</p>
+  <ul class="small">
+    <li>read compiler messages carefully,</li>
+    <li>reduce the problem to a small example,</li>
+    <li>print intermediate values,</li>
+    <li>trace code by hand,</li>
+    <li>test with simple inputs whose correct answers you already know,</li>
+    <li>change one thing at a time,</li>
+    <li>distinguish symptoms from causes.</li>
+  </ul>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-debugging" tabindex="0">The fundamental rule</span>
+  </div>
+  <aside class="notes">
+    <p>Debugging is the process of identifying and correcting defects in a program. Useful debugging habits include reading compiler messages carefully, reducing the problem to a small example, printing intermediate values, tracing code by hand, testing with simple inputs whose correct answers you already know, changing one thing at a time, and distinguishing symptoms from causes.</p>
+    <p>A fundamental rule: do not randomly modify code until it works. Instead, develop a hypothesis about what is wrong and test that hypothesis.</p>
+  </aside>
+</section>
+<!-- ==================== PART XXVII ==================== -->
+
+<section>
+  <h2>Comments for Humans</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Comments allow programmers to leave explanatory text in source code. A single-line comment begins with:</p>
+<pre><code class="language-java" data-trim data-noescape>
+//
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+// Compute the area of the rectangle
+double area = width * height;
+</code></pre>
+      <p class="smaller">Java ignores the comment during execution.</p>
+    </div>
+    <div>
+      <p class="small">Java also supports:</p>
+<pre><code class="language-java" data-trim data-noescape>
+/*
+This is a
+multi-line comment.
+*/
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Comments should explain useful information, not restate obvious code.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>A weak comment and a useful one</summary>
+    <div class="acc-body">
+      <p>Weak comment:</p>
+<pre><code class="language-java" data-trim data-noescape>
+// Add x and y
+sum = x + y;
+</code></pre>
+      <p>More useful:</p>
+<pre><code class="language-java" data-trim data-noescape>
+// Scores are weighted equally, so divide their sum by the number of exams.
+average = total / examCount;
+</code></pre>
+      <p>The first restates what the code already says. The second records a decision that is not visible in the code at all.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Comments allow programmers to leave explanatory text in source code. A single-line comment begins with two forward slashes. Java ignores the comment during execution. Java also supports multi-line comments delimited by slash-star and star-slash.</p>
+    <p>Comments should explain useful information, not restate obvious code. "Add x and y" above sum = x + y is a weak comment. "Scores are weighted equally, so divide their sum by the number of exams" above average = total / examCount is genuinely useful, because it explains why.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXVIII ==================== -->
+
+<section>
+  <h2>Readability and Indentation</h2>
+  <p class="small">Compare:</p>
+  <div class="cols">
+    <div>
+      <span class="tag no">Hard to read</span>
+<pre><code class="language-java" data-trim data-noescape>
+int x=10;double y=20.5;System.out.println(x+y);
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">Easy to read</span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+double y = 20.5;
+
+System.out.println(x + y);
+</code></pre>
+    </div>
+  </div>
+  <ul class="small">
+    <li>Both may compile. The second is much easier to read.</li>
+    <li>Professional programming is not only about making code execute.</li>
+    <li>Code must also be understandable to humans.</li>
+  </ul>
+  <details class="acc">
+    <summary>Indentation: use it to show program structure</summary>
+    <div class="acc-body">
+      <p>Preferred:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Example {
+    public static void main(String[] args) {
+        int x = 5;
+
+        System.out.println(x);
+    }
+}
+</code></pre>
+      <p>Poor:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Example {
+public static void main(String[] args) {
+int x = 5;
+System.out.println(x);
+}
+}
+</code></pre>
+      <p>As programs become more complex, indentation becomes essential.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Compare the single crammed line with the same three statements spread over four lines with spaces around the operators. Both may compile. The second is much easier to read.</p>
+    <p>Professional programming is not only about making code execute. Code must also be understandable to humans — by your teammates, your grader, and by you in six months.</p>
+    <p>Use consistent indentation to show program structure. Both versions of Example compile identically — the compiler ignores whitespace — but only one of them lets a reader see at a glance that the print statement is inside main, which is inside the class. As programs become more complex, indentation becomes essential.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXIX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Computational Thinking in Practice</h2>
+  <p class="part-sub">Problem, relationship, algorithm, code — then predict the output and find the error.</p>
+</section>
+
+<section>
+  <h2>From Problem to Program</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose the problem is:</p>
+      <blockquote class="small">Given a temperature in Fahrenheit, calculate Celsius.</blockquote>
+      <p class="small">We should not immediately start typing Java. First identify the relationship:</p>
+      <span class="math">C = 5/9 <span class="op">×</span> (F <span class="op">−</span> 32)</span>
+      <p class="small">Then identify inputs and outputs.</p>
+<pre><code class="language-text" data-trim data-noescape>
+Fahrenheit temperature
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+Celsius temperature
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Then form an algorithm:</p>
+      <ol class="small">
+        <li>Read Fahrenheit temperature.</li>
+        <li>Subtract 32.</li>
+        <li>Multiply by 5.</li>
+        <li>Divide by 9.</li>
+        <li>Display Celsius temperature.</li>
+      </ol>
+      <p class="small">Then implement it.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Relationship, then inputs and outputs, then algorithm, then code. Typing is the last step, not the first.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose the problem is: given a temperature in Fahrenheit, calculate Celsius. We should not immediately start typing Java. First identify the relationship: C equals five ninths times the quantity F minus 32.</p>
+    <p>Then identify inputs and outputs. The input is a Fahrenheit temperature; the output is a Celsius temperature. Then form an algorithm: read the Fahrenheit temperature, subtract 32, multiply by 5, divide by 9, display the Celsius temperature. Then implement it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Java Implementation</h2>
+  <div class="cols-53">
+    <div>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|6|8-9|11|13">
+import java.util.Scanner;
+
+public class TemperatureConverter {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter temperature in Fahrenheit: ");
+        double fahrenheit = input.nextDouble();
+
+        double celsius = (5.0 / 9.0) * (fahrenheit - 32);
+
+        System.out.println("Celsius: " + celsius);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Notice:</p>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+5.0 / 9.0
+</code></pre>
+      <p class="small">rather than:</p>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+5 / 9
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>5 / 9</code> would destroy the program</summary>
+    <div class="acc-body">
+      <p>Because:</p>
+<pre><code class="language-java" data-trim data-noescape>
+5 / 9
+</code></pre>
+      <p>uses integer division and evaluates to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0
+</code></pre>
+      <p>This would cause an incorrect result — every temperature would convert to 0.0, and the program would still compile and run happily. It is a textbook logic error.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-temperature" tabindex="0">Problem to program, end to end</span>
+  </div>
+  <aside class="notes">
+    <p>Here is the implementation. Notice 5.0 / 9.0 rather than 5 / 9. Why? Because 5 / 9 uses integer division and evaluates to 0. This would cause an incorrect result.</p>
+    <p>This is the payoff of Part XIV. The integer-division rule is not trivia; it is the difference between a working converter and one that always answers zero.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXX ==================== -->
+
+<section>
+  <h2>Predict the Output</h2>
+  <div class="cols">
+    <div>
+      <h4>Example 1</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+int y = 4;
+
+System.out.println(x + y);
+System.out.println(x / y);
+System.out.println(x % y);
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+14
+2
+2
+</code></pre>
+          <p>The second line is integer division: 10 / 4 is 2, not 2.5. The third is the remainder: 10 = 4 × 2 + 2.</p>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Example 2</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 3;
+
+System.out.println(x);
+x = x + 2;
+System.out.println(x);
+x = x * 4;
+System.out.println(x);
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+3
+5
+20
+</code></pre>
+          <p>Each assignment replaces the value, and each print shows the state at that moment.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Example 1 answer: 14, then 2, then 2. The division is integer division and the remainder of 10 by 4 is 2.</p>
+    <p>Example 2 answer: 3, then 5, then 20. Ask the class to say the answer before opening the accordion. Both of these are exactly the kind of question that appears on the Week 1 quiz.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Find the Error</h2>
+  <div class="cols">
+    <div>
+      <h4>Example 3 — Find the error</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int age = 25.5;
+</code></pre>
+      <p class="smaller">Problem: an <code>int</code> cannot directly store the value <code>25.5</code>.</p>
+      <p class="smaller">Possible correction:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double age = 25.5;
+</code></pre>
+    </div>
+    <div>
+      <h4>Example 4 — Find the logic error</h4>
+<pre><code class="language-java" data-trim data-noescape>
+double length = 10;
+double width = 5;
+
+double perimeter = length * width;
+
+System.out.println(perimeter);
+</code></pre>
+      <p class="smaller">The formula calculates area, not perimeter.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Correcting Example 4</summary>
+    <div class="acc-body">
+      <p>Correct:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double perimeter = 2 * (length + width);
+</code></pre>
+      <p>Note the difference in kind between Examples 3 and 4. Example 3 is caught by the compiler; Example 4 is not caught by anything except a person who knows what a perimeter is.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Example 3: int age = 25.5. The problem is that an int cannot directly store the value 25.5. A possible correction is double age = 25.5.</p>
+    <p>Example 4: the formula calculates area, not perimeter. The correct version is double perimeter = 2 times the quantity length plus width. Use this pair to reinforce Part XXV — one is a compile-time failure, the other is a logic error that runs perfectly and reports the wrong number.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXXI ==================== -->
+
+<section>
+  <h2>Calculating a Course Average</h2>
+  <div class="cols-53">
+    <div>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|5|7-14|16|18">
+import java.util.Scanner;
+
+public class ExamAverage {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter exam 1 score: ");
+        double exam1 = input.nextDouble();
+
+        System.out.print("Enter exam 2 score: ");
+        double exam2 = input.nextDouble();
+
+        System.out.print("Enter exam 3 score: ");
+        double exam3 = input.nextDouble();
+
+        double average = (exam1 + exam2 + exam3) / 3.0;
+
+        System.out.println("Average = " + average);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Suppose a student has three exam scores. We want to compute the average.</p>
+      <p class="small">This program demonstrates most of the week's important ideas:</p>
+      <ul class="smaller">
+        <li>variables,</li>
+        <li>data types,</li>
+        <li>input,</li>
+        <li>arithmetic expressions,</li>
+        <li>assignment,</li>
+        <li>output.</li>
+      </ul>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Two details worth pointing at</summary>
+    <div class="acc-body">
+      <p>First, the parentheses around <code>exam1 + exam2 + exam3</code> are essential: without them, precedence would divide only <code>exam3</code> by 3.0.</p>
+      <p>Second, the divisor is written <code>3.0</code>, not <code>3</code>. Here the scores are already <code>double</code>, so either would work — but writing <code>3.0</code> makes the intent explicit and keeps the habit from Part XIV.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose a student has three exam scores. We want to compute the average. This is the algorithm from Part I — obtain three scores, add them, divide by three, display the result — finally written as a Java program.</p>
+    <p>This program demonstrates most of the week's important ideas: variables, data types, input, arithmetic expressions, assignment, and output. It is a good template for the lab.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXXII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Execution, State, and Abstraction</h2>
+  <p class="part-sub">Sequential execution, the values a program holds, and managing complexity.</p>
+</section>
+
+<section>
+  <h2>Programs Execute Sequentially</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For now, programs execute approximately from top to bottom. Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+x = x + 1;
+x = x * 2;
+
+System.out.println(x);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Execution occurs in this order:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x = 5
+x = 6
+x = 12
+print 12
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Later, conditionals, loops, and method calls will make control flow more sophisticated. But execution always follows defined rules.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>For now, programs execute approximately from top to bottom. In the example, x becomes 5, then 6, then 12, and then 12 is printed.</p>
+    <p>Later, conditionals, loops, and method calls will make control flow more sophisticated. But execution always follows defined rules — the rules get richer, they never become vague.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXXIII ==================== -->
+
+<section>
+  <h2>Program State</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">State:</span> at any moment during execution, the current values stored in a program's variables.</div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int balance = 100;
+balance = balance - 25;
+balance = balance + 50;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The state evolves:</p>
+<pre><code class="language-text" data-trim data-noescape>
+balance = 100
+balance = 75
+balance = 125
+</code></pre>
+      <p class="small">Thinking about how program state changes over time is an important skill. It becomes especially important when we later study:</p>
+      <ul class="smaller">
+        <li>loops,</li>
+        <li>objects,</li>
+        <li>arrays,</li>
+        <li>linked structures,</li>
+        <li>recursion,</li>
+        <li>algorithms.</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>At any moment during execution, a program has a state. The state includes the current values stored in variables. In the balance example the state evolves from 100 to 75 to 125.</p>
+    <p>Thinking about how program state changes over time is an important skill. It becomes especially important when we later study loops, objects, arrays, linked structures, recursion, and algorithms. This is exactly what a trace table records.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXXIV ==================== -->
+
+<section>
+  <h2>Levels of Detail</h2>
+  <div class="cols">
+    <div>
+      <p class="small">You do not need to understand how electrical signals move through a processor in order to write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+</code></pre>
+      <p class="small">Java provides abstractions that allow us to reason at a higher level. For example, we say:</p>
+      <blockquote class="small">Store the integer 5 in the variable <code>x</code>.</blockquote>
+      <p class="smaller">The computer ultimately performs much lower-level operations.</p>
+    </div>
+    <div>
+      <p class="small">A major theme throughout computer science is:</p>
+      <blockquote class="small">Managing complexity through abstraction.</blockquote>
+      <p class="small">Later examples include:</p>
+      <ul class="smaller">
+        <li>methods,</li>
+        <li>classes,</li>
+        <li>interfaces,</li>
+        <li>data structures,</li>
+        <li>libraries,</li>
+        <li>operating systems,</li>
+        <li>databases.</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>You do not need to understand how electrical signals move through a processor in order to write int x = 5. Java provides abstractions that allow us to reason at a higher level: we say "store the integer 5 in the variable x", while the computer ultimately performs much lower-level operations.</p>
+    <p>A major theme throughout computer science is managing complexity through abstraction. Later examples include methods, classes, interfaces, data structures, libraries, operating systems, and databases. The JVM from Part V was already an example of this.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXXV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XI</p>
+  <h2>Practice and Common Mistakes</h2>
+  <p class="part-sub">Work these by hand, and learn the five errors you will make this week.</p>
+</section>
+
+<section>
+  <h2>Exercise: Variable Trace</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Trace:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int a = 5;
+int b = 8;
+
+a = b;
+b = a + 2;
+</code></pre>
+      <p class="small">What are the final values?</p>
+    </div>
+    <div>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+          <p>After:</p>
+<pre><code class="language-java" data-trim data-noescape>
+a = b;
+</code></pre>
+          <p>we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a = 8
+b = 8
+</code></pre>
+          <p>Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+b = a + 2;
+</code></pre>
+          <p>gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a = 8
+b = 10
+</code></pre>
+        </div>
+      </details>
+      <div class="box warn"><span class="box-title">Watch out</span>The original value 5 is destroyed by <code>a = b;</code>. Compare this with the swap in Part XXIV, which was careful <em>not</em> to lose a value.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Trace: int a = 5, int b = 8, then a = b, then b = a + 2. After a = b we have a is 8 and b is 8. Then b = a + 2 gives a is 8 and b is 10.</p>
+    <p>The common wrong answer is b is 7, from students who use the original a of 5. Contrast with the trace-table swap: there the order of the three statements was chosen precisely so that nothing was lost.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercises: Arithmetic and Conversion</h2>
+  <div class="cols">
+    <div>
+      <h4>Exercise: Arithmetic</h4>
+      <p class="smaller">What does this print?</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 17;
+int y = 5;
+
+System.out.println(x / y);
+System.out.println(x % y);
+</code></pre>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+3
+2
+</code></pre>
+          <p>because <span class="math">17 = 5(3) + 2</span></p>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Exercise: Conversion</h4>
+      <p class="smaller">Write a program that asks the user for a number of minutes and converts it to seconds. Formula:</p>
+      <span class="math">seconds = minutes <span class="op">×</span> 60</span>
+      <details class="acc">
+        <summary>Possible implementation</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.Scanner;
+
+public class MinutesToSeconds {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter minutes: ");
+        double minutes = input.nextDouble();
+
+        double seconds = minutes * 60;
+
+        System.out.println("Seconds = " + seconds);
+    }
+}
+</code></pre>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The arithmetic exercise prints 3 then 2, because 17 equals 5 times 3 plus 2. This is integer division and remainder working as a pair.</p>
+    <p>The conversion exercise asks students to write a program that reads minutes and converts to seconds, using seconds equals minutes times 60. The possible implementation follows exactly the input-processing-output shape from Part XXII.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XXXVI ==================== -->
+
+<section>
+  <h2>Semicolons, Capitals, and Declaration Order</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Missing semicolons</h4>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5
+</code></pre>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+</code></pre>
+    </div>
+    <div>
+      <h4>Wrong capitalization</h4>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+system.out.println("Hello");
+</code></pre>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Hello");
+</code></pre>
+    </div>
+    <div>
+      <h4>Use before declaring</h4>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+x = 10;
+int x;
+</code></pre>
+      <span class="tag ok">Prefer</span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Java is case-sensitive — which is why the second one fails.</div>
+  <aside class="notes">
+    <p>Missing semicolons: int x = 5 without a semicolon is incorrect; int x = 5 semicolon is correct.</p>
+    <p>Wrong capitalization: lowercase system.out.println is incorrect; capital-S System.out.println is correct. Java is case-sensitive — the same point we made back in Part II.</p>
+    <p>Using a variable before declaring it: x = 10 followed by int x is incorrect. Prefer int x = 10.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Types and Quotation Marks</h2>
+  <div class="cols">
+    <div>
+      <h4>Confusing <code>int</code> and <code>double</code></h4>
+      <p class="smaller">Potentially problematic:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int average = 7 / 2;
+</code></pre>
+      <p class="smaller">Result:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+</code></pre>
+      <p class="smaller">If the intended answer is <code>3.5</code>:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double average = 7.0 / 2.0;
+</code></pre>
+    </div>
+    <div>
+      <h4>Forgetting quotation marks</h4>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(Hello);
+</code></pre>
+      <p class="smaller">Unless <code>Hello</code> is the name of a valid variable, this will not work. Text literals require quotation marks:</p>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Hello");
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-beginner-mistakes" tabindex="0">All five mistakes in one place</span>
+  </div>
+  <aside class="notes">
+    <p>Confusing int and double: int average = 7 / 2 gives 3. If the intended answer is 3.5, write double average = 7.0 / 2.0.</p>
+    <p>Forgetting quotation marks: System.out.println(Hello) will not work unless Hello is the name of a valid variable. Text literals require quotation marks, so write System.out.println("Hello"). Note that this one is a compile error, whereas the int-division one compiles and quietly gives the wrong number.</p>
+  </aside>
+</section>
+<!-- ==================== BACK MATTER ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XII</p>
+  <h2>Lab, Homework, and Key Ideas</h2>
+  <p class="part-sub">What you do this week, and what you must remember from it.</p>
+</section>
+
+<section>
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>A <strong>program</strong> is a precise sequence of instructions executed by a computer.</li>
+    <li>An <strong>algorithm</strong> is a procedure for solving a problem; a program implements one.</li>
+    <li>Java source is written, compiled to bytecode, and executed by the JVM.</li>
+    <li>Variables allow programs to maintain <strong>state</strong>; assignment changes that state.</li>
+    <li>Expressions compute values — and <code>int</code> division discards the fraction.</li>
+    <li>Input comes from <code>Scanner</code>; output goes through <code>System.out.println</code>.</li>
+    <li>Errors come in three kinds: <strong>syntax</strong>, <strong>runtime</strong>, and <strong>logic</strong>.</li>
+    <li>Programming requires learning to reason precisely about how instructions transform program state.</li>
+  </ul>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-week1-summary" tabindex="0">Week 1 summary, in the notes' own words</span>
+  </div>
+  <aside class="notes">
+    <p>A program is a precise sequence of instructions executed by a computer. An algorithm is a procedure for solving a problem. Java source code is typically written, compiled, translated into bytecode, and executed by the JVM.</p>
+    <p>Variables allow programs to maintain state. Assignment changes program state. Expressions compute values. Input can be obtained using Scanner; output can be displayed using System.out.println. Three important categories of errors are syntax errors, runtime errors, and logic errors.</p>
+    <p>Most importantly, programming requires learning to reason precisely about how instructions transform program state.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Algorithm</td><td>A finite sequence of well-defined steps for solving a problem.</td></tr>
+        <tr><td>Program</td><td>An implementation of an algorithm in a programming language.</td></tr>
+        <tr><td>Class</td><td>A container that holds part of a Java program.</td></tr>
+        <tr><td>Statement</td><td>An instruction that tells the computer to perform some action.</td></tr>
+        <tr><td>Source code</td><td>The Java code that we write.</td></tr>
+        <tr><td>Bytecode</td><td>The representation the compiler produces from source.</td></tr>
+        <tr><td>JVM</td><td>The Java Virtual Machine, which executes bytecode.</td></tr>
+        <tr><td>Variable</td><td>A named location in which a program stores a value.</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Statically typed</td><td>Variables have declared types the compiler checks.</td></tr>
+        <tr><td>Assignment</td><td>Evaluate the right side; store the result in the variable on the left.</td></tr>
+        <tr><td>Integer division</td><td>Division of two <code>int</code>s; the fractional part is discarded.</td></tr>
+        <tr><td>Constant</td><td>A <code>final</code> variable that cannot later be assigned another value.</td></tr>
+        <tr><td>Hard-coding</td><td>Writing values directly into the program's source.</td></tr>
+        <tr><td>State</td><td>The current values stored in a program's variables.</td></tr>
+        <tr><td>Debugging</td><td>Identifying and correcting defects in a program.</td></tr>
+        <tr><td>camelCase</td><td>The Java naming convention for variable names.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">
+    <p>Every term here was introduced somewhere in Week 1. Use this table as the vocabulary list for the first quiz, and note that conceptual questions 1 through 8 are essentially asking students to define eight of these terms in their own words.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Week 1 Programming Lab</h2>
+  <p class="small">Students should complete several short programs rather than one large program. Suggested exercises:</p>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><strong>A — Personal Introduction:</strong> print your name, your academic background, and one reason you are studying computer science.</li>
+        <li><strong>B — Rectangle Calculator:</strong> ask for width and height; display area and perimeter.</li>
+        <li><strong>C — Temperature Conversion:</strong> ask for Fahrenheit and calculate Celsius.</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="small">
+        <li><strong>D — Seconds Converter:</strong> ask for a number of seconds; calculate minutes and remaining seconds.</li>
+        <li><strong>E — Bill Calculator:</strong> ask for meal cost, tax percentage, and tip percentage; calculate tax, tip, and final bill.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>Exercise E gives students practice translating a real-world problem into a sequence of computations.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Exercise D in detail — the seconds converter</summary>
+    <div class="acc-body">
+      <p>Ask the user for a number of seconds. Calculate the equivalent number of minutes and remaining seconds. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Input: 137
+Output:
+2 minutes
+17 seconds
+</code></pre>
+      <p>Hint:</p>
+<pre><code class="language-java" data-trim data-noescape>
+minutes = totalSeconds / 60;
+remainingSeconds = totalSeconds % 60;
+</code></pre>
+      <p>Integer division gives the whole minutes; <code>%</code> gives what is left over. This only works because <code>/</code> on two <code>int</code>s discards the fraction. Homework Problem 3 extends the same idea to hours, minutes, and seconds.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m1-lab-exercises" tabindex="0">Full lab brief (A–E)</span>
+    <span class="mbtn" data-modal="m1-homework" tabindex="0">Programming Assignment 0</span>
+    <span class="mbtn" data-modal="m1-conceptual-questions" tabindex="0">15 conceptual questions</span>
+  </div>
+  <aside class="notes">
+    <p>Students should complete several short programs rather than one large program. Five short exercises give five chances to get the compile-and-run loop working, instead of one long chance to get stuck.</p>
+    <p>Exercise D is the one that needs the remainder operator from Part XV; Exercise E gives students practice translating a real-world problem into a sequence of computations.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">In Week 1, our programs execute essentially from top to bottom. That severely limits what they can do.</p>
+      <p class="small">Suppose we want a program to behave differently depending on a student's grade:</p>
+<pre><code class="language-text" data-trim data-noescape>
+If the score is at least 90:
+    print "Excellent"
+
+Otherwise:
+    print "Keep working"
+</code></pre>
+    </div>
+    <div>
+      <p class="small">To do this, programs need the ability to make decisions.</p>
+      <p class="small">That brings us to Week 2:</p>
+      <div class="def"><span class="term">Week 2:</span> Decisions, Boolean Logic, and Conditional Execution</div>
+      <div class="box note"><span class="box-title">Note</span>Remember <code>boolean</code> from Part X? Next week it stops being a curiosity and becomes the type that controls what your program does.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>In Week 1, our programs execute essentially from top to bottom. That severely limits what they can do.</p>
+    <p>Suppose we want a program to behave differently depending on a student's grade: if the score is at least 90, print Excellent; otherwise print Keep working. To do this, programs need the ability to make decisions. That brings us to Week 2: Decisions, Boolean Logic, and Conditional Execution.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 1 — Computational Thinking and Java Basics
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m1-algorithm-vs-program"
+          data-kicker="Deep dive" data-title="Algorithm, program, and the process we repeat all semester">
+  <h4>The instruction a human understands</h4>
+  <p>Consider the instruction: <em>Calculate the average of three exam scores.</em> A human may immediately understand what to do. A computer needs a much more explicit procedure:</p>
+  <ol>
+    <li>Obtain the first score.</li>
+    <li>Obtain the second score.</li>
+    <li>Obtain the third score.</li>
+    <li>Add the three scores.</li>
+    <li>Divide the sum by 3.</li>
+    <li>Display the result.</li>
+  </ol>
+  <p>This sequence of steps is an example of an <strong>algorithm</strong>.</p>
+  <h4>What an algorithm is</h4>
+  <p>An algorithm is a finite sequence of well-defined steps for solving a problem or performing a computation. Algorithms exist independently of programming languages.</p>
+  <p>For example, an algorithm for computing the area of a rectangle could be:</p>
+  <ol>
+    <li>Obtain the width.</li>
+    <li>Obtain the height.</li>
+    <li>Multiply width by height.</li>
+    <li>Report the result.</li>
+  </ol>
+  <p>We might express the algorithm mathematically as:</p>
+  <p><span class="math">A = w <span class="op">×</span> h</span></p>
+  <p>We could implement the same algorithm in Java, Python, C++, or another language.</p>
+  <h4>The distinction that matters</h4>
+  <p><strong>Algorithm:</strong> the method used to solve the problem.</p>
+  <p><strong>Program:</strong> an implementation of that method in a programming language.</p>
+  <h4>The process we repeat</h4>
+  <p>Throughout CSC500, we will repeatedly move through the following process:</p>
+  <p><strong>Problem → Algorithm → Program → Execution → Result</strong></p>
+  <div class="box key"><span class="box-title">Why it matters</span>Most beginner difficulty is not with Java. It is with skipping straight from Problem to Program without ever writing down the Algorithm.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m1-hello-anatomy"
+          data-kicker="Worked example" data-title="Hello, world — line by line">
+  <h4>The whole program</h4>
+<pre><code class="language-java">public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}</code></pre>
+  <p>When executed, the program displays:</p>
+<pre><code class="language-text">Hello, world!</code></pre>
+  <p>At first, some parts of this program will look mysterious. That is expected. For now, focus on its structure.</p>
+  <h4>Line 1 — the class</h4>
+<pre><code class="language-java">public class Hello {</code></pre>
+  <p>Java programs are organized around entities called <strong>classes</strong>. Classes will become one of the central ideas of this course when we study object-oriented programming. For now, think of a class as a container that holds part of a Java program.</p>
+  <p>Here, the class is named:</p>
+<pre><code class="language-text">Hello</code></pre>
+  <p>Java is case-sensitive. Therefore:</p>
+<pre><code class="language-text">Hello
+hello
+HELLO</code></pre>
+  <p>are three different names. If the class is declared as:</p>
+<pre><code class="language-java">public class Hello</code></pre>
+  <p>the source file should normally be named:</p>
+<pre><code class="language-text">Hello.java</code></pre>
+  <h4>Line 2 — where execution begins</h4>
+<pre><code class="language-java">public static void main(String[] args) {</code></pre>
+  <p>When we run this Java application, execution begins in the <code>main</code> method. For Week 1, treat this line as a required pattern. Later in the course we will understand what each part means: <code>public</code>, <code>static</code>, <code>void</code>, <code>String[]</code>, <code>args</code>.</p>
+  <p>For now, remember:</p>
+<pre><code class="language-java">public static void main(String[] args)</code></pre>
+  <p>defines the starting point of a basic Java application.</p>
+  <h4>Line 3 — the statement</h4>
+<pre><code class="language-java">System.out.println("Hello, world!");</code></pre>
+  <p>This is a Java <strong>statement</strong>. A statement tells the computer to perform some action. Here, the action is: display the text <code>Hello, world!</code></p>
+  <p>Most Java statements end with a semicolon:</p>
+<pre><code class="language-java">;</code></pre>
+  <p>Forgetting the semicolon is a common beginning programming error.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-compile-run"
+          data-kicker="Deep dive" data-title="From Hello.java to a running process">
+  <h4>Source code</h4>
+  <p>The Java code that we write is called <strong>source code</strong>. For example:</p>
+<pre><code class="language-java">public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}</code></pre>
+  <p>might be stored in:</p>
+<pre><code class="language-text">Hello.java</code></pre>
+  <p>The computer does not directly execute Java source code. Instead, Java normally uses a two-stage process.</p>
+  <h4>Compilation</h4>
+  <p>The Java compiler translates source code into another representation called <strong>bytecode</strong>. Conceptually:</p>
+<pre><code class="language-text">Hello.java
+    |
+    | Java compiler
+    v
+Hello.class</code></pre>
+  <p>The command-line Java compiler is called:</p>
+<pre><code class="language-text">javac</code></pre>
+  <p>For example:</p>
+<pre><code class="language-text">javac Hello.java</code></pre>
+  <p>If compilation succeeds, Java produces:</p>
+<pre><code class="language-text">Hello.class</code></pre>
+  <h4>The Java Virtual Machine</h4>
+  <p>The <code>.class</code> file contains Java bytecode. The bytecode is executed by the <strong>Java Virtual Machine</strong>, or JVM. Conceptually:</p>
+<pre><code class="language-text">Java source code
+      |
+      v
+   Compiler
+      |
+      v
+   Bytecode
+      |
+      v
+     JVM
+      |
+      v
+Program execution</code></pre>
+  <p>To run the program from a terminal, we might use:</p>
+<pre><code class="language-text">java Hello</code></pre>
+  <p>Notice that we write:</p>
+<pre><code class="language-text">java Hello</code></pre>
+  <p>not:</p>
+<pre><code class="language-text">java Hello.java</code></pre>
+  <p>when executing the compiled class in the traditional compile-then-run workflow.</p>
+  <h4>Why a virtual machine at all</h4>
+  <p>One of Java's historical design goals is portability. The idea is approximately: compile Java source into a standard bytecode format, then run that bytecode using an appropriate JVM on each platform.</p>
+  <p>Therefore, Java bytecode can often run across operating systems without recompiling the source for each CPU architecture. This idea is sometimes summarized by the phrase: <em>Write once, run anywhere.</em></p>
+  <p>In reality, platform differences still matter in some situations, but the JVM provides a useful level of abstraction between the Java program and the underlying machine.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-print-vs-println"
+          data-kicker="Comparison" data-title="print, println, and where the line ends">
+  <h4>println</h4>
+  <p>We can print text using:</p>
+<pre><code class="language-java">System.out.println("Welcome to CSC500");</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">Welcome to CSC500</code></pre>
+  <p>We can print multiple lines:</p>
+<pre><code class="language-java">System.out.println("CSC500");
+System.out.println("Programming Fundamentals");
+System.out.println("Week 1");</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">CSC500
+Programming Fundamentals
+Week 1</code></pre>
+  <p>Each call to <code>println</code> ends the current output line.</p>
+  <h4>print</h4>
+  <p>Java also provides:</p>
+<pre><code class="language-java">System.out.print(...)</code></pre>
+  <p>Unlike <code>println</code>, <code>print</code> does not automatically move to the next line.</p>
+  <p>Example:</p>
+<pre><code class="language-java">System.out.print("Hello ");
+System.out.print("world");</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">Hello world</code></pre>
+  <p>Compare:</p>
+<pre><code class="language-java">System.out.println("Hello");
+System.out.println("world");</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">Hello
+world</code></pre>
+  <h4>Where this matters in practice</h4>
+  <p>Every prompt in this week's interactive programs uses <code>print</code>, not <code>println</code>, so that the user's typing appears on the same line as the question. Look at the <code>Greeting</code> and <code>RectangleArea</code> programs and check that this is true of every prompt.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-assignment-not-algebra"
+          data-kicker="Deep dive" data-title="Assignment is not algebra">
+  <h4>Declaring and assigning</h4>
+  <p>In Java, variables have types. The general form is:</p>
+<pre><code class="language-java">type variableName;</code></pre>
+  <p>For example:</p>
+<pre><code class="language-java">int count;</code></pre>
+  <p>This declares a variable named <code>count</code> capable of storing an integer. We can later assign a value:</p>
+<pre><code class="language-java">count = 10;</code></pre>
+  <p>Or we can declare and initialize the variable at the same time:</p>
+<pre><code class="language-java">int count = 10;</code></pre>
+  <h4>Assignment replaces</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">int x = 5;
+x = 12;</code></pre>
+  <p>After the first statement:</p>
+<pre><code class="language-text">x contains 5</code></pre>
+  <p>After the second statement:</p>
+<pre><code class="language-text">x contains 12</code></pre>
+  <p>The old value has been replaced.</p>
+  <h4>Understanding =</h4>
+  <p>In mathematics, <span class="math">x = 5</span> usually expresses an equality. In Java:</p>
+<pre><code class="language-java">x = 5;</code></pre>
+  <p>means: evaluate the expression on the right and store the resulting value in the variable on the left.</p>
+  <h4>The statement that makes the difference obvious</h4>
+  <p>This distinction becomes especially important when we write:</p>
+<pre><code class="language-java">x = x + 1;</code></pre>
+  <p>Mathematically, <span class="math">x = x + 1</span> would be impossible. In programming, however, it means:</p>
+  <ol>
+    <li>Read the current value of <code>x</code>.</li>
+    <li>Add 1.</li>
+    <li>Store the result back into <code>x</code>.</li>
+  </ol>
+  <p>If:</p>
+<pre><code class="language-text">x = 10</code></pre>
+  <p>before the statement, then after:</p>
+<pre><code class="language-java">x = x + 1;</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">x = 11</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m1-primitive-types"
+          data-kicker="Reference" data-title="int, double, boolean, char — and String">
+  <h4>Why types matter</h4>
+  <p>A program works with different kinds of data. Examples include whole numbers, decimal numbers, characters, and true/false values.</p>
+  <p>Java is a <strong>statically typed language</strong>. This means that variables have declared types. The compiler uses these types to determine what operations are valid.</p>
+  <h4>int</h4>
+  <p>The <code>int</code> type stores integers. Examples:</p>
+<pre><code class="language-java">int students = 24;
+int temperature = -5;
+int year = 2026;</code></pre>
+  <p>Valid integer values include:</p>
+<pre><code class="language-text">0
+17
+-92
+5000</code></pre>
+  <p>An <code>int</code> does not store fractional values. This is invalid:</p>
+<pre><code class="language-java">int price = 19.99;</code></pre>
+  <h4>double</h4>
+  <p>The <code>double</code> type stores floating-point numbers. Examples:</p>
+<pre><code class="language-java">double price = 19.99;
+double temperature = 72.5;
+double pi = 3.14159;</code></pre>
+  <p>A <code>double</code> can represent fractional quantities.</p>
+  <h4>boolean</h4>
+  <p>A boolean represents one of two logical values:</p>
+<pre><code class="language-text">true
+false</code></pre>
+  <p>Example:</p>
+<pre><code class="language-java">boolean enrolled = true;
+boolean finished = false;</code></pre>
+  <p>Booleans will become extremely important when we introduce decision-making in Week 2.</p>
+  <h4>char</h4>
+  <p>A <code>char</code> stores a single character. Example:</p>
+<pre><code class="language-java">char grade = 'A';</code></pre>
+  <p>Notice the single quotation marks:</p>
+<pre><code class="language-java">'A'</code></pre>
+  <p>A character differs from a string. Character:</p>
+<pre><code class="language-java">'A'</code></pre>
+  <p>String:</p>
+<pre><code class="language-java">"A"</code></pre>
+  <h4>String</h4>
+  <p>Java represents sequences of characters using the <code>String</code> type. Example:</p>
+<pre><code class="language-java">String name = "Ada";</code></pre>
+  <p>Another example:</p>
+<pre><code class="language-java">String course = "CSC500";</code></pre>
+  <p>Strictly speaking, <code>String</code> is not a primitive type. It is a class. We will understand the significance of that distinction later. For now, it is fine to think of <code>String</code> as the standard Java type for text.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-naming"
+          data-kicker="Reference" data-title="Naming: what is legal, what is good, what is conventional">
+  <h4>Legal names</h4>
+  <p>Java identifiers can include letters, digits, underscore <code>_</code>, and dollar sign <code>$</code>. However, an identifier cannot begin with a digit.</p>
+  <p>Valid:</p>
+<pre><code class="language-java">age
+studentCount
+exam2
+total_score</code></pre>
+  <p>Invalid:</p>
+<pre><code class="language-java">2exam
+student-count
+class</code></pre>
+  <p>The last example is invalid because <code>class</code> is a Java keyword.</p>
+  <h4>Good names</h4>
+  <p>Prefer meaningful variable names.</p>
+  <p>Poor:</p>
+<pre><code class="language-java">double x;
+double y;</code></pre>
+  <p>Better:</p>
+<pre><code class="language-java">double width;
+double height;</code></pre>
+  <p>Poor:</p>
+<pre><code class="language-java">int a;</code></pre>
+  <p>Better:</p>
+<pre><code class="language-java">int studentCount;</code></pre>
+  <p>Good variable names make programs easier to read, understand, test, and maintain.</p>
+  <h4>The Java naming convention</h4>
+  <p>Java programmers normally use <strong>camelCase</strong> for variable names:</p>
+<pre><code class="language-java">studentCount
+maximumScore
+monthlyPayment</code></pre>
+  <p>The first word starts with a lowercase letter, while subsequent words begin with uppercase letters.</p>
+  <p>Class names normally begin with uppercase letters:</p>
+<pre><code class="language-java">Student
+BankAccount
+CourseRegistration</code></pre>
+  <p>And constants, from Part XVI, are often written in uppercase with underscores:</p>
+<pre><code class="language-java">MAX_SCORE
+TAX_RATE
+SECONDS_PER_MINUTE</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m1-integer-division"
+          data-kicker="Deep dive" data-title="Integer division and the remainder operator">
+  <h4>An important Java rule</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">int x = 5;
+int y = 2;
+
+System.out.println(x / y);</code></pre>
+  <p>Many new programmers expect:</p>
+<pre><code class="language-text">2.5</code></pre>
+  <p>But Java prints:</p>
+<pre><code class="language-text">2</code></pre>
+  <p>Why? Both operands are integers. Therefore Java performs integer division. The fractional part is discarded.</p>
+  <h4>Producing floating-point division</h4>
+  <p>If at least one operand is floating-point:</p>
+<pre><code class="language-java">System.out.println(5.0 / 2);</code></pre>
+  <p>the output is:</p>
+<pre><code class="language-text">2.5</code></pre>
+  <p>Similarly:</p>
+<pre><code class="language-java">double result = 5.0 / 2.0;</code></pre>
+  <p>produces:</p>
+<pre><code class="language-text">2.5</code></pre>
+  <p>This distinction will cause many bugs if students do not understand it.</p>
+  <h4>The remainder operator</h4>
+  <p>The <code>%</code> operator computes the remainder after integer division. For example:</p>
+<pre><code class="language-java">int remainder = 10 % 3;</code></pre>
+  <p>Since:</p>
+<pre><code class="language-text">10 = 3 × 3 + 1</code></pre>
+  <p>we get:</p>
+<pre><code class="language-text">remainder = 1</code></pre>
+  <p>Examples:</p>
+<pre><code class="language-text">8 % 2 = 0
+9 % 2 = 1
+17 % 5 = 2</code></pre>
+  <p>The remainder operator becomes useful for problems such as determining whether a number is even, extracting digits, cyclic calculations, and time calculations.</p>
+  <div class="box pitfall"><span class="box-title">Common error</span>Potentially problematic: <code>int average = 7 / 2;</code> gives <code>3</code>. If the intended answer is <code>3.5</code>, write <code>double average = 7.0 / 2.0;</code></div>
+</template>
+
+<template class="csc-modal-tpl" id="m1-rectangle-area"
+          data-kicker="Worked example" data-title="RectangleArea — the first calculation program">
+  <h4>The program</h4>
+<pre><code class="language-java">public class RectangleArea {
+    public static void main(String[] args) {
+        double width = 5.0;
+        double height = 3.0;
+
+        double area = width * height;
+
+        System.out.println("Area = " + area);
+    }
+}</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">Area = 15.0</code></pre>
+  <h4>Trace the program carefully</h4>
+<pre><code class="language-text">width  → 5.0
+height → 3.0
+
+area = width * height
+     = 5.0 * 3.0
+     = 15.0</code></pre>
+  <h4>What is hard-coded here</h4>
+  <p>The program contains:</p>
+<pre><code class="language-java">double width = 5.0;
+double height = 3.0;</code></pre>
+  <p>These values are written directly into the program. This is called <strong>hard-coding</strong>. Often, however, we want users to provide values while the program is running — which is what Part XX and Part XXII address.</p>
+  <h4>Where the output text comes from</h4>
+  <p>The line <code>System.out.println("Area = " + area);</code> uses string concatenation, exactly as in Part XVII. The literal text <code>Area = </code> is joined to the numeric value of <code>area</code>, and the result is printed as one line.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-scanner"
+          data-kicker="Reference" data-title="Scanner: import, create, read">
+  <h4>Import</h4>
+  <p>Java provides a class called <code>Scanner</code>. We first import it:</p>
+<pre><code class="language-java">import java.util.Scanner;</code></pre>
+  <h4>Create</h4>
+  <p>Then create a <code>Scanner</code>:</p>
+<pre><code class="language-java">Scanner input = new Scanner(System.in);</code></pre>
+  <h4>Read a line of text</h4>
+<pre><code class="language-java">import java.util.Scanner;
+
+public class Greeting {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter your name: ");
+        String name = input.nextLine();
+
+        System.out.println("Hello, " + name + "!");
+    }
+}</code></pre>
+  <p>Possible interaction:</p>
+<pre><code class="language-text">Enter your name: Maya
+Hello, Maya!</code></pre>
+  <h4>Read an integer</h4>
+<pre><code class="language-java">int age = input.nextInt();</code></pre>
+  <p>Example:</p>
+<pre><code class="language-java">System.out.print("Enter your age: ");
+int age = input.nextInt();
+
+System.out.println("You entered " + age);</code></pre>
+  <h4>Read a double</h4>
+<pre><code class="language-java">double price = input.nextDouble();</code></pre>
+  <p>Example:</p>
+<pre><code class="language-java">System.out.print("Enter the price: ");
+double price = input.nextDouble();
+
+System.out.println("Price = " + price);</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m1-interactive-rectangle"
+          data-kicker="Worked example" data-title="Interactive RectangleArea and the INPUT–PROCESSING–OUTPUT pattern">
+  <h4>The complete program</h4>
+<pre><code class="language-java">import java.util.Scanner;
+
+public class RectangleArea {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter width: ");
+        double width = input.nextDouble();
+
+        System.out.print("Enter height: ");
+        double height = input.nextDouble();
+
+        double area = width * height;
+
+        System.out.println("Area = " + area);
+    }
+}</code></pre>
+  <h4>Example execution</h4>
+<pre><code class="language-text">Enter width: 5
+Enter height: 3
+Area = 15.0</code></pre>
+  <h4>The pattern</h4>
+  <p>This program demonstrates a basic computational pattern:</p>
+<pre><code class="language-text">INPUT
+  ↓
+PROCESSING
+  ↓
+OUTPUT</code></pre>
+  <p>Many programs can initially be understood using this model.</p>
+  <h4>Compare with the hard-coded version</h4>
+  <p>The hard-coded version of the same program replaced the two <code>nextDouble</code> calls with literal values:</p>
+<pre><code class="language-java">double width = 5.0;
+double height = 3.0;</code></pre>
+  <p>The processing step and the output step are byte-for-byte identical in both versions. Only the input step changed. That is the value of thinking in terms of INPUT, PROCESSING, and OUTPUT: you can replace one stage without disturbing the others.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-trace-table"
+          data-kicker="Technique" data-title="Trace tables, and the swap that needs no third variable">
+  <h4>Why trace at all</h4>
+  <p>One of the most important programming skills is predicting exactly what a program will do. Do not rely only on running the program. You should also be able to reason about execution by hand.</p>
+  <h4>A first trace</h4>
+<pre><code class="language-java">int x = 4;
+int y = 2;
+
+x = x + y;
+y = x * 2;
+
+System.out.println(x);
+System.out.println(y);</code></pre>
+  <p>Initially:</p>
+<pre><code class="language-text">x = 4
+y = 2</code></pre>
+  <p>After:</p>
+<pre><code class="language-java">x = x + y;</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">x = 6
+y = 2</code></pre>
+  <p>Then:</p>
+<pre><code class="language-java">y = x * 2;</code></pre>
+  <p>gives:</p>
+<pre><code class="language-text">x = 6
+y = 12</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">6
+12</code></pre>
+  <h4>A systematic technique</h4>
+  <p>For larger examples, use a trace table. Program:</p>
+<pre><code class="language-java">int a = 3;
+int b = 4;
+
+a = a + b;
+b = a - b;
+a = a - b;</code></pre>
+  <p>Trace:</p>
+  <table>
+    <thead><tr><th>Statement</th><th><code>a</code></th><th><code>b</code></th></tr></thead>
+    <tbody>
+      <tr><td>initial values</td><td>3</td><td>4</td></tr>
+      <tr><td><code>a = a + b</code></td><td>7</td><td>4</td></tr>
+      <tr><td><code>b = a - b</code></td><td>7</td><td>3</td></tr>
+      <tr><td><code>a = a - b</code></td><td>4</td><td>3</td></tr>
+    </tbody>
+  </table>
+  <p>Notice what happened: the two values were swapped.</p>
+  <p>Initially:</p>
+<pre><code class="language-text">a = 3
+b = 4</code></pre>
+  <p>Finally:</p>
+<pre><code class="language-text">a = 4
+b = 3</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m1-error-types"
+          data-kicker="Reference" data-title="Syntax errors, runtime errors, and logic errors">
+  <h4>Three ways a program fails</h4>
+  <p>Programs can fail in several different ways. It is useful to distinguish among:</p>
+  <ol>
+    <li>syntax errors,</li>
+    <li>runtime errors,</li>
+    <li>logic errors.</li>
+  </ol>
+  <h4>Syntax errors</h4>
+  <p>A syntax error occurs when code violates the grammatical rules of Java. Example:</p>
+<pre><code class="language-java">System.out.println("Hello")</code></pre>
+  <p>The semicolon is missing. Another example:</p>
+<pre><code class="language-java">int x = ;</code></pre>
+  <p>The compiler cannot understand the statement. Syntax errors are usually detected during compilation.</p>
+  <h4>Runtime errors</h4>
+  <p>A program may compile successfully but fail while it is executing. Example:</p>
+<pre><code class="language-java">int x = 10;
+int y = 0;
+
+System.out.println(x / y);</code></pre>
+  <p>The program compiles. But attempting integer division by zero causes an exception during execution. This is a runtime error.</p>
+  <h4>Logic errors</h4>
+  <p>Logic errors are often more difficult. The program runs, but produces an incorrect answer. Example:</p>
+<pre><code class="language-java">double width = 5;
+double height = 3;
+
+double area = width + height;</code></pre>
+  <p>This program compiles. It runs. But the formula is wrong. The programmer intended:</p>
+<pre><code class="language-java">double area = width * height;</code></pre>
+  <p>The computer faithfully executes what we wrote, not what we intended.</p>
+  <div class="box key"><span class="box-title">Diagnostic ladder</span>Did it compile? If not, syntax. Did it finish? If not, runtime. Did it give the right answer? If not, logic.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m1-debugging"
+          data-kicker="Practice" data-title="Debugging: habits, and the fundamental rule">
+  <h4>What debugging is</h4>
+  <p><strong>Debugging</strong> is the process of identifying and correcting defects in a program.</p>
+  <h4>Useful habits</h4>
+  <ul>
+    <li>read compiler messages carefully,</li>
+    <li>reduce the problem to a small example,</li>
+    <li>print intermediate values,</li>
+    <li>trace code by hand,</li>
+    <li>test with simple inputs whose correct answers you already know,</li>
+    <li>change one thing at a time,</li>
+    <li>distinguish symptoms from causes.</li>
+  </ul>
+  <h4>The fundamental rule</h4>
+  <blockquote>Do not randomly modify code until it works.</blockquote>
+  <p>Instead, develop a hypothesis about what is wrong and test that hypothesis.</p>
+  <h4>Comments help the next debugger — often you</h4>
+  <p>Comments allow programmers to leave explanatory text in source code. Comments should explain useful information, not restate obvious code.</p>
+  <p>Weak comment:</p>
+<pre><code class="language-java">// Add x and y
+sum = x + y;</code></pre>
+  <p>More useful:</p>
+<pre><code class="language-java">// Scores are weighted equally, so divide their sum by the number of exams.
+average = total / examCount;</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m1-temperature"
+          data-kicker="Worked example" data-title="From problem to program: Fahrenheit to Celsius">
+  <h4>The problem</h4>
+  <blockquote>Given a temperature in Fahrenheit, calculate Celsius.</blockquote>
+  <p>We should not immediately start typing Java. First identify the relationship:</p>
+  <p><span class="math">C = 5/9 <span class="op">×</span> (F <span class="op">−</span> 32)</span></p>
+  <h4>Inputs and outputs</h4>
+  <p>Input:</p>
+<pre><code class="language-text">Fahrenheit temperature</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">Celsius temperature</code></pre>
+  <h4>The algorithm</h4>
+  <ol>
+    <li>Read Fahrenheit temperature.</li>
+    <li>Subtract 32.</li>
+    <li>Multiply by 5.</li>
+    <li>Divide by 9.</li>
+    <li>Display Celsius temperature.</li>
+  </ol>
+  <p>Then implement it.</p>
+  <h4>Java implementation</h4>
+<pre><code class="language-java">import java.util.Scanner;
+
+public class TemperatureConverter {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter temperature in Fahrenheit: ");
+        double fahrenheit = input.nextDouble();
+
+        double celsius = (5.0 / 9.0) * (fahrenheit - 32);
+
+        System.out.println("Celsius: " + celsius);
+    }
+}</code></pre>
+  <h4>The detail that decides whether it works</h4>
+  <p>Notice:</p>
+<pre><code class="language-java">5.0 / 9.0</code></pre>
+  <p>rather than:</p>
+<pre><code class="language-java">5 / 9</code></pre>
+  <p>Why? Because:</p>
+<pre><code class="language-java">5 / 9</code></pre>
+  <p>uses integer division and evaluates to:</p>
+<pre><code class="language-text">0</code></pre>
+  <p>This would cause an incorrect result.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-beginner-mistakes"
+          data-kicker="Checklist" data-title="Five common beginner mistakes">
+  <h4>1. Missing semicolons</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">int x = 5</code></pre>
+  <p>Correct:</p>
+<pre><code class="language-java">int x = 5;</code></pre>
+  <h4>2. Wrong capitalization</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">system.out.println("Hello");</code></pre>
+  <p>Correct:</p>
+<pre><code class="language-java">System.out.println("Hello");</code></pre>
+  <p>Java is case-sensitive.</p>
+  <h4>3. Using a variable before declaring it</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">x = 10;
+int x;</code></pre>
+  <p>Prefer:</p>
+<pre><code class="language-java">int x = 10;</code></pre>
+  <h4>4. Confusing int and double</h4>
+  <p>Potentially problematic:</p>
+<pre><code class="language-java">int average = 7 / 2;</code></pre>
+  <p>Result:</p>
+<pre><code class="language-text">3</code></pre>
+  <p>If the intended answer is <code>3.5</code>:</p>
+<pre><code class="language-java">double average = 7.0 / 2.0;</code></pre>
+  <h4>5. Forgetting quotation marks</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">System.out.println(Hello);</code></pre>
+  <p>Unless <code>Hello</code> is the name of a valid variable, this will not work. Text literals require quotation marks:</p>
+<pre><code class="language-java">System.out.println("Hello");</code></pre>
+  <h4>And two style habits worth forming now</h4>
+  <p>Readability matters. Compare:</p>
+<pre><code class="language-java">int x=10;double y=20.5;System.out.println(x+y);</code></pre>
+  <p>with:</p>
+<pre><code class="language-java">int x = 10;
+double y = 20.5;
+
+System.out.println(x + y);</code></pre>
+  <p>Both may compile. The second is much easier to read. Professional programming is not only about making code execute; code must also be understandable to humans.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-lab-exercises"
+          data-kicker="Lab" data-title="Week 1 Programming Lab — Exercises A to E">
+  <h4>Lab goals</h4>
+  <p>Students should complete several short programs rather than one large program.</p>
+  <h4>Exercise A — Personal Introduction</h4>
+  <p>Write a program that prints:</p>
+  <ul>
+    <li>your name,</li>
+    <li>your academic background,</li>
+    <li>one reason you are studying computer science.</li>
+  </ul>
+  <h4>Exercise B — Rectangle Calculator</h4>
+  <p>Ask the user for width and height. Display area and perimeter. Use:</p>
+  <p><span class="math">area = width <span class="op">×</span> height</span></p>
+  <p>and:</p>
+  <p><span class="math">perimeter = 2(width + height)</span></p>
+  <h4>Exercise C — Temperature Conversion</h4>
+  <p>Ask for Fahrenheit and calculate Celsius.</p>
+  <p><span class="math">C = 5/9 <span class="op">×</span> (F <span class="op">−</span> 32)</span></p>
+  <h4>Exercise D — Seconds Converter</h4>
+  <p>Ask the user for a number of seconds. Calculate the equivalent number of minutes and remaining seconds. For example:</p>
+<pre><code class="language-text">Input: 137
+Output:
+2 minutes
+17 seconds</code></pre>
+  <p>Hint:</p>
+<pre><code class="language-java">minutes = totalSeconds / 60;
+remainingSeconds = totalSeconds % 60;</code></pre>
+  <h4>Exercise E — Bill Calculator</h4>
+  <p>Ask for meal cost, tax percentage, and tip percentage. Calculate tax, tip, and the final bill. This gives students practice translating a real-world problem into a sequence of computations.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-homework"
+          data-kicker="Homework" data-title="Programming Assignment 0: Java Setup and Fundamentals">
+  <h4>Scope</h4>
+  <p>The first assignment should be relatively low stakes. Students should submit several small programs demonstrating that they can:</p>
+  <ul>
+    <li>create a Java source file,</li>
+    <li>compile it,</li>
+    <li>run it,</li>
+    <li>use variables,</li>
+    <li>perform arithmetic,</li>
+    <li>accept input,</li>
+    <li>display output.</li>
+  </ul>
+  <h4>Problem 1 — Distance Conversion</h4>
+  <p>Read a distance in miles and convert it to kilometers. Use:</p>
+  <p><span class="math">1 mile = 1.60934 km</span></p>
+  <h4>Problem 2 — Circle Measurements</h4>
+  <p>Read a radius and calculate:</p>
+  <p><span class="math">area = π r²</span></p>
+  <p>and:</p>
+  <p><span class="math">circumference = 2 π r</span></p>
+  <p>Java provides:</p>
+<pre><code class="language-java">Math.PI</code></pre>
+  <h4>Problem 3 — Time Conversion</h4>
+  <p>Read a number of seconds and calculate hours, remaining minutes, and remaining seconds. For example:</p>
+<pre><code class="language-text">Input: 7384 seconds
+
+Output:
+2 hours
+3 minutes
+4 seconds</code></pre>
+  <h4>Problem 4 — Weighted Grade</h4>
+  <p>Read three scores: homework, midterm, and final. Suppose the weights are:</p>
+<pre><code class="language-text">Homework: 30%
+Midterm: 30%
+Final: 40%</code></pre>
+  <p>Calculate the weighted course score.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m1-conceptual-questions"
+          data-kicker="Review" data-title="Conceptual questions students should be able to answer">
+  <ol>
+    <li>What is an algorithm?</li>
+    <li>What is the difference between an algorithm and a program?</li>
+    <li>What is source code?</li>
+    <li>What does a compiler do?</li>
+    <li>What is Java bytecode?</li>
+    <li>What is the JVM?</li>
+    <li>What is a variable?</li>
+    <li>Why do variables have types?</li>
+    <li>What is the difference between <code>int</code> and <code>double</code>?</li>
+    <li>What is assignment?</li>
+    <li>Why is the following valid Java?</li>
+  </ol>
+<pre><code class="language-java">x = x + 1;</code></pre>
+  <ol start="12">
+    <li>What does integer division mean?</li>
+    <li>What does <code>%</code> compute?</li>
+    <li>What is the difference between a syntax error, runtime error, and logic error?</li>
+    <li>Why should programmers trace programs manually?</li>
+  </ol>
+</template>
+
+<template class="csc-modal-tpl" id="m1-week1-summary"
+          data-kicker="Summary" data-title="Week 1 — key ideas to remember">
+  <h4>Programs and algorithms</h4>
+  <p>A <strong>program</strong> is a precise sequence of instructions executed by a computer.</p>
+  <p>An <strong>algorithm</strong> is a procedure for solving a problem.</p>
+  <h4>How Java code becomes execution</h4>
+  <p>Java source code is typically:</p>
+<pre><code class="language-text">written
+   ↓
+compiled
+   ↓
+translated into bytecode
+   ↓
+executed by the JVM</code></pre>
+  <h4>Variables and state</h4>
+  <p>Variables allow programs to maintain state. Examples:</p>
+<pre><code class="language-java">int students = 25;
+double average = 92.4;
+boolean enrolled = true;
+String course = "CSC500";</code></pre>
+  <p>Assignment changes program state:</p>
+<pre><code class="language-java">x = x + 1;</code></pre>
+  <p>Expressions compute values:</p>
+<pre><code class="language-java">double area = width * height;</code></pre>
+  <h4>Input and output</h4>
+  <p>Input can be obtained using <code>Scanner</code>. Output can be displayed using:</p>
+<pre><code class="language-java">System.out.println(...)</code></pre>
+  <h4>Errors</h4>
+  <p>Three important categories of errors are:</p>
+<pre><code class="language-text">syntax errors
+runtime errors
+logic errors</code></pre>
+  <p>Most importantly, programming requires learning to reason precisely about how instructions transform program state.</p>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

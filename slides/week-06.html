@@ -1,0 +1,4492 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 6: Classes and Objects</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Classes and Objects</h1>
+  <p class="subtitle">Week 6 — combining related data and behavior into a new type</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">By the end of this week, you should be able to:</p>
+  <ul>
+    <li>Explain the difference between a class and an object.</li>
+    <li>Define a Java class containing fields and methods.</li>
+    <li>Create objects using the <code>new</code> operator.</li>
+    <li>Access and modify object state through methods.</li>
+    <li>Write constructors that initialize objects.</li>
+    <li>Explain the role of object references.</li>
+  </ul>
+  <aside class="notes">
+    <p>Twelve objectives this week, and they split cleanly in half. The first six are about building a class: what it is, what goes inside it, and how you bring an object into existence.</p>
+    <p>Objective six — explain the role of object references — is the one students most often skip past. It is also the one that produces the most confusing bugs when it is missed, so we spend a whole part on it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul>
+    <li>Distinguish between primitive variables and reference variables.</li>
+    <li>Use <code>private</code> and <code>public</code> appropriately.</li>
+    <li>Explain the purpose of encapsulation.</li>
+    <li>Use the <code>this</code> keyword to refer to the current object.</li>
+    <li>Write getter and setter methods when appropriate.</li>
+    <li>Design a small program consisting of multiple interacting objects.</li>
+  </ul>
+  <div class="box key"><span class="box-title">Note the wording</span>Getters and setters <em>when appropriate</em> — not for every field. Section 24 and Section 44 both make the point that mechanical getters and setters are a design smell, not a design goal.</div>
+  <aside class="notes">
+    <p>The second six are about design judgement rather than syntax. Encapsulation, access modifiers and the interface-versus-implementation split are the ideas that make classes worth having in the first place.</p>
+    <p>The last objective — design a small program consisting of multiple interacting objects — is what the in-class exercises and the suggested lab are for. It is also the bridge into Week 7.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap — Parts I to XII</h2>
+  <div class="cols smaller">
+    <ol>
+      <li>Why Objects?</li>
+      <li>Classes, Objects, and Fields</li>
+      <li>Behavior: Methods and State</li>
+      <li>Objects, References, and <code>null</code></li>
+      <li>Constructors and <code>this</code></li>
+      <li>Encapsulation and Access Control</li>
+    </ol>
+    <ol start="7">
+      <li>Interface, Abstraction, Collaboration</li>
+      <li>Identity, Equality, and Lifetime</li>
+      <li>Designing a Class</li>
+      <li>Thinking in Objects</li>
+      <li>Common Mistakes</li>
+      <li>Tracing and Worked Examples</li>
+    </ol>
+  </div>
+  <p class="small dim">This week introduces the central concepts behind object-oriented programming: classes, objects, fields, methods, constructors, references, encapsulation, access modifiers, and the <code>this</code> keyword.</p>
+  <aside class="notes">
+    <p>Parts I through V build the machinery — what a class is, what an object is, how you make one, and how you initialize it. Parts VI through VIII are about control and identity: who is allowed to change an object, and what it means for two objects to be the same.</p>
+    <p>Parts IX and X are design. Parts XI and XII are the diagnostic half of the week: the six mistakes students actually make, three tracing exercises, and two full worked examples.</p>
+    <p>These ideas will form the foundation for most of the Java programming we do for the rest of the course.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Why Objects?</h2>
+  <p class="part-sub">What objects exist in the problem, what information do those objects store, and what can those objects do?</p>
+</section>
+
+<section>
+  <h2>From Methods to Objects</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Until now, most of our programs have been organized primarily around <strong>methods</strong>. A typical program might contain:</p>
+      <ul class="small tight">
+        <li>variables,</li>
+        <li>arrays,</li>
+        <li>loops,</li>
+        <li>conditionals,</li>
+        <li>and several methods.</li>
+      </ul>
+      <p class="small">This style works well for small programs. As programs become larger, it becomes increasingly difficult to organize all of the data and operations in a clear way.</p>
+    </div>
+    <div>
+      <p class="small">Instead of thinking only in terms of:</p>
+      <blockquote class="small">What functions should my program perform?</blockquote>
+      <p class="small">we also begin asking:</p>
+      <blockquote class="small">What objects exist in the problem, what information do those objects store, and what can those objects do?</blockquote>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>In Java, object-oriented programming is built around <strong>classes</strong> and <strong>objects</strong>.</div>
+  <details class="acc">
+    <summary>The nine concepts this week introduces</summary>
+    <div class="acc-body">
+      <p>This week introduces the central concepts behind object-oriented programming:</p>
+      <ul>
+        <li>classes,</li>
+        <li>objects,</li>
+        <li>fields,</li>
+        <li>methods,</li>
+        <li>constructors,</li>
+        <li>references,</li>
+        <li>encapsulation,</li>
+        <li>access modifiers,</li>
+        <li>and the <code>this</code> keyword.</li>
+      </ul>
+      <p>These ideas will form the foundation for most of the Java programming we do for the rest of the course.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Until now, most of the programs we have written have been organized primarily around methods. A typical program might contain variables, arrays, loops, conditionals, and several methods. This style of programming works well for small programs. However, as programs become larger, it becomes increasingly difficult to organize all of the data and operations in a clear way.</p>
+    <p>Object-oriented programming gives us another way to structure programs. Instead of thinking only in terms of what functions the program should perform, we also begin asking what objects exist in the problem, what information those objects store, and what those objects can do.</p>
+    <p>In Java, object-oriented programming is built around classes and objects.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Motivation: Storing Student Information</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want a program that stores information about students. For each student we want: name, student ID, number of credits, GPA.</p>
+      <p class="small">Without classes, we might use several arrays:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String[] names = new String[100];
+int[] ids = new int[100];
+int[] credits = new int[100];
+double[] gpas = new double[100];
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This works, but it creates a problem. The information for a single student is spread across several arrays. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+names[5]
+ids[5]
+credits[5]
+gpas[5]
+</code></pre>
+      <p class="small">all describe the same student.</p>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">Watch out</span>The relationship between those pieces of information exists only because the programmer remembers that index <code>5</code> refers to the same student in every array.</div>
+  <aside class="notes">
+    <p>Suppose we want to write a program that stores information about students. For each student we want to store name, student ID, number of credits, and GPA. Without classes, we might use several parallel arrays.</p>
+    <p>This works, but it creates a problem: the information for a single student is spread across several arrays. The elements at index 5 in all four arrays describe the same student — and that relationship exists only in the programmer's head. Nothing in the code says so, and nothing stops the arrays from drifting out of step.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Grouping Related Data Together</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Object-oriented programming allows us to group related data together. We could instead define a <code>Student</code> class.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+    String name;
+    int id;
+    int credits;
+    double gpa;
+}
+</code></pre>
+      <p class="small">Then one object can represent one student.</p>
+    </div>
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Student object
+-----------------
+name: "Alice"
+id: 12345
+credits: 18
+gpa: 3.72
+</code></pre>
+      <p class="small">Now the data belonging to one student stays together.</p>
+    </div>
+  </div>
+  <div class="def"><span class="term">The central motivation:</span> combining related data and behavior into a single unit.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-why-objects" tabindex="0">The full motivation, arrays to objects</span>
+  </div>
+  <aside class="notes">
+    <p>Object-oriented programming allows us to group related data together. We could instead define a Student class holding name, id, credits and gpa. Then one object can represent one student.</p>
+    <p>Now the data belonging to one student stays together. This idea — combining related data and behavior — is one of the central motivations for object-oriented programming.</p>
+    <p>Note the shift in the diagram: instead of four arrays and a shared index, there is one box with four labelled slots. That box is what we are going to spend the rest of the week learning to define.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>Classes, Objects, and Fields</h2>
+  <p class="part-sub">A class is a definition. An object is one particular instance created from that definition.</p>
+</section>
+
+<section>
+  <h2>Class and Object</h2>
+  <div class="def"><span class="term">Class:</span> a definition or blueprint for a type of object. &nbsp; <span class="term">Object:</span> a particular instance of a class.</div>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Dog {
+    String name;
+    int age;
+}
+</code></pre>
+      <p class="small"><code>Dog</code> is a class.</p>
+    </div>
+    <div>
+      <p class="small">We can create individual <code>Dog</code> objects:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Dog dog1 = new Dog();
+Dog dog2 = new Dog();
+</code></pre>
+      <p class="small">Now <code>dog1</code> and <code>dog2</code> refer to two separate objects.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A class is a definition or blueprint for a type of object. An object is a particular instance of a class.</p>
+    <p>Dog is a class — it says that every Dog object has a name and an age. It is not itself a dog. Writing new Dog twice creates two separate objects, and dog1 and dog2 refer to them.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Two Objects, Two Sets of Values</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can store different information in each one.</p>
+<pre><code class="language-java" data-trim data-noescape>
+dog1.name = "Buddy";
+dog1.age = 5;
+
+dog2.name = "Luna";
+dog2.age = 2;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+dog1
+  |
+  v
++----------------+
+| Dog object     |
+| name = Buddy   |
+| age = 5        |
++----------------+
+
+dog2
+  |
+  v
++----------------+
+| Dog object     |
+| name = Luna    |
+| age = 2        |
++----------------+
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We can store different information in each one: dog1 gets the name Buddy and age 5, dog2 gets Luna and 2.</p>
+    <p>The diagram is worth drawing on the board. Two arrows, two boxes. The arrow is the variable; the box is the object. That picture is the single most useful thing a student can carry out of Week 6, and we will come back to it in Part IV when we talk about references.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Definition versus Instance</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The important distinction is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Class = definition
+
+Object = one particular instance created from that definition
+</code></pre>
+      <p class="small">Another analogy is a house blueprint. The blueprint describes number of rooms, layout, and dimensions.</p>
+    </div>
+    <div>
+      <p class="small">But the blueprint is not itself a house. You can construct many different houses from the same blueprint. Similarly:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Class → blueprint
+
+Object → constructed instance
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-class-object-blueprint" tabindex="0">Class, object, and the blueprint analogy</span>
+  </div>
+  <aside class="notes">
+    <p>The important distinction is that a class is a definition, and an object is one particular instance created from that definition.</p>
+    <p>Another analogy is a house blueprint. The blueprint describes the number of rooms, the layout, and the dimensions — but the blueprint is not itself a house. You can construct many different houses from the same blueprint. Class is to blueprint as object is to constructed instance.</p>
+    <p>Section 41 of the notes lists "Student is a student" as a common conceptual mistake. Better: Student is a class that defines what Student objects contain and can do.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Defining a Class</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider a simple bank account.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    double balance;
+
+}
+</code></pre>
+      <p class="small">The class contains one variable:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double balance;
+</code></pre>
+    </div>
+    <div>
+      <div class="def"><span class="term">Field:</span> a variable declared inside a class but outside a method.</div>
+      <p class="small">Fields represent the <strong>state</strong> of an object.</p>
+      <div class="box note"><span class="box-title">Note</span>Nothing here creates an account. This is the definition only — the blueprint. No object exists until we say <code>new</code>.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Two accounts with different balances</summary>
+    <div class="acc-body">
+      <p>We could create two accounts:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account1 = new BankAccount();
+BankAccount account2 = new BankAccount();
+</code></pre>
+      <p>and give them different balances.</p>
+<pre><code class="language-java" data-trim data-noescape>
+account1.balance = 500.0;
+account2.balance = 1250.0;
+</code></pre>
+      <p>Although both objects belong to the same class, they contain independent state.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider a simple bank account. The class contains one variable, a double named balance. A variable declared inside a class but outside a method is called a field. Fields represent the state of an object.</p>
+    <p>We could create two accounts and give them different balances — 500.0 and 1250.0. Although both objects belong to the same class, they contain independent state. That independence is the whole point: the class says what shape the state has, the object holds one particular instance of it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Fields Belong to Objects</h2>
+  <div class="def"><span class="term">Field:</span> a variable that belongs to an object.</div>
+  <div class="cols-3">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Rectangle {
+
+    double width;
+    double height;
+
+}
+</code></pre>
+      <p class="small">Each <code>Rectangle</code> object has its own <code>width</code> and <code>height</code>.</p>
+    </div>
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Rectangle r1 = new Rectangle();
+Rectangle r2 = new Rectangle();
+
+r1.width = 5;
+r1.height = 3;
+
+r2.width = 10;
+r2.height = 7;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+r1
+ |
+ v
++------------+
+| width = 5  |
+| height = 3 |
++------------+
+
+r2
+ |
+ v
++-------------+
+| width = 10  |
+| height = 7  |
++-------------+
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Changing <code>r1.width</code> does not affect <code>r2.width</code>. Each object has its own state. The class supplies the <em>shape</em> of the state; each object supplies the <em>values</em>.</div>
+  <details class="acc">
+    <summary>Why this matters for the parallel-array problem</summary>
+    <div class="acc-body">
+      <p>With parallel arrays, the four values describing one student were connected only by a shared index. With objects, the connection is structural: <code>r1</code>'s width and height live in the same box, and there is no index to keep in step.</p>
+      <p>That is the same benefit the <code>Student</code> class gave us in Part I — the data belonging to one entity stays together.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A field is a variable that belongs to an object. Each Rectangle object has its own width and its own height. Creating r1 and r2 and assigning to them separately gives us two rectangles: five by three, and ten by seven — two objects, four independent field values.</p>
+    <p>Draw the two boxes. r1 points at a box holding width 5 and height 3; r2 points at a box holding width 10 and height 7. Changing r1.width does not affect r2.width. Each object has its own state.</p>
+    <p>This is the payoff of the motivation in Part I: the values that describe one rectangle are held together in one place rather than scattered across parallel arrays.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Behavior: Methods and State</h2>
+  <p class="part-sub">Objects do not only store information. They can also perform operations.</p>
+</section>
+
+<section>
+  <h2>Objects Can Also Have Behavior</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Objects do not only store information. They can also perform operations. These operations are represented by <strong>methods</strong>.</p>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Rectangle {
+
+    double width;
+    double height;
+
+    public double area() {
+        return width * height;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Now we can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Rectangle r = new Rectangle();
+
+r.width = 5;
+r.height = 3;
+
+System.out.println(r.area());
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+15.0
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Objects do not only store information. They can also perform operations, and these operations are represented by methods.</p>
+    <p>Adding an area method to Rectangle lets the object compute its own area. Notice the method body: return width times height. It names no object and takes no parameters, yet it clearly means one particular rectangle's width and height.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Method Uses the Object's Own Fields</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When we call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+r.area();
+</code></pre>
+      <p class="small">Java executes the <code>area()</code> method using the values stored inside the object referenced by <code>r</code>.</p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>The method operates using the object's own fields.</div>
+      <p class="small">That is why <code>r.area()</code> gives <code>15.0</code> here and would give something else entirely if <code>r</code> referred to a different rectangle.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The same expression, a different answer</summary>
+    <div class="acc-body">
+      <p>The expression <code>r.area()</code> does not have one fixed value. It depends on which object <code>r</code> currently refers to and what that object's fields contain at the moment of the call.</p>
+      <p>This is the first appearance of an idea Part V makes explicit with the <code>this</code> keyword: an instance method always runs "on behalf of" one particular object.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The method operates using the object's own fields. When we call r.area(), Java executes the area method using the values stored inside the object referenced by r.</p>
+    <p>Emphasise the phrase "the object referenced by r". We have not yet defined reference — that is Part IV — but the language of the notes is already careful about it, and it pays to be careful with students from the start.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Instance Methods</h2>
+  <div class="def"><span class="term">Instance method:</span> a method that operates on a particular object.</div>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    double balance;
+
+    public void deposit(double amount) {
+        balance = balance + amount;
+    }
+
+    public void withdraw(double amount) {
+        balance = balance - amount;
+    }
+
+}
+</code></pre>
+  <aside class="notes">
+    <p>A method that operates on a particular object is called an instance method. The BankAccount class here has two of them: deposit adds an amount to the balance, and withdraw subtracts one.</p>
+    <p>Note that neither of these methods yet checks anything. A deposit of a negative amount would work, and a withdrawal larger than the balance would work. Part VI is where we fix that — but only after the fields have been made private, because otherwise outside code can bypass the methods entirely.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Calling Instance Methods</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account = new BankAccount();
+
+account.balance = 1000;
+
+account.deposit(200);
+account.withdraw(50);
+
+System.out.println(account.balance);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1150.0
+</code></pre>
+      <p class="small">Notice that the methods do not need a <code>balance</code> parameter. Why? Because the method already belongs to a particular object. When we write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account.deposit(200);
+</code></pre>
+      <p class="small">the <code>deposit</code> method operates on <code>account</code>'s balance.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where does 1150.0 come from?</summary>
+    <div class="acc-body">
+      <p>The balance starts at 1000. The deposit adds 200, giving 1200. The withdrawal subtracts 50, giving 1150. It prints as <code>1150.0</code> rather than <code>1150</code> because <code>balance</code> is declared <code>double</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Set the balance to 1000, deposit 200, withdraw 50, and print — the output is 1150.0.</p>
+    <p>Notice that the methods do not need a balance parameter. Why? Because the method already belongs to a particular object. When we write account.deposit(200), the deposit method operates on account's balance. This is the difference from the procedural style of Week 4, where a method that needed a value had to be handed that value.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Object State</h2>
+  <div class="def"><span class="term">State:</span> the collection of values stored in an object's fields.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class LightBulb {
+
+    boolean on;
+
+    public void turnOn() {
+        on = true;
+    }
+
+    public void turnOff() {
+        on = false;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Initially:</p>
+<pre><code class="language-text" data-trim data-noescape>
+on = false
+</code></pre>
+      <p class="small">After:</p>
+<pre><code class="language-java" data-trim data-noescape>
+bulb.turnOn();
+</code></pre>
+      <p class="small">the object's state changes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+on = true
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The collection of values stored in an object's fields is called the object's state. The LightBulb class has a single boolean field, on, and two methods that change it.</p>
+    <p>Initially on is false — that is the default value Java gives a boolean field. After calling bulb.turnOn(), the object's state changes and on is true. Nothing else about the object changed; state is exactly the field values.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>State Changes Over Time</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Objects often represent entities whose state changes over time. Examples include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+BankAccount
+    balance
+
+Student
+    credits
+    gpa
+
+GameCharacter
+    health
+    position
+
+ShoppingCart
+    items
+    total
+
+Thermostat
+    temperature
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Object methods often cause <em>controlled</em> changes to object state.</div>
+      <p class="small">The word <em>controlled</em> is doing real work in that sentence. A method can refuse a change, clamp a value, or update two fields together so they stay consistent — none of which a bare field assignment can do.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Reading the list as a design exercise</summary>
+    <div class="acc-body">
+      <p>Each entry pairs an entity with the state that defines it: a bank account is its balance, a student is credits and GPA, a game character is health and position, a shopping cart is its items and total, a thermostat is a temperature.</p>
+      <p>Section 35 turns this into a design procedure — "What state does each object need?" is the second of five questions to ask when designing a class.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Objects often represent entities whose state changes over time: a BankAccount has a balance, a Student has credits and a gpa, a GameCharacter has health and a position, a ShoppingCart has items and a total, a Thermostat has a temperature.</p>
+    <p>Object methods often cause controlled changes to object state. Hold on to the word controlled — it is the seed of encapsulation in Part VI.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Objects, References, and <code>null</code></h2>
+  <p class="part-sub">The variable does not contain the entire object. It stores a reference to the object.</p>
+</section>
+
+<section>
+  <h2>Creating Objects with <code>new</code></h2>
+  <p class="small">Objects are normally created using the <code>new</code> operator. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Rectangle rect = new Rectangle();
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">This statement has several parts.</p>
+<pre><code class="language-text" data-trim data-noescape>
+Rectangle rect = new Rectangle();
+</code></pre>
+    </div>
+    <div>
+      <ul class="small tight">
+        <li><code>Rectangle</code> is the variable's type.</li>
+        <li><code>rect</code> is the reference variable.</li>
+        <li><code>new Rectangle()</code> creates a new object.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>Three jobs in one line: declare a variable, create an object, and connect the two.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Objects are normally created using the new operator. The statement Rectangle rect equals new Rectangle() has several parts: Rectangle is the variable's type, rect is the reference variable, and new Rectangle() creates a new object.</p>
+    <p>It is worth reading the line right to left when explaining it. First an object comes into existence, then a variable is declared that can refer to a Rectangle, and finally the reference to the new object is stored in that variable.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Variable Holds a Reference</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+rect
+ |
+ v
++-------------------+
+| Rectangle object  |
+| width = 0.0       |
+| height = 0.0      |
++-------------------+
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>The variable <code>rect</code> does not contain the entire object. Instead, it stores a <strong>reference</strong> to the object.</div>
+      <p class="small">The fields start at <code>0.0</code> because that is the default value Java gives an uninitialised <code>double</code> field.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the arrow in the diagram matters</summary>
+    <div class="acc-body">
+      <p>Every object diagram in this week's notes draws the variable as a small box with an arrow leaving it, and the object as a larger box the arrow points to. Two boxes, not one.</p>
+      <p>Section 12 (reference assignment), Section 30 (equality), and Section 42 (confusing references with objects) are all consequences of that picture. If students draw it correctly, those three sections become obvious rather than surprising.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Conceptually, rect is a name with an arrow leaving it, and at the end of the arrow sits a Rectangle object whose width is 0.0 and whose height is 0.0.</p>
+    <p>The variable rect does not contain the entire object. Instead, it stores a reference to the object. This one sentence is the hinge of the whole part — everything from here to the null reference follows from it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Primitive Variables vs. Reference Variables</h2>
+  <p class="small">This distinction is extremely important in Java.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+</code></pre>
+      <p class="small">Here, <code>x</code> directly stores the value <code>10</code>.</p>
+      <p class="small">Primitive:</p>
+<pre><code class="language-text" data-trim data-noescape>
+x
++----+
+| 10 |
++----+
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Now consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Rectangle r = new Rectangle();
+</code></pre>
+      <p class="small">Here, <code>r</code> stores a reference to a <code>Rectangle</code> object.</p>
+      <p class="small">Reference:</p>
+<pre><code class="language-text" data-trim data-noescape>
+r
++-----------+
+| reference | --------+
++-----------+         |
+                      v
+               +-------------+
+               | Rectangle   |
+               | width       |
+               | height      |
+               +-------------+
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This distinction is extremely important in Java. With int x equals 10, x directly stores the value 10. With Rectangle r equals new Rectangle(), r stores a reference to a Rectangle object.</p>
+    <p>We can think of the two situations as two pictures. The primitive picture is one box with 10 written in it. The reference picture is a small box containing a reference, an arrow, and a separate larger box holding the width and height.</p>
+    <p>Ask the class which picture has two boxes. That is the whole difference.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Which Types Are Which</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Primitive types include:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int
+double
+boolean
+char
+long
+float
+short
+byte
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Most other types in Java are reference types. Examples:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String
+Scanner
+ArrayList
+Student
+BankAccount
+Rectangle
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Arrays are also reference types.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>String</code> is on the second list</summary>
+    <div class="acc-body">
+      <p><code>String</code> is a reference type, which means a <code>String</code> variable holds a reference to a <code>String</code> object exactly the way a <code>Rectangle</code> variable holds a reference to a <code>Rectangle</code> object.</p>
+      <p>Section 32 makes the point directly: you have already been working with objects. Calling <code>name.length()</code> has the same object-method structure as calling <code>account.getBalance()</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Primitive types include int, double, boolean, char, long, float, short and byte — eight of them, all lower case. Most other types in Java are reference types: String, Scanner, ArrayList, and the classes we write ourselves such as Student, BankAccount and Rectangle.</p>
+    <p>Arrays are also reference types. That explains a behaviour students may already have noticed in Week 5: passing an array to a method lets the method change the caller's array, because what was copied was the reference.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reference Assignment</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount a = new BankAccount();
+a.balance = 100;
+
+BankAccount b = a;
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>A common misconception is that Java creates a second account. It does not. Both variables now refer to the <em>same</em> object.</div>
+<pre><code class="language-text" data-trim data-noescape>
+a --------+
+          |
+          v
+     +-------------+
+     | BankAccount |
+     | balance=100 |
+     +-------------+
+          ^
+          |
+b --------+
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Now suppose we write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+b.balance = 500;
+</code></pre>
+      <p class="small">Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(a.balance);
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+500.0
+</code></pre>
+      <div class="box key"><span class="box-title">Why</span>Because <code>a</code> and <code>b</code> refer to the same object. This behavior is fundamentally different from primitive assignment.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where students meet this for real</summary>
+    <div class="acc-body">
+      <p>Tracing Exercise 1 in Section 45 is exactly this situation with a <code>Counter</code>: <code>b</code> is assigned from <code>a</code>, <code>b</code> is incremented twice, and the value printed through <code>a</code> is 7.</p>
+      <p>Section 42 lists the same idea as a common mistake — after <code>Student s2 = s1;</code> there are two reference variables but only one <code>Student</code> object.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Create an account, set its balance to 100, and then write BankAccount b equals a. A common misconception is that Java creates a second account. It does not. Both variables now refer to the same object — the diagram shows one BankAccount box with two arrows pointing at it.</p>
+    <p>Now write b.balance equals 500 and then print a.balance. It prints 500.0. Why? Because a and b refer to the same object. There was never a second account to be out of date.</p>
+    <p>This behaviour is fundamentally different from primitive assignment, which is the comparison on the next slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Compare With Primitive Assignment</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+int y = x;
+
+y = 20;
+
+System.out.println(x);
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The value was copied.</p>
+      <div class="box key"><span class="box-title">Key idea</span>With references, the <em>reference itself</em> is copied. The underlying object is <strong>not</strong> automatically copied.</div>
+      <div class="chain">
+        <span>primitive</span><span class="sep">→</span><span>copies the value</span>
+      </div>
+      <div class="chain">
+        <span>reference</span><span class="sep">→</span><span>copies the arrow</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>With int x equals 10, int y equals x, then y equals 20, printing x gives 10. The value was copied, so changing y could not possibly affect x.</p>
+    <p>With references, the reference itself is copied. The underlying object is not automatically copied. Assignment copies the arrow, not the box the arrow points to. Students who hold that sentence will avoid the single most common source of confusion in the rest of the course.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>null</code> Reference</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A reference variable can also contain the special value:</p>
+<pre><code class="language-java" data-trim data-noescape>
+null
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account = null;
+</code></pre>
+      <p class="small">This means that <code>account</code> currently refers to no object.</p>
+    </div>
+    <div>
+      <p class="small">If we write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account.deposit(100);
+</code></pre>
+      <p class="small">Java will generate a:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NullPointerException
+</code></pre>
+      <p class="small">because there is no object on which to execute the method.</p>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>A <code>NullPointerException</code> is one of the most common errors in Java. Whenever one occurs, ask: <em>which reference was <code>null</code>?</em></div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-references" tabindex="0">References in full: primitives, aliases, and null</span>
+  </div>
+  <aside class="notes">
+    <p>A reference variable can also contain the special value null. Writing BankAccount account equals null means that account currently refers to no object.</p>
+    <p>If we then write account.deposit(100), Java will generate a NullPointerException, because there is no object on which to execute the method. A NullPointerException is one of the most common errors in Java.</p>
+    <p>Whenever one occurs, ask: which reference was null? That question turns a scary stack trace into a mechanical search. Tracing Exercise 3 in Section 47 is a two-line version of exactly this bug.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Constructors and <code>this</code></h2>
+  <p class="part-sub">A better approach is often to initialize an object when it is created.</p>
+</section>
+
+<section>
+  <h2>Constructors</h2>
+  <div class="cols">
+    <div>
+      <p class="small">So far, we have been creating objects like this:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account = new BankAccount();
+
+account.balance = 1000;
+</code></pre>
+      <p class="small">A better approach is often to initialize an object when it is created. Java uses <strong>constructors</strong> for this purpose. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    double balance;
+
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Now we can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account = new BankAccount(1000);
+</code></pre>
+      <p class="small">The constructor initializes the object. Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+new BankAccount(1000)
+
+        |
+        v
+
++------------------+
+| BankAccount      |
+| balance = 1000   |
++------------------+
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>One statement now produces a fully formed object, rather than an empty one that still needs assembling.</div>
+  <aside class="notes">
+    <p>So far, we have been creating objects and then assigning to their fields afterwards — two steps, with a window in between during which the object exists but is not yet meaningful.</p>
+    <p>A better approach is often to initialize an object when it is created. Java uses constructors for this purpose. The BankAccount constructor takes an initialBalance parameter and assigns it to the balance field.</p>
+    <p>Now we can write BankAccount account equals new BankAccount(1000), and conceptually that expression produces a BankAccount box whose balance is already 1000. Compare that with the earlier two-step version, where the object briefly existed with a balance of 0.0.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Constructor Syntax</h2>
+  <p class="small">A constructor looks similar to a method, but there are two important differences. First, its name must match the class name. Second, it does not have a return type.</p>
+  <div class="cols">
+    <div>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+public BankAccount(double initialBalance) {
+    balance = initialBalance;
+}
+</code></pre>
+    </div>
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+public void BankAccount(double initialBalance) {
+    balance = initialBalance;
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>Adding <code>void</code> turns it into a normal method rather than a constructor.</div>
+  <details class="acc">
+    <summary>Why the compiler does not complain</summary>
+    <div class="acc-body">
+      <p>The incorrect version is perfectly legal Java — it is simply a method that happens to be named <code>BankAccount</code>. The class therefore still has its default no-argument constructor, and <code>new BankAccount(1000)</code> fails to compile for a reason that looks unrelated to the real mistake.</p>
+      <p>This is why the notes present the two versions side by side rather than describing the rule in prose.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A constructor looks similar to a method, but there are two important differences. First, its name must match the class name. Second, it does not have a return type.</p>
+    <p>The correct form is public BankAccount(double initialBalance). The incorrect form adds void, which turns it into a normal method rather than a constructor. Put the two on the board together — the difference is one word, and it changes everything.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Constructors with Multiple Parameters</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we create a <code>Student</code> class.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+
+    String name;
+    int id;
+    double gpa;
+
+    public Student(String studentName,
+                   int studentId,
+                   double studentGpa) {
+
+        name = studentName;
+        id = studentId;
+        gpa = studentGpa;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student s1 =
+    new Student("Maria", 12345, 3.8);
+
+Student s2 =
+    new Student("Ahmed", 98765, 3.4);
+</code></pre>
+      <p class="small">Each object is initialized with different values.</p>
+      <div class="box note"><span class="box-title">Note</span>The parameters are named <code>studentName</code>, <code>studentId</code> and <code>studentGpa</code> to keep them distinct from the fields. The next slides show the alternative — same names, plus <code>this</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we create a Student class with three fields — name, id and gpa — and a constructor taking three parameters. The constructor assigns each parameter to the corresponding field.</p>
+    <p>Creating s1 for Maria and s2 for Ahmed initializes each object with different values. One class, one constructor, two entirely separate objects.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Multiple Constructors</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A class can have more than one constructor. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    double balance;
+
+    public BankAccount() {
+        balance = 0;
+    }
+
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Now both of the following are legal:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account1 =
+    new BankAccount();
+
+BankAccount account2 =
+    new BankAccount(500);
+</code></pre>
+      <div class="def"><span class="term">Overloading:</span> two constructors may have the same name if they have different parameter lists.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-constructors" tabindex="0">Constructors from start to finish</span>
+  </div>
+  <aside class="notes">
+    <p>A class can have more than one constructor. Here BankAccount has a no-argument constructor that sets the balance to 0, and a one-argument constructor that sets it to the value supplied.</p>
+    <p>Now both new BankAccount() and new BankAccount(500) are legal. This is an example of overloading — two constructors may have the same name if they have different parameter lists. Students met overloading for methods in Week 4; this is the same rule applied to constructors.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>this</code> Keyword — the Problem</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+
+    String name;
+
+    public Student(String name) {
+        name = name;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">What does:</p>
+<pre><code class="language-java" data-trim data-noescape>
+name = name;
+</code></pre>
+      <p class="small">mean?</p>
+      <div class="box warn"><span class="box-title">Watch out</span>Both uses of <code>name</code> refer to the constructor parameter. The field does not get assigned.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we write a Student class whose constructor parameter is also called name, and whose body says name equals name. What does that mean?</p>
+    <p>Both uses of name refer to the constructor parameter. The field does not get assigned — the parameter is assigned to itself, which does nothing at all. The object is created with its name field still null, and the bug surfaces much later as a NullPointerException or an empty printout.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>this</code> Keyword — the Fix</h2>
+  <div class="cols">
+    <div>
+      <p class="small">To distinguish the object's field from the parameter, Java provides the keyword:</p>
+<pre><code class="language-java" data-trim data-noescape>
+this
+</code></pre>
+      <p class="small">We write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+
+    String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Here:</p>
+<pre><code class="language-text" data-trim data-noescape>
+this.name
+</code></pre>
+      <p class="small">means <em>the <code>name</code> field belonging to this object</em>, while:</p>
+<pre><code class="language-text" data-trim data-noescape>
+name
+</code></pre>
+      <p class="small">means <em>the constructor parameter named <code>name</code></em>.</p>
+      <div class="box good"><span class="box-title">Do this</span>This pattern is extremely common in Java.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>To distinguish the object's field from the parameter, Java provides the keyword this. We write this.name equals name.</p>
+    <p>Here this.name means the name field belonging to this object, while a bare name means the constructor parameter named name. The left side is the field, the right side is the parameter, and the assignment finally does what the programmer intended.</p>
+    <p>This pattern is extremely common in Java — you will see it in almost every constructor written in this course from now on. Section 43 lists the version without this as a common mistake.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>this</code> Refers to the Current Object</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    double balance;
+
+    public void deposit(double amount) {
+        this.balance += amount;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">When we call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account1.deposit(100);
+</code></pre>
+      <p class="small">inside the method:</p>
+<pre><code class="language-text" data-trim data-noescape>
+this
+</code></pre>
+      <p class="small">refers to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+account1
+</code></pre>
+    </div>
+    <div>
+      <p class="small">If we instead call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account2.deposit(100);
+</code></pre>
+      <p class="small">then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+this
+</code></pre>
+      <p class="small">refers to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+account2
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The same method can therefore operate on different objects.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-this" tabindex="0">The <code>this</code> keyword in full</span>
+  </div>
+  <details class="acc">
+    <summary>Reading the dot as "on behalf of"</summary>
+    <div class="acc-body">
+      <p>It helps to read <code>account2.deposit(100)</code> aloud as "run <code>deposit</code> with the argument 100, on behalf of <code>account2</code>". The receiver before the dot becomes <code>this</code> inside the method.</p>
+      <p>This is also the answer to the question raised in Part III: why <code>deposit</code> needs no <code>balance</code> parameter. The receiver supplies it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider a BankAccount whose deposit method writes this.balance plus equals amount. When we call account1.deposit(100), then inside the method this refers to account1. If we instead call account2.deposit(100), then this refers to account2. The same method can therefore operate on different objects.</p>
+    <p>Note that this deposit method does not strictly need the this keyword — there is no parameter named balance to shadow the field. Writing it anyway makes explicit what is always true: an instance method is running on behalf of one particular object.</p>
+    <p>There is one copy of the deposit code in the program, no matter how many accounts exist. What varies is which object the code is currently working on, and that is decided at the moment of the call by the receiver written before the dot.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Encapsulation and Access Control</h2>
+  <p class="part-sub">An object should control access to its own internal state.</p>
+</section>
+
+<section>
+  <h2>Encapsulation</h2>
+  <div class="cols">
+    <div>
+      <p class="small">So far, our fields have been accessible directly. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account.balance = -1000000;
+</code></pre>
+      <p class="small">Java allows this if the field is publicly accessible. But should a bank account allow arbitrary code to assign any value directly to its balance? Usually not.</p>
+    </div>
+    <div>
+      <div class="def"><span class="term">Encapsulation:</span> an object should control access to its own internal state.</div>
+      <p class="small">Instead of allowing arbitrary direct modification, the class provides methods that define valid operations.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Object-oriented programming encourages this principle everywhere, not only for bank accounts.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>So far, our fields have been accessible directly. Nothing stops a caller writing account.balance equals minus one million. Java allows this if the field is publicly accessible.</p>
+    <p>But should a bank account allow arbitrary code to assign any value directly to its balance? Usually not. Object-oriented programming encourages a principle called encapsulation: an object should control access to its own internal state.</p>
+    <p>Instead of allowing arbitrary direct modification, the class provides methods that define valid operations. That is the whole of Part VI in one sentence.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A <code>BankAccount</code> That Protects Itself</h2>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+
+    public void deposit(double amount) {
+        if (amount &gt; 0) {
+            balance += amount;
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount &gt; 0 &amp;&amp; amount &lt;= balance) {
+            balance -= amount;
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+}
+</code></pre>
+  <aside class="notes">
+    <p>Here is the same BankAccount with three changes. The field is private. The deposit method refuses a non-positive amount. The withdraw method refuses an amount that is not positive or that exceeds the balance. A getBalance method lets outside code read the balance without being able to write it.</p>
+    <p>Walk through what each guard prevents. Without the deposit guard, a negative deposit is a withdrawal in disguise. Without the withdraw guard, the balance can go negative — the invariant Section 59 says a bank account must maintain.</p>
+    <p>Notice that the class is not merely hiding a field. It is defining which changes are legal.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Using the Public Interface</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Outside code cannot now write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account.balance = -10000;
+</code></pre>
+      <p class="small">because <code>balance</code> is private.</p>
+    </div>
+    <div>
+      <p class="small">Instead, outside code must use the public interface:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account.deposit(500);
+
+account.withdraw(100);
+
+System.out.println(account.getBalance());
+</code></pre>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>Every path into the object's state now runs through a method that can check the change first.</div>
+  <details class="acc">
+    <summary>What "cannot" means here</summary>
+    <div class="acc-body">
+      <p>It is not that the assignment is discouraged — it does not compile. A <code>private</code> member can only be accessed from within the class itself, so the compiler rejects <code>account.balance = -10000;</code> in any other class.</p>
+      <p>Encapsulation is therefore enforced by the language, not merely by convention.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Outside code cannot now write account.balance equals minus ten thousand, because balance is private. Instead, outside code must use the public interface: deposit, withdraw, and getBalance.</p>
+    <p>The point is not that reading the balance is forbidden — getBalance exists precisely so it is available. The point is that every change goes through a method that gets to decide whether the change is legal.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Access Modifiers</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides access modifiers that control visibility. For now, the two most important are:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public
+private
+</code></pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>A <code>public</code> member can generally be accessed from outside the class.</li>
+        <li>A <code>private</code> member can only be accessed from within the class itself.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>The modifier applies to members — fields, methods and constructors — one at a time. A class commonly has private fields and public methods.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java provides access modifiers that control visibility. For now, the two most important are public and private.</p>
+    <p>A public member can generally be accessed from outside the class. A private member can only be accessed from within the class itself. That is the entire rule for this week; Java has two more levels, and we meet them later in the course.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>public</code> and <code>private</code> in Practice</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+
+    private String name;
+    private double gpa;
+
+    public String getName() {
+        return name;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">From another class:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student s = new Student();
+</code></pre>
+      <p class="small">This is legal:</p>
+<pre><code class="language-java" data-trim data-noescape>
+s.getName();
+</code></pre>
+      <p class="small">This is not:</p>
+<pre><code class="language-java" data-trim data-noescape>
+s.name
+</code></pre>
+      <p class="small">because <code>name</code> is private.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The Student class here has two private fields, name and gpa, and one public method, getName. From another class, we can create a Student and call s.getName(), because the method is public. We cannot write s.name, because the field is private.</p>
+    <p>Note what is missing: there is no getGpa method, so from outside this class the gpa is entirely invisible. That is a deliberate design choice, not an oversight — Section 24 argues that not every field needs to be exposed.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Make Fields Private?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider a <code>Person</code> class:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Person {
+
+    public int age;
+
+}
+</code></pre>
+      <p class="small">Another part of the program can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+person.age = -37;
+</code></pre>
+      <p class="small">That value makes no sense.</p>
+      <div class="box pitfall"><span class="box-title">Common error</span>A public field cannot refuse a value. Once it is public, every rule about what it may contain is somebody else's problem.</div>
+    </div>
+    <div>
+      <p class="small">If the field is private, we can control how changes happen.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Person {
+
+    private int age;
+
+    public void setAge(int age) {
+        if (age &gt;= 0) {
+            this.age = age;
+        }
+    }
+
+}
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Now the class can enforce its rules. It protects its internal state from invalid changes.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What happens to a rejected value?</summary>
+    <div class="acc-body">
+      <p>In this version, a negative age is simply ignored — the <code>if</code> has no <code>else</code>, so the field keeps its previous value and the caller is not told. That is the same strategy the <code>BankAccount</code> uses for a bad deposit.</p>
+      <p>The <code>withdraw</code> method in Section 25 does better: it returns <code>boolean</code>, so the caller can find out whether the operation actually happened.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider a Person class with a public int age. Another part of the program can write person.age equals minus thirty-seven. That value makes no sense — but nothing in the class can prevent it, because the field is public.</p>
+    <p>If the field is private, we can control how changes happen. Here Person has a private int age and a setAge method that assigns only when the value is at least zero. Now the class can enforce its rules. This is one benefit of encapsulation: the class protects its internal state from invalid changes.</p>
+    <p>Point out the this.age on the left of the assignment. The parameter and the field are both called age, so without this the method would assign the parameter to itself — exactly the mistake from Part V.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Getters</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Getter:</span> a method that returns the value of a private field.</div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public String getName() {
+    return name;
+}
+</code></pre>
+      <p class="small">Usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(student.getName());
+</code></pre>
+    </div>
+    <div>
+      <p class="small">A common naming convention is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+field           getter
+
+name            getName()
+balance         getBalance()
+age             getAge()
+temperature     getTemperature()
+</code></pre>
+      <p class="small">For boolean fields, methods are often named:</p>
+<pre><code class="language-java" data-trim data-noescape>
+isActive()
+isEmpty()
+isValid()
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A method that returns the value of a private field is commonly called a getter. The convention is the word get followed by the field name in camel case: name gives getName, balance gives getBalance, age gives getAge, temperature gives getTemperature.</p>
+    <p>For boolean fields, methods are often named with is rather than get — isActive, isEmpty, isValid. The Book class in Section 48 uses isCheckedOut for exactly this reason.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Setters — and Whether You Need Them</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Setter:</span> a method that modifies a private field.</div>
+<pre><code class="language-java" data-trim data-noescape>
+public void setName(String name) {
+    this.name = name;
+}
+</code></pre>
+      <p class="small">However, not every field should automatically have a setter. For example, consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+private double balance;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Providing:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public void setBalance(double balance)
+</code></pre>
+      <p class="small">would allow outside code to arbitrarily replace the balance. It might be better to expose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+deposit()
+withdraw()
+</code></pre>
+      <p class="small">because those operations describe the behavior of a bank account more accurately.</p>
+    </div>
+  </div>
+  <div class="box warn"><span class="box-title">A key design principle</span>Do not automatically write getters and setters for every field. Instead ask: <em>what operations should users of this class actually be allowed to perform?</em></div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-encapsulation" tabindex="0">Encapsulation in full</span>
+    <span class="mbtn" data-modal="m6-getters-setters" tabindex="0">Getters and setters, and when not to write them</span>
+  </div>
+  <aside class="notes">
+    <p>A method that modifies a private field is often called a setter. But not every field should automatically have a setter. Providing setBalance would allow outside code to arbitrarily replace the balance — which is exactly what making the field private was supposed to prevent.</p>
+    <p>It might be better to expose deposit and withdraw, because those operations describe the behavior of a bank account more accurately.</p>
+    <p>A key design principle: do not automatically write getters and setters for every field. Instead ask what operations users of this class should actually be allowed to perform. Section 44 returns to this as one of the six common mistakes.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Interface, Abstraction, Collaboration</h2>
+  <p class="part-sub">What other code is allowed to do, versus how the class accomplishes its work.</p>
+</section>
+
+<section>
+  <h2>Example: A Complete <code>BankAccount</code> Class</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The finished class brings together everything from Parts V and VI:</p>
+      <ul class="small tight">
+        <li>two private fields, <code>owner</code> and <code>balance</code>;</li>
+        <li>a constructor taking both, using <code>this</code>;</li>
+        <li>a guard so a negative initial balance becomes <code>0</code>;</li>
+        <li>two getters;</li>
+        <li><code>deposit</code>, which ignores non-positive amounts;</li>
+        <li><code>withdraw</code>, which returns <code>boolean</code>.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box good"><span class="box-title">Do this</span><code>withdraw</code> returns <code>true</code> when the money moved and <code>false</code> when it did not, so the caller can react instead of guessing.</div>
+      <p class="small">Compare it with the first <code>BankAccount</code> in Part III, which had a public field and no checks at all.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-bankaccount-complete" tabindex="0">The complete <code>BankAccount</code> class</span>
+  </div>
+  <aside class="notes">
+    <p>Section 25 assembles everything so far into one class. Two private fields, a two-parameter constructor that uses this and guards against a negative opening balance, two getters, a deposit that ignores non-positive amounts, and a withdraw that returns a boolean saying whether the withdrawal succeeded.</p>
+    <p>Open the modal and read it top to bottom in class. Ask at each method: what rule is this method protecting, and what would go wrong without it?</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Using the Class</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A separate program can use the class. <code>BankDemo</code> opens an account for Alice with 1000, deposits 250, attempts to withdraw 400, and prints the owner, the balance, and whether the withdrawal succeeded.</p>
+      <div class="box note"><span class="box-title">Note</span><code>BankDemo</code> never mentions <code>balance</code>. It cannot — the field is private. Everything it does goes through the four public methods.</div>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice
+850.0
+Withdrawal successful: true
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-bankdemo" tabindex="0">The <code>BankDemo</code> program in full</span>
+  </div>
+  <details class="acc">
+    <summary>Where 850.0 comes from</summary>
+    <div class="acc-body">
+      <p>The account opens with 1000. The deposit of 250 passes the positive check, giving 1250. The withdrawal of 400 is positive and does not exceed 1250, so it succeeds and returns <code>true</code>, leaving 850.</p>
+      <p>Had the withdrawal been 4000, <code>withdraw</code> would have returned <code>false</code>, the balance would still read 1250.0, and the last line would print <code>Withdrawal successful: false</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A separate program can use the class. BankDemo creates an account for Alice with 1000, deposits 250, withdraws 400, and prints the owner, the balance, and the boolean result of the withdrawal. The output is Alice, 850.0, and Withdrawal successful: true.</p>
+    <p>The important observation is what BankDemo does not do. It never touches balance directly, because it cannot. Every interaction goes through the public methods, which is precisely the arrangement encapsulation was introduced to produce.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Public Interface vs. Internal Implementation</h2>
+  <p class="small">A useful way to think about a class is to separate two ideas.</p>
+  <div class="cols">
+    <div>
+      <h4>Public interface</h4>
+      <p class="small">What other code is allowed to do. For <code>BankAccount</code>:</p>
+<pre><code class="language-java" data-trim data-noescape>
+getOwner()
+getBalance()
+deposit()
+withdraw()
+</code></pre>
+      <p class="small">These methods define how other code interacts with the object.</p>
+    </div>
+    <div>
+      <h4>Internal implementation</h4>
+      <p class="small">How the class accomplishes its work. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+private String owner;
+private double balance;
+</code></pre>
+      <p class="small">Outside code should not need to know the details.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>If the internal implementation changes but the public interface stays the same, code using the class may not need to change.</div>
+  <aside class="notes">
+    <p>A useful way to think about a class is to separate two ideas. The public interface describes what other code is allowed to do — for BankAccount, that is getOwner, getBalance, deposit and withdraw. The internal implementation describes how the class accomplishes its work — here, two private fields.</p>
+    <p>This separation is extremely important in software engineering. If the internal implementation changes but the public interface stays the same, code using the class may not need to change. That is the property that lets large programs be maintained at all.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Abstraction</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Abstraction:</span> focusing on what something does without requiring the user to understand every implementation detail.</div>
+      <p class="small">You already use abstraction frequently. Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String text = "hello";
+
+text.toUpperCase();
+</code></pre>
+      <p class="small">You know what <code>toUpperCase()</code> does. You probably do not know exactly how Java's <code>String</code> class implements the operation internally. You do not need to know.</p>
+    </div>
+    <div>
+      <p class="small">Similarly, when someone uses:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account.withdraw(100);
+</code></pre>
+      <p class="small">they should not need to understand every detail of how the account stores its balance.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The method provides an abstraction. The class provides a useful abstraction.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Encapsulation is closely related to another concept: abstraction. Abstraction means focusing on what something does without requiring the user to understand every implementation detail.</p>
+    <p>You already use abstraction frequently. You know what toUpperCase does; you probably do not know how Java's String class implements it, and you do not need to know. The method provides an abstraction.</p>
+    <p>Similarly, when someone calls account.withdraw(100), they should not need to understand every detail of how the account stores its balance. The class provides a useful abstraction.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Objects Interacting with Objects</h2>
+  <p class="small">Real object-oriented programs rarely contain only one type of object. Objects interact. Consider a <code>Course</code> class that contains students.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Course {
+
+    private String courseCode;
+    private Student[] students;
+    private int studentCount;
+
+    public Course(String courseCode,
+                  int capacity) {
+
+        this.courseCode = courseCode;
+        students = new Student[capacity];
+        studentCount = 0;
+    }
+
+    public void addStudent(Student student) {
+
+        if (studentCount &lt; students.length) {
+
+            students[studentCount] = student;
+            studentCount++;
+        }
+    }
+
+}
+</code></pre>
+  <aside class="notes">
+    <p>Real object-oriented programs rarely contain only one type of object. Objects interact. Consider a Course class that contains students: it has a course code, an array of Student references, and a count of how many are enrolled.</p>
+    <p>The constructor allocates the array to the requested capacity and sets the count to zero. The addStudent method checks that there is room before storing the reference and incrementing the count — a guard protecting the invariant that enrollment never exceeds capacity.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Field Can Hold Other Objects</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Notice:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student[] students;
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>A field can itself contain references to other objects.</div>
+      <p class="small">Now the <code>Course</code> object contains references to <code>Student</code> objects. This is one way that complex programs are constructed from interacting objects.</p>
+    </div>
+    <div>
+      <p class="small">We can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student s1 =
+    new Student("Alice", 101, 3.7);
+
+Student s2 =
+    new Student("Bob", 102, 3.4);
+
+Course course =
+    new Course("CSC500", 30);
+
+course.addStudent(s1);
+course.addStudent(s2);
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-course-collab" tabindex="0">Collaborating objects and object diagrams</span>
+  </div>
+  <aside class="notes">
+    <p>Notice the field declaration Student array students. A field can itself contain references to other objects — that is how object graphs are built.</p>
+    <p>Creating two students and a course, then calling addStudent twice, means the Course object now contains references to Student objects. No copies were made: the same two Student objects are also reachable through s1 and s2.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Object Diagrams</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Drawing object diagrams is useful when learning object-oriented programming. Suppose we have:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student alice =
+    new Student("Alice", 101, 3.8);
+
+Course course =
+    new Course("CSC500", 30);
+
+course.addStudent(alice);
+</code></pre>
+      <p class="small">Drawing diagrams like this helps clarify references.</p>
+    </div>
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+alice
+  |
+  v
++-------------------+
+| Student           |
+| name = "Alice"    |
+| id = 101          |
+| gpa = 3.8         |
++-------------------+
+        ^
+        |
+        |
++-------------------+
+| Course            |
+| code = "CSC500"   |
+| students[0] ------+
++-------------------+
+        ^
+        |
+      course
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Reading the two arrows into the <code>Student</code> box</summary>
+    <div class="acc-body">
+      <p>One arrow comes from the local variable <code>alice</code>. The other comes from <code>students[0]</code> inside the <code>Course</code> object. Both point at the same <code>Student</code> object.</p>
+      <p>That means a change made through <code>alice</code> is visible through the course, and vice versa — the aliasing behaviour of Part IV, now happening between two objects rather than two local variables.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Drawing object diagrams is useful when learning object-oriented programming. Create a Student for Alice and a Course for CSC500, then add Alice to the course.</p>
+    <p>The diagram shows the Student box with two arrows arriving at it: one from the variable alice, one from students[0] inside the Course object. Drawing diagrams like this helps clarify references — and it is the same picture that explains reference assignment, equality, and the null reference.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Identity, Equality, and Lifetime</h2>
+  <p class="part-sub">Even if their fields contain identical values, they are different objects.</p>
+</section>
+
+<section>
+  <h2>Equality and Objects</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount a =
+    new BankAccount("Alice", 100);
+
+BankAccount b =
+    new BankAccount("Alice", 100);
+</code></pre>
+      <p class="small">Are <code>a</code> and <code>b</code> the same object? <strong>No.</strong> Two separate objects were created.</p>
+    </div>
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a ---&gt; BankAccount object #1
+
+b ---&gt; BankAccount object #2
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Even if their fields contain identical values, they are different objects.</div>
+    </div>
+    <div>
+      <p class="small">Now consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount c = a;
+</code></pre>
+      <p class="small">Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a ---&gt; BankAccount object #1
+          ^
+          |
+c --------+
+</code></pre>
+      <p class="small"><code>a</code> and <code>c</code> refer to the same object. This distinction becomes important when comparing objects.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Create two BankAccounts, both for Alice with 100. Are a and b the same object? No — two separate objects were created, one per new. Even if their fields contain identical values, they are different objects. Identical content and identical identity are two different questions, and Java's == answers only the second one.</p>
+    <p>Now write BankAccount c equals a. No new appeared, so no object was created. a and c refer to the same object.</p>
+    <p>Put the two diagrams side by side: a and b point at two different boxes; a and c point at one box. Counting the arrows and counting the boxes are different operations, and the whole of Part VIII depends on keeping them apart.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>==</code> Operator</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">For primitive types:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 5;
+int y = 5;
+
+System.out.println(x == y);
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+true
+</code></pre>
+    </div>
+    <div>
+      <div class="def"><span class="term">For object references:</span> <code>==</code> asks whether the references point to the exact same object.</div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount a =
+    new BankAccount("Alice", 100);
+
+BankAccount b =
+    new BankAccount("Alice", 100);
+
+System.out.println(a == b);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+false
+</code></pre>
+      <p class="small">because two separate objects were created.</p>
+      <div class="box pitfall"><span class="box-title">Common error</span>Students expect <code>true</code> here because the fields match. <code>==</code> never looks at the fields.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>For primitive types, == compares values. int x equals 5 and int y equals 5, so x == y prints true.</p>
+    <p>For object references, == asks whether the references point to the exact same object. That is a different question. Two accounts are created, both for Alice with 100, and a == b prints false — because two separate objects were created.</p>
+    <p>This is the result that surprises people. The two objects are indistinguishable by content and still not equal, because == is asking about identity, not content.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>When <code>==</code> Is True</h2>
+  <div class="cols">
+    <div>
+      <p class="small">But:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount c = a;
+
+System.out.println(a == c);
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+true
+</code></pre>
+      <p class="small">because both references point to the same object.</p>
+    </div>
+    <div>
+      <div class="box note"><span class="box-title">Note</span>Later we will discuss more sophisticated approaches for comparing object contents.</div>
+      <p class="small">For this week, the rule is simple and mechanical: <code>==</code> on references is true exactly when the two arrows end in the same box.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-equality" tabindex="0">Identity and equality in full</span>
+  </div>
+  <aside class="notes">
+    <p>With BankAccount c equals a, the comparison a == c prints true, because both references point to the same object.</p>
+    <p>Later we will discuss more sophisticated approaches for comparing object contents — the equals method — but that is a Week 8 topic. For now, == on references answers exactly one question: same box or not.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Strings Are Objects Too</h2>
+  <div class="cols">
+    <div>
+      <p class="small">You have already been working with objects. A <code>String</code> is an object.</p>
+<pre><code class="language-java" data-trim data-noescape>
+String name = "Alice";
+</code></pre>
+      <p class="small">We call methods on it:</p>
+<pre><code class="language-java" data-trim data-noescape>
+name.length();
+
+name.toUpperCase();
+
+name.substring(1, 3);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The expression:</p>
+<pre><code class="language-java" data-trim data-noescape>
+name.length()
+</code></pre>
+      <p class="small">has the same general object-method structure as:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account.getBalance()
+</code></pre>
+      <p class="small">or:</p>
+<pre><code class="language-java" data-trim data-noescape>
+rectangle.area()
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The difference is that Java provides the <code>String</code> class for us, while we write classes such as <code>BankAccount</code> ourselves.</div>
+  <aside class="notes">
+    <p>You have already been working with objects. A String is an object: String name equals "Alice" creates one, and name.length(), name.toUpperCase() and name.substring(1, 3) are all method calls on it.</p>
+    <p>The expression name.length() has the same general object-method structure as account.getBalance() or rectangle.area() — receiver, dot, method name, arguments. The only difference is that Java provides the String class for us, while we write classes such as BankAccount ourselves.</p>
+    <p>This is a good moment to reassure students who feel object-oriented programming is new. They have been calling instance methods since Week 1.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Instance Variables vs. Local Variables</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Counter {
+
+    private int count;
+
+    public void increment() {
+
+        int amount = 1;
+
+        count = count + amount;
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">There are two kinds of variables here.</p>
+      <ul class="small tight">
+        <li><code>count</code> is a field, or instance variable. It belongs to the object.</li>
+        <li><code>amount</code> is a local variable. It exists only while the method is running.</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>When the method finishes, the local variable disappears. The object's fields remain as long as the object exists.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The same distinction, drawn</summary>
+    <div class="acc-body">
+      <p>Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Counter object
++----------------+
+| count = 5      |
++----------------+
+
+increment() call
++----------------+
+| amount = 1     |
++----------------+
+</code></pre>
+      <p>The <code>Counter</code> box persists between calls; the <code>increment()</code> box appears when the call starts and vanishes when it returns.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The Counter class has a private field count and a method increment that declares a local variable amount, sets it to 1, and adds it to count.</p>
+    <p>There are two kinds of variables here. count is a field, or instance variable — it belongs to the object. amount is a local variable — it exists only while the method is running. When the method finishes, the local variable disappears. The object's fields remain as long as the object exists.</p>
+    <p>This is the same lifetime distinction students met for method parameters in Week 4, now with a longer-lived partner to compare against.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Object Lifetime</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Objects are created using <code>new</code>. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account =
+    new BankAccount("Alice", 100);
+</code></pre>
+      <p class="small">Eventually, an object may no longer have any references pointing to it. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+account = null;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">If no other reference points to the object, the program can no longer access it.</p>
+      <div class="def"><span class="term">Garbage collection:</span> a system that automatically reclaims memory occupied by unreachable objects.</div>
+      <p class="small">Unlike languages such as C and C++, Java programmers generally do not manually free object memory.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">For this course</span>Objects remain accessible while references to them exist.</div>
+  <aside class="notes">
+    <p>Objects are created using new. Eventually, an object may no longer have any references pointing to it — for instance after account equals null. If no other reference points to the object, the program can no longer access it.</p>
+    <p>Java contains a system called garbage collection that automatically reclaims memory occupied by unreachable objects. Unlike languages such as C and C plus plus, Java programmers generally do not manually free object memory.</p>
+    <p>For this course, the important idea is that objects remain accessible while references to them exist. Note the wording: it is the references that keep the object alive, not the variable that originally created it.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Designing a Class</h2>
+  <p class="part-sub">A well-designed class makes invalid states difficult or impossible to create.</p>
+</section>
+
+<section>
+  <h2>Five Questions to Ask</h2>
+  <div class="cols">
+    <div>
+      <ol class="small">
+        <li>What entity does the class represent?</li>
+        <li>What state does each object need?</li>
+        <li>What behavior should the object provide?</li>
+        <li>Which information should be private?</li>
+        <li>What rules must the class enforce?</li>
+      </ol>
+      <p class="small">Question 4 has a short answer: <strong>usually the fields</strong>.</p>
+    </div>
+    <div>
+      <p class="small">Examples of entities a class might represent:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Student
+Book
+Employee
+Rectangle
+BankAccount
+Course
+Appointment
+GameCharacter
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-design-questions" tabindex="0">The five design questions in full</span>
+  </div>
+  <aside class="notes">
+    <p>When designing a class, ask several questions. What entity does the class represent? What state does each object need? What behavior should the object provide? Which information should be private? What rules must the class enforce?</p>
+    <p>The list of example entities — Student, Book, Employee, Rectangle, BankAccount, Course, Appointment, GameCharacter — is worth reading out. Every one of them is a noun that has both data and things it can do. That pairing is the test for whether something deserves to be a class.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>State and Behavior for a <code>Book</code></h2>
+  <div class="cols">
+    <div>
+      <h4>Question 2: what state?</h4>
+      <p class="small">For a book:</p>
+<pre><code class="language-text" data-trim data-noescape>
+title
+author
+ISBN
+numberOfPages
+checkedOut
+</code></pre>
+    </div>
+    <div>
+      <h4>Question 3: what behavior?</h4>
+      <p class="small">For a book:</p>
+<pre><code class="language-text" data-trim data-noescape>
+checkout()
+returnBook()
+isCheckedOut()
+getTitle()
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Question 4</span>Which information should be private? Usually the fields.</div>
+  <details class="acc">
+    <summary>Why <code>checkout()</code> and not <code>setCheckedOut()</code></summary>
+    <div class="acc-body">
+      <p>The behavior list names actions a library performs — checking a book out, returning it — rather than fields to overwrite. Section 48 builds exactly this class and explicitly declines to provide <code>setCheckedOut()</code>, because <code>checkout()</code> and <code>returnBook()</code> are a more expressive design.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>For a book, the state might be title, author, ISBN, numberOfPages and checkedOut. The behavior might be checkout, returnBook, isCheckedOut and getTitle.</p>
+    <p>Notice that the behaviour list is shorter than a getter for every field would be, and that it contains two verbs that are not field assignments at all. Question four — which information should be private? — has the short answer: usually the fields.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Question 5: What Rules Must the Class Enforce?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A bank balance should not become negative.
+
+A person's age should not be negative.
+
+A course enrollment should not exceed capacity.
+
+A rectangle's width should not be negative.
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>A well-designed class makes invalid states difficult or impossible to create.</div>
+      <p class="small">Each rule points at a guard somewhere in the class: an <code>if</code> in a constructor, a check inside a setter, or a method that simply refuses.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>What rules must the class enforce? A bank balance should not become negative. A person's age should not be negative. A course enrollment should not exceed capacity. A rectangle's width should not be negative.</p>
+    <p>A well-designed class makes invalid states difficult or impossible to create. Section 59 gives these rules a name — invariants — and we return to them at the end of Part X.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example Design: <code>Rectangle</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want a rectangle abstraction. Possible state:</p>
+<pre><code class="language-text" data-trim data-noescape>
+width
+height
+</code></pre>
+      <p class="small">Possible behavior:</p>
+<pre><code class="language-text" data-trim data-noescape>
+area
+perimeter
+resize
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The implementation follows the five questions directly: two private fields, a constructor that refuses negative dimensions, two getters, and two computed values.</p>
+      <div class="box note"><span class="box-title">Note</span><code>getArea()</code> and <code>getPerimeter()</code> are not getters for fields. They compute their answers from the state each time they are called.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-rectangle" tabindex="0">The <code>Rectangle</code> implementation</span>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want a rectangle abstraction. Possible state: width and height. Possible behavior: area, perimeter, resize.</p>
+    <p>The implementation in the modal has private width and height, a constructor that assigns each only when it is at least zero, getWidth and getHeight, getArea returning width times height, and getPerimeter returning two times width plus two times height.</p>
+    <p>Point out that getArea stores nothing. It is derived information, computed on demand — the same design decision Temperature makes later in this part.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>Rectangle</code> in Use</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Rectangle room =
+    new Rectangle(12, 10);
+
+System.out.println(
+    room.getArea()
+);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+120.0
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>The caller never sets a field. It hands two numbers to the constructor and then asks the object questions.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Creating a Rectangle called room with 12 and 10 and printing room.getArea() produces 120.0.</p>
+    <p>Compare this with the very first Rectangle in Part II, where the caller assigned r.width and r.height directly. Same class name, same fields, entirely different contract: the object now decides what it will accept.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example Design: <code>Counter</code></h2>
+  <p class="small">A simple counter is useful for understanding state.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Counter {
+
+    private int count;
+
+    public Counter() {
+        count = 0;
+    }
+
+    public void increment() {
+        count++;
+    }
+
+    public void decrement() {
+        count--;
+    }
+
+    public void reset() {
+        count = 0;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+}
+</code></pre>
+  <aside class="notes">
+    <p>A simple counter is useful for understanding state. It has one private field, a no-argument constructor that sets it to zero, and four methods: increment, decrement, reset, and getCount.</p>
+    <p>This class has no parameters to validate and no interesting arithmetic. What it does have is a clear public interface — four verbs and one question — over a field nobody outside can touch.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>Counter</code> in Use</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Counter counter =
+    new Counter();
+
+counter.increment();
+counter.increment();
+counter.increment();
+
+System.out.println(
+    counter.getCount()
+);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Notice that every call changes the same object's state.</div>
+      <p class="small">Three calls to <code>increment()</code>, one object, one field that carries the total from call to call.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why this matters for the tracing exercises</summary>
+    <div class="acc-body">
+      <p>Because the state persists between calls, the answer to "what does this print?" depends on how many calls happened and on <em>which object</em> they happened to.</p>
+      <p>Tracing Exercises 1 and 2 in Part XII use a <code>Counter</code> for exactly this reason: the same three lines of calling code give 7 in one exercise and 5 in the other, purely because of how many objects exist.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Create a counter, call increment three times, and print getCount(). The output is 3.</p>
+    <p>Notice that every call changes the same object's state. Nothing is returned by increment and nothing is passed to it; the effect is entirely a change to the field of the receiver.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example Design: <code>Temperature</code></h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public class Temperature {
+
+    private double celsius;
+
+    public Temperature(double celsius) {
+        this.celsius = celsius;
+    }
+
+    public double getCelsius() {
+        return celsius;
+    }
+
+    public double getFahrenheit() {
+        return celsius * 9.0 / 5.0 + 32;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This example illustrates an important design concept. We do not necessarily need fields for both Celsius and Fahrenheit.</p>
+      <div class="box key"><span class="box-title">Key idea</span>If Fahrenheit can be calculated from Celsius, storing both could create inconsistencies.</div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+celsius = 0
+fahrenheit = 100
+</code></pre>
+      <p class="small">would be contradictory.</p>
+      <div class="box good"><span class="box-title">Do this</span>Store the essential state and calculate derived information when needed.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Two fields, two places to go wrong</summary>
+    <div class="acc-body">
+      <p>If a class stored both <code>celsius</code> and <code>fahrenheit</code>, every method that changed one would have to remember to change the other. Miss one path and the object holds a state that cannot physically exist.</p>
+      <p><code>Rectangle.getArea()</code> makes the same choice: area is computed from width and height rather than stored, so it can never disagree with them.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The Temperature class stores one private double, celsius. Its constructor takes a celsius value and assigns it with this. getCelsius returns the field; getFahrenheit returns celsius times nine over five plus thirty-two.</p>
+    <p>This example illustrates an important design concept. We do not necessarily need fields for both Celsius and Fahrenheit. If we stored both, a state such as celsius equals 0 with fahrenheit equals 100 would be contradictory — and nothing about having two fields prevents it.</p>
+    <p>Instead, store the essential state and calculate derived information when needed. This is one of the most transferable design rules in the week, and the suggested lab applies it again to GPA: do not store GPA as a separate field unless necessary.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Thinking in Objects</h2>
+  <p class="part-sub">A class should have one clear conceptual responsibility.</p>
+</section>
+
+<section>
+  <h2>Protect Invariants</h2>
+  <div class="def"><span class="term">Invariant:</span> a condition that should always remain true for an object.</div>
+  <div class="cols-3">
+    <div>
+      <p class="small">For a bank account:</p>
+<pre><code class="language-text" data-trim data-noescape>
+balance &gt;= 0
+</code></pre>
+      <p class="small">For a course:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0 &lt;= enrollment &lt;= capacity
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For a rectangle:</p>
+<pre><code class="language-text" data-trim data-noescape>
+width &gt;= 0
+
+height &gt;= 0
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For an inventory item:</p>
+<pre><code class="language-text" data-trim data-noescape>
+quantity &gt;= 0
+
+price &gt;= 0
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>One purpose of encapsulation is to protect these invariants. If external code can directly modify every field, maintaining invariants becomes much harder.</div>
+  <aside class="notes">
+    <p>An invariant is a condition that should always remain true for an object. For a bank account, the balance should be at least zero. For a course, enrollment should be between zero and capacity. For a rectangle, width and height should both be non-negative. For an inventory item, quantity and price should both be non-negative.</p>
+    <p>One purpose of encapsulation is to protect these invariants. If external code can directly modify every field, maintaining invariants becomes much harder — every place in the program that touches the field becomes a place the rule can be broken.</p>
+    <p>This slide is the answer to a student who asks why private fields are worth the trouble.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>From Procedural to Object-Oriented Thinking</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Earlier in the course, you might have written:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double calculateArea(
+    double width,
+    double height) {
+
+    return width * height;
+}
+</code></pre>
+      <p class="small">This is procedural thinking. The operation receives all required information through parameters.</p>
+    </div>
+    <div>
+      <p class="small">With objects:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Rectangle rect =
+    new Rectangle(5, 3);
+
+double area =
+    rect.getArea();
+</code></pre>
+      <p class="small">The data belongs to the object. The object's method operates on its own state.</p>
+    </div>
+    <div>
+      <p class="small">Neither approach is universally correct. Object-oriented programming becomes particularly useful when:</p>
+      <ul class="small tight">
+        <li>many related values belong together,</li>
+        <li>the program models entities,</li>
+        <li>state changes over time,</li>
+        <li>operations depend on that state,</li>
+        <li>programs become large,</li>
+        <li>multiple components interact.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Every item on that list was a symptom of the parallel-array problem in Part I: four arrays and a shared index is many related values belonging together, modelling an entity, with state that changes over time.</div>
+  <aside class="notes">
+    <p>Earlier in the course, you might have written a calculateArea method taking width and height as parameters. This is procedural thinking: the operation receives all required information through parameters.</p>
+    <p>With objects, you create a Rectangle with 5 and 3 and ask it for its area. The data belongs to the object; the object's method operates on its own state. Neither approach is universally correct — say that plainly, because students who have just been taught methods in Week 4 should not conclude that they were taught something wrong.</p>
+    <p>Object-oriented programming becomes particularly useful when many related values belong together, when the program models entities, when state changes over time, when operations depend on that state, when programs become large, and when multiple components interact. Read the list against the student-records example from Part I: it matches on every point, which is why that example was chosen to open the week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reading Object-Oriented Code</h2>
+  <p class="small">When you encounter an unfamiliar class, ask:</p>
+  <div class="cols">
+    <ol class="small">
+      <li>What does one object represent?</li>
+      <li>What fields define its state?</li>
+      <li>What constructors can create it?</li>
+      <li>What public methods can outside code call?</li>
+    </ol>
+    <ol class="small" start="5">
+      <li>What private details are hidden?</li>
+      <li>Which methods modify object state?</li>
+      <li>Which methods simply return information?</li>
+    </ol>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>This approach will become increasingly important as you begin reading larger Java programs.</div>
+  <details class="acc">
+    <summary>Applying the seven questions to <code>BankAccount</code></summary>
+    <div class="acc-body">
+      <p>One object represents one account. Its state is an owner and a balance, both private. One constructor creates it, taking an owner and an initial balance. Outside code may call <code>getOwner</code>, <code>getBalance</code>, <code>deposit</code> and <code>withdraw</code>.</p>
+      <p><code>deposit</code> and <code>withdraw</code> modify state; <code>getOwner</code> and <code>getBalance</code> simply return information. Seven questions, one class, no guessing.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>When you encounter an unfamiliar class, ask seven questions: what does one object represent, what fields define its state, what constructors can create it, what public methods can outside code call, what private details are hidden, which methods modify object state, and which methods simply return information.</p>
+    <p>This approach will become increasingly important as you begin reading larger Java programs. It is also a good template for the reading students do in Weeks 7 and 8, when classes start to relate to one another.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Multi-Class Programs</h2>
+  <div class="cols">
+    <div>
+      <p class="small">In Java, larger programs usually contain many classes. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Library
+Book
+Patron
+Loan
+LibraryApplication
+</code></pre>
+      <p class="small">Each class has a responsibility.</p>
+      <div class="def"><span class="term">A useful design principle:</span> a class should have one clear conceptual responsibility.</div>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Book
+    represents one book
+
+Patron
+    represents one library patron
+
+Loan
+    represents a borrowing transaction
+
+Library
+    manages collections of books and patrons
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>The goal is not simply to create many classes. The goal is to organize the program into meaningful abstractions.</div>
+  <aside class="notes">
+    <p>In Java, larger programs usually contain many classes — a library application might have Library, Book, Patron, Loan and LibraryApplication. Each class has a responsibility.</p>
+    <p>A useful design principle: a class should have one clear conceptual responsibility. Book represents one book, Patron represents one library patron, Loan represents a borrowing transaction, and Library manages collections of books and patrons.</p>
+    <p>The goal is not simply to create many classes. The goal is to organize the program into meaningful abstractions.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Class Responsibility</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we write a program for a university. Possible classes include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Student
+Course
+Instructor
+Department
+Enrollment
+</code></pre>
+      <p class="small">Ask where each responsibility belongs.</p>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+      <blockquote class="small">Who should know a student's GPA?</blockquote>
+      <p class="small">Probably the <code>Student</code> object.</p>
+      <blockquote class="small">Who should know the course capacity?</blockquote>
+      <p class="small">Probably the <code>Course</code> object.</p>
+      <blockquote class="small">Who should determine whether a course is full?</blockquote>
+      <p class="small">Probably the <code>Course</code> object.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>This type of reasoning becomes increasingly important as programs grow.</div>
+  <aside class="notes">
+    <p>Suppose we write a program for a university. Possible classes include Student, Course, Instructor, Department and Enrollment. Ask where each responsibility belongs.</p>
+    <p>Who should know a student's GPA? Probably the Student object. Who should know the course capacity? Probably the Course object. Who should determine whether a course is full? Probably the Course object — it is the one holding both the capacity and the enrollment, so it is the only one that can answer without being told.</p>
+    <p>This type of reasoning becomes increasingly important as programs grow, and it is the main subject of Week 7.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XI</p>
+  <h2>Common Mistakes</h2>
+  <p class="part-sub">Six errors that account for most of the trouble in a first object-oriented program.</p>
+</section>
+
+<section>
+  <h2>Forgetting <code>new</code></h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account;
+
+account.deposit(100);
+</code></pre>
+      <p class="small">The variable has been declared, but no object has been created.</p>
+    </div>
+    <div>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+BankAccount account =
+    new BankAccount("Alice", 0);
+
+account.deposit(100);
+</code></pre>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>Declaring a reference variable is not creating an object. Until <code>new</code> runs, there is nothing at the end of the arrow.</div>
+  <details class="acc">
+    <summary>What the program actually does</summary>
+    <div class="acc-body">
+      <p>A declared-but-unassigned local variable will not compile at all if it is used, and a field left unassigned holds <code>null</code> — which produces the <code>NullPointerException</code> from Part IV as soon as a method is called on it.</p>
+      <p>Either way the fix is the same: create the object with <code>new</code> before using it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The incorrect version declares BankAccount account and then immediately calls account.deposit(100). The variable has been declared, but no object has been created.</p>
+    <p>The correct version creates the object first, with new BankAccount for Alice and 0, and only then deposits. This is the most literal possible illustration of the two-boxes picture from Part IV: the first version drew the variable box and forgot the object box.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Directly Exposing Fields</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Less desirable</span>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+
+    public String name;
+    public double gpa;
+
+}
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">Better</span>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+
+    private String name;
+    private double gpa;
+
+    public String getName() {
+        return name;
+    }
+
+    public double getGpa() {
+        return gpa;
+    }
+
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>Private fields give the class control over its internal state.</div>
+  <aside class="notes">
+    <p>The less desirable Student class has public name and gpa. The better version makes them private and provides getName and getGpa.</p>
+    <p>Private fields give the class control over its internal state. Notice what the better version still does not have: setters. Reading is offered; writing is not, because nothing in the requirements said outside code should change a student's name or GPA directly.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Confusing Class and Object</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Incorrect conceptual statement</span>
+      <blockquote class="small"><code>Student</code> is a student.</blockquote>
+      <span class="tag ok">Better</span>
+      <blockquote class="small"><code>Student</code> is a class that defines what <code>Student</code> objects contain and can do.</blockquote>
+    </div>
+    <div>
+      <p class="small">An individual object such as:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student alice;
+</code></pre>
+      <p class="small">may represent a particular student.</p>
+      <div class="box note"><span class="box-title">Note</span>Back to the blueprint: the blueprint is not a house, and <code>Student</code> is not a student.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The incorrect conceptual statement is "Student is a student". Better: Student is a class that defines what Student objects contain and can do. An individual object such as the one referred to by the variable alice may represent a particular student.</p>
+    <p>This looks like pedantry until a student writes Student.getName() and cannot see why it fails. The class does not have a name; objects do.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Confusing References with Objects</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student s1 =
+    new Student("Alice", 1, 3.5);
+
+Student s2 = s1;
+</code></pre>
+    </div>
+    <div>
+      <p class="small">There are:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2 reference variables
+
+but only
+
+1 Student object
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>This distinction is critical.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The counting rule</summary>
+    <div class="acc-body">
+      <p>Count the objects by counting the <code>new</code> expressions that have run. Count the references by counting the variables and fields that currently hold an arrow.</p>
+      <p>Here <code>new</code> appears once, so there is one object; two variables hold arrows to it, so there are two references. Section 30 uses the same counting rule to explain why <code>a == b</code> is false but <code>a == c</code> is true.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>After Student s1 equals new Student for Alice, and Student s2 equals s1, there are two reference variables but only one Student object. This distinction is critical.</p>
+    <p>The reliable way to count is to count the new expressions. One new means one object, however many names end up pointing at it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Accidentally Shadowing Fields</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+public Student(String name) {
+    name = name;
+}
+</code></pre>
+      <p class="small">The first version assigns the parameter to itself.</p>
+    </div>
+    <div>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+public Student(String name) {
+    this.name = name;
+}
+</code></pre>
+      <p class="small">The second assigns the parameter value to the object's field.</p>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>The incorrect version compiles cleanly and runs without complaint. The field is simply never set.</div>
+  <aside class="notes">
+    <p>The incorrect constructor writes name equals name, which assigns the parameter to itself. The correct constructor writes this.name equals name, which assigns the parameter value to the object's field.</p>
+    <p>The reason this mistake survives so long in student code is that it is not an error. Nothing fails at the point of the bug; the object is simply built wrong, and the symptom appears somewhere else entirely.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Writing Unnecessary Setters</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we have:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    private double balance;
+
+}
+</code></pre>
+      <p class="small">It may be tempting to write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public void setBalance(double balance) {
+    this.balance = balance;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">But ask whether callers should really be able to directly replace the account balance. Usually:</p>
+<pre><code class="language-java" data-trim data-noescape>
+deposit()
+withdraw()
+</code></pre>
+      <p class="small">better represent the legal operations.</p>
+    </div>
+  </div>
+  <div class="cols">
+    <div>
+      <span class="tag no">Not good design</span>
+      <blockquote class="small">Make everything private and create getters and setters.</blockquote>
+    </div>
+    <div>
+      <span class="tag ok">Good design</span>
+      <blockquote class="small">Define a meaningful public interface that protects the object's rules.</blockquote>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-mistakes" tabindex="0">All six common mistakes in full</span>
+  </div>
+  <aside class="notes">
+    <p>Given a BankAccount with a private balance, it may be tempting to write setBalance. But ask whether callers should really be able to directly replace the account balance. Usually deposit and withdraw better represent the legal operations.</p>
+    <p>Good object-oriented design is not simply "make everything private and create getters and setters". Instead: define a meaningful public interface that protects the object's rules. A setter that undoes the guarantee the private field was meant to provide is worse than a public field, because it looks safe.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XII</p>
+  <h2>Tracing and Worked Examples</h2>
+  <p class="part-sub">Three traces, one library, and everything from this week working at once.</p>
+</section>
+
+<section>
+  <h2>Tracing Exercise 1</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Counter {
+
+    private int value;
+
+    public Counter(int value) {
+        this.value = value;
+    }
+
+    public void increment() {
+        value++;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">What is printed?</p>
+<pre><code class="language-java" data-trim data-noescape>
+Counter a = new Counter(5);
+
+Counter b = a;
+
+b.increment();
+b.increment();
+
+System.out.println(
+    a.getValue()
+);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Answer:</p>
+<pre><code class="language-text" data-trim data-noescape>
+7
+</code></pre>
+      <p class="small">Why? <code>a</code> and <code>b</code> refer to the same object.</p>
+      <div class="box note"><span class="box-title">Note</span>The constructor parameter is called <code>value</code>, exactly like the field — so <code>this.value</code> is required on the left of the assignment.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Step by step</summary>
+    <div class="acc-body">
+      <p>One <code>new</code> runs, so one object exists, holding 5. The assignment <code>Counter b = a;</code> creates a second reference to that same object — no second object.</p>
+      <p>Two calls to <code>b.increment()</code> therefore take the single object from 5 to 6 to 7. Reading <code>a.getValue()</code> reads that same object, so the answer is 7.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>This Counter differs slightly from the one in Section 37: it has a constructor taking an initial value, and the field is called value rather than count. Before showing the calling code, ask students to say aloud what each of the three members does, so the trace is about references only and not about the class.</p>
+    <p>Counter a equals new Counter(5). Counter b equals a. Two increments through b. Print a.getValue(). The answer is 7.</p>
+    <p>Why? a and b refer to the same object. This is the reference-assignment slide from Part IV in exam form, and it is the single most reliable question for finding out whether a student has understood references.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing Exercise 2</h2>
+  <div class="cols">
+    <div>
+      <p class="small">What is printed?</p>
+<pre><code class="language-java" data-trim data-noescape>
+Counter a =
+    new Counter(5);
+
+Counter b =
+    new Counter(5);
+
+a.increment();
+
+System.out.println(
+    b.getValue()
+);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Answer:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5
+</code></pre>
+      <p class="small">Why? <code>a</code> and <code>b</code> refer to different objects.</p>
+      <div class="box key"><span class="box-title">Compare with Exercise 1</span>Two <code>new</code> expressions instead of one. The calling code is otherwise almost identical, and the answer changes.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Here both a and b are created with their own new Counter(5). Incrementing a and then printing b.getValue() gives 5.</p>
+    <p>Why? a and b refer to different objects. Put Exercises 1 and 2 side by side on the board — the only difference is whether the second line says new, and that one word changes the answer from 7 to 5.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing Exercise 3</h2>
+  <div class="cols">
+    <div>
+      <p class="small">What is wrong here?</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student student = null;
+
+System.out.println(
+    student.getName()
+);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The reference contains <code>null</code>. There is no <code>Student</code> object on which to execute <code>getName()</code>. The result is a:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NullPointerException
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-tracing" tabindex="0">All three tracing exercises with answers</span>
+  </div>
+  <aside class="notes">
+    <p>Student student equals null, then print student.getName(). The reference contains null. There is no Student object on which to execute getName(). The result is a NullPointerException.</p>
+    <p>Return to the question from Part IV: which reference was null? Here it is obvious because the assignment is two lines up. In a real program the same question is still the right one, it just takes longer to answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: <code>Book</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to represent books in a library. Each book has:</p>
+<pre><code class="language-text" data-trim data-noescape>
+title
+author
+ISBN
+checkout status
+</code></pre>
+    </div>
+    <div>
+      <p class="small">A user should be able to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+check out a book
+return a book
+determine whether it is checked out
+retrieve its title and author
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>The requirements are written as state and behavior — exactly the second and third design questions from Part IX.</div>
+  <aside class="notes">
+    <p>Suppose we want to represent books in a library. Each book has a title, an author, an ISBN, and a checkout status. A user should be able to check out a book, return a book, determine whether it is checked out, and retrieve its title and author.</p>
+    <p>Notice that these requirements arrive already in the shape the design questions ask for. Half of designing a class is getting the requirements written this way in the first place.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>Book</code> Class</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Four private fields, a three-parameter constructor that also sets <code>checkedOut</code> to <code>false</code>, three getters, one <code>isCheckedOut()</code>, and two operations.</p>
+      <p class="small">Notice that we do not provide:</p>
+<pre><code class="language-java" data-trim data-noescape>
+setCheckedOut()
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Instead, the class exposes meaningful operations:</p>
+<pre><code class="language-java" data-trim data-noescape>
+checkout()
+returnBook()
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>This is a more expressive design.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-book" tabindex="0">The full <code>Book</code> class and <code>LibraryDemo</code></span>
+  </div>
+  <details class="acc">
+    <summary>Why <code>checkout()</code> returns <code>boolean</code></summary>
+    <div class="acc-body">
+      <p>If the book is already checked out, <code>checkout()</code> returns <code>false</code> and changes nothing. Otherwise it sets <code>checkedOut</code> to <code>true</code> and returns <code>true</code>.</p>
+      <p>That is the same pattern as <code>BankAccount.withdraw()</code>: the operation may legitimately fail, so the caller is told whether it happened rather than being left to guess.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The Book class has four private fields — title, author, isbn and checkedOut. The constructor takes the first three and sets checkedOut to false. There are three getters, an isCheckedOut method, a checkout method that returns false if the book is already out, and a returnBook method.</p>
+    <p>Notice that we do not provide setCheckedOut. Instead, the class exposes meaningful operations: checkout and returnBook. This is a more expressive design — the method names describe what a library does, not which field to overwrite.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Using the <code>Book</code> Class</h2>
+  <div class="cols">
+    <div>
+      <p class="small"><code>LibraryDemo</code> creates a <code>Book</code> for <em>The Hobbit</em>, prints its title, checks it out while capturing the returned <code>boolean</code>, and then prints the checkout status.</p>
+      <div class="box note"><span class="box-title">Note</span>The demo never touches a field. Every line goes through the public interface, and the ISBN is never printed at all.</div>
+    </div>
+    <div>
+      <p class="small">Possible output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+The Hobbit
+Checkout successful: true
+Checked out: true
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What a second <code>checkout()</code> would print</summary>
+    <div class="acc-body">
+      <p>The first call succeeds and returns <code>true</code>. A second call on the same object would find <code>checkedOut</code> already <code>true</code>, return <code>false</code>, and leave the state alone — so the program would report <code>Checkout successful: false</code> while <code>Checked out: true</code>.</p>
+      <p>That pair of lines is the class enforcing its rule, visible from outside.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>LibraryDemo creates a Book for The Hobbit by J.R.R. Tolkien, prints the title, calls checkout and stores the boolean result, then prints whether the book is checked out. The possible output is The Hobbit, Checkout successful: true, Checked out: true.</p>
+    <p>This is the whole week in one program: a class with private state and a designed interface, an object created with new and initialised by a constructor, and a caller that can only interact through public methods.</p>
+  </aside>
+</section>
+
+<!-- ==================== BACK MATTER ==================== -->
+
+<section>
+  <h2>Key Takeaways (1 of 2)</h2>
+  <div class="cols">
+    <div>
+      <h4>1. Classes define new types.</h4>
+<pre><code class="language-java" data-trim data-noescape>
+class Student
+class BankAccount
+class Rectangle
+</code></pre>
+      <h4>2. Objects are instances of classes.</h4>
+<pre><code class="language-java" data-trim data-noescape>
+new Student(...)
+new BankAccount(...)
+</code></pre>
+      <h4>3. Fields represent object state.</h4>
+<pre><code class="language-java" data-trim data-noescape>
+private double balance;
+</code></pre>
+    </div>
+    <div>
+      <h4>4. Methods represent object behavior.</h4>
+<pre><code class="language-java" data-trim data-noescape>
+deposit()
+withdraw()
+</code></pre>
+      <h4>5. Constructors initialize new objects.</h4>
+<pre><code class="language-java" data-trim data-noescape>
+public Student(String name)
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>A class is a new type. Once <code>Student</code> exists, you can declare variables of type <code>Student</code> exactly as you declare variables of type <code>int</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The most important ideas from this week. Classes define new types — class Student, class BankAccount, class Rectangle. Objects are instances of classes, produced by new. Fields represent object state. Methods represent object behavior. Constructors initialize new objects.</p>
+    <p>These five are the mechanical half. The next five are about references and design, and they are the ones that need the most practice.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways (2 of 2)</h2>
+  <div class="cols">
+    <div>
+      <h4>6. Variables of class types hold references.</h4>
+<pre><code class="language-java" data-trim data-noescape>
+Student student;
+</code></pre>
+      <h4>7. Multiple references can point to the same object.</h4>
+      <p class="small">This can cause changes through one variable to appear through another.</p>
+      <h4>8. <code>private</code> fields support encapsulation.</h4>
+      <p class="small">Classes should control their own internal state.</p>
+    </div>
+    <div>
+      <h4>9. <code>this</code> refers to the current object.</h4>
+<pre><code class="language-java" data-trim data-noescape>
+this.name = name;
+</code></pre>
+      <h4>10. Good classes protect their invariants.</h4>
+      <p class="small">An object's public methods should make invalid states difficult to create.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Variables of class types hold references. Multiple references can point to the same object, which can cause changes through one variable to appear through another. Private fields support encapsulation — classes should control their own internal state. This refers to the current object. And good classes protect their invariants: an object's public methods should make invalid states difficult to create.</p>
+    <p>If a student remembers only two things from Week 6, make it takeaway 7 and takeaway 10. Everything else is syntax that can be looked up.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Class</td><td>A definition describing the structure and behavior of objects.</td></tr>
+        <tr><td>Object</td><td>An instance of a class.</td></tr>
+        <tr><td>Field</td><td>A variable belonging to an object.</td></tr>
+        <tr><td>Method</td><td>Behavior associated with a class or object.</td></tr>
+        <tr><td>Constructor</td><td>Special code used to initialize a new object.</td></tr>
+        <tr><td>Reference</td><td>A value that identifies an object.</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Encapsulation</td><td>Restricting direct access to internal state and exposing controlled operations.</td></tr>
+        <tr><td><code>private</code></td><td>Accessible only inside the class.</td></tr>
+        <tr><td><code>public</code></td><td>Accessible to other classes.</td></tr>
+        <tr><td><code>this</code></td><td>A reference to the current object.</td></tr>
+        <tr><td>State</td><td>The collection of values stored in an object's fields.</td></tr>
+        <tr><td>Invariant</td><td>A condition that should always remain true for an object.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="acc">
+    <summary>The code that goes with each term</summary>
+    <div class="acc-body">
+      <p><strong>Class</strong> — a definition describing the structure and behavior of objects.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Student {
+    ...
+}
+</code></pre>
+      <p><strong>Object</strong> — an instance of a class.</p>
+<pre><code class="language-java" data-trim data-noescape>
+new Student(...)
+</code></pre>
+      <p><strong>Field</strong> — a variable belonging to an object.</p>
+<pre><code class="language-java" data-trim data-noescape>
+private String name;
+</code></pre>
+      <p><strong>Method</strong> — behavior associated with a class or object.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public void deposit(double amount)
+</code></pre>
+      <p><strong>Constructor</strong> — special code used to initialize a new object.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public Student(String name)
+</code></pre>
+      <p><strong>Reference</strong> — a value that identifies an object.</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student student;
+</code></pre>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-concept-check" tabindex="0">Concept check — seven true/false statements</span>
+  </div>
+  <aside class="notes">
+    <p>Every term here was introduced somewhere in Week 6. The first six come with a line of code in the notes, and those are collected in the accordion.</p>
+    <p>The concept check in the modal is seven true-or-false statements. Four of them are false, and each false one is a misconception the week has explicitly addressed — class versus object, setters for every field, constructors with return types, and reference assignment copying the object.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Lab and Practice — In-Class Exercises</h2>
+  <div class="cols">
+    <div>
+      <h4>Design a class called:</h4>
+<pre><code class="language-java" data-trim data-noescape>
+Car
+</code></pre>
+      <p class="small">Each car should contain:</p>
+<pre><code class="language-text" data-trim data-noescape>
+make
+model
+year
+mileage
+fuelLevel
+</code></pre>
+      <p class="small">When driving: mileage should increase, fuel should decrease, and the car should not drive farther than its available fuel permits.</p>
+    </div>
+    <div>
+      <h4>Design:</h4>
+<pre><code class="language-java" data-trim data-noescape>
+Course
+</code></pre>
+      <p class="small">with fields:</p>
+<pre><code class="language-text" data-trim data-noescape>
+courseCode
+courseName
+capacity
+enrollment
+</code></pre>
+      <p class="small">Think carefully about what rules must be preserved. The class should prevent invalid states.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-inclass-exercises" tabindex="0">Both in-class exercises in full</span>
+  </div>
+  <aside class="notes">
+    <p>The first in-class exercise is a Car class with make, model, year, mileage and fuelLevel, plus operations to retrieve each value, add fuel, and drive. When driving, mileage should increase, fuel should decrease, and the car should not drive farther than its available fuel permits.</p>
+    <p>The second is a Course class with a course code, name, capacity and enrollment, and seven methods. The invariants are that enrollment is at least zero and at most capacity.</p>
+    <p>Both exercises are really the same question in two costumes: which fields are private, and which operations are legal? Open the modal for the full question lists.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Lab and Practice — Programming Exercises</h2>
+  <div class="cols">
+    <div>
+      <h4>Programming exercise</h4>
+      <p class="small">Implement a <code>SavingsAccount</code> class. Each account should have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+accountHolder
+balance
+interestRate
+</code></pre>
+      <p class="small">Deposits and withdrawals must be positive, a withdrawal cannot exceed the balance, and the balance cannot be changed directly outside the class.</p>
+    </div>
+    <div>
+      <h4>Challenge exercise</h4>
+      <p class="small">Create a class representing an inventory item. Possible fields:</p>
+<pre><code class="language-text" data-trim data-noescape>
+name
+sku
+price
+quantity
+</code></pre>
+      <p class="small">Think carefully about whether fields should be directly modifiable.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-programming-exercises" tabindex="0">Full briefs: <code>SavingsAccount</code>, <code>InventoryItem</code>, and the design exercise</span>
+  </div>
+  <aside class="notes">
+    <p>The programming exercise is a SavingsAccount with an account holder, a balance and an interest rate, plus three getters, deposit, withdraw and applyInterest. The interest calculation is balance equals balance plus balance times interestRate.</p>
+    <p>The challenge exercise is an InventoryItem with a name, sku, price and quantity, offering addStock, removeStock, getInventoryValue and changePrice. Inventory value is price times quantity, and the class should prevent negative prices and negative quantities.</p>
+    <p>The third item in the modal is the design exercise: a movie theater application, where the task is to identify the classes rather than write any code.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Lab and Practice — Suggested Lab</h2>
+  <div class="cols">
+    <div>
+      <h4>A Simple Student Management System</h4>
+      <p class="small">Create a <code>Student</code> class. Each student should have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+name
+studentId
+credits
+totalGradePoints
+</code></pre>
+      <p class="small">GPA can be calculated as total grade points divided by credits. <strong>Do not store GPA as a separate field unless necessary.</strong></p>
+    </div>
+    <div>
+      <h4>Extension</h4>
+      <p class="small">Store several <code>Student</code> objects in an array:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student[] students;
+</code></pre>
+      <p class="small">Loop through the array and determine which student has the highest GPA.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Derived information is calculated, not stored — the <code>Temperature</code> lesson from Part IX, applied to GPA.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m6-lab" tabindex="0">The full lab brief</span>
+  </div>
+  <aside class="notes">
+    <p>The lab is to build a simple student management system. Each Student has a name, a student ID, credits and total grade points, and provides getName, getStudentId, getCredits, getGpa, and addCourse taking course credits and grade points. When a student completes a course, both credits and totalGradePoints are updated.</p>
+    <p>GPA is calculated as totalGradePoints divided by credits — do not store it as a separate field unless necessary. That is the Temperature design rule again.</p>
+    <p>The extension stores several Student objects in an array and loops through it to find the highest GPA. It is also the first time this week that an array of objects is written by the students themselves rather than read in the Course example.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">This week focused primarily on creating individual classes and objects. Next, we will build on these ideas by discussing <strong>object-oriented design</strong> in greater depth. We will examine:</p>
+      <ul class="small tight">
+        <li>relationships between classes,</li>
+        <li>composition,</li>
+        <li>static vs. instance members,</li>
+        <li>enums,</li>
+        <li>packages,</li>
+        <li>responsibilities,</li>
+        <li>and how multiple objects cooperate to solve larger problems.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">Later, we will introduce:</p>
+      <ul class="small tight">
+        <li>inheritance,</li>
+        <li>interfaces,</li>
+        <li>polymorphism,</li>
+        <li>and abstract classes.</li>
+      </ul>
+      <div class="def"><span class="term">If one idea deserves particular attention:</span> an object combines state and behavior behind a carefully designed interface.</div>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>That idea is at the heart of object-oriented programming.</div>
+  <aside class="notes">
+    <p>This week focused primarily on creating individual classes and objects. Next, we will build on these ideas by discussing object-oriented design in greater depth: relationships between classes, composition, static versus instance members, enums, packages, responsibilities, and how multiple objects cooperate to solve larger problems.</p>
+    <p>Later, we will introduce inheritance, interfaces, polymorphism, and abstract classes. The concepts introduced this week are therefore foundational.</p>
+    <p>If one idea deserves particular attention, it is this: an object combines state and behavior behind a carefully designed interface. That idea is at the heart of object-oriented programming.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 6 — Classes and Objects
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m6-why-objects"
+          data-kicker="Deep dive" data-title="From parallel arrays to objects">
+  <h4>The problem</h4>
+  <p>Suppose we want to write a program that stores information about students. For each student we want to store name, student ID, number of credits, and GPA.</p>
+  <p>Without classes, we might use several arrays:</p>
+<pre><code class="language-java">String[] names = new String[100];
+int[] ids = new int[100];
+int[] credits = new int[100];
+double[] gpas = new double[100];</code></pre>
+  <p>This works, but it creates a problem. The information for a single student is spread across several arrays. For example:</p>
+<pre><code class="language-text">names[5]
+ids[5]
+credits[5]
+gpas[5]</code></pre>
+  <p>all describe the same student. The relationship between those pieces of information exists only because the programmer remembers that index <code>5</code> refers to the same student in every array.</p>
+  <h4>The fix</h4>
+  <p>Object-oriented programming allows us to group related data together. We could instead define a <code>Student</code> class.</p>
+<pre><code class="language-java">public class Student {
+    String name;
+    int id;
+    int credits;
+    double gpa;
+}</code></pre>
+  <p>Then one object can represent one student. Conceptually:</p>
+<pre><code class="language-text">Student object
+-----------------
+name: "Alice"
+id: 12345
+credits: 18
+gpa: 3.72</code></pre>
+  <p>Now the data belonging to one student stays together.</p>
+  <h4>Why it matters</h4>
+  <p>This idea — combining related data and behavior — is one of the central motivations for object-oriented programming.</p>
+  <p>Until now, most of the programs we have written have been organized primarily around methods: variables, arrays, loops, conditionals, and several methods. This style of programming works well for small programs. However, as programs become larger, it becomes increasingly difficult to organize all of the data and operations in a clear way.</p>
+  <p>Instead of thinking only in terms of <em>what functions should my program perform?</em> we also begin asking <em>what objects exist in the problem, what information do those objects store, and what can those objects do?</em></p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-class-object-blueprint"
+          data-kicker="Deep dive" data-title="Class, object, and the blueprint analogy">
+  <h4>The definitions</h4>
+  <p>A <strong>class</strong> is a definition or blueprint for a type of object. An <strong>object</strong> is a particular instance of a class.</p>
+  <p>For example:</p>
+<pre><code class="language-java">public class Dog {
+    String name;
+    int age;
+}</code></pre>
+  <p><code>Dog</code> is a class. We can create individual <code>Dog</code> objects:</p>
+<pre><code class="language-java">Dog dog1 = new Dog();
+Dog dog2 = new Dog();</code></pre>
+  <p>Now <code>dog1</code> and <code>dog2</code> refer to two separate objects. We can store different information in each one.</p>
+<pre><code class="language-java">dog1.name = "Buddy";
+dog1.age = 5;
+
+dog2.name = "Luna";
+dog2.age = 2;</code></pre>
+  <h4>The picture</h4>
+  <p>Conceptually:</p>
+<pre><code class="language-text">dog1
+  |
+  v
++----------------+
+| Dog object     |
+| name = Buddy   |
+| age = 5        |
++----------------+
+
+dog2
+  |
+  v
++----------------+
+| Dog object     |
+| name = Luna    |
+| age = 2        |
++----------------+</code></pre>
+  <h4>The distinction</h4>
+  <p>The important distinction is:</p>
+<pre><code class="language-text">Class = definition
+
+Object = one particular instance created from that definition</code></pre>
+  <h4>The blueprint</h4>
+  <p>Another analogy is a house blueprint. The blueprint describes the number of rooms, the layout, and the dimensions. But the blueprint is not itself a house. You can construct many different houses from the same blueprint. Similarly:</p>
+<pre><code class="language-text">Class → blueprint
+
+Object → constructed instance</code></pre>
+  <p>Section 41 of the notes lists the corresponding conceptual error: saying "<code>Student</code> is a student" rather than "<code>Student</code> is a class that defines what <code>Student</code> objects contain and can do".</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-references"
+          data-kicker="Deep dive" data-title="References: primitives, aliases, and null">
+  <h4>Primitive variables vs. reference variables</h4>
+  <p>This distinction is extremely important in Java. Consider:</p>
+<pre><code class="language-java">int x = 10;</code></pre>
+  <p>Here, <code>x</code> directly stores the value <code>10</code>. Now consider:</p>
+<pre><code class="language-java">Rectangle r = new Rectangle();</code></pre>
+  <p>Here, <code>r</code> stores a reference to a <code>Rectangle</code> object. We can think of the two situations like this. Primitive:</p>
+<pre><code class="language-text">x
++----+
+| 10 |
++----+</code></pre>
+  <p>Reference:</p>
+<pre><code class="language-text">r
++-----------+
+| reference | --------+
++-----------+         |
+                      v
+               +-------------+
+               | Rectangle   |
+               | width       |
+               | height      |
+               +-------------+</code></pre>
+  <h4>Which types are which</h4>
+  <p>Primitive types include:</p>
+<pre><code class="language-java">int
+double
+boolean
+char
+long
+float
+short
+byte</code></pre>
+  <p>Most other types in Java are reference types. Examples:</p>
+<pre><code class="language-java">String
+Scanner
+ArrayList
+Student
+BankAccount
+Rectangle</code></pre>
+  <p>Arrays are also reference types.</p>
+  <h4>Reference assignment</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">BankAccount a = new BankAccount();
+a.balance = 100;
+
+BankAccount b = a;</code></pre>
+  <p>A common misconception is that Java creates a second account. It does not. Both variables now refer to the same object.</p>
+<pre><code class="language-text">a --------+
+          |
+          v
+     +-------------+
+     | BankAccount |
+     | balance=100 |
+     +-------------+
+          ^
+          |
+b --------+</code></pre>
+  <p>Now suppose we write:</p>
+<pre><code class="language-java">b.balance = 500;</code></pre>
+  <p>Then:</p>
+<pre><code class="language-java">System.out.println(a.balance);</code></pre>
+  <p>prints:</p>
+<pre><code class="language-text">500.0</code></pre>
+  <p>Why? Because <code>a</code> and <code>b</code> refer to the same object.</p>
+  <h4>Compare with primitive assignment</h4>
+  <p>This behavior is fundamentally different from primitive assignment. Consider:</p>
+<pre><code class="language-java">int x = 10;
+int y = x;
+
+y = 20;
+
+System.out.println(x);</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">10</code></pre>
+  <p>The value was copied. With references, the reference itself is copied. The underlying object is not automatically copied.</p>
+  <h4>The <code>null</code> reference</h4>
+  <p>A reference variable can also contain the special value:</p>
+<pre><code class="language-java">null</code></pre>
+  <p>Example:</p>
+<pre><code class="language-java">BankAccount account = null;</code></pre>
+  <p>This means that <code>account</code> currently refers to no object. If we write:</p>
+<pre><code class="language-java">account.deposit(100);</code></pre>
+  <p>Java will generate a:</p>
+<pre><code class="language-text">NullPointerException</code></pre>
+  <p>because there is no object on which to execute the method. A <code>NullPointerException</code> is one of the most common errors in Java. Whenever one occurs, ask: <em>which reference was <code>null</code>?</em></p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-constructors"
+          data-kicker="Deep dive" data-title="Constructors from start to finish">
+  <h4>Why constructors exist</h4>
+  <p>So far, we have been creating objects like this:</p>
+<pre><code class="language-java">BankAccount account = new BankAccount();
+
+account.balance = 1000;</code></pre>
+  <p>A better approach is often to initialize an object when it is created. Java uses <strong>constructors</strong> for this purpose.</p>
+<pre><code class="language-java">public class BankAccount {
+
+    double balance;
+
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+
+}</code></pre>
+  <p>Now we can write:</p>
+<pre><code class="language-java">BankAccount account = new BankAccount(1000);</code></pre>
+  <p>The constructor initializes the object. Conceptually:</p>
+<pre><code class="language-text">new BankAccount(1000)
+
+        |
+        v
+
++------------------+
+| BankAccount      |
+| balance = 1000   |
++------------------+</code></pre>
+  <h4>Constructor syntax</h4>
+  <p>A constructor looks similar to a method, but there are two important differences. First, its name must match the class name. Second, it does not have a return type.</p>
+  <p>Correct:</p>
+<pre><code class="language-java">public BankAccount(double initialBalance) {
+    balance = initialBalance;
+}</code></pre>
+  <p>Incorrect:</p>
+<pre><code class="language-java">public void BankAccount(double initialBalance) {
+    balance = initialBalance;
+}</code></pre>
+  <p>Adding <code>void</code> turns it into a normal method rather than a constructor.</p>
+  <h4>Multiple parameters</h4>
+  <p>Suppose we create a <code>Student</code> class.</p>
+<pre><code class="language-java">public class Student {
+
+    String name;
+    int id;
+    double gpa;
+
+    public Student(String studentName,
+                   int studentId,
+                   double studentGpa) {
+
+        name = studentName;
+        id = studentId;
+        gpa = studentGpa;
+    }
+
+}</code></pre>
+  <p>Usage:</p>
+<pre><code class="language-java">Student s1 =
+    new Student("Maria", 12345, 3.8);
+
+Student s2 =
+    new Student("Ahmed", 98765, 3.4);</code></pre>
+  <p>Each object is initialized with different values.</p>
+  <h4>Multiple constructors</h4>
+  <p>A class can have more than one constructor. Example:</p>
+<pre><code class="language-java">public class BankAccount {
+
+    double balance;
+
+    public BankAccount() {
+        balance = 0;
+    }
+
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+
+}</code></pre>
+  <p>Now both of the following are legal:</p>
+<pre><code class="language-java">BankAccount account1 =
+    new BankAccount();
+
+BankAccount account2 =
+    new BankAccount(500);</code></pre>
+  <p>This is an example of <strong>overloading</strong>. Two constructors may have the same name if they have different parameter lists.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-this"
+          data-kicker="Deep dive" data-title="The this keyword">
+  <h4>The problem</h4>
+  <p>Suppose we write:</p>
+<pre><code class="language-java">public class Student {
+
+    String name;
+
+    public Student(String name) {
+        name = name;
+    }
+
+}</code></pre>
+  <p>What does:</p>
+<pre><code class="language-java">name = name;</code></pre>
+  <p>mean? Both uses of <code>name</code> refer to the constructor parameter. The field does not get assigned.</p>
+  <h4>The keyword</h4>
+  <p>To distinguish the object's field from the parameter, Java provides the keyword:</p>
+<pre><code class="language-java">this</code></pre>
+  <p>We write:</p>
+<pre><code class="language-java">public class Student {
+
+    String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+}</code></pre>
+  <p>Here:</p>
+<pre><code class="language-text">this.name</code></pre>
+  <p>means <em>the <code>name</code> field belonging to this object</em>, while:</p>
+<pre><code class="language-text">name</code></pre>
+  <p>means <em>the constructor parameter named <code>name</code></em>. This pattern is extremely common in Java.</p>
+  <h4>this refers to the current object</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">public class BankAccount {
+
+    double balance;
+
+    public void deposit(double amount) {
+        this.balance += amount;
+    }
+
+}</code></pre>
+  <p>When we call:</p>
+<pre><code class="language-java">account1.deposit(100);</code></pre>
+  <p>inside the method:</p>
+<pre><code class="language-text">this</code></pre>
+  <p>refers to:</p>
+<pre><code class="language-text">account1</code></pre>
+  <p>If we instead call:</p>
+<pre><code class="language-java">account2.deposit(100);</code></pre>
+  <p>then:</p>
+<pre><code class="language-text">this</code></pre>
+  <p>refers to:</p>
+<pre><code class="language-text">account2</code></pre>
+  <p>The same method can therefore operate on different objects.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-encapsulation"
+          data-kicker="Deep dive" data-title="Encapsulation and why fields are private">
+  <h4>The starting point</h4>
+  <p>So far, our fields have been accessible directly. For example:</p>
+<pre><code class="language-java">account.balance = -1000000;</code></pre>
+  <p>Java allows this if the field is publicly accessible. But should a bank account allow arbitrary code to assign any value directly to its balance? Usually not.</p>
+  <p>Object-oriented programming encourages a principle called <strong>encapsulation</strong>: <em>an object should control access to its own internal state.</em> Instead of allowing arbitrary direct modification, the class provides methods that define valid operations.</p>
+  <h4>A class that controls its state</h4>
+<pre><code class="language-java">public class BankAccount {
+
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        balance = initialBalance;
+    }
+
+    public void deposit(double amount) {
+        if (amount &gt; 0) {
+            balance += amount;
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount &gt; 0 &amp;&amp; amount &lt;= balance) {
+            balance -= amount;
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+}</code></pre>
+  <p>Outside code cannot now write:</p>
+<pre><code class="language-java">account.balance = -10000;</code></pre>
+  <p>because <code>balance</code> is private. Instead, outside code must use the public interface:</p>
+<pre><code class="language-java">account.deposit(500);
+
+account.withdraw(100);
+
+System.out.println(account.getBalance());</code></pre>
+  <h4>Why make fields private?</h4>
+  <p>Consider a <code>Person</code> class:</p>
+<pre><code class="language-java">public class Person {
+
+    public int age;
+
+}</code></pre>
+  <p>Another part of the program can write:</p>
+<pre><code class="language-java">person.age = -37;</code></pre>
+  <p>That value makes no sense. If the field is private, we can control how changes happen.</p>
+<pre><code class="language-java">public class Person {
+
+    private int age;
+
+    public void setAge(int age) {
+        if (age &gt;= 0) {
+            this.age = age;
+        }
+    }
+
+}</code></pre>
+  <p>Now the class can enforce its rules. This is one benefit of encapsulation: the class protects its internal state from invalid changes.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-getters-setters"
+          data-kicker="Comparison" data-title="Getters, setters, and when not to write them">
+  <h4>Getters</h4>
+  <p>A method that returns the value of a private field is commonly called a <strong>getter</strong>. Example:</p>
+<pre><code class="language-java">public String getName() {
+    return name;
+}</code></pre>
+  <p>Usage:</p>
+<pre><code class="language-java">System.out.println(student.getName());</code></pre>
+  <p>A common naming convention is:</p>
+<pre><code class="language-text">field           getter
+
+name            getName()
+balance         getBalance()
+age             getAge()
+temperature     getTemperature()</code></pre>
+  <p>For boolean fields, methods are often named:</p>
+<pre><code class="language-java">isActive()
+isEmpty()
+isValid()</code></pre>
+  <h4>Setters</h4>
+  <p>A method that modifies a private field is often called a <strong>setter</strong>. Example:</p>
+<pre><code class="language-java">public void setName(String name) {
+    this.name = name;
+}</code></pre>
+  <p>However, not every field should automatically have a setter. For example, consider:</p>
+<pre><code class="language-java">private double balance;</code></pre>
+  <p>Providing:</p>
+<pre><code class="language-java">public void setBalance(double balance)</code></pre>
+  <p>would allow outside code to arbitrarily replace the balance. It might be better to expose:</p>
+<pre><code class="language-java">deposit()
+withdraw()</code></pre>
+  <p>because those operations describe the behavior of a bank account more accurately.</p>
+  <h4>The design principle</h4>
+  <p>A key design principle is: <em>do not automatically write getters and setters for every field.</em></p>
+  <p>Instead ask: <em>what operations should users of this class actually be allowed to perform?</em></p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-bankaccount-complete"
+          data-kicker="Worked example" data-title="A complete BankAccount class">
+  <h4>The class</h4>
+<pre><code class="language-java">public class BankAccount {
+
+    private String owner;
+    private double balance;
+
+    public BankAccount(String owner,
+                       double initialBalance) {
+
+        this.owner = owner;
+
+        if (initialBalance &gt;= 0) {
+            this.balance = initialBalance;
+        } else {
+            this.balance = 0;
+        }
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+
+        if (amount &gt; 0) {
+            balance += amount;
+        }
+    }
+
+    public boolean withdraw(double amount) {
+
+        if (amount &gt; 0 &amp;&amp;
+            amount &lt;= balance) {
+
+            balance -= amount;
+            return true;
+        }
+
+        return false;
+    }
+
+}</code></pre>
+  <h4>What each part is doing</h4>
+  <p>The two fields are private, so no outside code can assign to them. The constructor takes an owner and an initial balance, uses <code>this</code> to assign the owner, and guards the balance: a negative opening balance becomes <code>0</code>.</p>
+  <p><code>getOwner</code> and <code>getBalance</code> expose the state for reading. <code>deposit</code> silently ignores a non-positive amount. <code>withdraw</code> is the most interesting method — it returns <code>boolean</code>, so a caller can tell whether the withdrawal actually happened rather than having to compare balances before and after.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-bankdemo"
+          data-kicker="Worked example" data-title="BankDemo, and interface versus implementation">
+  <h4>A separate program can use the class</h4>
+<pre><code class="language-java">public class BankDemo {
+
+    public static void main(String[] args) {
+
+        BankAccount account =
+            new BankAccount("Alice", 1000);
+
+        account.deposit(250);
+
+        boolean success =
+            account.withdraw(400);
+
+        System.out.println(
+            account.getOwner()
+        );
+
+        System.out.println(
+            account.getBalance()
+        );
+
+        System.out.println(
+            "Withdrawal successful: "
+            + success
+        );
+    }
+
+}</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">Alice
+850.0
+Withdrawal successful: true</code></pre>
+  <h4>Public interface</h4>
+  <p>The public interface describes what other code is allowed to do. For <code>BankAccount</code>:</p>
+<pre><code class="language-java">getOwner()
+getBalance()
+deposit()
+withdraw()</code></pre>
+  <p>These methods define how other code interacts with the object.</p>
+  <h4>Internal implementation</h4>
+  <p>The internal implementation describes how the class accomplishes its work. For example:</p>
+<pre><code class="language-java">private String owner;
+private double balance;</code></pre>
+  <p>Outside code should not need to know the details. This separation is extremely important in software engineering. If the internal implementation changes but the public interface stays the same, code using the class may not need to change.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-course-collab"
+          data-kicker="Deep dive" data-title="Objects interacting, and object diagrams">
+  <h4>A class that contains other objects</h4>
+  <p>Real object-oriented programs rarely contain only one type of object. Objects interact. Consider a <code>Course</code> class that contains students.</p>
+<pre><code class="language-java">public class Course {
+
+    private String courseCode;
+    private Student[] students;
+    private int studentCount;
+
+    public Course(String courseCode,
+                  int capacity) {
+
+        this.courseCode = courseCode;
+        students = new Student[capacity];
+        studentCount = 0;
+    }
+
+    public void addStudent(Student student) {
+
+        if (studentCount &lt; students.length) {
+
+            students[studentCount] = student;
+            studentCount++;
+        }
+    }
+
+}</code></pre>
+  <p>Notice:</p>
+<pre><code class="language-java">Student[] students;</code></pre>
+  <p>A field can itself contain references to other objects.</p>
+  <h4>Building the graph</h4>
+  <p>We can write:</p>
+<pre><code class="language-java">Student s1 =
+    new Student("Alice", 101, 3.7);
+
+Student s2 =
+    new Student("Bob", 102, 3.4);
+
+Course course =
+    new Course("CSC500", 30);
+
+course.addStudent(s1);
+course.addStudent(s2);</code></pre>
+  <p>Now the <code>Course</code> object contains references to <code>Student</code> objects. This is one way that complex programs are constructed from interacting objects.</p>
+  <h4>Object diagrams</h4>
+  <p>Drawing object diagrams is useful when learning object-oriented programming. Suppose we have:</p>
+<pre><code class="language-java">Student alice =
+    new Student("Alice", 101, 3.8);
+
+Course course =
+    new Course("CSC500", 30);
+
+course.addStudent(alice);</code></pre>
+  <p>Conceptually:</p>
+<pre><code class="language-text">alice
+  |
+  v
++-------------------+
+| Student           |
+| name = "Alice"    |
+| id = 101          |
+| gpa = 3.8         |
++-------------------+
+        ^
+        |
+        |
++-------------------+
+| Course            |
+| code = "CSC500"   |
+| students[0] ------+
++-------------------+
+        ^
+        |
+      course</code></pre>
+  <p>Drawing diagrams like this helps clarify references.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-equality"
+          data-kicker="Deep dive" data-title="Identity, equality, and the == operator">
+  <h4>Two objects with identical contents</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">BankAccount a =
+    new BankAccount("Alice", 100);
+
+BankAccount b =
+    new BankAccount("Alice", 100);</code></pre>
+  <p>Are <code>a</code> and <code>b</code> the same object? No. Two separate objects were created. Conceptually:</p>
+<pre><code class="language-text">a ---&gt; BankAccount object #1
+
+b ---&gt; BankAccount object #2</code></pre>
+  <p>Even if their fields contain identical values, they are different objects.</p>
+  <h4>Two names for one object</h4>
+  <p>Now consider:</p>
+<pre><code class="language-java">BankAccount c = a;</code></pre>
+  <p>Then:</p>
+<pre><code class="language-text">a ---&gt; BankAccount object #1
+          ^
+          |
+c --------+</code></pre>
+  <p><code>a</code> and <code>c</code> refer to the same object. This distinction becomes important when comparing objects.</p>
+  <h4>== for primitives</h4>
+  <p>For primitive types:</p>
+<pre><code class="language-java">int x = 5;
+int y = 5;
+
+System.out.println(x == y);</code></pre>
+  <p>prints:</p>
+<pre><code class="language-text">true</code></pre>
+  <h4>== for references</h4>
+  <p>For object references, <code>==</code> asks whether the references point to the exact same object. Example:</p>
+<pre><code class="language-java">BankAccount a =
+    new BankAccount("Alice", 100);
+
+BankAccount b =
+    new BankAccount("Alice", 100);
+
+System.out.println(a == b);</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">false</code></pre>
+  <p>because two separate objects were created. But:</p>
+<pre><code class="language-java">BankAccount c = a;
+
+System.out.println(a == c);</code></pre>
+  <p>prints:</p>
+<pre><code class="language-text">true</code></pre>
+  <p>because both references point to the same object.</p>
+  <p>Later we will discuss more sophisticated approaches for comparing object contents.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-design-questions"
+          data-kicker="Method" data-title="The five questions to ask when designing a class">
+  <h4>Question 1: What entity does the class represent?</h4>
+  <p>Examples:</p>
+<pre><code class="language-text">Student
+Book
+Employee
+Rectangle
+BankAccount
+Course
+Appointment
+GameCharacter</code></pre>
+  <h4>Question 2: What state does each object need?</h4>
+  <p>For a book:</p>
+<pre><code class="language-text">title
+author
+ISBN
+numberOfPages
+checkedOut</code></pre>
+  <h4>Question 3: What behavior should the object provide?</h4>
+  <p>For a book:</p>
+<pre><code class="language-text">checkout()
+returnBook()
+isCheckedOut()
+getTitle()</code></pre>
+  <h4>Question 4: Which information should be private?</h4>
+  <p>Usually the fields.</p>
+  <h4>Question 5: What rules must the class enforce?</h4>
+  <p>For example:</p>
+<pre><code class="language-text">A bank balance should not become negative.
+
+A person's age should not be negative.
+
+A course enrollment should not exceed capacity.
+
+A rectangle's width should not be negative.</code></pre>
+  <p>A well-designed class makes invalid states difficult or impossible to create.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-rectangle"
+          data-kicker="Worked example" data-title="Example design: Rectangle">
+  <h4>State and behavior</h4>
+  <p>Suppose we want a rectangle abstraction. Possible state:</p>
+<pre><code class="language-text">width
+height</code></pre>
+  <p>Possible behavior:</p>
+<pre><code class="language-text">area
+perimeter
+resize</code></pre>
+  <h4>Implementation</h4>
+<pre><code class="language-java">public class Rectangle {
+
+    private double width;
+    private double height;
+
+    public Rectangle(double width,
+                     double height) {
+
+        if (width &gt;= 0) {
+            this.width = width;
+        }
+
+        if (height &gt;= 0) {
+            this.height = height;
+        }
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public double getArea() {
+        return width * height;
+    }
+
+    public double getPerimeter() {
+        return 2 * width +
+               2 * height;
+    }
+
+}</code></pre>
+  <h4>Usage</h4>
+<pre><code class="language-java">Rectangle room =
+    new Rectangle(12, 10);
+
+System.out.println(
+    room.getArea()
+);</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">120.0</code></pre>
+  <p>Note that <code>getArea</code> and <code>getPerimeter</code> store nothing. They compute their results from <code>width</code> and <code>height</code> each time they are called, so they can never disagree with the object's state.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-mistakes"
+          data-kicker="Diagnostics" data-title="Six common mistakes, in full">
+  <h4>1. Forgetting new</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">BankAccount account;
+
+account.deposit(100);</code></pre>
+  <p>The variable has been declared, but no object has been created. Correct:</p>
+<pre><code class="language-java">BankAccount account =
+    new BankAccount("Alice", 0);
+
+account.deposit(100);</code></pre>
+  <h4>2. Directly exposing fields</h4>
+  <p>Less desirable:</p>
+<pre><code class="language-java">public class Student {
+
+    public String name;
+    public double gpa;
+
+}</code></pre>
+  <p>Better:</p>
+<pre><code class="language-java">public class Student {
+
+    private String name;
+    private double gpa;
+
+    public String getName() {
+        return name;
+    }
+
+    public double getGpa() {
+        return gpa;
+    }
+
+}</code></pre>
+  <p>Private fields give the class control over its internal state.</p>
+  <h4>3. Confusing class and object</h4>
+  <p>Incorrect conceptual statement: <em><code>Student</code> is a student.</em></p>
+  <p>Better: <em><code>Student</code> is a class that defines what Student objects contain and can do.</em></p>
+  <p>An individual object such as:</p>
+<pre><code class="language-java">Student alice;</code></pre>
+  <p>may represent a particular student.</p>
+  <h4>4. Confusing references with objects</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">Student s1 =
+    new Student("Alice", 1, 3.5);
+
+Student s2 = s1;</code></pre>
+  <p>There are:</p>
+<pre><code class="language-text">2 reference variables
+
+but only
+
+1 Student object</code></pre>
+  <p>This distinction is critical.</p>
+  <h4>5. Accidentally shadowing fields</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">public Student(String name) {
+    name = name;
+}</code></pre>
+  <p>Correct:</p>
+<pre><code class="language-java">public Student(String name) {
+    this.name = name;
+}</code></pre>
+  <p>The first version assigns the parameter to itself. The second assigns the parameter value to the object's field.</p>
+  <h4>6. Writing unnecessary setters</h4>
+  <p>Suppose we have:</p>
+<pre><code class="language-java">public class BankAccount {
+
+    private double balance;
+
+}</code></pre>
+  <p>It may be tempting to write:</p>
+<pre><code class="language-java">public void setBalance(double balance) {
+    this.balance = balance;
+}</code></pre>
+  <p>But ask whether callers should really be able to directly replace the account balance. Usually:</p>
+<pre><code class="language-java">deposit()
+withdraw()</code></pre>
+  <p>better represent the legal operations.</p>
+  <p>Good object-oriented design is not simply <em>make everything private and create getters and setters</em>. Instead: <em>define a meaningful public interface that protects the object's rules.</em></p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-tracing"
+          data-kicker="Practice" data-title="Three tracing exercises with answers">
+  <h4>Tracing Exercise 1</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">public class Counter {
+
+    private int value;
+
+    public Counter(int value) {
+        this.value = value;
+    }
+
+    public void increment() {
+        value++;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+}</code></pre>
+  <p>What is printed?</p>
+<pre><code class="language-java">Counter a = new Counter(5);
+
+Counter b = a;
+
+b.increment();
+b.increment();
+
+System.out.println(
+    a.getValue()
+);</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">7</code></pre>
+  <p>Why? <code>a</code> and <code>b</code> refer to the same object.</p>
+  <h4>Tracing Exercise 2</h4>
+  <p>What is printed?</p>
+<pre><code class="language-java">Counter a =
+    new Counter(5);
+
+Counter b =
+    new Counter(5);
+
+a.increment();
+
+System.out.println(
+    b.getValue()
+);</code></pre>
+  <p>Answer:</p>
+<pre><code class="language-text">5</code></pre>
+  <p>Why? <code>a</code> and <code>b</code> refer to different objects.</p>
+  <h4>Tracing Exercise 3</h4>
+  <p>What is wrong here?</p>
+<pre><code class="language-java">Student student = null;
+
+System.out.println(
+    student.getName()
+);</code></pre>
+  <p>The reference contains <code>null</code>. There is no <code>Student</code> object on which to execute <code>getName()</code>. The result is a:</p>
+<pre><code class="language-text">NullPointerException</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m6-book"
+          data-kicker="Worked example" data-title="The Book class and LibraryDemo">
+  <h4>Requirements</h4>
+  <p>Suppose we want to represent books in a library. Each book has:</p>
+<pre><code class="language-text">title
+author
+ISBN
+checkout status</code></pre>
+  <p>A user should be able to:</p>
+<pre><code class="language-text">check out a book
+return a book
+determine whether it is checked out
+retrieve its title and author</code></pre>
+  <h4>A possible design</h4>
+<pre><code class="language-java">public class Book {
+
+    private String title;
+    private String author;
+    private String isbn;
+    private boolean checkedOut;
+
+    public Book(String title,
+                String author,
+                String isbn) {
+
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        checkedOut = false;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public boolean isCheckedOut() {
+        return checkedOut;
+    }
+
+    public boolean checkout() {
+
+        if (checkedOut) {
+            return false;
+        }
+
+        checkedOut = true;
+        return true;
+    }
+
+    public void returnBook() {
+        checkedOut = false;
+    }
+
+}</code></pre>
+  <p>Notice that we do not provide:</p>
+<pre><code class="language-java">setCheckedOut()</code></pre>
+  <p>Instead, the class exposes meaningful operations:</p>
+<pre><code class="language-java">checkout()
+returnBook()</code></pre>
+  <p>This is a more expressive design.</p>
+  <h4>Using the Book class</h4>
+<pre><code class="language-java">public class LibraryDemo {
+
+    public static void main(String[] args) {
+
+        Book book =
+            new Book(
+                "The Hobbit",
+                "J.R.R. Tolkien",
+                "9780547928227"
+            );
+
+        System.out.println(
+            book.getTitle()
+        );
+
+        boolean success =
+            book.checkout();
+
+        System.out.println(
+            "Checkout successful: "
+            + success
+        );
+
+        System.out.println(
+            "Checked out: "
+            + book.isCheckedOut()
+        );
+    }
+
+}</code></pre>
+  <p>Possible output:</p>
+<pre><code class="language-text">The Hobbit
+Checkout successful: true
+Checked out: true</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m6-concept-check"
+          data-kicker="Practice" data-title="Concept check — true or false">
+  <p>For each statement, determine whether it is true or false.</p>
+  <h4>1. A class and an object are the same thing.</h4>
+  <p><strong>False.</strong> A class defines a type of object. An object is an instance of that class.</p>
+  <h4>2. Two variables can refer to the same object.</h4>
+  <p><strong>True.</strong></p>
+  <h4>3. Every field should have a setter.</h4>
+  <p><strong>False.</strong> The public interface should expose only operations that make sense.</p>
+  <h4>4. A constructor has a return type.</h4>
+  <p><strong>False.</strong> Constructors do not specify a return type.</p>
+  <h4>5. Private fields cannot be accessed directly from unrelated classes.</h4>
+  <p><strong>True.</strong></p>
+  <h4>6. <code>this</code> refers to the current object.</h4>
+  <p><strong>True.</strong></p>
+  <h4>7. Assigning one object reference variable to another automatically copies the object.</h4>
+  <p><strong>False.</strong> It copies the reference.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-inclass-exercises"
+          data-kicker="Practice" data-title="In-class exercises: Car and Course">
+  <h4>Exercise: Car</h4>
+  <p>Design a class called:</p>
+<pre><code class="language-java">Car</code></pre>
+  <p>Each car should contain:</p>
+<pre><code class="language-text">make
+model
+year
+mileage
+fuelLevel</code></pre>
+  <p>The class should provide operations that allow a user to:</p>
+<pre><code class="language-text">retrieve the make
+retrieve the model
+retrieve the year
+retrieve the mileage
+retrieve the fuel level
+add fuel
+drive the car</code></pre>
+  <p>When driving:</p>
+  <ul>
+    <li>mileage should increase,</li>
+    <li>fuel should decrease,</li>
+    <li>the car should not drive farther than its available fuel permits.</li>
+  </ul>
+  <p>Questions to consider:</p>
+  <ol>
+    <li>Which fields should be private?</li>
+    <li>What constructor parameters are necessary?</li>
+    <li>Should <code>mileage</code> have a setter?</li>
+    <li>Should <code>fuelLevel</code> have a setter?</li>
+    <li>What should happen if someone tries to add a negative amount of fuel?</li>
+    <li>What should happen if someone tries to drive a negative number of miles?</li>
+  </ol>
+  <h4>Exercise: Course</h4>
+  <p>Design:</p>
+<pre><code class="language-java">Course</code></pre>
+  <p>with fields:</p>
+<pre><code class="language-text">courseCode
+courseName
+capacity
+enrollment</code></pre>
+  <p>Provide:</p>
+<pre><code class="language-text">getCourseCode()
+getCourseName()
+getCapacity()
+getEnrollment()
+isFull()
+enrollStudent()
+dropStudent()</code></pre>
+  <p>Think carefully about what rules must be preserved. For example:</p>
+<pre><code class="language-text">enrollment &gt;= 0
+
+enrollment &lt;= capacity</code></pre>
+  <p>The class should prevent invalid states.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-programming-exercises"
+          data-kicker="Practice" data-title="SavingsAccount, InventoryItem, and identifying objects">
+  <h4>Programming exercise: SavingsAccount</h4>
+  <p>Implement a <code>SavingsAccount</code> class. Each account should have:</p>
+<pre><code class="language-text">accountHolder
+balance
+interestRate</code></pre>
+  <p>Provide a constructor and methods:</p>
+<pre><code class="language-java">getAccountHolder()
+
+getBalance()
+
+getInterestRate()
+
+deposit(double amount)
+
+withdraw(double amount)
+
+applyInterest()</code></pre>
+  <p><code>applyInterest()</code> should increase the balance according to:</p>
+<pre><code class="language-text">balance = balance +
+          balance * interestRate</code></pre>
+  <p>Requirements:</p>
+  <ul>
+    <li>Deposits must be positive.</li>
+    <li>Withdrawals must be positive.</li>
+    <li>A withdrawal cannot exceed the balance.</li>
+    <li>The balance cannot be changed directly outside the class.</li>
+  </ul>
+  <p>Example:</p>
+<pre><code class="language-java">SavingsAccount account =
+    new SavingsAccount(
+        "Alice",
+        1000,
+        0.05
+    );
+
+account.deposit(200);
+
+account.applyInterest();
+
+System.out.println(
+    account.getBalance()
+);</code></pre>
+  <h4>Challenge exercise: InventoryItem</h4>
+  <p>Create a class representing an inventory item. Possible fields:</p>
+<pre><code class="language-text">name
+sku
+price
+quantity</code></pre>
+  <p>Possible operations:</p>
+<pre><code class="language-text">addStock()
+removeStock()
+getInventoryValue()
+changePrice()</code></pre>
+  <p>The total inventory value should be:</p>
+<pre><code class="language-text">price * quantity</code></pre>
+  <p>The class should prevent:</p>
+<pre><code class="language-text">negative prices
+
+negative quantities</code></pre>
+  <p>Think carefully about whether fields should be directly modifiable.</p>
+  <h4>Design exercise: identify the objects</h4>
+  <p>Suppose we are designing a simple movie theater application. The program must track movies, theaters, showtimes, customers, tickets, and seats. Identify possible classes. One reasonable design might include:</p>
+<pre><code class="language-text">Movie
+Theater
+Showtime
+Customer
+Ticket
+Seat</code></pre>
+  <p>For each class, ask:</p>
+  <ol>
+    <li>What information belongs to the object?</li>
+    <li>What actions should the object perform?</li>
+    <li>Which other objects does it interact with?</li>
+  </ol>
+  <p>There is rarely only one correct object-oriented design. The goal is to find a design that makes responsibilities clear.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m6-lab"
+          data-kicker="Lab" data-title="Building a simple student management system">
+  <h4>The class</h4>
+  <p>Create a <code>Student</code> class. Each student should have:</p>
+<pre><code class="language-text">name
+studentId
+credits
+totalGradePoints</code></pre>
+  <p>Provide methods:</p>
+<pre><code class="language-java">getName()
+
+getStudentId()
+
+getCredits()
+
+getGpa()
+
+addCourse(int courseCredits,
+          double gradePoints)</code></pre>
+  <h4>The rules</h4>
+  <p>When a student completes a course, update both:</p>
+<pre><code class="language-text">credits
+
+totalGradePoints</code></pre>
+  <p>GPA can be calculated as:</p>
+<pre><code class="language-text">totalGradePoints / credits</code></pre>
+  <p>Do not store GPA as a separate field unless necessary.</p>
+  <p>Then create a program that creates several students and prints their information.</p>
+  <h4>Extension</h4>
+  <p>Store several <code>Student</code> objects in an array:</p>
+<pre><code class="language-java">Student[] students;</code></pre>
+  <p>Loop through the array and determine which student has the highest GPA.</p>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

@@ -1,0 +1,4146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 9: Exceptions, File I/O, and Testing</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Exceptions, File I/O, and Testing</h1>
+  <p class="subtitle">Week 9 — what your program does when things go wrong</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">By the end of this week, you should be able to:</p>
+  <ul>
+    <li>Explain the difference between syntax errors, logic errors, and runtime errors.</li>
+    <li>Explain what an exception is and why Java uses exceptions.</li>
+    <li>Use <code>try</code>, <code>catch</code>, and <code>finally</code>.</li>
+    <li>Distinguish between checked and unchecked exceptions.</li>
+    <li>Throw exceptions using <code>throw</code>.</li>
+    <li>Declare exceptions using <code>throws</code>.</li>
+    <li>Decide when an exception should be handled and when it should be propagated.</li>
+  </ul>
+  <aside class="notes">
+    <p>Thirteen objectives this week, and they fall into three blocks: exceptions, files, and testing. The first seven are the exception block — the vocabulary, the syntax, and then the judgement call.</p>
+    <p>Notice the last one on this slide is not a syntax skill. Deciding when an exception should be handled and when it should be propagated is a design decision, and it is the objective students find hardest.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul>
+    <li>Read data from text files.</li>
+    <li>Write data to text files.</li>
+    <li>Use <code>try-with-resources</code> to safely manage files.</li>
+    <li>Validate input and write more robust programs.</li>
+    <li>Explain the purpose of software testing.</li>
+    <li>Write basic unit tests.</li>
+    <li>Identify normal cases, boundary cases, and exceptional cases when testing code.</li>
+  </ul>
+  <div class="box key"><span class="box-title">Key idea</span>One of the differences between a small classroom program and production-quality software is how the program behaves when something goes wrong.</div>
+  <aside class="notes">
+    <p>The second block is file I/O — reading, writing, and managing the resource safely — and the third block is testing, ending with the three categories of test case that the second half of the week is built around.</p>
+    <p>Everything on both lists serves one sentence: one of the differences between a small classroom program and production-quality software is how the program behaves when something goes wrong.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap — Parts I to XII</h2>
+  <div class="cols smaller">
+    <ol>
+      <li>Errors, and What an Exception Is</li>
+      <li>Handling Exceptions: <code>try</code>, <code>catch</code>, <code>finally</code></li>
+      <li>Checked and Unchecked; <code>throw</code> and <code>throws</code></li>
+      <li>Defensive Programming and Validation</li>
+      <li>Reading and Writing Files</li>
+      <li>Real Data, Real Failures</li>
+    </ol>
+    <ol start="7">
+      <li>Testing Fundamentals</li>
+      <li>Unit Testing with JUnit</li>
+      <li>Testable Design, Robustness, Debugging</li>
+      <li>Putting It Together</li>
+      <li>Contracts, Propagation, and Connections</li>
+      <li>Lab, Review, and Summary</li>
+    </ol>
+  </div>
+  <p class="small dim">Three closely related ideas run through all twelve: detecting and responding to errors, working with external data, and testing programs systematically.</p>
+  <aside class="notes">
+    <p>This week focuses on three closely related ideas: detecting and responding to errors, working with external data, and testing programs systematically. Together, these concepts help us write software that is more reliable.</p>
+    <p>Parts I to IV are the exception machinery. Parts V and VI are files — which is where checked exceptions stop being theoretical. Parts VII to X are testing. Part XI ties the week back to object-oriented programming and forward to data structures.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Errors, and What an Exception Is</h2>
+  <p class="part-sub">Real programs cannot assume that everything goes according to plan.</p>
+</section>
+
+<section>
+  <h2>Programs That Assume Everything Works</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int age = scanner.nextInt();
+</code></pre>
+      <p class="small">We assume the user enters an integer.</p>
+<pre><code class="language-java" data-trim data-noescape>
+double result = total / count;
+</code></pre>
+      <p class="small">We assume <code>count</code> is not zero.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner file = new Scanner(new File("students.txt"));
+</code></pre>
+      <p class="small">We assume the file exists.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>Real programs cannot make these assumptions.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What actually happens out there</summary>
+    <div class="acc-body">
+      <ul>
+        <li>Users enter invalid input.</li>
+        <li>Files disappear.</li>
+        <li>Network connections fail.</li>
+        <li>Data may be incomplete.</li>
+        <li>Programmers make mistakes.</li>
+      </ul>
+      <p>Each line is a different failure source, and each one arrives at your code the same way: as a value or a state your program did not plan for.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>So far, most of our programs have assumed that everything goes according to plan. We write <code>int age = scanner.nextInt();</code> and assume the user enters an integer. We write <code>double result = total / count;</code> and assume count is not zero. We write a Scanner over a File and assume the file exists.</p>
+    <p>Real programs cannot make these assumptions. Users enter invalid input. Files disappear. Network connections fail. Data may be incomplete. Programmers make mistakes.</p>
+    <p>One of the differences between a small classroom program and production-quality software is how the program behaves when something goes wrong.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Three Ideas, One Week</h2>
+  <ol>
+    <li><strong>Detecting and responding to errors</strong></li>
+    <li><strong>Working with external data</strong></li>
+    <li><strong>Testing programs systematically</strong></li>
+  </ol>
+  <div class="box key"><span class="box-title">Key idea</span>Together, these concepts help us write software that is more reliable.</div>
+  <div class="chain">
+    <span>Detect</span><span class="sep">→</span>
+    <span>Respond</span><span class="sep">→</span>
+    <span>Persist</span><span class="sep">→</span>
+    <span>Test</span>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-why-this-week" tabindex="0">Why this week matters, in full</span>
+  </div>
+  <aside class="notes">
+    <p>This week focuses on three closely related ideas: detecting and responding to errors, working with external data, and testing programs systematically.</p>
+    <p>They are related because each one exposes the others. Working with external data is what forces you to detect errors; testing systematically is how you find out whether your error handling actually works.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Syntax Errors</h2>
+  <p class="small">A syntax error means that the program violates Java's grammatical rules.</p>
+  <div class="cols">
+    <div>
+      <span class="tag no">Missing semicolon</span>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10
+System.out.println(x);
+</code></pre>
+      <p class="small">The semicolon is missing. The Java compiler detects this problem.</p>
+    </div>
+    <div>
+      <span class="tag no">Unbalanced parenthesis</span>
+<pre><code class="language-java" data-trim data-noescape>
+if (x &gt; 5 {
+    System.out.println("Large");
+}
+</code></pre>
+      <p class="small">This code cannot compile.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Syntax errors are generally discovered before the program runs.</div>
+  <details class="acc">
+    <summary>Which of the three error kinds costs you the least?</summary>
+    <div class="acc-body">
+      <p>This one. A syntax error means the program violates Java's grammatical rules, and the Java compiler detects the problem — so the broken program never runs at all.</p>
+      <p>Contrast that with a logic error, where the program compiles, runs, never crashes, and is quietly wrong; and with a runtime error, which is only discovered while the program is executing, possibly in front of a user.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Before discussing exceptions, we need to distinguish several kinds of errors. A syntax error means that the program violates Java's grammatical rules.</p>
+    <p>In the first example the semicolon is missing, and the Java compiler detects this problem. In the second the opening parenthesis of the if condition is never closed; this code cannot compile.</p>
+    <p>Syntax errors are generally discovered before the program runs. That is the property that separates them from everything else this week — they cost you nothing but time.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Logic Errors</h2>
+  <p class="small">A logic error occurs when the program runs, but produces the wrong answer.</p>
+<pre><code class="language-java" data-trim data-noescape>
+double average = total / 2;
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose there are actually 10 values.</p>
+      <ul class="small">
+        <li>The program may compile.</li>
+        <li>It may run.</li>
+        <li>It may never crash.</li>
+        <li>But the result is incorrect.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Watch out</span>Logic errors can be especially difficult because Java cannot automatically determine what the programmer intended.</div>
+      <p class="small">Testing is one of our main tools for detecting logic errors.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A logic error occurs when the program runs, but produces the wrong answer. Dividing a total by 2 when there are actually 10 values is the canonical case: the program may compile, it may run, it may never crash, but the result is incorrect.</p>
+    <p>Logic errors can be especially difficult because Java cannot automatically determine what the programmer intended. The compiler has no opinion about whether 2 or 10 was meant.</p>
+    <p>Testing is one of our main tools for detecting logic errors — which is exactly why the second half of this week exists.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Runtime Errors</h2>
+  <p class="small">A runtime error occurs while the program is executing.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int[] numbers = new int[5];
+
+System.out.println(numbers[10]);
+</code></pre>
+      <p class="small">This program compiles.</p>
+    </div>
+    <div>
+      <p class="small">But when it runs, Java detects that index <code>10</code> is outside the array.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The result is an exception.</div>
+    </div>
+  </div>
+  <div class="chain">
+    <span>Syntax error</span><span class="sep">→</span>
+    <span>compile time</span>
+  </div>
+  <div class="chain">
+    <span>Logic error</span><span class="sep">→</span>
+    <span>wrong answer, no crash</span>
+  </div>
+  <div class="chain">
+    <span>Runtime error</span><span class="sep">→</span>
+    <span>exception</span>
+  </div>
+  <aside class="notes">
+    <p>A runtime error occurs while the program is executing. Allocating a five-element array and then printing element ten compiles perfectly well, because the compiler does not evaluate the index. When it runs, Java detects that index 10 is outside the array.</p>
+    <p>The result is an exception. That is the bridge into the rest of Part I: the third category of error is the one Java gives us a mechanism for.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Is an Exception?</h2>
+  <div class="def"><span class="term">Exception:</span> an object representing an abnormal situation that occurs while a program is running.</div>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10;
+int y = 0;
+
+int result = x / y;
+</code></pre>
+      <p class="small">When Java attempts to divide by zero, it creates an exception object. Specifically:</p>
+<pre><code class="language-text" data-trim data-noescape>
+ArithmeticException
+</code></pre>
+    </div>
+    <div>
+      <p class="small">If the program does not handle the exception, the program terminates. A message similar to this appears:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The exception mechanism allows us to separate <strong>normal program logic</strong> from <strong>error-handling logic</strong>.</div>
+  <aside class="notes">
+    <p>An exception is an object representing an abnormal situation that occurs while a program is running. When Java attempts to divide by zero, it creates an exception object — specifically an ArithmeticException.</p>
+    <p>If the program does not handle the exception, the program terminates, and a message like <em>Exception in thread "main" java.lang.ArithmeticException: / by zero</em> appears.</p>
+    <p>The exception mechanism allows us to separate normal program logic from error-handling logic. Keep that phrase; it is the argument for why exceptions exist at all rather than returning error codes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Exception Hierarchy</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Exceptions are objects. Therefore, exception types are organized using <strong>inheritance</strong>. A simplified Java hierarchy looks like this:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Object
+   |
+Throwable
+   |
+   +-- Error
+   |
+   +-- Exception
+          |
+          +-- RuntimeException
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We will mainly work with classes below <code>Exception</code>. Some common exception classes include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+ArithmeticException
+NullPointerException
+ArrayIndexOutOfBoundsException
+NumberFormatException
+IllegalArgumentException
+IOException
+FileNotFoundException
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What sits on the <code>Error</code> branch, and why we ignore it</summary>
+    <div class="acc-body">
+      <p>The hierarchy splits at <code>Throwable</code> into two branches, <code>Error</code> and <code>Exception</code>. We will mainly work with classes below <code>Exception</code>.</p>
+      <p>Every one of the seven common classes listed on this slide is under <code>Exception</code>. Nothing in CSC500 asks you to catch anything from the other branch.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-hierarchy" tabindex="0">Why the hierarchy shape matters</span>
+  </div>
+  <aside class="notes">
+    <p>Exceptions are objects. Therefore, exception types are organized using inheritance. The simplified hierarchy runs Object, Throwable, and then two branches — Error and Exception — with RuntimeException sitting under Exception.</p>
+    <p>We will mainly work with classes below Exception. The seven classes on the right are the ones this week actually uses; six of them appear again before Friday.</p>
+    <p>This is the first payoff from Week 8. Inheritance is not an abstract exercise here — it is what makes one catch block able to handle a family of failures.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>ArithmeticException and ArrayIndexOutOfBoundsException</h2>
+  <div class="cols">
+    <div>
+      <h4>ArithmeticException</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int x = 10 / 0;
+</code></pre>
+      <p class="small">Produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+ArithmeticException
+</code></pre>
+    </div>
+    <div>
+      <h4>ArrayIndexOutOfBoundsException</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int[] values = {10, 20, 30};
+
+System.out.println(values[5]);
+</code></pre>
+      <p class="small">Valid indices are:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0
+1
+2
+</code></pre>
+      <p class="small">Index <code>5</code> is invalid.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Integer division by zero produces an ArithmeticException. Note that this is integer division specifically — floating-point division by zero gives infinity instead, which is one of the reasons this exception surprises people.</p>
+    <p>An array literal of three elements has valid indices 0, 1, and 2. Index 5 is invalid, and the attempt produces an ArrayIndexOutOfBoundsException.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>NullPointerException and NumberFormatException</h2>
+  <div class="cols">
+    <div>
+      <h4>NullPointerException</h4>
+<pre><code class="language-java" data-trim data-noescape>
+String name = null;
+
+System.out.println(name.length());
+</code></pre>
+      <p class="small">The variable exists. But it does not refer to a <code>String</code> object. Calling a method through a <code>null</code> reference causes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NullPointerException
+</code></pre>
+    </div>
+    <div>
+      <h4>NumberFormatException</h4>
+<pre><code class="language-java" data-trim data-noescape>
+String value = "hello";
+
+int x = Integer.parseInt(value);
+</code></pre>
+      <p class="small">Java cannot interpret <code>"hello"</code> as an integer. Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NumberFormatException
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span><code>NullPointerException</code> is one of the most common exceptions in Java programs.</div>
+  <details class="acc">
+    <summary>Why <code>name.length()</code> fails when <code>name</code> exists</summary>
+    <div class="acc-body">
+      <p>The variable exists. But it does not refer to a <code>String</code> object.</p>
+<pre><code class="language-java" data-trim data-noescape>
+String name = null;
+</code></pre>
+      <p>Declaring the variable reserves the name; assigning <code>null</code> means there is no object on the other end of it. Calling a method through a <code>null</code> reference causes a <code>NullPointerException</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>With a null String, the variable exists — but it does not refer to a String object. Calling a method through a null reference causes a NullPointerException. This is one of the most common exceptions in Java programs.</p>
+    <p>Integer.parseInt of the string "hello" fails because Java cannot interpret "hello" as an integer, and the result is a NumberFormatException. Remember this one; it is the exception the file-parsing examples later this week keep hitting.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>Handling Exceptions</h2>
+  <p class="part-sub"><code>try</code>, <code>catch</code>, and <code>finally</code> — and the control flow they create.</p>
+</section>
+
+<section>
+  <h2>try and catch</h2>
+  <p class="small">We handle exceptions using a <code>try-catch</code> statement. Basic structure:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    // code that might throw an exception
+}
+catch (ExceptionType e) {
+    // code that handles the exception
+}
+</code></pre>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    int result = 10 / 0;
+    System.out.println(result);
+}
+catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero.");
+}
+</code></pre>
+    </div>
+  </div>
+  <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Cannot divide by zero.
+</code></pre>
+  <div class="box good"><span class="box-title">Do this</span>The program does not terminate unexpectedly.</div>
+  <aside class="notes">
+    <p>We handle exceptions using a try-catch statement. The try block holds code that might throw an exception; the catch block holds code that handles it.</p>
+    <p>In the worked example, dividing 10 by 0 inside the try block causes an ArithmeticException, the catch block prints "Cannot divide by zero.", and the program does not terminate unexpectedly.</p>
+    <p>Point out what did <em>not</em> print: the println of result never ran. That is the subject of the next slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Control Flow in try-catch</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    System.out.println("A");
+
+    int x = 10 / 0;
+
+    System.out.println("B");
+}
+catch (ArithmeticException e) {
+    System.out.println("C");
+}
+
+System.out.println("D");
+</code></pre>
+    </div>
+    <div>
+      <p class="small">What is printed?</p>
+<pre><code class="language-text" data-trim data-noescape>
+A
+C
+D
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span><code>B</code> is never printed.</div>
+      <p class="small">As soon as the exception occurs, Java stops executing the remaining statements in the <code>try</code> block. Control immediately transfers to the matching <code>catch</code>.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Trace it one statement at a time</summary>
+    <div class="acc-body">
+      <ol>
+        <li><code>System.out.println("A")</code> runs — <strong>A</strong> appears.</li>
+        <li><code>10 / 0</code> throws. The remaining statements in the <code>try</code> block are abandoned.</li>
+        <li>Control transfers to the matching <code>catch</code> — <strong>C</strong> appears.</li>
+        <li>The <code>try-catch</code> statement is finished; execution continues after it — <strong>D</strong> appears.</li>
+      </ol>
+      <p>The statement that printed <strong>B</strong> was skipped, not failed. There is no partial execution of a line and no resumption point.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A, C, D is printed; B is never printed. As soon as the exception occurs, Java stops executing the remaining statements in the try block. Control immediately transfers to the matching catch.</p>
+    <p>Students often expect execution to resume where it left off after the catch. It does not. The rest of the try block is abandoned permanently, and execution continues after the whole try-catch statement.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Exception Object</h2>
+  <p class="small">In:</p>
+<pre><code class="language-java" data-trim data-noescape>
+catch (ArithmeticException e)
+</code></pre>
+  <p class="small"><code>e</code> is a reference to the exception object. We can examine it.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+catch (ArithmeticException e) {
+    System.out.println(e.getMessage());
+}
+</code></pre>
+      <p class="small">For division by zero, this may print:</p>
+<pre><code class="language-text" data-trim data-noescape>
+/ by zero
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Another useful method is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+e.printStackTrace();
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+catch (Exception e) {
+    e.printStackTrace();
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>The stack trace shows where the exception occurred and how the program reached that point. Stack traces are extremely useful for debugging.</div>
+  <aside class="notes">
+    <p>In <code>catch (ArithmeticException e)</code>, the identifier <code>e</code> is a reference to the exception object. We can examine it. Calling getMessage on a divide-by-zero exception may print "/ by zero".</p>
+    <p>Another useful method is printStackTrace. The stack trace shows where the exception occurred and how the program reached that point. Stack traces are extremely useful for debugging — Part IX comes back to reading one properly.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Multiple catch Blocks</h2>
+  <p class="small">A block of code may cause several different exceptions.</p>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    String text = "abc";
+    int value = Integer.parseInt(text);
+
+    int result = 100 / value;
+
+    System.out.println(result);
+}
+catch (NumberFormatException e) {
+    System.out.println("The string is not a valid integer.");
+}
+catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero.");
+}
+</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>Java chooses the <strong>first compatible</strong> <code>catch</code>.</div>
+  <details class="acc">
+    <summary>Which <code>catch</code> runs for <code>text = "abc"</code>?</summary>
+    <div class="acc-body">
+      <p>The first one. <code>Integer.parseInt("abc")</code> throws a <code>NumberFormatException</code> immediately, so the division is never reached and "The string is not a valid integer." is printed.</p>
+      <p>The <code>ArithmeticException</code> clause exists for a different input entirely — a <code>text</code> of <code>"0"</code>, which parses fine and then makes <code>100 / value</code> divide by zero.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A block of code may cause several different exceptions. Here the parse can fail with a NumberFormatException, and the division can fail with an ArithmeticException if value happens to be zero.</p>
+    <p>Java chooses the first compatible catch. "First" and "compatible" are both doing work in that sentence, and the next two slides unpack each of them.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Catching General Exceptions</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We could write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+catch (Exception e) {
+    System.out.println("Something went wrong.");
+}
+</code></pre>
+      <p class="small">This works because many exception classes inherit from <code>Exception</code>.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>However, catching <code>Exception</code> everywhere is usually poor design.</div>
+    </div>
+    <div>
+      <span class="tag no">Vague</span>
+<pre><code class="language-java" data-trim data-noescape>
+catch (Exception e) {
+    System.out.println("Error.");
+}
+</code></pre>
+      <span class="tag ok">Meaningful</span>
+<pre><code class="language-java" data-trim data-noescape>
+catch (NumberFormatException e) {
+    System.out.println("Please enter a valid integer.");
+}
+</code></pre>
+      <p class="small">The second provides more meaningful handling.</p>
+    </div>
+  </div>
+  <div class="def"><span class="term">General principle:</span> catch the most specific exception that you can meaningfully handle.</div>
+  <aside class="notes">
+    <p>We could catch Exception itself, and it works, because many exception classes inherit from Exception. However, catching Exception everywhere is usually poor design.</p>
+    <p>Compare the two catch blocks. The first tells the user "Error." — which tells them nothing they can act on. The second says "Please enter a valid integer.", which is actionable. The second provides more meaningful handling.</p>
+    <p>The general principle: catch the most specific exception that you can meaningfully handle. Note the second half of that — specificity is only useful if you can actually do something about it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Catch Ordering</h2>
+  <p class="small">Because exceptions participate in inheritance, catch order matters.</p>
+  <div class="cols">
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    // ...
+}
+catch (Exception e) {
+    // ...
+}
+catch (NumberFormatException e) {
+    // ...
+}
+</code></pre>
+      <p class="small">This will not compile. Why? Because <code>NumberFormatException</code> is already covered by <code>Exception</code>.</p>
+    </div>
+    <div>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    // ...
+}
+catch (NumberFormatException e) {
+    // ...
+}
+catch (Exception e) {
+    // ...
+}
+</code></pre>
+      <p class="small">The specific exception should appear first.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Because exceptions participate in inheritance, catch order matters. Putting catch Exception first will not compile. Why? Because NumberFormatException is already covered by Exception — the second clause could never be reached.</p>
+    <p>The specific exception should appear first. This is one of the rare cases where Java refuses to compile code that is merely useless rather than actually wrong, and students should be grateful for it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>finally</h2>
+  <p class="small">Java provides an optional <code>finally</code> block.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    // risky code
+}
+catch (Exception e) {
+    // handle error
+}
+finally {
+    // cleanup
+}
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The <code>finally</code> block executes whether or not an exception occurred.</div>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    System.out.println("Trying operation...");
+}
+catch (Exception e) {
+    System.out.println("Error.");
+}
+finally {
+    System.out.println("Finished.");
+}
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What <code>finally</code> was historically for</summary>
+    <div class="acc-body">
+      <p>Historically, <code>finally</code> was commonly used to close files, database connections, and other resources.</p>
+      <p>Modern Java usually uses <strong>try-with-resources</strong> for that purpose, which we will see later — in Part V, once we have files open to close.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Java provides an optional finally block. The finally block executes whether or not an exception occurred — that is the whole point of it.</p>
+    <p>Historically, finally was commonly used to close files, database connections, and other resources. Modern Java usually uses try-with-resources for that purpose, which we will see later in Part V.</p>
+    <p>Do not skip finally as merely historical, though. It still matters when the cleanup is not a closeable resource.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Checked, Unchecked, <code>throw</code>, and <code>throws</code></h2>
+  <p class="part-sub">Which exceptions the compiler insists you deal with — and how to raise your own.</p>
+</section>
+
+<section>
+  <h2>Unchecked Exceptions</h2>
+  <p class="small">Java distinguishes between two important categories. Unchecked exceptions generally represent <strong>programming errors or invalid operations</strong>.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NullPointerException
+ArithmeticException
+ArrayIndexOutOfBoundsException
+IllegalArgumentException
+NumberFormatException
+</code></pre>
+    </div>
+    <div>
+      <p class="small">These typically inherit from:</p>
+<pre><code class="language-java" data-trim data-noescape>
+RuntimeException
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The compiler does not require us to handle them.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java distinguishes between two important categories. Unchecked exceptions generally represent programming errors or invalid operations — a null reference, a bad index, an argument that violates a method's rules.</p>
+    <p>These typically inherit from RuntimeException, and the compiler does not require us to handle them. The reasoning is that if you had to write a catch block for every possible NullPointerException, every line of Java would be wrapped in one.</p>
+    <p>All five examples on the left appeared in Part I. That is not a coincidence — the everyday exceptions are the unchecked ones.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Checked Exceptions</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Checked exceptions usually represent <strong>external conditions</strong> that a program may reasonably need to recover from.</p>
+      <p class="small">Examples include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+IOException
+FileNotFoundException
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Java requires the programmer either to:</p>
+      <ul class="small">
+        <li>handle the exception</li>
+      </ul>
+      <p class="small">or</p>
+      <ul class="small">
+        <li>declare that the method may throw it</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>This is why Part V — file I/O — is where checked exceptions stop being theoretical.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Checked vs. unchecked, side by side</summary>
+    <div class="acc-body">
+      <table class="smaller">
+        <thead><tr><th></th><th>Unchecked</th><th>Checked</th></tr></thead>
+        <tbody>
+          <tr><td>Represents</td><td>Programming errors or invalid operations</td><td>External conditions the program may reasonably need to recover from</td></tr>
+          <tr><td>Inherits from</td><td><code>RuntimeException</code></td><td><code>Exception</code> (but not <code>RuntimeException</code>)</td></tr>
+          <tr><td>Compiler</td><td>Does not require you to handle them</td><td>Requires you to handle or declare</td></tr>
+          <tr><td>Typical</td><td><code>NullPointerException</code>, <code>ArithmeticException</code></td><td><code>IOException</code>, <code>FileNotFoundException</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-checked-unchecked" tabindex="0">The full checked / unchecked distinction</span>
+  </div>
+  <aside class="notes">
+    <p>Checked exceptions usually represent external conditions that a program may reasonably need to recover from. The examples are IOException and FileNotFoundException — things outside your program's control.</p>
+    <p>Java requires the programmer either to handle the exception or to declare that the method may throw it. There is no third option; the code will not compile.</p>
+    <p>The design argument is that a missing file is not a bug in your code, it is a fact about the world, and the language wants you to have thought about it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>throws</code> Keyword</h2>
+  <p class="small">Suppose a method might cause a checked exception. We can declare this using <code>throws</code>.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void readFile() throws FileNotFoundException {
+    Scanner file = new Scanner(new File("data.txt"));
+}
+</code></pre>
+      <blockquote class="small">This method may fail with a <code>FileNotFoundException</code>. The caller is responsible for dealing with that possibility.</blockquote>
+    </div>
+    <div>
+      <p class="small">Notice the difference:</p>
+<pre><code class="language-java" data-trim data-noescape>
+throw
+</code></pre>
+      <p class="small">versus:</p>
+<pre><code class="language-java" data-trim data-noescape>
+throws
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>They are different keywords.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose a method might cause a checked exception. We can declare this using throws, written after the parameter list. The readFile method declares throws FileNotFoundException and then never handles it.</p>
+    <p>What that declaration means, in English: this method may fail with a FileNotFoundException, and the caller is responsible for dealing with that possibility. It is a promise moved up the call chain.</p>
+    <p>Notice the difference between throw and throws. They are different keywords, and Concept Check Question 1 asks students to state the difference.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>throw</code> Keyword</h2>
+  <p class="small">We use <code>throw</code> when we <strong>intentionally</strong> create an exception.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void setAge(int age) {
+
+    if (age &lt; 0) {
+        throw new IllegalArgumentException("Age cannot be negative.");
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+setAge(-5);
+</code></pre>
+      <p class="small">produces an exception.</p>
+      <div class="box key"><span class="box-title">Key idea</span>This is useful when a method detects that its <strong>contract</strong> has been violated.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary><code>throw</code> and <code>throws</code> in one sentence each</summary>
+    <div class="acc-body">
+      <p><code>throw</code> is a <em>statement</em>. It creates an exception object and raises it right now:</p>
+<pre><code class="language-java" data-trim data-noescape>
+throw new IllegalArgumentException("Age cannot be negative.");
+</code></pre>
+      <p><code>throws</code> is part of a <em>method signature</em>. It declares that calling this method may produce that exception, and pushes the responsibility onto the caller.</p>
+      <p>A method may do both: throw an exception it detects, and declare a checked exception it does not handle.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>We use throw when we intentionally create an exception. In setAge, a negative age is not something Java would object to on its own — <code>int</code> happily holds minus five. It is the method that decides minus five is meaningless.</p>
+    <p>Calling setAge with minus five produces an exception. This is useful when a method detects that its contract has been violated — an idea we return to formally in Part XI.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Defensive Programming and Validation</h2>
+  <p class="part-sub">Anticipating possible errors instead of assuming valid input.</p>
+</section>
+
+<section>
+  <h2>Defensive Programming</h2>
+  <div class="def"><span class="term">Defensive programming:</span> anticipating possible errors instead of assuming valid input.</div>
+  <div class="cols">
+    <div>
+      <span class="tag no">Assumes valid input</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateAverage(double total, int count) {
+    return total / count;
+}
+</code></pre>
+      <p class="small">What happens when:</p>
+<pre><code class="language-java" data-trim data-noescape>
+count == 0
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">Safer</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateAverage(double total, int count) {
+
+    if (count &lt;= 0) {
+        throw new IllegalArgumentException(
+            "count must be greater than zero"
+        );
+    }
+
+    return total / count;
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>Now the method explicitly defines acceptable input.</div>
+  <details class="acc">
+    <summary>Why the guard says <code>&lt;= 0</code> and not <code>== 0</code></summary>
+    <div class="acc-body">
+      <p>A count of minus three is no more meaningful than a count of zero, and it would not throw — it would return a negative "average" and keep going.</p>
+      <p>Defensive programming means anticipating possible errors instead of assuming valid input, so the guard rejects the whole invalid range rather than the one value that happens to crash.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Defensive programming means anticipating possible errors instead of assuming valid input. The naive calculateAverage simply divides total by count.</p>
+    <p>What happens when count equals zero? Because total is a double, this does not even throw — it produces infinity or NaN, and the wrong number travels onward silently. That is worse than a crash.</p>
+    <p>The safer method rejects count less than or equal to zero with an IllegalArgumentException. Now the method explicitly defines acceptable input. The guard is documentation as much as it is defence.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Validate at the Boundary</h2>
+  <blockquote class="small">Validate data when it enters your system.</blockquote>
+  <p class="small">Suppose a class represents a bank account.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class BankAccount {
+
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+
+        if (initialBalance &lt; 0) {
+            throw new IllegalArgumentException(
+                "Initial balance cannot be negative."
+            );
+        }
+
+        balance = initialBalance;
+    }
+}
+</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>This prevents the object from entering an invalid state.</div>
+  <aside class="notes">
+    <p>A useful software engineering rule is: validate data when it enters your system. The boundary is wherever untrusted data first becomes your program's data — a constructor, a setter, a parse method, a file reader.</p>
+    <p>In the BankAccount constructor, a negative initial balance is rejected before the field is ever assigned. This prevents the object from entering an invalid state.</p>
+    <p>Compare this with checking the balance later, at withdrawal time. By then the invalid object has already been passed around, stored in collections, and printed. Part XI calls this principle "fail fast".</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exception Handling Is Not a Substitute for Good Logic</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Do not write</span>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    System.out.println(array[index]);
+}
+catch (ArrayIndexOutOfBoundsException e) {
+    System.out.println("Bad index.");
+}
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">When you could simply validate</span>
+<pre><code class="language-java" data-trim data-noescape>
+if (index &gt;= 0 &amp;&amp; index &lt; array.length) {
+    System.out.println(array[index]);
+}
+else {
+    System.out.println("Bad index.");
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Exceptions should normally represent <strong>exceptional</strong> situations. They should not replace ordinary conditional logic.</div>
+  <details class="acc">
+    <summary>How to tell which one a situation calls for</summary>
+    <div class="acc-body">
+      <p>Ask whether you can cheaply test the condition before acting. An array index can be range-checked in one comparison, so an <code>if</code> is right. Whether a file exists cannot be reliably tested before opening it, so an exception is right.</p>
+      <p>Mistake 3 in Part IX is exactly this error committed in its worst form — with an empty catch block that discards the evidence.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Do not wrap an array access in a try-catch for ArrayIndexOutOfBoundsException when you could simply validate the index with an if statement. Both versions print "Bad index." — but only one of them says what it means.</p>
+    <p>Exceptions should normally represent exceptional situations. They should not replace ordinary conditional logic. Beyond style, the try-catch version is also slower and it swallows out-of-range accesses from anywhere in the block, not only the one you meant.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Reading and Writing Files</h2>
+  <p class="part-sub">A file allows data to survive after the program terminates.</p>
+</section>
+
+<section>
+  <h2>Why Files?</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">So far, many programs have received input from:</p>
+<pre><code class="language-text" data-trim data-noescape>
+keyboard
+</code></pre>
+      <p class="small">and sent output to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+screen
+</code></pre>
+    </div>
+    <div>
+      <p class="small">But useful programs frequently need <strong>persistent</strong> data. Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+students.txt
+grades.csv
+configuration.txt
+transactions.txt
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>A file allows data to survive after the program terminates.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>So far, many programs have received input from the keyboard and sent output to the screen. Both of those disappear when the program ends.</p>
+    <p>But useful programs frequently need persistent data — a roster, a gradebook, a configuration, a transaction log. A file allows data to survive after the program terminates.</p>
+    <p>It also means the data arrives from outside your program, written by someone else, possibly wrongly. That is why files and exceptions are taught in the same week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reading Text Files with <code>Scanner</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">We have already used:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner
+</code></pre>
+      <p class="small">for keyboard input. We can also use <code>Scanner</code> to read files. First import:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+</code></pre>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args)
+        throws FileNotFoundException {
+
+    File file = new File("students.txt");
+
+    Scanner input = new Scanner(file);
+
+    while (input.hasNextLine()) {
+        String line = input.nextLine();
+        System.out.println(line);
+    }
+
+    input.close();
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We have already used Scanner for keyboard input. We can also use Scanner to read files — the same class, a different source. That is a nice example of the abstraction paying off.</p>
+    <p>First import java.io.File, java.io.FileNotFoundException, and java.util.Scanner. Two of those three imports are about the failure case, which tells you something.</p>
+    <p>The example constructs a File, wraps it in a Scanner, loops while hasNextLine is true, and closes the Scanner at the end. Note the <code>throws FileNotFoundException</code> on main — that is Option 1 from Part V's "What can go wrong" slide, and we will meet Option 2 shortly.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reading Line by Line</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Suppose <code>students.txt</code> contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice
+Bob
+Charlie
+David
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Code:</p>
+<pre><code class="language-java" data-trim data-noescape>
+while (input.hasNextLine()) {
+    String name = input.nextLine();
+    System.out.println(name);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice
+Bob
+Charlie
+David
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span><code>hasNextLine()</code> is the loop guard; <code>nextLine()</code> consumes one line each time round.</div>
+  <aside class="notes">
+    <p>With a students.txt file containing four names, the hasNextLine / nextLine loop prints exactly those four names back. Input and output are identical here because the program does nothing but echo.</p>
+    <p>That is deliberate. Establish the mechanics with a program whose correct output is obvious, before adding parsing on the next slide where the output is no longer a copy of the input.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reading Structured Data</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose the file contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice 92
+Bob 85
+Charlie 78
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Whitespace-separated fields, so <code>next()</code> and <code>nextInt()</code> can pick them apart directly.</div>
+    </div>
+    <div>
+      <p class="small">We can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+while (input.hasNext()) {
+
+    String name = input.next();
+    int grade = input.nextInt();
+
+    System.out.println(name + ": " + grade);
+}
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>hasNext()</code> rather than <code>hasNextLine()</code> here?</summary>
+    <div class="acc-body">
+      <p>The loop no longer processes a line at a time — it processes a <em>token</em> at a time, taking two tokens per iteration. <code>hasNext()</code> asks whether another token exists, which is the right question when the body calls <code>next()</code> and <code>nextInt()</code>.</p>
+      <p>This also means the loop does not care how the records are spread across lines. Two names on one line would still parse.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>When the file contains a name and a number separated by a space, Scanner's token methods do the work: next reads the name, nextInt reads the grade, and the loop prints them joined by a colon.</p>
+    <p>Note the shift from hasNextLine to hasNext. The loop is now consuming two tokens per iteration rather than one line.</p>
+    <p>Also note what happens if a grade is not a number: nextInt throws. We are one slide away from that problem being the whole topic.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reading CSV-Style Data</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice,92
+Bob,85
+Charlie,78
+</code></pre>
+      <p class="small">This example combines:</p>
+      <ul class="small tight">
+        <li>file I/O</li>
+        <li>arrays</li>
+        <li>strings</li>
+        <li>parsing</li>
+        <li>exceptions</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">One approach is to read each line:</p>
+      <details class="acc">
+        <summary>What <code>split(",")</code> gives you</summary>
+        <div class="acc-body">
+          <p>An array of the pieces between the commas. For the line <code>Alice,92</code> that is a two-element <code>String[]</code>, so <code>parts[0]</code> is the name and <code>parts[1]</code> is the grade as text.</p>
+          <p>The grade still has to be converted: <code>Integer.parseInt(parts[1])</code>. That call is where a malformed file will hurt you.</p>
+        </div>
+      </details>
+<pre><code class="language-java" data-trim data-noescape>
+while (input.hasNextLine()) {
+
+    String line = input.nextLine();
+
+    String[] parts = line.split(",");
+
+    String name = parts[0];
+    int grade = Integer.parseInt(parts[1]);
+
+    System.out.println(name + " -&gt; " + grade);
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>With commas instead of spaces, the token methods no longer help directly. One approach is to read each line, split it on the comma, and parse the pieces yourself.</p>
+    <p>This example combines file I/O, arrays, strings, parsing, and exceptions. Five topics from five different weeks, in nine lines. Point that out — it is the first genuinely integrative example of the course.</p>
+    <p>Two things can go wrong here that we are not yet handling: parts might have fewer than two elements, and parts[1] might not be a number. Both come back in Part VI.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Can Go Wrong?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner input = new Scanner(new File("students.txt"));
+</code></pre>
+      <p class="small">The file may not exist. Java therefore requires us to handle:</p>
+<pre><code class="language-text" data-trim data-noescape>
+FileNotFoundException
+</code></pre>
+      <p class="small">Option 1:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args)
+        throws FileNotFoundException {
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Option 2:</p>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    Scanner input =
+        new Scanner(new File("students.txt"));
+}
+catch (FileNotFoundException e) {
+    System.out.println("File not found.");
+}
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>For user-facing applications, handling the error is often preferable.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why Java forces the choice at all</summary>
+    <div class="acc-body">
+      <p>Because <code>FileNotFoundException</code> is a <em>checked</em> exception. Checked exceptions usually represent external conditions that a program may reasonably need to recover from, and Java requires the programmer either to handle the exception or to declare that the method may throw it.</p>
+      <p>Option 1 declares; Option 2 handles. There is no third option that compiles.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The file may not exist. Java therefore requires us to handle FileNotFoundException — this is the checked-exception rule from Part III finally biting.</p>
+    <p>Option 1 declares throws on main and lets the program die with a stack trace. Option 2 catches it and prints "File not found." For user-facing applications, handling the error is often preferable.</p>
+    <p>Option 1 is not always wrong, though. In a small tool you are writing for yourself, a stack trace is a perfectly informative failure. The choice is about who reads the output.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Writing to Files with <code>PrintWriter</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">A convenient class for writing text is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+PrintWriter
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import java.io.PrintWriter;
+import java.io.FileNotFoundException;
+</code></pre>
+      <p class="small">Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+PrintWriter output =
+    new PrintWriter("results.txt");
+
+output.println("Alice,92");
+output.println("Bob,85");
+output.println("Charlie,78");
+
+output.close();
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The resulting file contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice,92
+Bob,85
+Charlie,78
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span><code>PrintWriter</code> gives you <code>println</code> — the same method you already know from <code>System.out</code>, pointed at a file instead of the screen.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A convenient class for writing text is PrintWriter. Import java.io.PrintWriter and java.io.FileNotFoundException, construct a PrintWriter over a filename, call println for each line, and close it.</p>
+    <p>The resulting file contains exactly the three lines that were printed. This is the same CSV shape we were reading two slides ago, which is the point — a program can produce input for another program.</p>
+    <p>Stress the close call. Without it the file may be empty even though the program ran, because buffered output was never flushed. That is the subject of the next slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Importance of Closing Files</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When a program opens a file, the operating system allocates resources. We should release those resources when we are finished.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>An unclosed <code>PrintWriter</code> may leave a file empty or truncated even though the program ran without error.</div>
+    </div>
+    <div>
+      <p class="small">Old style:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Scanner input = new Scanner(new File("data.txt"));
+
+try {
+    // use input
+}
+finally {
+    input.close();
+}
+</code></pre>
+      <p class="small">Modern Java provides a cleaner solution.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>When a program opens a file, the operating system allocates resources. We should release those resources when we are finished.</p>
+    <p>The old style opens the resource, then uses a try-finally so that close runs whether or not the body succeeded. This is the use of finally that Part II mentioned historically.</p>
+    <p>Notice how easy it is to get wrong: the open must be outside the try, the close must be in the finally, and if the open itself throws there is nothing to close. Modern Java provides a cleaner solution.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>try-with-resources</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Use:</p>
+<pre><code class="language-java" data-trim data-noescape>
+try (Scanner input =
+        new Scanner(new File("data.txt"))) {
+
+    while (input.hasNextLine()) {
+        System.out.println(input.nextLine());
+    }
+
+}
+catch (FileNotFoundException e) {
+    System.out.println("File not found.");
+}
+</code></pre>
+      <p class="small">Java automatically closes the <code>Scanner</code>. This is called:</p>
+<pre><code class="language-text" data-trim data-noescape>
+try-with-resources
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The general form is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+try (Resource resource = ...) {
+
+    // use resource
+
+}
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>When the block finishes, Java closes the resource automatically. This is the preferred approach.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What "when the block finishes" covers</summary>
+    <div class="acc-body">
+      <p>Every exit path: falling off the end normally, returning early, or leaving because an exception was thrown. In all three cases Java closes the resource before control moves on.</p>
+      <p>That is why this is preferred over the old <code>try-finally</code> pattern — there is no way to forget the close, and no way to write it in the wrong place.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>In try-with-resources, the resource is declared inside parentheses after the try keyword. Java automatically closes the Scanner when the block finishes.</p>
+    <p>The general form is try, open paren, a resource declaration, close paren, then the block that uses it. When the block finishes, Java closes the resource automatically. This is the preferred approach.</p>
+    <p>Concept Check Question 4 asks why try-with-resources is useful. The answer students should give: it guarantees the close on every exit path, including the exceptional ones, without any cleanup code of your own.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Real Data, Real Failures</h2>
+  <p class="part-sub">One bad record should not necessarily stop the whole program.</p>
+</section>
+
+<section>
+  <h2>Example: Reading Student Grades</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose the file is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice,92
+Bob,85
+Charlie,78
+David,95
+</code></pre>
+      <p class="small">We want to calculate the average.</p>
+      <div class="box note"><span class="box-title">Note</span>The program combines everything from Part V: <code>try-with-resources</code>, line reading, <code>split</code>, parsing, and a <code>catch</code> for the missing file.</div>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+try (Scanner input =
+        new Scanner(new File("grades.txt"))) {
+
+    while (input.hasNextLine()) {
+        String line = input.nextLine();
+        String[] parts = line.split(",");
+        // name, grade, running total, count
+    }
+
+    if (count &gt; 0) { /* print average */ }
+
+}
+catch (FileNotFoundException e) { /* report */ }
+</code></pre>
+      <p class="small dim">Sketch only — the full program is in the modal.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-grade-reader" tabindex="0">The complete <code>GradeReader</code> program</span>
+  </div>
+  <aside class="notes">
+    <p>Suppose the file is four comma-separated records, and we want to calculate the average. The full GradeReader program is in the modal; open it and walk down it in class.</p>
+    <p>The structure to notice: total and count are declared <em>before</em> the try block, because they must survive it. The average is printed inside the try, guarded by <code>if (count &gt; 0)</code> so an empty file does not divide by zero.</p>
+    <p>And the catch for FileNotFoundException wraps the whole thing — a missing file means there is nothing to average at all, so there is no useful per-record recovery to attempt.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A More Difficult Problem: Malformed Data</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose the file contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice,92
+Bob,eighty
+Charlie,78
+</code></pre>
+      <p class="small">This statement:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Double.parseDouble(parts[1]);
+</code></pre>
+      <p class="small">will throw:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NumberFormatException
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We can handle malformed records.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The <code>try-catch</code> is <strong>inside</strong> the loop. Why? Because one bad record should not necessarily prevent us from processing the remaining file.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m9-malformed" tabindex="0">The skip-the-bad-record loop</span>
+      </div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Inside the loop vs. around the loop</summary>
+    <div class="acc-body">
+      <p>If the <code>try-catch</code> surrounded the whole loop, the first malformed record would end the loop and every later record would go unread — the exception jumps out of the loop, not just the iteration.</p>
+      <p>Putting it inside the loop body scopes the recovery to one record: catch, report, and continue with the next iteration.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose the file contains Bob,eighty in the middle. Double.parseDouble of "eighty" will throw a NumberFormatException — the same exception from Part I, now arriving from a data file instead of a literal.</p>
+    <p>We can handle malformed records. Open the modal and look at where the try-catch sits: it is inside the loop, wrapping the body only.</p>
+    <p>Why? Because one bad record should not necessarily prevent us from processing the remaining file. Say "not necessarily" — whether it should is the design question on the next slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Designing Error Policies</h2>
+  <p class="small">There is not always one correct way to handle an error. Suppose we encounter:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+Bob,eighty
+</code></pre>
+      <p class="small">Possible policies include:</p>
+      <ul class="small tight">
+        <li>terminate immediately</li>
+        <li>skip the record</li>
+        <li>substitute a default value</li>
+        <li>ask the user for correction</li>
+        <li>log the error</li>
+        <li>throw the exception to another part of the program</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">The correct strategy depends on the application.</p>
+      <ul class="small">
+        <li>A <strong>payroll</strong> application may need to stop.</li>
+        <li>A <strong>data-analysis</strong> program may skip malformed rows.</li>
+        <li>A <strong>GUI</strong> application may display an error message.</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>Software design includes deciding <strong>how failure should behave</strong>.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The policy the code on the last slide chose</summary>
+    <div class="acc-body">
+      <p>Two of the six: <em>skip the record</em> and <em>log the error</em>. The <code>catch</code> printed "Skipping invalid record: " followed by the offending line, then the loop continued.</p>
+      <p>That is a reasonable default for a data-analysis program. It would be the wrong default for a payroll application, which may need to stop.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>There is not always one correct way to handle an error. Given the record Bob,eighty, six policies are all defensible: terminate immediately, skip the record, substitute a default value, ask the user for correction, log the error, or throw the exception to another part of the program.</p>
+    <p>The correct strategy depends on the application. A payroll application may need to stop — paying someone the wrong amount is worse than paying nobody. A data-analysis program may skip malformed rows. A GUI application may display an error message.</p>
+    <p>Software design includes deciding how failure should behave. Part X returns to this as a discussion question with ten thousand records.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Testing Fundamentals</h2>
+  <p class="part-sub">From handling known error conditions to detecting mistakes in our own programs.</p>
+</section>
+
+<section>
+  <h2>Why Test at All?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int max(int a, int b) {
+    return a;
+}
+</code></pre>
+      <ul class="small">
+        <li>The program compiles.</li>
+        <li>It runs.</li>
+        <li>No exception occurs.</li>
+        <li>But the method is incorrect.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">How do we detect the problem?</p>
+      <div class="box key"><span class="box-title">Key idea</span>Testing.</div>
+      <p class="small">Now we shift from handling known error conditions to detecting mistakes in <strong>our own</strong> programs.</p>
+    </div>
+  </div>
+  <div class="def"><span class="term">Software testing:</span> the systematic process of evaluating whether software behaves as expected.</div>
+  <details class="acc">
+    <summary>The key word is <code>systematic</code></summary>
+    <div class="acc-body">
+      <p>The key word is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+systematic
+</code></pre>
+      <p>Testing is not simply running the program once and seeing whether it appears to work. Systematic means the inputs were chosen deliberately, the expected results were decided before running, and the same set can be re-run later.</p>
+      <p>That matters here because the broken <code>max</code> above is right half the time — <code>max(10, 5)</code> returns 10, which is correct. Running it once and glancing at the output would pass it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Now we shift from handling known error conditions to detecting mistakes in our own programs. A max method that simply returns its first argument compiles, runs, and never throws — but it is wrong.</p>
+    <p>Worse, it is right half the time. Called with max(10, 5) it gives the correct answer, which is exactly how a bug like this survives casual checking.</p>
+    <p>How do we detect the problem? Testing. Software testing is the systematic process of evaluating whether software behaves as expected, and the key word is systematic — testing is not simply running the program once and seeing whether it appears to work.</p>
+    <p>Notice that no amount of exception handling would have helped here — this is a logic error, the category from Part I that Java cannot see.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Manual Testing</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Suppose we write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int max(int a, int b) {
+
+    if (a &gt; b) {
+        return a;
+    }
+
+    return b;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We could manually test:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(max(10, 5));
+System.out.println(max(5, 10));
+System.out.println(max(10, 10));
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Expected output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+10
+10
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>This is useful, but manual testing becomes difficult as programs grow.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Here is a correct max. We could manually test it with three calls: the first argument larger, the second larger, and the two equal. Expected output is ten, ten, ten.</p>
+    <p>Notice the third case. Equal arguments is exactly the kind of input a casual tester skips, and it is where an <code>a &gt; b</code> versus <code>a &gt;= b</code> mistake would show up. That is a boundary case, four slides early.</p>
+    <p>This is useful, but manual testing becomes difficult as programs grow. You must read the output yourself, every time, and compare it against expectations you are holding in your head.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Test Cases</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A test case consists of:</p>
+<pre><code class="language-text" data-trim data-noescape>
+input
+expected result
+actual result
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Good testing requires us to deliberately choose different <em>kinds</em> of inputs.</div>
+    </div>
+    <div>
+      <p class="small">For <code>max()</code>:</p>
+      <table class="smaller">
+        <thead><tr><th>Input</th><th>Expected</th></tr></thead>
+        <tbody>
+          <tr><td><code>max(10, 5)</code></td><td><code>10</code></td></tr>
+          <tr><td><code>max(5, 10)</code></td><td><code>10</code></td></tr>
+          <tr><td><code>max(10, 10)</code></td><td><code>10</code></td></tr>
+          <tr><td><code>max(-5, -10)</code></td><td><code>-5</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the negative case earns its place</summary>
+    <div class="acc-body">
+      <p><code>max(-5, -10)</code> expects <code>-5</code>. A student who reasons about "bigger" as "further from zero" writes a method that returns <code>-10</code> here and passes all three of the earlier cases.</p>
+      <p>That is the whole argument for deliberately choosing different <em>kinds</em> of input rather than three more of the same kind.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A test case consists of three things: an input, an expected result, and an actual result. The expected result must be decided before running — otherwise you are not testing, you are just observing.</p>
+    <p>The table gives four cases for max, and the fourth is the interesting one: two negatives, expecting minus five. Good testing requires us to deliberately choose different kinds of inputs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Normal Cases</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Normal cases represent <strong>typical</strong> inputs. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+max(10, 5)
+</code></pre>
+      <p class="small">For a method calculating an average:</p>
+<pre><code class="language-java" data-trim data-noescape>
+average({80, 90, 100})
+</code></pre>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Watch out</span>Normal cases are important, but they are <strong>not enough</strong>.</div>
+      <div class="chain">
+        <span>Normal</span><span class="sep">→</span>
+        <span>Boundary</span><span class="sep">→</span>
+        <span>Exceptional</span>
+      </div>
+      <p class="small">The three categories on this list are what the rest of Part VII is about.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Normal cases represent typical inputs — max of ten and five, or an average of eighty, ninety, and one hundred. Nothing surprising, nothing at an edge.</p>
+    <p>Normal cases are important, but they are not enough. They confirm the method works for the situation you had in mind when you wrote it, which is the situation least likely to be broken.</p>
+    <p>The three categories — normal, boundary, exceptional — are the vocabulary students are expected to use for the rest of the course when asked "what would you test?".</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Boundary Cases</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Boundary cases occur near <strong>limits</strong>. Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isValidAge(int age) {
+    return age &gt;= 0 &amp;&amp; age &lt;= 120;
+}
+</code></pre>
+      <p class="small">Important tests include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+-1
+0
+1
+119
+120
+121
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Why? Because programming errors frequently occur at boundaries. Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+&lt; instead of &lt;=
+index 0
+index length - 1
+empty array
+exact threshold values
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Boundary cases occur near limits. For an isValidAge method accepting zero through one hundred and twenty, the important tests are minus one, zero, one, one hundred nineteen, one hundred twenty, and one hundred twenty-one — a pair straddling each end, plus the endpoints themselves.</p>
+    <p>Why? Because programming errors frequently occur at boundaries: less-than written instead of less-than-or-equal, index zero, index length minus one, the empty array, and exact threshold values.</p>
+    <p>Every one of those five examples is an off-by-one in disguise. Boundary testing is how you catch off-by-ones without reading the code again.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exceptional Cases</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Exceptional cases deliberately test <strong>invalid or unusual</strong> inputs. Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+null
+empty file
+missing file
+negative values
+zero
+incorrect data format
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Good programmers do not merely ask:</p>
+      <blockquote class="small">Does this work when everything is correct?</blockquote>
+      <p class="small">They also ask:</p>
+      <blockquote class="small">What happens when something goes wrong?</blockquote>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Every item on that list appeared earlier this week as something a program has to survive.</div>
+  <details class="acc">
+    <summary>Where each exceptional case already showed up</summary>
+    <div class="acc-body">
+      <ul>
+        <li><strong>null</strong> — the <code>NullPointerException</code> in Part I, and the debugging advice in Part IX.</li>
+        <li><strong>missing file</strong> — <code>FileNotFoundException</code>, Part V.</li>
+        <li><strong>empty file</strong> — the reason <code>GradeReader</code> guards its average with <code>if (count &gt; 0)</code>.</li>
+        <li><strong>zero</strong> — <code>ArithmeticException</code>, and the <code>count &lt;= 0</code> guard in Part IV.</li>
+        <li><strong>incorrect data format</strong> — <code>NumberFormatException</code>, and the whole of Part VI.</li>
+      </ul>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Exceptional cases deliberately test invalid or unusual inputs: null, an empty file, a missing file, negative values, zero, and incorrect data format.</p>
+    <p>Good programmers do not merely ask "does this work when everything is correct?" They also ask "what happens when something goes wrong?" Those two questions are the whole difference between the first half and the second half of this week.</p>
+    <p>Note that the six examples are precisely the failures Parts I through VI taught us to handle. Testing exceptional cases is how you verify that the handling you wrote actually runs.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Unit Testing with JUnit</h2>
+  <p class="part-sub">Testing a small, isolated component — automatically, and repeatably.</p>
+</section>
+
+<section>
+  <h2>Unit Testing</h2>
+  <div class="def"><span class="term">Unit test:</span> a test of a small, isolated component of a program.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Usually that component is:</p>
+      <ul class="small">
+        <li>a method</li>
+        <li>a class</li>
+      </ul>
+      <p class="small">Suppose:</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public class MathUtils {
+
+    public static int square(int x) {
+        return x * x;
+    }
+}
+</code></pre>
+      <p class="small">We want to test <code>square()</code> <strong>independently</strong>.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A unit test tests a small, isolated component of a program. Usually that component is a method or a class.</p>
+    <p>MathUtils.square is the smallest useful example: one input, one output, no state, no input/output. We want to test square independently — that word "independently" is the whole idea, and Part IX explains what makes some code resist it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>JUnit</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A common Java testing framework is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+JUnit
+</code></pre>
+      <p class="small">A basic JUnit test might look like:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class MathUtilsTest {
+
+    @Test
+    public void testSquarePositive() {
+
+        assertEquals(
+            25,
+            MathUtils.square(5)
+        );
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small"><code>assertEquals</code> compares:</p>
+<pre><code class="language-text" data-trim data-noescape>
+expected value
+actual value
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>The order matters for the failure message, not for the result: expected first, actual second.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What the pieces do</summary>
+    <div class="acc-body">
+      <ul>
+        <li>The static import makes <code>assertEquals</code>, <code>assertTrue</code> and friends available unqualified.</li>
+        <li><code>@Test</code> marks a method as a test the framework should run.</li>
+        <li>The method name says what is being checked — <code>testSquarePositive</code> — so a failure report is readable without opening the file.</li>
+      </ul>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A common Java testing framework is JUnit. A basic JUnit test imports the assertions statically, imports the Test annotation, and puts one annotated method in a test class.</p>
+    <p>assertEquals compares an expected value with an actual value. Here it asserts that MathUtils.square of five equals twenty-five.</p>
+    <p>The gain over manual testing is that nobody reads output any more. The framework compares for you, and it tells you which named test failed.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Multiple Unit Tests</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public class MathUtilsTest {
+
+    @Test
+    public void testSquarePositive() {
+        assertEquals(25, MathUtils.square(5));
+    }
+
+    @Test
+    public void testSquareZero() {
+        assertEquals(0, MathUtils.square(0));
+    }
+
+    @Test
+    public void testSquareNegative() {
+        assertEquals(25, MathUtils.square(-5));
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Each test examines a different situation.</div>
+      <p class="small">Map them onto Part VII's three categories:</p>
+      <ul class="small">
+        <li><code>testSquarePositive</code> — a normal case.</li>
+        <li><code>testSquareZero</code> — a boundary case.</li>
+        <li><code>testSquareNegative</code> — an unusual input whose result is not obvious.</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Three tests, one class. Each test examines a different situation: a positive input, zero, and a negative input.</p>
+    <p>The negative case is the one worth discussing. Square of minus five is twenty-five, not minus twenty-five — a student who writes the expected value carelessly will see a red test and learn something about their own reasoning.</p>
+    <p>Also note that each test is independent. If testSquareZero fails, the other two still run and still report.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Testing Boolean Methods</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isEven(int x) {
+    return x % 2 == 0;
+}
+</code></pre>
+      <p class="small">Tests:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testEvenNumber() {
+    assertTrue(MathUtils.isEven(10));
+}
+
+@Test
+public void testOddNumber() {
+    assertFalse(MathUtils.isEven(7));
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Useful assertions include:</p>
+<pre><code class="language-java" data-trim data-noescape>
+assertEquals(...)
+assertTrue(...)
+assertFalse(...)
+assertNull(...)
+assertNotNull(...)
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>A boolean method needs at least one test for each answer — a method that always returns <code>true</code> passes <code>testEvenNumber</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>For a boolean method, assertTrue and assertFalse read better than assertEquals with a literal true or false. isEven of ten should be true; isEven of seven should be false.</p>
+    <p>The useful assertions are assertEquals, assertTrue, assertFalse, assertNull, and assertNotNull. That short list covers nearly everything students will need this term.</p>
+    <p>Make the point that both tests are required. A method that ignores its argument and returns true would pass the first test alone, which is the same failure mode as the broken max from Part VII.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Testing Exceptions — the Method</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double divide(
+        double a,
+        double b) {
+
+    if (b == 0) {
+        throw new IllegalArgumentException(
+            "Denominator cannot be zero."
+        );
+    }
+
+    return a / b;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We should test normal behavior:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testDivide() {
+
+    assertEquals(
+        5.0,
+        MathUtils.divide(10, 2)
+    );
+}
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>This is defensive programming from Part IV, now with a test attached to prove the guard exists.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This divide method guards against a zero denominator by throwing an IllegalArgumentException — note that for doubles Java would not throw on its own, it would return infinity, so the guard is doing real work.</p>
+    <p>We should test normal behavior first: ten divided by two is five point zero. Get the ordinary case passing before you test the failure.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Testing Exceptions — <code>assertThrows</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">But we should also test the exception:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testDivideByZero() {
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -&gt; MathUtils.divide(10, 0)
+    );
+}
+</code></pre>
+      <p class="small">This confirms that invalid input produces the intended failure.</p>
+    </div>
+    <div>
+      <h4>Tests are executable specifications</h4>
+      <p class="small">Suppose we write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+assertThrows(
+    IllegalArgumentException.class,
+    () -&gt; account.withdraw(-100)
+);
+</code></pre>
+      <p class="small">This does more than check implementation. It <strong>documents expected behavior</strong>.</p>
+    </div>
+  </div>
+  <blockquote class="small">Withdrawing a negative amount is invalid and should produce an <code>IllegalArgumentException</code>.</blockquote>
+  <details class="acc">
+    <summary>Reading the <code>assertThrows</code> arguments</summary>
+    <div class="acc-body">
+      <p>The first argument is the exception class you expect. The second is the code to run, written as a lambda so the framework can call it inside its own <code>try</code>.</p>
+      <p>The test passes only if that call throws that type. Throwing nothing fails; throwing a different type fails.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>assertThrows takes the expected exception class and a lambda that performs the call. This confirms that invalid input produces the intended failure — not merely that something went wrong, but that the right thing went wrong.</p>
+    <p>The withdraw example makes the larger point: this does more than check implementation, it documents expected behavior. The test says, in a form the compiler and the test runner both understand, that withdrawing a negative amount is invalid and should produce an IllegalArgumentException.</p>
+    <p>This is why tests can serve as a form of documentation. Unlike a comment, this documentation fails loudly when it stops being true.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Testing Classes</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose a <code>BankAccount</code> class with a validating constructor, a validating <code>deposit</code>, and a <code>getBalance</code> accessor.</p>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m9-bank-account" tabindex="0">The <code>BankAccount</code> class in full</span>
+      </div>
+      <p class="small">Possible tests:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testInitialBalance() {
+
+    BankAccount account =
+        new BankAccount(100);
+
+    assertEquals(
+        100,
+        account.getBalance()
+    );
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Another:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testDeposit() {
+
+    BankAccount account =
+        new BankAccount(100);
+
+    account.deposit(50);
+
+    assertEquals(
+        150,
+        account.getBalance()
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Testing a class rather than a static method means building an object first, then exercising it, then inspecting it. The BankAccount in the modal validates in the constructor and in deposit — the boundary validation from Part IV.</p>
+    <p>testInitialBalance constructs an account with one hundred and asserts the balance is one hundred. That looks trivial, and it is, but it pins down the constructor's contract.</p>
+    <p>testDeposit constructs, deposits fifty, and asserts one hundred fifty. Note it does not reuse the account from the previous test — each test builds its own, so tests never depend on each other's order.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Testing Classes — Invalid Input</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Invalid input:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testNegativeDeposit() {
+
+    BankAccount account =
+        new BankAccount(100);
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -&gt; account.deposit(-20)
+    );
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Three tests, three categories: a normal construction, a normal operation, and an exceptional input.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m9-bank-account-tests" tabindex="0">All three <code>BankAccount</code> tests together</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>testNegativeDeposit constructs a valid account and then asserts that depositing minus twenty throws an IllegalArgumentException. The account has to be valid first — you cannot test the deposit guard through a constructor that already rejected you.</p>
+    <p>Across the three tests we have a normal construction, a normal operation, and an exceptional input. That is Part VII's categories applied to a class instead of a method.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Arrange — Act — Assert</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A useful structure for tests is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Arrange
+Act
+Assert
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>This makes tests easier to read.</div>
+    </div>
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testDeposit() {
+
+    // Arrange
+    BankAccount account =
+        new BankAccount(100);
+
+    // Act
+    account.deposit(50);
+
+    // Assert
+    assertEquals(
+        150,
+        account.getBalance()
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A useful structure for tests is Arrange, Act, Assert. Arrange builds the objects and data the test needs; Act performs the single operation under test; Assert checks the outcome.</p>
+    <p>The example is the same testDeposit as before, with three comments added. This makes tests easier to read — and it also exposes tests that are doing too much, because they end up with several Act sections.</p>
+    <p>If a test has no clear Act, it is probably testing the arrangement rather than the behaviour.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Testable Design, Robustness, and Debugging</h2>
+  <p class="part-sub">Some code is easier to test than other code — and that is a design choice.</p>
+</section>
+
+<section>
+  <h2>Testing Is Not Proof</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Passing tests does not prove that a program is correct. Suppose a program passes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 tests
+</code></pre>
+      <p class="small">There may still be an input we forgot to test.</p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Testing gives us <strong>evidence</strong> of correctness. It does not provide mathematical <strong>proof</strong> of correctness.</div>
+      <p class="small">That distinction becomes increasingly important in algorithms and advanced computer science.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Passing tests does not prove that a program is correct. A program that passes ten tests has been checked on ten inputs; there may still be an input we forgot to test.</p>
+    <p>Testing gives us evidence of correctness. It does not provide mathematical proof of correctness. That distinction becomes increasingly important in algorithms and advanced computer science, where we do sometimes prove things.</p>
+    <p>Concept Check Question 7 asks exactly this. The expected answer is no — with the reason, not just the word.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Writing Testable Code</h2>
+  <p class="small">Some code is easier to test than other code. Consider:</p>
+  <div class="cols">
+    <div>
+      <span class="tag no">Hard to test</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void process() {
+
+    Scanner input =
+        new Scanner(System.in);
+
+    System.out.println(
+        "Enter two numbers:"
+    );
+
+    int a = input.nextInt();
+    int b = input.nextInt();
+
+    System.out.println(a + b);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This method combines:</p>
+      <ul class="small tight">
+        <li>input</li>
+        <li>computation</li>
+        <li>output</li>
+      </ul>
+      <p class="small">It is difficult to test automatically. A better design separates responsibilities.</p>
+      <span class="tag ok">Easy to test</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static int add(int a, int b) {
+    return a + b;
+}
+</code></pre>
+      <p class="small">Then another method handles input/output. This method is easy to test:</p>
+<pre><code class="language-java" data-trim data-noescape>
+assertEquals(7, add(3, 4));
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Some code is easier to test than other code. The process method combines input, computation, and output in one place. It is difficult to test automatically — to test it you would have to fake the keyboard and capture the screen.</p>
+    <p>A better design separates responsibilities. Pull the computation out into add, and the test becomes a single line: assertEquals of seven and add of three and four.</p>
+    <p>Then another method handles input/output. Nothing was lost; the program still reads and prints. But the part with the logic in it is now reachable from a test.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Separation of Concerns</h2>
+  <blockquote class="small">Separate computation from input/output whenever practical.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">Instead of:</p>
+<pre><code class="language-text" data-trim data-noescape>
+read data
+calculate result
+print result
+</code></pre>
+      <p class="small">all in one method, prefer:</p>
+<pre><code class="language-text" data-trim data-noescape>
+input layer
+    ↓
+processing layer
+    ↓
+output layer
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This improves:</p>
+      <ul class="small">
+        <li>readability</li>
+        <li>reuse</li>
+        <li>testing</li>
+        <li>debugging</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>Testability is not a separate goal bolted onto design — it is a consequence of good design.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This illustrates an important software design principle: separate computation from input/output whenever practical.</p>
+    <p>Instead of read data, calculate result, print result all in one method, prefer an input layer feeding a processing layer feeding an output layer. This improves readability, reuse, testing, and debugging.</p>
+    <p>Concept Check Question 8 asks why separating computation from input/output improves testability. The answer is that the processing layer can be called directly with values, without simulating a user.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: A Better Grade Program</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Instead of writing everything in <code>main</code>, separate responsibilities.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double average(
+        double[] grades) {
+
+    if (grades.length == 0) {
+        throw new IllegalArgumentException(
+            "No grades provided."
+        );
+    }
+
+    double total = 0;
+
+    for (double grade : grades) {
+        total += grade;
+    }
+
+    return total / grades.length;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Now we can test:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testAverage() {
+
+    double[] grades =
+        {80, 90, 100};
+
+    assertEquals(
+        90,
+        GradeUtils.average(grades)
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>And the empty case</summary>
+    <div class="acc-body">
+      <p>The guard at the top of <code>average</code> exists precisely so that this test can be written:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testEmptyGrades() {
+
+    double[] grades = {};
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -&gt; GradeUtils.average(grades)
+    );
+}
+</code></pre>
+      <p>Without the guard, an empty array would divide by zero and return <code>NaN</code> — a wrong answer rather than a reported failure.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Instead of writing everything in main, separate responsibilities. The average method takes an array of doubles, rejects the empty array with an IllegalArgumentException, sums with an enhanced for loop, and divides.</p>
+    <p>Now we can test it: an array of eighty, ninety, one hundred should average to ninety — the normal case from Part VII. And the accordion holds the exceptional case, an empty array, tested with assertThrows.</p>
+    <p>Notice that the design decision and the test arrived together. The guard is not defensive clutter; it is the behaviour the test asserts.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Robustness vs. Correctness</h2>
+  <p class="small">These terms are related but different.</p>
+  <div class="cols">
+    <div>
+      <h4>Correctness</h4>
+      <p class="small">Does the program give the right answer for <strong>valid</strong> inputs? Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+average(80, 90, 100) → 90
+</code></pre>
+    </div>
+    <div>
+      <h4>Robustness</h4>
+      <p class="small">Does the program behave sensibly when something <strong>unexpected</strong> happens? Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+missing file
+invalid number
+empty array
+null reference
+incorrect user input
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Good software should strive for both.</div>
+  <aside class="notes">
+    <p>Correctness asks: does the program give the right answer for valid inputs? Robustness asks: does the program behave sensibly when something unexpected happens?</p>
+    <p>A program can be correct and not robust — right answers for good data, a crash for bad data. It can also be robust and not correct, which is worse: it never falls over and it is always wrong.</p>
+    <p>Good software should strive for both. Correctness is what testing normal cases checks; robustness is what testing exceptional cases checks.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Beginner Mistakes 1 to 3</h2>
+  <div class="cols-3">
+    <div>
+      <h4>1. Catching everything</h4>
+<pre><code class="language-java" data-trim data-noescape>
+catch (Exception e) {
+}
+</code></pre>
+      <p class="small">This hides problems. The program may fail silently.</p>
+    </div>
+    <div>
+      <h4>2. Empty catch blocks</h4>
+      <span class="tag no">Bad</span>
+<pre><code class="language-java" data-trim data-noescape>
+catch (FileNotFoundException e) {
+}
+</code></pre>
+      <p class="small">The exception disappears and the programmer may not know something went wrong.</p>
+    </div>
+    <div>
+      <h4>3. Exceptions instead of validation</h4>
+      <span class="tag no">Bad</span>
+<pre><code class="language-java" data-trim data-noescape>
+try {
+    array[index] = value;
+}
+catch (ArrayIndexOutOfBoundsException e) {
+}
+</code></pre>
+      <span class="tag ok">Better</span>
+<pre><code class="language-java" data-trim data-noescape>
+if (index &gt;= 0 &amp;&amp;
+    index &lt; array.length) {
+
+    array[index] = value;
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Mistake 1, catching everything: an empty <code>catch (Exception e)</code> hides problems, and the program may fail silently. It is the worst of both worlds — the failure happened and nobody was told.</p>
+    <p>Mistake 2, empty catch blocks: even with a specific type, an empty body means the exception disappears and the programmer may not know something went wrong.</p>
+    <p>Mistake 3, using exceptions instead of validation, is Part IV's rule broken with an empty catch on top. Better to range-check the index with an if statement.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Beginner Mistakes 4 and 5</h2>
+  <div class="cols">
+    <div>
+      <h4>4. Catching an exception too early</h4>
+      <p class="small">Sometimes the method that detects the problem does not know how to recover.</p>
+      <p class="small">In that case, <strong>propagating</strong> the exception can be better than catching it immediately.</p>
+    </div>
+    <div>
+      <h4>5. Treating stack traces as useless noise</h4>
+      <p class="small">When debugging, read:</p>
+<pre><code class="language-text" data-trim data-noescape>
+exception type
+message
+first line referring to your code
+line number
+method call sequence
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>The stack trace often tells you exactly where to start investigating.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Mistake 4, catching too early: sometimes the method that detects the problem does not know how to recover. A parse method knows the text is not a number; it does not know whether the right response is to skip the row, ask the user, or abort. In that case, propagating the exception can be better than catching it immediately.</p>
+    <p>Mistake 5, treating stack traces as useless noise. When debugging, read five things: the exception type, the message, the first line referring to your code, the line number, and the method call sequence.</p>
+    <p>The stack trace often tells you exactly where to start investigating. Students scroll past it because it is long; teach them to read the first five lines.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reading a Stack Trace</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose Java prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Exception in thread "main"
+java.lang.NullPointerException
+    at Student.getName(Student.java:18)
+    at Course.printRoster(Course.java:42)
+    at Main.main(Main.java:10)
+</code></pre>
+      <p class="small">Read from the top.</p>
+    </div>
+    <div>
+      <p class="small">The error occurred at:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Student.java:18
+</code></pre>
+      <p class="small">That method was called by:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Course.java:42
+</code></pre>
+      <p class="small">which was called by:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Main.java:10
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The stack trace represents the <strong>active method calls</strong> when the exception occurred.</div>
+  <details class="acc">
+    <summary>What the five things to read map onto here</summary>
+    <div class="acc-body">
+      <ul>
+        <li><strong>exception type</strong> — <code>java.lang.NullPointerException</code></li>
+        <li><strong>message</strong> — none given on this one, which itself is a hint</li>
+        <li><strong>first line referring to your code</strong> — <code>at Student.getName</code></li>
+        <li><strong>line number</strong> — <code>Student.java:18</code></li>
+        <li><strong>method call sequence</strong> — <code>getName</code> ← <code>printRoster</code> ← <code>main</code></li>
+      </ul>
+      <p>Read from the top: the error occurred at <code>Student.java:18</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Read from the top. The error occurred at Student.java line 18. That method was called by Course.java line 42, which was called by Main.java line 10.</p>
+    <p>The stack trace represents the active method calls when the exception occurred. It is a snapshot of the call stack — the same call stack Week 4 introduced for method calls and that Week 10 will lean on heavily for recursion.</p>
+    <p>The most useful line is usually the topmost one that is in <em>your</em> code. Frames above it may be inside library classes you did not write.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Debugging Strategy</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When an exception occurs:</p>
+      <ol class="small">
+        <li>Read the exception type.</li>
+        <li>Read the exception message.</li>
+        <li>Find the first stack-trace line referring to your code.</li>
+        <li>Inspect the values involved.</li>
+        <li>Determine why an invalid state was possible.</li>
+        <li>Fix the underlying cause rather than merely suppressing the exception.</li>
+      </ol>
+    </div>
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NullPointerException
+</code></pre>
+      <p class="small">Do not immediately add:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (x != null)
+</code></pre>
+      <p class="small">Ask:</p>
+      <blockquote class="small">Why is <code>x</code> null?</blockquote>
+      <div class="box warn"><span class="box-title">Watch out</span>The deeper bug may be somewhere else.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-debugging" tabindex="0">Stack traces and debugging, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Six steps: read the exception type, read the message, find the first stack-trace line referring to your code, inspect the values involved, determine why an invalid state was possible, and fix the underlying cause rather than merely suppressing the exception.</p>
+    <p>Step six is the one students skip. Faced with a NullPointerException, do not immediately add <code>if (x != null)</code>. Ask why x is null. The deeper bug may be somewhere else — perhaps a constructor that never assigned the field, or a lookup that silently returned nothing.</p>
+    <p>Adding the null check makes the symptom go away and leaves the program doing nothing where it should have done something.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Putting It Together</h2>
+  <p class="part-sub">One small application, and the tests that pin it down.</p>
+</section>
+
+<section>
+  <h2>Integrated Example</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider a small student-grade application. The file:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice,90
+Bob,83
+Charlie,not-a-number
+David,95
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We want to:</p>
+      <ol class="small">
+        <li>read each record</li>
+        <li>parse the grade</li>
+        <li>reject malformed records</li>
+        <li>validate grade range</li>
+        <li>calculate an average</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Two different kinds of bad record are possible here: a grade that is not a number at all, and a number outside the valid range.</div>
+  <aside class="notes">
+    <p>Consider a small student-grade application reading four records, one of which contains not-a-number where a grade should be.</p>
+    <p>The five goals: read each record, parse the grade, reject malformed records, validate grade range, and calculate an average. Goals three and four are different jobs — one is about format, the other about meaning.</p>
+    <p>That distinction drives the design on the next slide, where a helper method takes on both and signals them with two different exception types.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Helper Method: <code>parseGrade</code></h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static double parseGrade(
+        String text) {
+
+    double grade =
+        Double.parseDouble(text);
+
+    if (grade &lt; 0 || grade &gt; 100) {
+
+        throw new IllegalArgumentException(
+            "Grade must be between 0 and 100."
+        );
+    }
+
+    return grade;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Two failures, two exception types:</p>
+      <ul class="small">
+        <li><code>Double.parseDouble</code> throws <code>NumberFormatException</code> when the text is not a number.</li>
+        <li>The guard throws <code>IllegalArgumentException</code> when the number is out of range.</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>The method does not decide what to <em>do</em> about either failure. It only reports them.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why two different exception types matter here</summary>
+    <div class="acc-body">
+      <p>The caller can distinguish them. The file-processing code catches <code>NumberFormatException</code> to print "Invalid number" and <code>IllegalArgumentException</code> to print "Invalid record" — two different messages, from one method.</p>
+      <p>Note the ordering constraint from Part II applies: <code>NumberFormatException</code> is a subclass of <code>IllegalArgumentException</code>, so it must be caught first.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>parseGrade parses the text and then validates the range. Double.parseDouble handles the format question and throws NumberFormatException on failure; the explicit guard handles the range question and throws IllegalArgumentException.</p>
+    <p>The method does not decide what to do about either failure — it only reports them. This is Part XI's guideline arriving early: throw when a method cannot fulfil its contract, catch where you know how to recover.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Processing the File</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The structure is a <code>try-with-resources</code> around the file, and a <code>try-catch</code> around each record:</p>
+      <div class="chain">
+        <span>open file</span><span class="sep">→</span>
+        <span>per record: split, validate, parse</span><span class="sep">→</span>
+        <span>report or skip</span>
+      </div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m9-integrated" tabindex="0">The complete file-processing code</span>
+      </div>
+    </div>
+    <div>
+      <p class="small">This example demonstrates several concepts together:</p>
+<pre><code class="language-text" data-trim data-noescape>
+file input
+string parsing
+validation
+exceptions
+nested error handling
+defensive programming
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Open the modal and walk the code. The outer try-with-resources owns the file and catches FileNotFoundException. Inside the loop, an inner try wraps one record, with two catch clauses — NumberFormatException first, then IllegalArgumentException.</p>
+    <p>There is also a third failure guarded explicitly: if split does not produce exactly two parts, the code throws IllegalArgumentException itself with "Invalid record format." That is a format error the parse would never have reached.</p>
+    <p>This example demonstrates several concepts together: file input, string parsing, validation, exceptions, nested error handling, and defensive programming. Six of the week's ideas in one screen.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Discussion Question</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose a program reads 10,000 customer records. Record 5,328 contains invalid data. Should the program:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A. terminate immediately
+B. skip the bad record
+C. substitute a default value
+D. log the bad record and continue
+E. ask the user what to do
+</code></pre>
+    </div>
+    <div>
+      <p class="small">There is no universally correct answer. The correct response depends on the requirements of the system.</p>
+      <p class="small">This is an important transition from introductory programming to software engineering:</p>
+      <blockquote class="small">Error handling is a design decision.</blockquote>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Ten thousand customer records, one bad one at position five thousand three hundred twenty-eight. Terminate, skip, substitute, log and continue, or ask the user?</p>
+    <p>Run this as an actual discussion. Push students to name the application before answering — a billing run, a research dataset, and an interactive import wizard give three different right answers.</p>
+    <p>There is no universally correct answer; the correct response depends on the requirements of the system. This is an important transition from introductory programming to software engineering: error handling is a design decision.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Testing the Integrated Example</h2>
+  <p class="small">We do not need to test file I/O and parsing simultaneously. First test:</p>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+parseGrade()
+</code></pre>
+      <p class="small">Normal case:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testValidGrade() {
+
+    assertEquals(
+        92,
+        parseGrade("92")
+    );
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Boundary cases:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testZeroGrade() {
+
+    assertEquals(
+        0,
+        parseGrade("0")
+    );
+}
+</code></pre>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testHundredGrade() {
+
+    assertEquals(
+        100,
+        parseGrade("100")
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We do not need to test file I/O and parsing simultaneously. First test parseGrade on its own — that is why it was pulled out into a method at all.</p>
+    <p>The normal case is a plain valid grade. The boundary cases are zero and one hundred: the two endpoints of the accepted range, exactly as Part VII prescribed.</p>
+    <p>Zero and one hundred must pass, because the guard uses strictly-less-than and strictly-greater-than. If someone rewrites it with <code>&lt;=</code>, these two tests go red immediately.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Testing the Invalid Cases</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Invalid numeric range:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testTooLargeGrade() {
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -&gt; parseGrade("105")
+    );
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Invalid format:</p>
+<pre><code class="language-java" data-trim data-noescape>
+@Test
+public void testNonNumericGrade() {
+
+    assertThrows(
+        NumberFormatException.class,
+        () -&gt; parseGrade("excellent")
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <blockquote class="small">Break complex programs into small components that can be tested independently.</blockquote>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-integrated-tests" tabindex="0">All five <code>parseGrade</code> tests</span>
+  </div>
+  <aside class="notes">
+    <p>Two invalid cases, two different exception types. "105" is a number but out of range, so it must throw IllegalArgumentException. "excellent" is not a number at all, so it must throw NumberFormatException.</p>
+    <p>These tests are what make the two-exception design from earlier verifiable. If someone simplified parseGrade to throw one type for everything, one of these tests fails.</p>
+    <p>This demonstrates an important idea: break complex programs into small components that can be tested independently.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Designing Good Tests</h2>
+  <p class="small">Before writing tests, ask:</p>
+  <div class="cols-3">
+    <div>
+      <h4>Typical cases</h4>
+      <p class="small">What inputs represent ordinary usage?</p>
+      <h4>Boundary cases</h4>
+      <p class="small">What happens at the edges?</p>
+      <h4>Invalid cases</h4>
+      <p class="small">What inputs should be rejected?</p>
+    </div>
+    <div>
+      <h4>Empty cases</h4>
+      <p class="small">What happens with:</p>
+<pre><code class="language-text" data-trim data-noescape>
+empty arrays
+empty strings
+empty files
+</code></pre>
+    </div>
+    <div>
+      <h4>Special cases</h4>
+      <p class="small">What about:</p>
+<pre><code class="language-text" data-trim data-noescape>
+zero
+negative values
+duplicate values
+null
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Five questions to ask before writing tests: typical cases — what inputs represent ordinary usage; boundary cases — what happens at the edges; invalid cases — what inputs should be rejected; empty cases; and special cases.</p>
+    <p>Empty is worth separating from invalid. An empty array is often perfectly valid input that simply needs a defined answer, and deciding what that answer is is a design decision.</p>
+    <p>Special cases — zero, negative values, duplicate values, null — are the values that have historically broken code regardless of the problem domain. Treat the list as a checklist.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example Test Design Exercise</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isPassing(
+        double grade) {
+
+    return grade &gt;= 60;
+}
+</code></pre>
+      <p class="small">What should we test?</p>
+    </div>
+    <div>
+      <span class="tag no">A weak test set</span>
+<pre><code class="language-text" data-trim data-noescape>
+70
+80
+90
+</code></pre>
+      <p class="small">All three test essentially the same situation.</p>
+    </div>
+    <div>
+      <span class="tag ok">A stronger test set</span>
+<pre><code class="language-text" data-trim data-noescape>
+59
+60
+61
+0
+100
+</code></pre>
+      <p class="small">Why is <code>60</code> especially important? Because it is the <strong>boundary</strong>.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>isPassing returns whether a grade is at least sixty. A weak test set is seventy, eighty, ninety — all three test essentially the same situation, comfortably above the line.</p>
+    <p>A stronger set is fifty-nine, sixty, sixty-one, zero, and one hundred: one below, exactly on, one above, and the two extremes.</p>
+    <p>Why is sixty especially important? Because it is the boundary. Sixty is the only value that distinguishes <code>&gt;= 60</code> from <code>&gt; 60</code>, and that is exactly the mistake a tired programmer makes.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XI</p>
+  <h2>Contracts, Propagation, and Connections</h2>
+  <p class="part-sub">Where exceptions fit in the object-oriented picture — and in everything that follows.</p>
+</section>
+
+<section>
+  <h2>Exceptions and Method Contracts</h2>
+  <p class="small">Every method has an implicit or explicit <strong>contract</strong>. Consider:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static double sqrt(double x)
+</code></pre>
+      <p class="small">A possible contract is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Precondition:
+x &gt;= 0
+
+Postcondition:
+returns the nonnegative square root of x
+</code></pre>
+    </div>
+    <div>
+      <p class="small">If a caller violates the precondition, we might throw:</p>
+<pre><code class="language-java" data-trim data-noescape>
+IllegalArgumentException
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (x &lt; 0) {
+    throw new IllegalArgumentException(
+        "x must be nonnegative"
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Exceptions help <strong>enforce contracts</strong> between different parts of a program.</div>
+  <aside class="notes">
+    <p>Every method has an implicit or explicit contract. For sqrt, a possible contract is: precondition, x is at least zero; postcondition, returns the nonnegative square root of x.</p>
+    <p>If a caller violates the precondition, we might throw IllegalArgumentException. The name is exact — the argument was illegal for this method, which is a statement about the call, not about the method.</p>
+    <p>Exceptions therefore help enforce contracts between different parts of a program. Without them, a violated precondition produces a meaningless number that travels onward.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Design Principle: Fail Fast</h2>
+  <blockquote class="small">Detect invalid states as early as possible.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Student student =
+    new Student("", -3);
+</code></pre>
+      <p class="small">If empty names and negative IDs are invalid, reject them in the <strong>constructor</strong>.</p>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Watch out</span>Do not allow an invalid object to travel throughout the program.</div>
+      <p class="small">The longer invalid data survives, the harder the eventual bug may be to diagnose.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why late detection is so much worse</summary>
+    <div class="acc-body">
+      <p>If the empty name is rejected in the constructor, the stack trace points at the line that built the bad object — the place where the wrong data actually came from.</p>
+      <p>If it is discovered later, when something tries to print or sort or compare it, the stack trace points at the printing code, which is innocent. You then have to work backwards to find who created it and why.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A useful principle is: detect invalid states as early as possible. Constructing a Student with an empty name and an ID of minus three should fail there and then.</p>
+    <p>If empty names and negative IDs are invalid, reject them in the constructor. Do not allow an invalid object to travel throughout the program.</p>
+    <p>The longer invalid data survives, the harder the eventual bug may be to diagnose. This is the same argument as Part IV's validate-at-the-boundary, stated as a slogan students will meet again in industry.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>When to Catch and When to Throw</h2>
+  <div class="cols">
+    <div>
+      <h4>Throw an exception when:</h4>
+      <p class="small">A method detects a problem that prevents it from completing its contract.</p>
+      <h4>Catch an exception when:</h4>
+      <p class="small">The current part of the program knows what meaningful action to take.</p>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+parseGrade()
+</code></pre>
+      <p class="small">may throw an exception.</p>
+      <p class="small">The file-processing code may <strong>catch</strong> it because it knows it can skip the malformed record.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Knowledge of the failure and knowledge of the remedy usually live in different methods.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>parseGrade</code> does not catch its own exception</summary>
+    <div class="acc-body">
+      <p>Because it does not know what to do about it. It knows the text is not a valid grade; it does not know whether the caller wants to skip the record, substitute a default, ask the user, or stop.</p>
+      <p>Sometimes the method that detects the problem does not know how to recover. In that case, propagating the exception can be better than catching it immediately.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A useful guideline. Throw an exception when a method detects a problem that prevents it from completing its contract. Catch an exception when the current part of the program knows what meaningful action to take.</p>
+    <p>parseGrade may throw. The file-processing code may catch it, because it is the part that knows it can skip the malformed record and keep going.</p>
+    <p>This is also the answer to Mistake 4 from Part IX. Catching too early means catching in a method that does not know the remedy.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exception Propagation</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+main()
+   calls loadStudents()
+      calls parseStudent()
+         throws an exception
+</code></pre>
+      <p class="small">If <code>parseStudent()</code> does not catch it, the exception travels to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+loadStudents()
+</code></pre>
+      <p class="small">If <code>loadStudents()</code> does not catch it, it travels to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+main()
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This process is called:</p>
+<pre><code class="language-text" data-trim data-noescape>
+exception propagation
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The runtime searches the <strong>call stack</strong> for a compatible handler.</div>
+      <p class="small">If nothing on the stack handles it, the program terminates and the stack trace from Part IX is printed.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>main calls loadStudents, which calls parseStudent, which throws. If parseStudent does not catch it, the exception travels to loadStudents. If loadStudents does not catch it, it travels to main.</p>
+    <p>This process is called exception propagation. The runtime searches the call stack for a compatible handler — "compatible" meaning a catch clause whose type is the thrown type or a supertype of it.</p>
+    <p>Connect this back to the stack trace: the frames printed there are exactly the frames the exception travelled through on the way out.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Connections to Object-Oriented Programming</h2>
+  <p class="small">Exceptions reinforce concepts we already learned. Exceptions are:</p>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+objects
+</code></pre>
+      <p class="small">They are constructed with <code>new</code>, they carry state, and they have methods.</p>
+    </div>
+    <div>
+      <p class="small">Exception types are organized through:</p>
+<pre><code class="language-text" data-trim data-noescape>
+inheritance
+</code></pre>
+      <p class="small">Hence the hierarchy in Part I and the catch-ordering rule in Part II.</p>
+    </div>
+    <div>
+      <p class="small">A <code>catch</code> block can demonstrate:</p>
+<pre><code class="language-text" data-trim data-noescape>
+polymorphism
+</code></pre>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+catch (Exception e)
+</code></pre>
+      <p class="small">can catch objects belonging to many subclasses of <code>Exception</code>.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Exception handling is also an application of the object-oriented model.</div>
+  <aside class="notes">
+    <p>Exceptions reinforce concepts we already learned. Exceptions are objects — created with new, carrying a message, answering method calls like getMessage.</p>
+    <p>Exception types are organized through inheritance, which is why the hierarchy in Part I exists and why catch order matters in Part II.</p>
+    <p>A catch block can demonstrate polymorphism: <code>catch (Exception e)</code> can catch objects belonging to many subclasses of Exception. Thus, exception handling is also an application of the object-oriented model — Week 8's material doing real work.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Connections to Future Topics</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Next week we will study <strong>recursion</strong>. Later we will study:</p>
+<pre><code class="language-text" data-trim data-noescape>
+searching
+sorting
+lists
+stacks
+queues
+trees
+</code></pre>
+      <p class="small">Exceptions and testing will remain important.</p>
+    </div>
+    <div>
+      <p class="small">Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+What happens when a stack is empty?
+What happens when an index is invalid?
+What happens when binary search receives bad input?
+What happens when a tree does not contain a value?
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Data structures require us to think carefully about valid and invalid operations.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Next week we will study recursion. Later we will study searching, sorting, lists, stacks, queues, and trees. Exceptions and testing will remain important throughout.</p>
+    <p>The four questions are worth reading out: what happens when a stack is empty, when an index is invalid, when binary search receives bad input, and when a tree does not contain a value?</p>
+    <p>Every one of those is a design decision of exactly the kind Part VI called an error policy. Data structures require us to think carefully about valid and invalid operations.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XII / BACK MATTER ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XII</p>
+  <h2>Lab, Review, and Summary</h2>
+  <p class="part-sub">What you write this week, and what you must remember from it.</p>
+</section>
+
+<section>
+  <h2>In-Class Coding Exercise 1</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int readPositiveInteger(
+        Scanner input)
+</code></pre>
+      <p class="small">The method should repeatedly ask for input until the user provides a positive integer. It should correctly handle inputs such as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+hello
+-10
+0
+42
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Expected behavior:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Enter positive integer: hello
+Invalid integer.
+
+Enter positive integer: -10
+Number must be positive.
+
+Enter positive integer: 42
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Two different rejections, two different messages</summary>
+    <div class="acc-body">
+      <p>Look carefully at the expected output. <code>hello</code> produces "Invalid integer." — a <em>format</em> failure, which arrives as an exception. <code>-10</code> produces "Number must be positive." — a <em>range</em> failure, which is an ordinary <code>if</code>.</p>
+      <p>That is the same split as <code>parseGrade</code> in Part X, and the same lesson from Part IV: use an exception where you cannot cheaply test first, and a condition where you can.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Write readPositiveInteger, taking a Scanner and returning an int. The method should repeatedly ask for input until the user provides a positive integer, handling inputs such as hello, minus ten, zero, and forty-two.</p>
+    <p>The expected behaviour shows two distinct rejection messages: "Invalid integer." for text that is not a number, and "Number must be positive." for a number that is out of range. Zero is rejected too — it is the boundary.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Coding Exercises 2 and 3</h2>
+  <div class="cols">
+    <div>
+      <h4>Exercise 2</h4>
+      <p class="small">Write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double divide(
+        double numerator,
+        double denominator)
+</code></pre>
+      <p class="small">Requirements:</p>
+      <ul class="small tight">
+        <li>return the quotient</li>
+        <li>throw <code>IllegalArgumentException</code> when denominator is zero</li>
+      </ul>
+      <p class="small">Then write unit tests for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 / 2
+0 / 5
+-10 / 2
+10 / -2
+10 / 0
+</code></pre>
+    </div>
+    <div>
+      <h4>Exercise 3</h4>
+      <p class="small">Suppose <code>temperatures.txt</code> contains one temperature per line. Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+72.5
+68.2
+invalid
+75.1
+70.0
+</code></pre>
+      <p class="small">Write a program that:</p>
+      <ol class="small tight">
+        <li>opens the file</li>
+        <li>reads each line</li>
+        <li>converts valid lines to <code>double</code></li>
+        <li>skips invalid lines</li>
+        <li>reports the number of valid temperatures</li>
+        <li>calculates their average</li>
+      </ol>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Exercise 2 asks for the divide method from Part VIII, written from scratch, plus unit tests for five inputs. Note the choice of test inputs: a normal case, a zero numerator, two sign variations, and the zero denominator that must throw.</p>
+    <p>Exercise 3 is Part VI's skip-the-bad-record pattern applied to a simpler file — one value per line, no splitting. Students must report a count of valid temperatures as well as the average, which forces them to track what was skipped rather than silently ignoring it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Coding Exercise 4</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int findLargest(int[] values)
+</code></pre>
+      <p class="small">Design tests <strong>before</strong> implementing the method. Your tests should include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+normal array
+single-element array
+all negative numbers
+duplicate maximum
+empty array
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Then decide what the method should do when the array is empty. Should it:</p>
+<pre><code class="language-text" data-trim data-noescape>
+return 0?
+return Integer.MIN_VALUE?
+throw an exception?
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Explain your design decision. There is a defensible answer; there is no automatic one.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why "design tests before implementing" changes the answer</summary>
+    <div class="acc-body">
+      <p>Writing the empty-array test first forces the question "what should this return?" before any code exists to bias the answer. Written afterwards, the test tends to assert whatever the implementation already happens to do.</p>
+      <p>The all-negative case is the trap: an implementation that starts its running maximum at <code>0</code> instead of <code>values[0]</code> passes every other test on the list.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Design tests before implementing findLargest. The five cases are a normal array, a single-element array, all negative numbers, a duplicate maximum, and an empty array.</p>
+    <p>Then decide what the method should do when the array is empty: return zero, return Integer.MIN_VALUE, or throw an exception? Explain your design decision.</p>
+    <p>Push for reasons. Returning zero is wrong for an all-negative array. Returning MIN_VALUE is a sentinel the caller may forget to check. Throwing is honest but forces every caller to handle it. All three trade-offs are real.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Suggested Lab — Robust Grade Processor</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Write a Java program that reads:</p>
+<pre><code class="language-text" data-trim data-noescape>
+grades.csv
+</code></pre>
+      <p class="small">Each line contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+studentName,grade
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice,91
+Bob,82
+Charlie,hello
+David,105
+Eva,88
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The program should:</p>
+      <ul class="small tight">
+        <li>read the file</li>
+        <li>validate each record</li>
+        <li>require exactly two fields</li>
+        <li>require grade between 0 and 100</li>
+        <li>skip invalid records</li>
+        <li>calculate the average of valid grades</li>
+        <li>report the number of valid and invalid records</li>
+      </ul>
+      <p class="small">Recommended methods:</p>
+<pre><code class="language-java" data-trim data-noescape>
+parseGrade(String text)
+
+isValidGrade(double grade)
+
+calculateAverage(double[] grades)
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The two requirements not on the list above</summary>
+    <div class="acc-body">
+      <p>Two more, from the full brief: <em>convert the grade to a number</em>, and <em>print a meaningful error message for invalid records</em>.</p>
+      <p>And the requirement that makes this a Week 9 lab rather than a Week 5 one: at least one part of the program should be separated into a method that can be unit tested.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-lab" tabindex="0">Full lab brief</span>
+    <span class="mbtn" data-modal="m9-exercises" tabindex="0">All four in-class exercises</span>
+  </div>
+  <aside class="notes">
+    <p>The lab is a robust grade processor over grades.csv. The sample data contains one non-numeric grade and one out-of-range grade — the two failure modes parseGrade distinguishes.</p>
+    <p>The requirement that matters most is the last one in the modal: at least one part of the program should be separated into a method that can be unit tested. That is the whole week in one sentence.</p>
+    <p>The three recommended methods are the seam. parseGrade, isValidGrade, and calculateAverage are all pure computation, so all three can be tested without a file existing.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Concept Check</h2>
+  <div class="cols">
+    <ol class="small">
+      <li>What is the difference between <code>throw</code> and <code>throws</code>?</li>
+      <li>Why might an empty <code>catch (Exception e)</code> be poor design?</li>
+      <li>What is the difference between a checked and unchecked exception?</li>
+      <li>Why is <code>try-with-resources</code> useful?</li>
+    </ol>
+    <ol class="small" start="5">
+      <li>What is the difference between a logic error and an exception?</li>
+      <li>Why should we test boundary cases?</li>
+      <li>Does passing all of our tests prove a program is correct?</li>
+      <li>Why does separating computation from input/output improve testability?</li>
+    </ol>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-concept-check" tabindex="0">The eight questions, as written</span>
+  </div>
+  <details class="acc">
+    <summary>Where each answer lives in the week</summary>
+    <div class="acc-body">
+      <ul>
+        <li>Q1 — Part III, <code>throws</code> and <code>throw</code>.</li>
+        <li>Q2 — Part IX, Mistakes 1 and 2.</li>
+        <li>Q3 — Part III, checked vs. unchecked.</li>
+        <li>Q4 — Part V, <code>try-with-resources</code>.</li>
+        <li>Q5 — Part I, the three categories of error.</li>
+        <li>Q6 — Part VII, boundary cases.</li>
+        <li>Q7 — Part IX, testing is not proof.</li>
+        <li>Q8 — Part IX, separation of concerns.</li>
+      </ul>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Eight questions covering all three strands of the week. Use them as a warm-up at the start of the next lecture rather than as an end-of-lecture rush.</p>
+    <p>Question 5 is the sharpest one: the difference between a logic error and an exception. A logic error is a wrong answer nobody reports; an exception is a reported abnormal condition. A program can have either without the other.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Summary — The Three Major Ideas</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Exceptions</h4>
+      <p class="small">Exceptions represent abnormal runtime conditions. We learned:</p>
+<pre><code class="language-java" data-trim data-noescape>
+try
+catch
+finally
+throw
+throws
+</code></pre>
+      <p class="small">We also distinguished:</p>
+<pre><code class="language-text" data-trim data-noescape>
+checked exceptions
+unchecked exceptions
+</code></pre>
+    </div>
+    <div>
+      <h4>File I/O</h4>
+      <p class="small">Files allow programs to work with persistent data. We used:</p>
+<pre><code class="language-java" data-trim data-noescape>
+File
+Scanner
+PrintWriter
+</code></pre>
+      <p class="small">and learned why:</p>
+<pre><code class="language-java" data-trim data-noescape>
+try-with-resources
+</code></pre>
+      <p class="small">is preferred for managing resources.</p>
+    </div>
+    <div>
+      <h4>Testing</h4>
+      <p class="small">Testing helps detect defects systematically. We discussed:</p>
+<pre><code class="language-text" data-trim data-noescape>
+normal cases
+boundary cases
+exceptional cases
+unit tests
+JUnit
+assertions
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Software quality depends not merely on whether a program works under ideal conditions. A robust program must also define what happens when conditions are not ideal.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-summary" tabindex="0">The full Week 9 summary</span>
+  </div>
+  <aside class="notes">
+    <p>This week introduced three major ideas. The first: exceptions represent abnormal runtime conditions. We learned try, catch, finally, throw, and throws, and we distinguished checked exceptions from unchecked exceptions.</p>
+    <p>The second: files allow programs to work with persistent data. We used File, Scanner, and PrintWriter, and learned why try-with-resources is preferred for managing resources.</p>
+    <p>The third: testing helps detect defects systematically. We discussed normal cases, boundary cases, exceptional cases, unit tests, JUnit, and assertions.</p>
+    <p>Most importantly, we saw that software quality depends not merely on whether a program works under ideal conditions. A robust program must also define what happens when conditions are not ideal.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways (1 of 2)</h2>
+  <ol>
+    <li>Programs should expect that things can go wrong.</li>
+    <li>Exceptions provide a structured mechanism for handling abnormal situations.</li>
+    <li>Throw exceptions when a method cannot fulfill its contract.</li>
+    <li>Catch exceptions when you know how to meaningfully recover.</li>
+    <li>Do not use exceptions as a substitute for ordinary validation.</li>
+    <li>Validate input as early as practical.</li>
+  </ol>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m9-key-takeaways" tabindex="0">All eleven takeaways on one page</span>
+  </div>
+  <aside class="notes">
+    <p>Takeaways one and two are the case for exceptions existing. Three and four are the throw-versus-catch guideline from Part XI, restated.</p>
+    <p>Five and six are the two ways beginners get it wrong: using exceptions where an <code>if</code> belongs, and validating too late to be useful.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways (2 of 2)</h2>
+  <ol start="7">
+    <li>Use <code>try-with-resources</code> for files and other closeable resources.</li>
+    <li>Separate computation from input/output to improve testability.</li>
+    <li>Test boundaries and invalid inputs, not only typical cases.</li>
+    <li>Passing tests increases confidence but does not prove correctness.</li>
+    <li>Robust error handling and systematic testing are fundamental software engineering skills.</li>
+  </ol>
+  <div class="box key"><span class="box-title">Key idea</span>Takeaway 11 is the one that carries past this course.</div>
+  <aside class="notes">
+    <p>Seven is the file rule. Eight is the design rule that makes nine possible: you cannot test boundaries and invalid inputs conveniently unless the computation is reachable without a keyboard.</p>
+    <p>Ten guards against overconfidence — passing tests increases confidence but does not prove correctness.</p>
+    <p>Eleven is the one that carries past this course: robust error handling and systematic testing are fundamental software engineering skills, not optional polish.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Syntax error</td><td>The program violates Java's grammatical rules.</td></tr>
+        <tr><td>Logic error</td><td>The program runs, but produces the wrong answer.</td></tr>
+        <tr><td>Runtime error</td><td>An error that occurs while the program is executing.</td></tr>
+        <tr><td>Exception</td><td>An object representing an abnormal situation that occurs while a program is running.</td></tr>
+        <tr><td>Unchecked exception</td><td>Generally represents a programming error or invalid operation; the compiler does not require handling.</td></tr>
+        <tr><td>Checked exception</td><td>Represents an external condition; Java requires you to handle it or declare it.</td></tr>
+        <tr><td><code>throw</code></td><td>Statement used to intentionally create an exception.</td></tr>
+        <tr><td><code>throws</code></td><td>Declares that a method may fail with a given checked exception.</td></tr>
+        <tr><td><code>finally</code></td><td>Block that executes whether or not an exception occurred.</td></tr>
+        <tr><td>Stack trace</td><td>The active method calls at the moment the exception occurred.</td></tr>
+        <tr><td>Exception propagation</td><td>The runtime searching the call stack for a compatible handler.</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Defensive programming</td><td>Anticipating possible errors instead of assuming valid input.</td></tr>
+        <tr><td><code>try-with-resources</code></td><td>A <code>try</code> that declares a resource and closes it automatically.</td></tr>
+        <tr><td><code>PrintWriter</code></td><td>A convenient class for writing text to a file.</td></tr>
+        <tr><td>Software testing</td><td>The systematic process of evaluating whether software behaves as expected.</td></tr>
+        <tr><td>Test case</td><td>An input, an expected result, and an actual result.</td></tr>
+        <tr><td>Boundary case</td><td>A test near a limit, where programming errors frequently occur.</td></tr>
+        <tr><td>Exceptional case</td><td>A test of deliberately invalid or unusual input.</td></tr>
+        <tr><td>Unit test</td><td>A test of a small, isolated component — usually a method or a class.</td></tr>
+        <tr><td>JUnit</td><td>A common Java testing framework.</td></tr>
+        <tr><td>Correctness</td><td>Does the program give the right answer for valid inputs?</td></tr>
+        <tr><td>Robustness</td><td>Does the program behave sensibly when something unexpected happens?</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">
+    <p>Every term here was introduced somewhere in Week 9. Note that four of them are keywords rather than concepts — <code>throw</code>, <code>throws</code>, <code>finally</code>, and <code>try-with-resources</code> — and students should be able to write a line of code using each.</p>
+    <p>The last two rows are the pair students most often conflate. Correctness is about valid inputs; robustness is about invalid ones. Concept Check Question 5 is close cousin to that distinction.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Next week we will introduce <strong>recursion and algorithmic thinking</strong>.</p>
+      <div class="def"><span class="term">Week 10:</span> Recursion and Algorithmic Thinking</div>
+      <p class="small">Before then, make sure you are comfortable with:</p>
+      <ul class="small tight">
+        <li>method calls</li>
+        <li>parameters and return values</li>
+        <li>local variables</li>
+        <li>the call stack</li>
+        <li>tracing execution</li>
+        <li>writing tests for individual methods</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Recursion will rely heavily on your ability to reason about how method calls are created, executed, and completed.</div>
+      <div class="box note"><span class="box-title">Note</span>You already met the call stack this week — twice. Once in the stack trace, and once in exception propagation.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Next week we will introduce recursion and algorithmic thinking. Before then, make sure you are comfortable with method calls, parameters and return values, local variables, the call stack, tracing execution, and writing tests for individual methods.</p>
+    <p>Recursion will rely heavily on your ability to reason about how method calls are created, executed, and completed.</p>
+    <p>Point out that the last item on the preparation list is from this week. Recursive methods are exactly the kind of small, pure, self-contained method that unit tests suit best.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 9 — Exceptions, File I/O, and Testing
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m9-why-this-week"
+          data-kicker="Context" data-title="Why this week matters">
+  <h4>The assumption we have been making</h4>
+  <p>So far, most of our programs have assumed that everything goes according to plan.</p>
+  <p>For example:</p>
+<pre><code class="language-java">int age = scanner.nextInt();</code></pre>
+  <p>We assume the user enters an integer.</p>
+  <p>Or:</p>
+<pre><code class="language-java">double result = total / count;</code></pre>
+  <p>We assume <code>count</code> is not zero.</p>
+  <p>Or:</p>
+<pre><code class="language-java">Scanner file = new Scanner(new File("students.txt"));</code></pre>
+  <p>We assume the file exists.</p>
+  <h4>Why that fails outside the classroom</h4>
+  <p>Real programs cannot make these assumptions.</p>
+  <ul>
+    <li>Users enter invalid input.</li>
+    <li>Files disappear.</li>
+    <li>Network connections fail.</li>
+    <li>Data may be incomplete.</li>
+    <li>Programmers make mistakes.</li>
+  </ul>
+  <p>One of the differences between a small classroom program and production-quality software is how the program behaves when something goes wrong.</p>
+  <h4>The three ideas</h4>
+  <ol>
+    <li><strong>Detecting and responding to errors</strong></li>
+    <li><strong>Working with external data</strong></li>
+    <li><strong>Testing programs systematically</strong></li>
+  </ol>
+  <p>Together, these concepts help us write software that is more reliable.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-hierarchy"
+          data-kicker="Deep dive" data-title="The exception hierarchy, and why its shape matters">
+  <h4>Exceptions are objects</h4>
+  <p>Exceptions are objects. Therefore, exception types are organized using inheritance. A simplified Java hierarchy looks like this:</p>
+<pre><code class="language-text">Object
+   |
+Throwable
+   |
+   +-- Error
+   |
+   +-- Exception
+          |
+          +-- RuntimeException</code></pre>
+  <p>We will mainly work with classes below <code>Exception</code>.</p>
+  <h4>The classes this week uses</h4>
+  <p>Some common exception classes include:</p>
+<pre><code class="language-text">ArithmeticException
+NullPointerException
+ArrayIndexOutOfBoundsException
+NumberFormatException
+IllegalArgumentException
+IOException
+FileNotFoundException</code></pre>
+  <h4>Three consequences of the shape</h4>
+  <ul>
+    <li><strong>Catching a supertype catches every subtype.</strong> <code>catch (Exception e)</code> can catch objects belonging to many subclasses of <code>Exception</code> — that is polymorphism at work.</li>
+    <li><strong>Catch order matters.</strong> Because a supertype clause covers the subtypes, the specific exception must appear first or the code will not compile.</li>
+    <li><strong>The <code>RuntimeException</code> branch is the unchecked one.</strong> Everything under it is exempt from the handle-or-declare rule; everything else under <code>Exception</code> is checked.</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m9-checked-unchecked"
+          data-kicker="Deep dive" data-title="Checked vs. unchecked exceptions">
+  <h4>Unchecked exceptions</h4>
+  <p>Java distinguishes between two important categories.</p>
+  <p>Unchecked exceptions generally represent programming errors or invalid operations.</p>
+  <p>Examples:</p>
+<pre><code class="language-text">NullPointerException
+ArithmeticException
+ArrayIndexOutOfBoundsException
+IllegalArgumentException
+NumberFormatException</code></pre>
+  <p>These typically inherit from:</p>
+<pre><code class="language-java">RuntimeException</code></pre>
+  <p>The compiler does not require us to handle them.</p>
+  <h4>Checked exceptions</h4>
+  <p>Checked exceptions usually represent external conditions that a program may reasonably need to recover from.</p>
+  <p>Examples include:</p>
+<pre><code class="language-text">IOException
+FileNotFoundException</code></pre>
+  <p>Java requires the programmer either to:</p>
+  <ul><li>handle the exception</li></ul>
+  <p>or</p>
+  <ul><li>declare that the method may throw it</li></ul>
+  <h4>Why the distinction exists</h4>
+  <p>A missing file is not a defect in your code — it is a fact about the world your program has to cope with, so the language insists you decide what to do. A null reference <em>is</em> a defect, and requiring a handler for every possible one would make Java unwritable.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-grade-reader"
+          data-kicker="Worked example" data-title="GradeReader — the complete program">
+  <h4>The data</h4>
+  <p>Suppose the file is:</p>
+<pre><code class="language-text">Alice,92
+Bob,85
+Charlie,78
+David,95</code></pre>
+  <p>We want to calculate the average.</p>
+  <h4>The program</h4>
+<pre><code class="language-java">import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class GradeReader {
+
+    public static void main(String[] args) {
+
+        double total = 0;
+        int count = 0;
+
+        try (Scanner input =
+                new Scanner(new File("grades.txt"))) {
+
+            while (input.hasNextLine()) {
+
+                String line = input.nextLine();
+
+                String[] parts = line.split(",");
+
+                String name = parts[0];
+                double grade =
+                    Double.parseDouble(parts[1]);
+
+                System.out.println(
+                    name + ": " + grade
+                );
+
+                total += grade;
+                count++;
+            }
+
+            if (count &gt; 0) {
+                System.out.println(
+                    "Average: " + total / count
+                );
+            }
+
+        }
+        catch (FileNotFoundException e) {
+
+            System.out.println(
+                "Could not locate grades.txt"
+            );
+
+        }
+    }
+}</code></pre>
+  <h4>Points to notice</h4>
+  <ul>
+    <li><code>total</code> and <code>count</code> are declared before the <code>try</code>, because they must outlive it.</li>
+    <li>The <code>try-with-resources</code> closes the <code>Scanner</code> on every exit path.</li>
+    <li>The average is printed only when <code>count</code> is greater than zero — an empty file must not divide by zero.</li>
+    <li>Nothing here survives a malformed record. That is the next slide's problem.</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m9-malformed"
+          data-kicker="Worked example" data-title="Handling malformed records">
+  <h4>The problem</h4>
+  <p>Suppose the file contains:</p>
+<pre><code class="language-text">Alice,92
+Bob,eighty
+Charlie,78</code></pre>
+  <p>This statement:</p>
+<pre><code class="language-java">Double.parseDouble(parts[1]);</code></pre>
+  <p>will throw:</p>
+<pre><code class="language-text">NumberFormatException</code></pre>
+  <h4>The fix</h4>
+  <p>We can handle malformed records.</p>
+<pre><code class="language-java">while (input.hasNextLine()) {
+
+    String line = input.nextLine();
+
+    try {
+
+        String[] parts = line.split(",");
+
+        String name = parts[0];
+
+        double grade =
+            Double.parseDouble(parts[1]);
+
+        System.out.println(
+            name + ": " + grade
+        );
+
+    }
+    catch (NumberFormatException e) {
+
+        System.out.println(
+            "Skipping invalid record: " + line
+        );
+
+    }
+}</code></pre>
+  <h4>The important detail</h4>
+  <p>Notice something important. The <code>try-catch</code> is inside the loop.</p>
+  <p>Why? Because one bad record should not necessarily prevent us from processing the remaining file.</p>
+  <p>Note also that <code>line</code> is read <em>before</em> the <code>try</code>. That is deliberate: the error message needs the offending line, so it must be in scope in the <code>catch</code>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-bank-account"
+          data-kicker="Worked example" data-title="The BankAccount class under test">
+  <h4>The class</h4>
+  <p>Suppose:</p>
+<pre><code class="language-java">public class BankAccount {
+
+    private double balance;
+
+    public BankAccount(double balance) {
+
+        if (balance &lt; 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.balance = balance;
+    }
+
+    public void deposit(double amount) {
+
+        if (amount &lt;= 0) {
+            throw new IllegalArgumentException();
+        }
+
+        balance += amount;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}</code></pre>
+  <h4>What the guards are doing</h4>
+  <ul>
+    <li>The constructor refuses a negative opening balance, so an invalid account can never exist — validate at the boundary, from Part IV.</li>
+    <li><code>deposit</code> refuses zero and negative amounts. Zero is rejected too: a deposit of nothing is a caller mistake, not a no-op.</li>
+    <li><code>getBalance</code> has no guard because it has no precondition. Not every method needs one.</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m9-bank-account-tests"
+          data-kicker="Worked example" data-title="Three tests for BankAccount">
+  <h4>Normal construction</h4>
+  <p>Possible tests:</p>
+<pre><code class="language-java">@Test
+public void testInitialBalance() {
+
+    BankAccount account =
+        new BankAccount(100);
+
+    assertEquals(
+        100,
+        account.getBalance()
+    );
+}</code></pre>
+  <h4>Normal operation</h4>
+  <p>Another:</p>
+<pre><code class="language-java">@Test
+public void testDeposit() {
+
+    BankAccount account =
+        new BankAccount(100);
+
+    account.deposit(50);
+
+    assertEquals(
+        150,
+        account.getBalance()
+    );
+}</code></pre>
+  <h4>Invalid input</h4>
+<pre><code class="language-java">@Test
+public void testNegativeDeposit() {
+
+    BankAccount account =
+        new BankAccount(100);
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -&gt; account.deposit(-20)
+    );
+}</code></pre>
+  <h4>Arrange — Act — Assert</h4>
+  <p>A useful structure for tests is:</p>
+<pre><code class="language-text">Arrange
+Act
+Assert</code></pre>
+  <p>Example:</p>
+<pre><code class="language-java">@Test
+public void testDeposit() {
+
+    // Arrange
+    BankAccount account =
+        new BankAccount(100);
+
+    // Act
+    account.deposit(50);
+
+    // Assert
+    assertEquals(
+        150,
+        account.getBalance()
+    );
+}</code></pre>
+  <p>This makes tests easier to read.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-integrated"
+          data-kicker="Worked example" data-title="The integrated example, in full">
+  <h4>The file</h4>
+  <p>Consider a small student-grade application. The file:</p>
+<pre><code class="language-text">Alice,90
+Bob,83
+Charlie,not-a-number
+David,95</code></pre>
+  <p>We want to:</p>
+  <ol>
+    <li>read each record</li>
+    <li>parse the grade</li>
+    <li>reject malformed records</li>
+    <li>validate grade range</li>
+    <li>calculate an average</li>
+  </ol>
+  <h4>A helper method</h4>
+<pre><code class="language-java">public static double parseGrade(
+        String text) {
+
+    double grade =
+        Double.parseDouble(text);
+
+    if (grade &lt; 0 || grade &gt; 100) {
+
+        throw new IllegalArgumentException(
+            "Grade must be between 0 and 100."
+        );
+    }
+
+    return grade;
+}</code></pre>
+  <h4>File processing</h4>
+<pre><code class="language-java">try (Scanner input =
+        new Scanner(new File("grades.txt"))) {
+
+    while (input.hasNextLine()) {
+
+        String line = input.nextLine();
+
+        try {
+
+            String[] parts =
+                line.split(",");
+
+            if (parts.length != 2) {
+                throw new IllegalArgumentException(
+                    "Invalid record format."
+                );
+            }
+
+            String name = parts[0];
+
+            double grade =
+                parseGrade(parts[1]);
+
+            System.out.println(
+                name + " -&gt; " + grade
+            );
+
+        }
+        catch (NumberFormatException e) {
+
+            System.out.println(
+                "Invalid number: " + line
+            );
+
+        }
+        catch (IllegalArgumentException e) {
+
+            System.out.println(
+                "Invalid record: " + line
+            );
+
+        }
+
+    }
+
+}
+catch (FileNotFoundException e) {
+
+    System.out.println(
+        "Unable to open grades.txt"
+    );
+}</code></pre>
+  <h4>What it demonstrates</h4>
+  <p>This example demonstrates several concepts together:</p>
+<pre><code class="language-text">file input
+string parsing
+validation
+exceptions
+nested error handling
+defensive programming</code></pre>
+  <p>Note the catch order: <code>NumberFormatException</code> is a subclass of <code>IllegalArgumentException</code>, so it must come first — the rule from Part II, appearing in real code.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-integrated-tests"
+          data-kicker="Worked example" data-title="Testing parseGrade — all five tests">
+  <h4>Test the component, not the whole program</h4>
+  <p>We do not need to test file I/O and parsing simultaneously.</p>
+  <p>First test:</p>
+<pre><code class="language-java">parseGrade()</code></pre>
+  <h4>Normal case</h4>
+<pre><code class="language-java">@Test
+public void testValidGrade() {
+
+    assertEquals(
+        92,
+        parseGrade("92")
+    );
+}</code></pre>
+  <h4>Boundary cases</h4>
+<pre><code class="language-java">@Test
+public void testZeroGrade() {
+
+    assertEquals(
+        0,
+        parseGrade("0")
+    );
+}</code></pre>
+<pre><code class="language-java">@Test
+public void testHundredGrade() {
+
+    assertEquals(
+        100,
+        parseGrade("100")
+    );
+}</code></pre>
+  <h4>Invalid numeric range</h4>
+<pre><code class="language-java">@Test
+public void testTooLargeGrade() {
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -&gt; parseGrade("105")
+    );
+}</code></pre>
+  <h4>Invalid format</h4>
+<pre><code class="language-java">@Test
+public void testNonNumericGrade() {
+
+    assertThrows(
+        NumberFormatException.class,
+        () -&gt; parseGrade("excellent")
+    );
+}</code></pre>
+  <p>This demonstrates an important idea: break complex programs into small components that can be tested independently.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-debugging"
+          data-kicker="Deep dive" data-title="Stack traces and debugging strategy">
+  <h4>Reading a stack trace</h4>
+  <p>Suppose Java prints:</p>
+<pre><code class="language-text">Exception in thread "main"
+java.lang.NullPointerException
+    at Student.getName(Student.java:18)
+    at Course.printRoster(Course.java:42)
+    at Main.main(Main.java:10)</code></pre>
+  <p>Read from the top. The error occurred at:</p>
+<pre><code class="language-text">Student.java:18</code></pre>
+  <p>That method was called by:</p>
+<pre><code class="language-text">Course.java:42</code></pre>
+  <p>which was called by:</p>
+<pre><code class="language-text">Main.java:10</code></pre>
+  <p>The stack trace represents the active method calls when the exception occurred.</p>
+  <h4>Debugging strategy</h4>
+  <p>When an exception occurs:</p>
+  <ol>
+    <li>Read the exception type.</li>
+    <li>Read the exception message.</li>
+    <li>Find the first stack-trace line referring to your code.</li>
+    <li>Inspect the values involved.</li>
+    <li>Determine why an invalid state was possible.</li>
+    <li>Fix the underlying cause rather than merely suppressing the exception.</li>
+  </ol>
+  <p>Example:</p>
+<pre><code class="language-text">NullPointerException</code></pre>
+  <p>Do not immediately add:</p>
+<pre><code class="language-java">if (x != null)</code></pre>
+  <p>Ask: why is <code>x</code> null? The deeper bug may be somewhere else.</p>
+  <h4>And the mistake this guards against</h4>
+  <p>Mistake 5 from Part IX: treating stack traces as useless noise. When debugging, read:</p>
+<pre><code class="language-text">exception type
+message
+first line referring to your code
+line number
+method call sequence</code></pre>
+  <p>The stack trace often tells you exactly where to start investigating.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-exercises"
+          data-kicker="In class" data-title="The four in-class coding exercises">
+  <h4>Exercise 1 — read a positive integer</h4>
+  <p>Write:</p>
+<pre><code class="language-java">public static int readPositiveInteger(
+        Scanner input)</code></pre>
+  <p>The method should repeatedly ask for input until the user provides a positive integer. It should correctly handle inputs such as:</p>
+<pre><code class="language-text">hello
+-10
+0
+42</code></pre>
+  <p>Expected behavior:</p>
+<pre><code class="language-text">Enter positive integer: hello
+Invalid integer.
+
+Enter positive integer: -10
+Number must be positive.
+
+Enter positive integer: 42</code></pre>
+  <h4>Exercise 2 — divide, with tests</h4>
+  <p>Write:</p>
+<pre><code class="language-java">public static double divide(
+        double numerator,
+        double denominator)</code></pre>
+  <p>Requirements:</p>
+  <ul>
+    <li>return the quotient</li>
+    <li>throw <code>IllegalArgumentException</code> when denominator is zero</li>
+  </ul>
+  <p>Then write unit tests for:</p>
+<pre><code class="language-text">10 / 2
+0 / 5
+-10 / 2
+10 / -2
+10 / 0</code></pre>
+  <h4>Exercise 3 — temperatures file</h4>
+  <p>Suppose <code>temperatures.txt</code> contains one temperature per line. Example:</p>
+<pre><code class="language-text">72.5
+68.2
+invalid
+75.1
+70.0</code></pre>
+  <p>Write a program that:</p>
+  <ol>
+    <li>opens the file</li>
+    <li>reads each line</li>
+    <li>converts valid lines to <code>double</code></li>
+    <li>skips invalid lines</li>
+    <li>reports the number of valid temperatures</li>
+    <li>calculates their average</li>
+  </ol>
+  <h4>Exercise 4 — design the tests first</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">public static int findLargest(int[] values)</code></pre>
+  <p>Design tests before implementing the method. Your tests should include:</p>
+<pre><code class="language-text">normal array
+single-element array
+all negative numbers
+duplicate maximum
+empty array</code></pre>
+  <p>Then decide what the method should do when the array is empty. Should it:</p>
+<pre><code class="language-text">return 0?
+return Integer.MIN_VALUE?
+throw an exception?</code></pre>
+  <p>Explain your design decision.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-lab"
+          data-kicker="Lab" data-title="Suggested lab — Robust Grade Processor">
+  <h4>The task</h4>
+  <p>Write a Java program that reads:</p>
+<pre><code class="language-text">grades.csv</code></pre>
+  <p>Each line contains:</p>
+<pre><code class="language-text">studentName,grade</code></pre>
+  <p>Example:</p>
+<pre><code class="language-text">Alice,91
+Bob,82
+Charlie,hello
+David,105
+Eva,88</code></pre>
+  <h4>Requirements</h4>
+  <p>The program should:</p>
+  <ul>
+    <li>read the file</li>
+    <li>validate each record</li>
+    <li>require exactly two fields</li>
+    <li>convert the grade to a number</li>
+    <li>require grade between 0 and 100</li>
+    <li>skip invalid records</li>
+    <li>print a meaningful error message for invalid records</li>
+    <li>calculate the average of valid grades</li>
+    <li>report the number of valid and invalid records</li>
+  </ul>
+  <p>At least one part of the program should be separated into a method that can be unit tested.</p>
+  <h4>Recommended methods</h4>
+<pre><code class="language-java">parseGrade(String text)
+
+isValidGrade(double grade)
+
+calculateAverage(double[] grades)</code></pre>
+  <p>Note that the sample data exercises both failure modes: <code>Charlie,hello</code> is not a number at all, and <code>David,105</code> is a number outside the valid range.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-concept-check"
+          data-kicker="Review" data-title="Concept check — eight questions">
+  <h4>Question 1</h4>
+  <p>What is the difference between:</p>
+<pre><code class="language-java">throw</code></pre>
+  <p>and:</p>
+<pre><code class="language-java">throws</code></pre>
+  <h4>Question 2</h4>
+  <p>Why might this be poor design?</p>
+<pre><code class="language-java">catch (Exception e) {
+}</code></pre>
+  <h4>Question 3</h4>
+  <p>What is the difference between a checked and unchecked exception?</p>
+  <h4>Question 4</h4>
+  <p>Why is <code>try-with-resources</code> useful?</p>
+  <h4>Question 5</h4>
+  <p>What is the difference between a logic error and an exception?</p>
+  <h4>Question 6</h4>
+  <p>Why should we test boundary cases?</p>
+  <h4>Question 7</h4>
+  <p>Does passing all of our tests prove a program is correct?</p>
+  <h4>Question 8</h4>
+  <p>Why does separating computation from input/output improve testability?</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-summary"
+          data-kicker="Summary" data-title="Week 9 summary — the three major ideas">
+  <h4>Exceptions</h4>
+  <p>Exceptions represent abnormal runtime conditions.</p>
+  <p>We learned:</p>
+<pre><code class="language-java">try
+catch
+finally
+throw
+throws</code></pre>
+  <p>We also distinguished:</p>
+<pre><code class="language-text">checked exceptions
+unchecked exceptions</code></pre>
+  <h4>File I/O</h4>
+  <p>Files allow programs to work with persistent data.</p>
+  <p>We used:</p>
+<pre><code class="language-java">File
+Scanner
+PrintWriter</code></pre>
+  <p>and learned why:</p>
+<pre><code class="language-java">try-with-resources</code></pre>
+  <p>is preferred for managing resources.</p>
+  <h4>Testing</h4>
+  <p>Testing helps detect defects systematically.</p>
+  <p>We discussed:</p>
+<pre><code class="language-text">normal cases
+boundary cases
+exceptional cases
+unit tests
+JUnit
+assertions</code></pre>
+  <p>Most importantly, we saw that software quality depends not merely on whether a program works under ideal conditions.</p>
+  <p>A robust program must also define what happens when conditions are not ideal.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m9-key-takeaways"
+          data-kicker="Summary" data-title="Week 9 — the eleven key takeaways">
+  <ol>
+    <li>Programs should expect that things can go wrong.</li>
+    <li>Exceptions provide a structured mechanism for handling abnormal situations.</li>
+    <li>Throw exceptions when a method cannot fulfill its contract.</li>
+    <li>Catch exceptions when you know how to meaningfully recover.</li>
+    <li>Do not use exceptions as a substitute for ordinary validation.</li>
+    <li>Validate input as early as practical.</li>
+    <li>Use <code>try-with-resources</code> for files and other closeable resources.</li>
+    <li>Separate computation from input/output to improve testability.</li>
+    <li>Test boundaries and invalid inputs, not only typical cases.</li>
+    <li>Passing tests increases confidence but does not prove correctness.</li>
+    <li>Robust error handling and systematic testing are fundamental software engineering skills.</li>
+  </ol>
+  <h4>Preparation for Week 10</h4>
+  <p>Next week we will introduce <strong>recursion and algorithmic thinking</strong>.</p>
+  <p>Before then, make sure you are comfortable with:</p>
+  <ul>
+    <li>method calls</li>
+    <li>parameters and return values</li>
+    <li>local variables</li>
+    <li>the call stack</li>
+    <li>tracing execution</li>
+    <li>writing tests for individual methods</li>
+  </ul>
+  <p>Recursion will rely heavily on your ability to reason about how method calls are created, executed, and completed.</p>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

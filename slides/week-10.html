@@ -1,0 +1,4135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 10: Recursion and Algorithmic Thinking</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Recursion and Algorithmic Thinking</h1>
+  <p class="subtitle">Week 10 — solving a problem by reducing it to a smaller version of itself</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives</h2>
+  <p class="dim small">By the end of this week, you should be able to:</p>
+  <ul>
+    <li>Explain what recursion is and when it is useful.</li>
+    <li>Identify the base case and recursive case of a recursive method.</li>
+    <li>Trace recursive method calls using the call stack.</li>
+    <li>Write simple recursive methods in Java.</li>
+    <li>Compare recursive and iterative solutions to the same problem.</li>
+    <li>Recognize common errors in recursive programs.</li>
+    <li>Use recursion to solve problems involving numbers, strings, arrays, and search.</li>
+    <li>Understand how recursion supports broader algorithmic thinking.</li>
+  </ul>
+  <aside class="notes">
+    <p>Eight objectives, and they split cleanly into two halves. The first four are mechanical: what recursion is, the two parts every recursive method needs, how to trace one on the call stack, and how to write one.</p>
+    <p>The last four are judgement. Comparing recursion with iteration, recognising the classic errors, applying recursion across numbers, strings, arrays and search, and — the one that carries into Week 11 and beyond — understanding how recursion supports broader algorithmic thinking.</p>
+    <p>Tell students up front that the last objective is the real subject. The syntax of a method calling itself is trivial; the habit of decomposing a problem into smaller instances of itself is what the week is for.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap</h2>
+  <div class="cols small">
+    <ol>
+      <li>What Recursion Is</li>
+      <li>The Call Stack and Unwinding</li>
+      <li>Recursive Thinking and Strings</li>
+      <li>Recursion on Arrays</li>
+      <li>Recursion and Searching</li>
+      <li>Recursion Versus Iteration</li>
+    </ol>
+    <ol start="7">
+      <li>When Recursion Goes Wrong</li>
+      <li>Recursive Definitions and Examples</li>
+      <li>Fibonacci and the Cost of Recursion</li>
+      <li>Decomposition, Templates, and Design</li>
+      <li>Memory, Objects, and Helper Methods</li>
+      <li>Patterns, Algorithmic Thinking, and Practice</li>
+    </ol>
+  </div>
+  <aside class="notes">
+    <p>Parts I and II build the machinery: the definition of recursion, the base case and recursive case, and the call stack that makes it all work. Nothing after that makes sense without the stack.</p>
+    <p>Parts III through V apply recursion to the three data shapes students already know — numbers, strings, arrays — and then to search. Parts VI through IX turn critical: when does recursion cost more than it earns, and what goes wrong.</p>
+    <p>Parts X through XII are where the week's title earns itself. Templates, design steps, patterns, and the questions of algorithmic thinking that Week 11 will formalise with Big-O notation.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>What Recursion Is</h2>
+  <p class="part-sub">A method that calls itself, a base case that stops it, and a recursive case that shrinks the problem.</p>
+</section>
+
+<section>
+  <h2>What Is Recursion?</h2>
+  <div class="def"><span class="term">Recursive:</span> a method is <strong>recursive</strong> if it calls itself, either directly or indirectly.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Consider the mathematical definition of factorial:</p>
+      <p><span class="math">n! = n <span class="op">×</span> (n<span class="op">−</span>1) <span class="op">×</span> (n<span class="op">−</span>2) <span class="op">×</span> ⋯ <span class="op">×</span> 1</span></p>
+      <p class="small">For example:</p>
+      <p><span class="math">5! = 5 <span class="op">×</span> 4 <span class="op">×</span> 3 <span class="op">×</span> 2 <span class="op">×</span> 1 = 120</span></p>
+    </div>
+    <div>
+      <p class="small">Factorial can also be defined <strong>recursively</strong>:</p>
+      <p><span class="math">n! = 1 &nbsp;&nbsp;if n = 0</span></p>
+      <p><span class="math">n! = n <span class="op">×</span> (n<span class="op">−</span>1)! &nbsp;&nbsp;if n <span class="op">&gt;</span> 0</span></p>
+      <div class="box key"><span class="box-title">Key idea</span>To find <code>n!</code>, we reduce the problem to a smaller version of the same problem.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-factorial-definition" tabindex="0">Factorial: from mathematics to Java</span>
+  </div>
+  <aside class="notes">
+    <p>A method is recursive if it calls itself, either directly or indirectly. Direct recursion is what we spend the week on; indirect recursion — A calls B, B calls A — is mentioned so that students recognise it when they meet it later.</p>
+    <p>Consider the mathematical definition of factorial: n factorial is n times n minus one times n minus two, and so on down to one. For example, 5 factorial is 5 times 4 times 3 times 2 times 1, which is 120.</p>
+    <p>Factorial can also be defined recursively, as a two-case definition: n factorial is 1 if n is 0, and n times the factorial of n minus one if n is greater than 0. This definition says two things. We already know the answer for zero factorial. And to find n factorial, we reduce the problem to a smaller version of the same problem. That idea is the essence of recursion.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Factorial in Java</h2>
+  <div class="cols">
+    <div>
+      <p class="small">In Java:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}
+</code></pre>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+factorial(4)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">conceptually produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(4)
+= 4 * factorial(3)
+= 4 * 3 * factorial(2)
+= 4 * 3 * 2 * factorial(1)
+= 4 * 3 * 2 * 1 * factorial(0)
+= 4 * 3 * 2 * 1 * 1
+= 24
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Read the Java line by line against the mathematics</summary>
+    <div class="acc-body">
+      <p>The two-case mathematical definition and the two-branch Java method line up exactly. The <code>if (n == 0)</code> branch is the case "1 if n = 0". The <code>return n * factorial(n - 1);</code> line is the case "n × (n−1)! if n &gt; 0".</p>
+      <p>Nothing has been invented in the translation. The definition told us there were two cases, so the method has two cases, and each one is a single <code>return</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The Java implementation is five lines. If n is zero, return one. Otherwise return n times factorial of n minus one.</p>
+    <p>Calling factorial of four conceptually produces the chain shown on the right: four times factorial of three, which becomes four times three times factorial of two, and so on until factorial of zero returns one and the whole product collapses to twenty-four.</p>
+    <p>Emphasise the word "conceptually". The chain on the right is not what the machine literally writes down — it is a way of seeing what the nested calls amount to. Part II replaces this picture with the call stack, which is what actually happens.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Two Essential Parts of Recursion</h2>
+  <p class="small">Almost every recursive algorithm needs two components.</p>
+  <div class="cols">
+    <div>
+      <h4>Base case</h4>
+      <div class="def"><span class="term">Base case:</span> a condition for which the method can return an answer immediately without making another recursive call.</div>
+      <p class="small">In factorial:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (n == 0) {
+    return 1;
+}
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>Without a base case, recursion does not stop.</div>
+    </div>
+    <div>
+      <h4>Recursive case</h4>
+      <div class="def"><span class="term">Recursive case:</span> the part that reduces the original problem to a smaller problem of the same form.</div>
+      <p class="small">In factorial:</p>
+<pre><code class="language-java" data-trim data-noescape>
+return n * factorial(n - 1);
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Almost every recursive algorithm needs two components. The base case is a condition for which the method can return an answer immediately without making another recursive call. In factorial it is the test for n equals zero, returning one. Without a base case, recursion does not stop.</p>
+    <p>The recursive case reduces the original problem to a smaller problem of the same form. In factorial it is the line returning n times factorial of n minus one.</p>
+    <p>Students who can reliably point at these two pieces in an unfamiliar method are already most of the way to reading recursive code. Ask them to identify both in every example this week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why the Recursive Case Terminates</h2>
+  <p class="small">The important idea is that:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(n)
+</code></pre>
+  <p class="small">depends on:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(n - 1)
+</code></pre>
+  <p class="small">and <code>n - 1</code> is smaller than <code>n</code>.</p>
+  <div class="box key"><span class="box-title">Key idea</span>A well-designed recursive method has three properties:</div>
+  <ol class="small">
+    <li>A base case exists.</li>
+    <li>Each recursive call moves toward the base case.</li>
+    <li>The recursive result is used to solve the current problem.</li>
+  </ol>
+  <aside class="notes">
+    <p>The important idea is that factorial of n depends on factorial of n minus one, and n minus one is smaller than n. That single observation is what guarantees the chain of calls is finite.</p>
+    <p>A well-designed recursive method therefore has three properties. A base case exists. Each recursive call moves toward the base case. And the recursive result is used to solve the current problem.</p>
+    <p>Keep these three on the board all week. Part VII is entirely about what happens when property one or property two is missing, and the checklist in Part XII turns all three into questions students can ask of their own code.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A First Recursive Example</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider counting down from a positive number.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void countdown(int n) {
+    if (n == 0) {
+        System.out.println("Blastoff!");
+        return;
+    }
+
+    System.out.println(n);
+    countdown(n - 1);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+countdown(3);
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+2
+1
+Blastoff!
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>This method returns <code>void</code>. Recursion is not only for methods that compute a value.</div>
+  <details class="acc">
+    <summary>The sequence of calls</summary>
+    <div class="acc-body">
+      <p>The sequence of method calls is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+countdown(3)
+    countdown(2)
+        countdown(1)
+            countdown(0)
+</code></pre>
+      <p>The final call does not recurse because it satisfies the base case.</p>
+      <p>The indentation is not decoration. Each level in is a call that has <em>started</em> and has not yet <em>finished</em>. When <code>countdown(0)</code> runs, all four calls are alive at the same time — three of them are suspended, waiting. This is exactly the picture the call stack makes concrete in Part II.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider counting down from a positive number. The method prints n, then calls itself with n minus one. When n reaches zero, it prints Blastoff and returns without recursing.</p>
+    <p>Calling countdown of three prints three, two, one, Blastoff — each on its own line.</p>
+    <p>Note that this method returns void. Students often assume recursion is about building up a return value. It is not; recursion is about the shape of the call structure, and a method that only prints is recursive in exactly the same sense.</p>
+    <p>The sequence of method calls is countdown of three, which calls countdown of two, which calls countdown of one, which calls countdown of zero — each nested one level deeper. The final call does not recurse, because it satisfies the base case. That is the whole mechanism: the base case is the floor the descent lands on. Draw it on the board with the indentation; students who write the calls in a flat list lose the crucial fact that the outer calls are still in progress.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>The Call Stack and Unwinding</h2>
+  <p class="part-sub">Descending, then unwinding — and why the position of a statement relative to the recursive call changes everything.</p>
+</section>
+
+<section>
+  <h2>The Call Stack</h2>
+  <p class="small">To understand recursion, you need to understand the <strong>call stack</strong>.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Whenever Java calls a method, information about that method call is placed on the stack. This information includes things such as:</p>
+      <ul class="small">
+        <li>parameter values,</li>
+        <li>local variables,</li>
+        <li>where execution should return after the method finishes.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-call-stack" tabindex="0">The call stack, in full</span>
+  </div>
+  <aside class="notes">
+    <p>To understand recursion, you need to understand the call stack. Whenever Java calls a method, information about that method call is placed on the stack.</p>
+    <p>This information includes things such as parameter values, local variables, and where execution should return after the method finishes. That third item is the one students forget, and it is the one that makes unwinding possible.</p>
+    <p>Nothing on this slide is special to recursion. Every method call in every program the class has written since Week 4 has pushed a frame. Recursion is only remarkable because many frames for the same method are alive at once.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Descending: The Stack Grows</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When we call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+factorial(3)
+</code></pre>
+      <p class="small">the stack grows approximately like this:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(3)
+factorial(2)
+factorial(1)
+factorial(0)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">At the deepest point:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(0)
+</code></pre>
+      <p class="small">returns <code>1</code>.</p>
+      <p class="small">Then the stack begins to unwind.</p>
+      <div class="def"><span class="term">Descending:</span> the program repeatedly makes smaller recursive calls.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>When we call factorial of three, the stack grows approximately like this: factorial three, factorial two, factorial one, factorial zero — four frames, stacked.</p>
+    <p>At the deepest point, factorial of zero returns one. Then the stack begins to unwind.</p>
+    <p>The word "approximately" is deliberate. The real frame contains more than the parameter, and the JVM is free to optimise. But for reasoning about the program, the parameter is the part that matters.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Unwinding: The Stack Returns</h2>
+  <p class="small">The recursive calls return in reverse order:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(1) returns 1 * 1 = 1
+factorial(2) returns 2 * 1 = 2
+factorial(3) returns 3 * 2 = 6
+</code></pre>
+  <div class="def"><span class="term">Unwinding:</span> the recursive calls return in reverse order.</div>
+  <div class="box key"><span class="box-title">Key idea</span>There are two conceptual stages of recursion: <strong>descending</strong> and <strong>unwinding</strong>.</div>
+  <details class="acc">
+    <summary>Where the multiplication actually happens</summary>
+    <div class="acc-body">
+      <p>Look at where the arithmetic occurs. Nothing is multiplied on the way down — each frame evaluates <code>n *</code> and then has to wait, because the right-hand operand is not known yet.</p>
+      <p>All three multiplications happen on the way back up, in the order shown. This is the first hint of the idea Part II develops next: work placed after the recursive call runs during unwinding.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Then the stack begins to unwind. Factorial of one returns one times one, which is one. Factorial of two returns two times one, which is two. Factorial of three returns three times two, which is six.</p>
+    <p>There are therefore two conceptual stages of recursion. Descending: the program repeatedly makes smaller recursive calls. Unwinding: the recursive calls return in reverse order.</p>
+    <p>These two words are the vocabulary for the rest of the week. Every recursive method is doing work in one stage, the other, or both — and knowing which is how you predict its output.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Before the Recursive Call</h2>
+  <p class="small">The location of code relative to the recursive call matters. Consider:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void example(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+    example(n - 1);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+example(3);
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+2
+1
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>The print happens <em>before</em> the recursive call, so it happens while the calls are descending.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The location of code relative to the recursive call matters. Here the print statement comes before the recursive call.</p>
+    <p>Calling example of three prints three, two, one — in descending order, which is what most students expect.</p>
+    <p>Have the class predict the output before you reveal it. Almost everyone gets this version right, which makes the next slide land harder.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>After the Recursive Call</h2>
+  <p class="small">Now move the print statement:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void example(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    example(n - 1);
+    System.out.println(n);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The result becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+2
+3
+</code></pre>
+      <p class="small">Why?</p>
+      <div class="box key"><span class="box-title">Key idea</span>In the second version, printing happens while the recursive calls are <strong>returning</strong>.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-before-after" tabindex="0">Both versions, side by side, with traces</span>
+  </div>
+  <aside class="notes">
+    <p>Now move the print statement so that it comes after the recursive call. The two methods differ by the order of two lines, and nothing else.</p>
+    <p>The result becomes one, two, three — reversed. Why? In the second version, printing happens while the recursive calls are returning.</p>
+    <p>This is the moment where recursion stops being "a loop written strangely" and becomes its own thing. A loop has one place to put work. Recursion has two.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Trace That Explains It</h2>
+  <p class="small">Trace:</p>
+<pre><code class="language-text" data-trim data-noescape>
+example(3)
+    example(2)
+        example(1)
+            example(0)
+        print 1
+    print 2
+print 3
+</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>This ability to perform operations during the unwinding stage is one of the most powerful aspects of recursion.</div>
+  <details class="acc">
+    <summary>Reading the trace</summary>
+    <div class="acc-body">
+      <p>Read it top to bottom. The four call lines descend, deepest at <code>example(0)</code>. Then the print lines climb back out, and the indentation tells you which frame is doing the printing.</p>
+      <p><code>print 1</code> sits at the indentation of <code>example(1)</code>, because that is the frame whose <code>n</code> is 1. Its recursive call has just returned, and only now does it reach its own print statement.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Trace it. Example three calls example two, which calls example one, which calls example zero. Example zero hits the base case and returns immediately. Now example one resumes and prints one. Then example two resumes and prints two. Then example three resumes and prints three.</p>
+    <p>This ability to perform operations during the unwinding stage is one of the most powerful aspects of recursion. We will use it directly in Part VIII to reverse a string and in Part XII to print a number in binary.</p>
+    <p>If students take away one diagram from Week 10, this is the one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursive Sum</h2>
+  <p class="small">Suppose we want to calculate <span class="math">1 + 2 + 3 + ⋯ + n</span>. An iterative solution is straightforward:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sum(int n) {
+    int total = 0;
+
+    for (int i = 1; i &lt;= n; i++) {
+        total += i;
+    }
+
+    return total;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We can also define the problem recursively:</p>
+      <p><span class="math">sum(n) = n + sum(n<span class="op">−</span>1)</span></p>
+      <p class="small">with:</p>
+      <p><span class="math">sum(0) = 0</span></p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want to calculate one plus two plus three and so on up to n. An iterative solution is straightforward: a running total, a for loop from one to n, add each i.</p>
+    <p>We can also define the problem recursively. Sum of n is n plus sum of n minus one, with sum of zero equal to zero.</p>
+    <p>Note the shape of the recursive definition: it is exactly the two-case form we saw for factorial. A base value, and a rule expressing the answer for n in terms of the answer for something smaller.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursive Sum in Java</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java implementation:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sum(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    return n + sum(n - 1);
+}
+</code></pre>
+      <p class="small">For:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sum(4)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">we get:</p>
+<pre><code class="language-text" data-trim data-noescape>
+4 + sum(3)
+4 + 3 + sum(2)
+4 + 3 + 2 + sum(1)
+4 + 3 + 2 + 1 + sum(0)
+4 + 3 + 2 + 1 + 0
+10
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Compare the two implementations</summary>
+    <div class="acc-body">
+      <p>The iterative version needs a local variable, <code>total</code>, and a loop counter, <code>i</code>. The recursive version needs neither. The accumulating sum lives in the pending additions held on the call stack.</p>
+      <p>That is the trade. Recursion moves bookkeeping out of your variables and into the call stack. Sometimes that is a clarity win; Part VI is about when it is not.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The Java implementation follows the definition directly. If n is zero, return zero. Otherwise return n plus sum of n minus one.</p>
+    <p>For sum of four we get four plus sum of three, then four plus three plus sum of two, and so on down to four plus three plus two plus one plus zero, which is ten.</p>
+    <p>Point out that the base case here returns zero, not one. The base-case answer must be the correct answer for the smallest problem — and for addition, the identity is zero. Part XII's product exercise turns exactly this point into a trap.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Recursive Thinking and Strings</h2>
+  <p class="part-sub">The recursive leap of faith, and what it looks like on a <code>String</code>.</p>
+</section>
+
+<section>
+  <h2>Recursive Thinking</h2>
+  <p class="small">Writing recursive programs requires a slightly different mindset from writing loops.</p>
+  <div class="cols">
+    <div>
+      <h4>Designing an iterative solution</h4>
+      <blockquote class="small">How do I perform every step?</blockquote>
+    </div>
+    <div>
+      <h4>Designing a recursive solution</h4>
+      <blockquote class="small">If I could already solve a smaller version of this problem, how could I use that solution to solve the current problem?</blockquote>
+    </div>
+  </div>
+  <div class="def"><span class="term">Recursive leap of faith:</span> you assume that the recursive call correctly solves the smaller problem.</div>
+  <div class="box good"><span class="box-title">Do this</span>Write the method as if the recursive call already works. Then check that the base case is right and that the problem shrinks.</div>
+  <details class="acc">
+    <summary>The leap of faith, on factorial</summary>
+    <div class="acc-body">
+      <p>Imagine we somehow already know how to compute:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(4)
+</code></pre>
+      <p>Then computing:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(5)
+</code></pre>
+      <p>is easy:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5 * factorial(4)
+</code></pre>
+      <p>You do not need to mentally work through every deeper recursive call while writing the method.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Writing recursive programs requires a slightly different mindset from writing loops. When designing an iterative solution, you often ask: how do I perform every step? With recursion, a more useful question is: if I could already solve a smaller version of this problem, how could I use that solution to solve the current problem?</p>
+    <p>For example, imagine we somehow already know how to compute factorial of four. Then computing factorial of five is easy: it is five times factorial of four. You do not need to mentally work through every deeper recursive call while writing the method. You assume that the recursive call correctly solves the smaller problem. This assumption is sometimes called the recursive leap of faith.</p>
+    <p>That shift is the whole difficulty of the week for most students. They keep trying to be the computer; the skill being taught is to stop. It is not really faith — it is induction, and it is rigorous — but calling it faith captures the psychological move students have to make.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursion on Strings</h2>
+  <p class="small">Recursion is not limited to arithmetic. Suppose we want to print the characters of a string one at a time.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printChars(String s) {
+    if (s.length() == 0) {
+        return;
+    }
+
+    System.out.println(s.charAt(0));
+    printChars(s.substring(1));
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+printChars("CAT");
+</code></pre>
+      <p class="small">produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+C
+A
+T
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The problem gets smaller because the string becomes shorter with each call.</div>
+  <details class="acc">
+    <summary>How the string shrinks, and what guarantees termination</summary>
+    <div class="acc-body">
+      <p>The recursive calls are:</p>
+<pre><code class="language-text" data-trim data-noescape>
+printChars("CAT")
+printChars("AT")
+printChars("T")
+printChars("")
+</code></pre>
+      <p>The same three properties from Part I hold. A base case exists: the empty string. Each call moves toward it, because <code>s.substring(1)</code> is always exactly one character shorter than <code>s</code>. And the result — here, printed output rather than a returned value — is produced at the right moment.</p>
+      <p>Length is the quantity that decreases. In factorial it was the value of <code>n</code>. Every correct recursive method has some such quantity.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Recursion is not limited to arithmetic. Suppose we want to print the characters of a string one at a time. The base case is the empty string. Otherwise, print the first character and recurse on everything after it. Calling printChars of the string CAT produces C, A, T on three lines.</p>
+    <p>The two String methods doing the work are charAt of zero, which gives the head, and substring of one, which gives the tail. Students met both in Week 5; here they become the recursive decomposition of a string.</p>
+    <p>The recursive calls are printChars of CAT, then of AT, then of T, then of the empty string; the last one hits the base case and returns. The problem gets smaller because the string becomes shorter with each call — worth writing on the board next to the factorial version. In one case a number shrinks, in the other a string shrinks, but the structure is identical.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Reversing a String Recursively</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static String reverse(String s) {
+    if (s.length() &lt;= 1) {
+        return s;
+    }
+
+    return reverse(s.substring(1)) + s.charAt(0);
+}
+</code></pre>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+reverse("DOG")
+</code></pre>
+    </div>
+    <div>
+      <p class="small">works as follows:</p>
+<pre><code class="language-text" data-trim data-noescape>
+reverse("DOG")
+= reverse("OG") + "D"
+
+reverse("OG")
+= reverse("G") + "O"
+
+reverse("G")
+= "G"
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Notice again that the important work happens while the recursive calls <strong>return</strong>.</div>
+  <details class="acc">
+    <summary>Now the calls unwind</summary>
+    <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+reverse("G") = "G"
+
+reverse("OG")
+= "G" + "O"
+= "GO"
+
+reverse("DOG")
+= "GO" + "D"
+= "GOD"
+</code></pre>
+      <p>Nothing is concatenated on the way down — each frame computes its half of the concatenation only after the deeper call has produced a string.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-reverse-trace" tabindex="0">Full reverse trace, both directions</span>
+  </div>
+  <aside class="notes">
+    <p>Consider reverse. If the string has zero or one characters, it is already its own reverse, so return it. Otherwise, reverse everything after the first character, and stick the first character on the end.</p>
+    <p>Calling reverse of DOG works as follows: reverse of DOG is reverse of OG plus D. Reverse of OG is reverse of G plus O. Reverse of G is just G, by the base case. Then the calls unwind: reverse of G is G, reverse of OG becomes GO, and reverse of DOG becomes GOD.</p>
+    <p>Notice the base case is length less than or equal to one, not equal to zero. Either works, but this version stops one level earlier. And notice again that the important work happens while the recursive calls return — the same lesson as the print-after-the-call example in Part II, now producing a value instead of output.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Recursion on Arrays</h2>
+  <p class="part-sub">An array never gets smaller — so we shrink the <em>remaining portion</em> with an index instead.</p>
+</section>
+
+<section>
+  <h2>Recursion with Arrays</h2>
+  <p class="small">Arrays require a slightly different approach. A recursive method usually needs an <strong>index</strong> to indicate which portion of the array remains to be processed.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to calculate the sum of an array.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sumArray(int[] values, int index) {
+    if (index == values.length) {
+        return 0;
+    }
+
+    return values[index] + sumArray(values, index + 1);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Given:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int[] values = {5, 8, 2};
+</code></pre>
+      <p class="small">calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(values, 0)
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>The base case is <code>index == values.length</code> — the empty remaining portion.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Arrays require a slightly different approach. A recursive method usually needs an index to indicate which portion of the array remains to be processed.</p>
+    <p>Suppose we want to calculate the sum of an array. The method takes the array and an index. If the index has run past the end, the remaining portion is empty and the sum is zero. Otherwise, return the element at the index plus the sum of everything after it.</p>
+    <p>Given the array five, eight, two, we call sumArray with the array and zero.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing <code>sumArray</code></h2>
+  <p class="small">Calling <code>sumArray(values, 0)</code> produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5 + sumArray(values, 1)
+5 + 8 + sumArray(values, 2)
+5 + 8 + 2 + sumArray(values, 3)
+5 + 8 + 2 + 0
+15
+</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>The array itself never gets smaller. Instead, the <strong>remaining portion of the problem</strong> becomes smaller because the index moves forward.</div>
+  <details class="acc">
+    <summary>Why not shrink the array itself?</summary>
+    <div class="acc-body">
+      <p>You could copy a shorter array on every call, the way <code>substring</code> makes a shorter string. But that copies every remaining element at every level — a great deal of work to compute a sum.</p>
+      <p>Moving an index costs nothing. Part XI returns to this as a general design technique: <em>additional parameters can describe the part of the problem that remains</em>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Calling sumArray with the array and zero produces five plus sumArray at index one, then five plus eight plus sumArray at index two, then five plus eight plus two plus sumArray at index three, which is the base case and returns zero. The total is fifteen.</p>
+    <p>The array itself never gets smaller. Instead, the remaining portion of the problem becomes smaller because the index moves forward.</p>
+    <p>This is the single most important sentence in Part IV. Students who miss it write recursive array methods that never terminate, because they keep passing the same array and looking for it to shrink.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Finding the Maximum Recursively</h2>
+  <p class="small">Suppose we want to find the largest element in an array. One recursive approach is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int max(int[] values, int index) {
+    if (index == values.length - 1) {
+        return values[index];
+    }
+
+    int maxOfRest = max(values, index + 1);
+
+    if (values[index] &gt; maxOfRest) {
+        return values[index];
+    }
+
+    return maxOfRest;
+}
+</code></pre>
+  <aside class="notes">
+    <p>Suppose we want to find the largest element in an array. One recursive approach names the answer for the rest of the array, then compares the current element against it.</p>
+    <p>Note the base case: index equals values dot length minus one, the last element. A single element is its own maximum. Unlike sum, there is no sensible answer for an empty portion — there is no identity value for maximum — so the recursion stops one element earlier.</p>
+    <p>That difference between the sum base case and the max base case is worth a minute. The base-case answer must be correct, and what counts as correct depends on the operation.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Trusting the Recursive Call</h2>
+  <p class="small">Think about the statement:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int maxOfRest = max(values, index + 1);
+</code></pre>
+  <p class="small">We are saying:</p>
+  <blockquote>Assume that the recursive method can correctly find the maximum of everything after the current position.</blockquote>
+  <p class="small">Then we only need to compare that answer with the current element.</p>
+  <div class="box key"><span class="box-title">Key idea</span>This is a good example of recursive problem decomposition.</div>
+  <details class="acc">
+    <summary>The leap of faith, applied</summary>
+    <div class="acc-body">
+      <p>Naming the recursive result — <code>maxOfRest</code> — is a small trick with a large payoff. Once the answer to the smaller problem has a name, the rest of the method is ordinary code: an <code>if</code> and two <code>return</code>s.</p>
+      <p>Compare with <code>sumArray</code>, where the recursive call is buried inside an expression. Both are correct; the named form is easier to reason about, and Part X's general template uses it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Think about the statement assigning maxOfRest. We are saying: assume that the recursive method can correctly find the maximum of everything after the current position.</p>
+    <p>Then we only need to compare that answer with the current element. If the current element is bigger, it is the maximum; otherwise the answer from the rest is.</p>
+    <p>This is a good example of recursive problem decomposition — and a direct application of the leap of faith from Part III.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Recursion and Searching</h2>
+  <p class="part-sub">Binary search: halving the problem, and the first glimpse of algorithm analysis.</p>
+</section>
+
+<section>
+  <h2>Recursion and Searching</h2>
+  <p class="small">One particularly important recursive algorithm is <strong>binary search</strong>. Binary search works on a sorted collection.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[3, 7, 12, 18, 25, 31, 42]
+</code></pre>
+      <p class="small">and want to find <code>25</code>.</p>
+      <p class="small">Instead of examining every element, binary search examines the middle element.</p>
+    </div>
+    <div>
+      <p class="small">Middle:</p>
+<pre><code class="language-text" data-trim data-noescape>
+18
+</code></pre>
+      <p class="small">Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+25 &gt; 18
+</code></pre>
+      <p class="small">we can ignore the entire left half. Now search only:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[25, 31, 42]
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The problem gets approximately half as large after each step.</div>
+  <div class="chain">
+    <span>7 elements</span><span class="sep">→</span>
+    <span>3 elements</span><span class="sep">→</span>
+    <span>1 element</span>
+  </div>
+  <details class="acc">
+    <summary>Why "approximately"?</summary>
+    <div class="acc-body">
+      <p>Discarding the left half also discards the middle element we just tested. Seven elements minus the middle leaves six, split into three and three — so the remaining range is three, not three and a half.</p>
+      <p>The counting is never exactly halving, which is why the notes say <em>approximately</em>. For the purpose of understanding the algorithm, approximately is enough; Week 11 makes it precise.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>One particularly important recursive algorithm is binary search. Binary search works on a sorted collection — that precondition is not optional, and it is the reason Week 11 spends time on sorting.</p>
+    <p>Suppose we have the sorted array three, seven, twelve, eighteen, twenty-five, thirty-one, forty-two, and want to find twenty-five. Instead of examining every element, binary search examines the middle element, which is eighteen. Since twenty-five is greater than eighteen, and the array is sorted, twenty-five cannot be anywhere to the left. We can ignore the entire left half and search only twenty-five, thirty-one, forty-two.</p>
+    <p>The problem gets approximately half as large after each step. Contrast with the linear scan the class wrote in Week 5: there, ruling out one element cost one comparison; here, one comparison rules out half the array.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursive Binary Search</h2>
+  <p class="small">A recursive implementation might look like:</p>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1-5|7-9|11|13-15|17-19|21">
+public static int binarySearch(
+        int[] values,
+        int target,
+        int low,
+        int high) {
+
+    if (low &gt; high) {
+        return -1;
+    }
+
+    int mid = low + (high - low) / 2;
+
+    if (values[mid] == target) {
+        return mid;
+    }
+
+    if (target &lt; values[mid]) {
+        return binarySearch(values, target, low, mid - 1);
+    }
+
+    return binarySearch(values, target, mid + 1, high);
+}
+</code></pre>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-binary-search-code" tabindex="0">Binary search: full walkthrough</span>
+  </div>
+  <aside class="notes">
+    <p>A recursive implementation takes the array, the target, and the two bounds of the range currently under consideration. If low has passed high the range is empty and we return minus one. Otherwise compute the midpoint, test it, and recurse into whichever half can still contain the target.</p>
+    <p>The midpoint is computed as low plus the quantity high minus low over two, rather than low plus high over two. Both give the same answer for small arrays; the form used here avoids overflow when the indices are large.</p>
+    <p>Note that the two recursive calls are the last thing the method does. Nothing happens during unwinding here — binary search does all its work on the way down.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Calling It, and Its Two Base Cases</h2>
+  <p class="small">We might call it like this:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int index = binarySearch(values, 25, 0, values.length - 1);
+</code></pre>
+  <p class="small">There are two base-case outcomes:</p>
+  <div class="cols">
+    <div>
+      <h4>Target found</h4>
+<pre><code class="language-java" data-trim data-noescape>
+if (values[mid] == target) {
+    return mid;
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Search range becomes empty</h4>
+<pre><code class="language-java" data-trim data-noescape>
+if (low &gt; high) {
+    return -1;
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The recursive call always searches a smaller interval.</div>
+  <aside class="notes">
+    <p>We might call it by passing zero and values dot length minus one as the initial range — the whole array.</p>
+    <p>There are two base-case outcomes. The target is found, and we return its index. Or the search range becomes empty, and we return minus one to signal absence.</p>
+    <p>This is the first method this week with two base cases, and it is a good moment to say that "the base case" is a convenient singular. What matters is that every path eventually stops recursing.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Binary Search Matters</h2>
+  <p class="small">Compare linear search and binary search. A linear search might examine:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+1 element
+2 elements
+3 elements
+...
+n elements
+</code></pre>
+      <p class="small">In the worst case, it examines all <code>n</code> elements.</p>
+    </div>
+    <div>
+      <p class="small">Binary search repeatedly cuts the problem approximately in half. For 1,000 elements:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1000
+500
+250
+125
+62
+31
+15
+7
+3
+1
+</code></pre>
+      <p class="small">Only about <strong>10</strong> reductions are necessary. For 1,000,000 elements, only about <strong>20</strong>.</p>
+    </div>
+  </div>
+  <blockquote class="small">Different algorithms can solve the same problem with dramatically different amounts of work.</blockquote>
+  <div class="box key"><span class="box-title">Key idea</span>We will formalize this comparison using <strong>Big-O notation</strong> next week. This is the beginning of algorithm analysis.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-why-binary-search" tabindex="0">Linear vs. binary, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Compare linear search and binary search. A linear search might examine one element, then two, then three, and in the worst case all n of them.</p>
+    <p>Binary search repeatedly cuts the problem approximately in half. For a thousand elements the sequence runs one thousand, five hundred, two hundred fifty, one hundred twenty-five, sixty-two, thirty-one, fifteen, seven, three, one. Count the lines: ten. Only about ten reductions are necessary. For a million elements, only about twenty reductions are necessary. Say those two numbers slowly — a thousandfold increase in data costs ten extra steps.</p>
+    <p>We will formalize this comparison using Big-O notation next week. For now, the key observation is that different algorithms can solve the same problem with dramatically different amounts of work. This is the beginning of algorithm analysis, and it is why Week 10 is titled recursion and algorithmic thinking rather than just recursion.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Recursion Versus Iteration</h2>
+  <p class="part-sub">Two ways to write the same method, and the right question to ask about them.</p>
+</section>
+
+<section>
+  <h2>Recursion Versus Iteration</h2>
+  <p class="small">Many problems can be solved using either loops or recursion.</p>
+  <div class="cols">
+    <div>
+      <h4>Factorial with iteration</h4>
+<pre><code class="language-java" data-trim data-noescape>
+public static int factorialIterative(int n) {
+    int result = 1;
+
+    for (int i = 2; i &lt;= n; i++) {
+        result *= i;
+    }
+
+    return result;
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Factorial with recursion</h4>
+<pre><code class="language-java" data-trim data-noescape>
+public static int factorialRecursive(int n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorialRecursive(n - 1);
+}
+</code></pre>
+    </div>
+  </div>
+  <p class="small">Both compute the same result. The important question is <strong>not</strong> "which one is always better?" Instead ask:</p>
+  <blockquote class="small">Which one expresses the structure of this particular problem more clearly?</blockquote>
+  <details class="acc">
+    <summary>Practical guidelines</summary>
+    <div class="acc-body">
+      <p><strong>Prefer a loop when:</strong> the operation is naturally repetitive; the data structure is linear; recursion adds no conceptual clarity; very deep recursion might occur.</p>
+      <p><strong>Consider recursion when:</strong> the problem is naturally defined in terms of smaller versions of itself; the data structure is recursive; the problem divides into subproblems; the recursive formulation closely matches the conceptual solution.</p>
+      <p>Neither technique is inherently superior. Good programmers know both.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Many problems can be solved using either loops or recursion. Here is factorial written both ways. The iterative version starts result at one and multiplies by every i from two up to n; the recursive version is the one we have been using all lecture. Both compute the same result.</p>
+    <p>Note the iterative loop starts at two, not one. Multiplying by one is harmless but pointless, and skipping it makes the loop's intent — multiply in every factor from two upward — clearer.</p>
+    <p>The important question is not which one is always better. Instead ask: which one expresses the structure of this particular problem more clearly? For factorial the honest answer is that the loop is fine — it is a naturally repetitive computation over a linear range, and recursion buys nothing but a stack frame per multiplication. Neither technique is inherently superior. Good programmers know both, and Part XII returns to these guidelines in full.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Advantages of Recursion</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Recursion can make certain algorithms much easier to express. It is especially natural when the problem itself has a recursive structure. Examples include:</p>
+      <ul class="small">
+        <li>tree traversal,</li>
+        <li>directory traversal,</li>
+        <li>divide-and-conquer algorithms,</li>
+        <li>binary search,</li>
+        <li>searching mazes,</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="small">
+        <li>processing nested structures,</li>
+        <li>generating permutations,</li>
+        <li>exploring graphs,</li>
+        <li>parsing programming languages.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>Later in computer science, recursion appears frequently.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Recursion can make certain algorithms much easier to express. It is especially natural when the problem itself has a recursive structure.</p>
+    <p>Examples include tree traversal, directory traversal, divide-and-conquer algorithms, binary search, searching mazes, processing nested structures, generating permutations, exploring graphs, and parsing programming languages.</p>
+    <p>Read that list slowly and point out how many of them are things the students will meet in later courses. Later in computer science, recursion appears frequently — this week is groundwork for all nine of these.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Disadvantages of Recursion</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Recursion also has costs. Every recursive call requires another <strong>stack frame</strong>. Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+factorial(1000000)
+</code></pre>
+      <p class="small">This creates a huge number of nested method calls. Eventually Java will run out of call-stack space.</p>
+    </div>
+    <div>
+      <p class="small">The program may throw:</p>
+<pre><code class="language-text" data-trim data-noescape>
+StackOverflowError
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>Iteration typically uses less stack memory. For simple repetitive calculations, a loop may therefore be preferable.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Recursion also has costs. Every recursive call requires another stack frame. Consider factorial of one million: this creates a huge number of nested method calls, and eventually Java will run out of call-stack space.</p>
+    <p>The program may throw StackOverflowError. Note that this is an Error, not an Exception — Week 9's advice about catching exceptions does not apply here. You do not recover from a stack overflow; you fix the algorithm.</p>
+    <p>Iteration typically uses less stack memory. For simple repetitive calculations, a loop may therefore be preferable.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>When Recursion Goes Wrong</h2>
+  <p class="part-sub">No base case, an unreachable base case, and bad input — the three ways recursion fails to stop.</p>
+</section>
+
+<section>
+  <h2>Infinite Recursion</h2>
+  <p class="small">One of the most common recursion errors is failing to move toward the base case. Consider:</p>
+  <div class="cols">
+    <div>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void countdown(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+    countdown(n);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The recursive call is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+countdown(n);
+</code></pre>
+      <p class="small">But <code>n</code> never changes.</p>
+      <div class="box pitfall"><span class="box-title">Common error</span>A base case that is never approached is no better than no base case at all.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>One of the most common recursion errors is failing to move toward the base case. This countdown has a perfectly good base case — the test for n equals zero — but the recursive call passes n unchanged.</p>
+    <p>The recursive call is countdown of n. But n never changes.</p>
+    <p>Ask the class what is wrong before you say it. Many will look for a missing base case, because that is the error they were warned about, and this one is subtler.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Actually Happens</h2>
+  <div class="cols">
+    <div>
+      <p class="small">If we call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+countdown(5)
+</code></pre>
+      <p class="small">the program repeatedly calls:</p>
+<pre><code class="language-text" data-trim data-noescape>
+countdown(5)
+countdown(5)
+countdown(5)
+...
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Eventually it crashes with a <code>StackOverflowError</code>.</p>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+countdown(n - 1);
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>Check that every recursive call passes something strictly smaller.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-infinite-recursion" tabindex="0">The three ways recursion fails to stop</span>
+  </div>
+  <aside class="notes">
+    <p>If we call countdown of five, the program repeatedly calls countdown of five, forever. Eventually it crashes with a StackOverflowError.</p>
+    <p>The correct call is countdown of n minus one. One character of difference between a program that terminates and one that does not.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Base Case Can Exist and Still Be Unreachable</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Wrong</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void countdown(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    countdown(n + 1);
+}
+</code></pre>
+      <p class="small">There is technically a base case.</p>
+    </div>
+    <div>
+      <p class="small">However, if <code>n</code> starts at <code>5</code>, the sequence becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5
+6
+7
+8
+9
+...
+</code></pre>
+      <p class="small">The calls move <strong>away</strong> from the base case.</p>
+      <p class="small">The correct question is therefore not merely "does the method have a base case?" You must also ask:</p>
+      <blockquote class="small">Does every recursive call make progress toward it?</blockquote>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Two failures, two symptoms — but the same crash</summary>
+    <div class="acc-body">
+      <p>A missing base case, a base case that is never approached, and a base case approached from the wrong direction all produce the same runtime symptom: <code>StackOverflowError</code>.</p>
+      <p>The error message will not tell you which of the three you have. That is why the checklist in Part XII asks the questions separately.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider this variant. There is technically a base case — the test for n equals zero is right there. However, if n starts at five, the sequence becomes five, six, seven, eight, nine, and onward. The calls move away from the base case.</p>
+    <p>This is the same failure as the previous slide in a more disguised form. Progress is not "the argument changes"; progress is "the argument gets closer to the base case".</p>
+    <p>The correct question is therefore not merely: does the method have a base case? You must also ask: does every recursive call make progress toward it? Require students to answer both, in writing, for every recursive method they submit this week. The habit is cheap and it eliminates most of the crashes they will otherwise produce.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Input Preconditions</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider factorial again:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}
+</code></pre>
+      <p class="small">What happens if we call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+factorial(-3);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The sequence becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+factorial(-3)
+factorial(-4)
+factorial(-5)
+...
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>It never reaches zero. The method is correct for its intended inputs and catastrophic outside them.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider factorial again — the version we have been calling correct all lecture. What happens if we call factorial of negative three?</p>
+    <p>The sequence becomes factorial of negative three, negative four, negative five, and on downward. It never reaches zero.</p>
+    <p>This is a different kind of bug from the previous two. The recursive step does make progress — n decreases every time — but it makes progress away from the base case, because the base case only catches exactly zero.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Validating the Input</h2>
+  <p class="small">One solution is to validate the input:</p>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|2-5|7-9|11">
+public static int factorial(int n) {
+    if (n &lt; 0) {
+        throw new IllegalArgumentException(
+            "Factorial requires a nonnegative integer.");
+    }
+
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}
+</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>This connects recursion with ideas from previous weeks about <strong>defensive programming</strong> and <strong>exceptions</strong>.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-preconditions" tabindex="0">Preconditions and recursion</span>
+  </div>
+  <aside class="notes">
+    <p>One solution is to validate the input. Add a guard at the top: if n is less than zero, throw an IllegalArgumentException with a message saying factorial requires a nonnegative integer.</p>
+    <p>This connects recursion with ideas from previous weeks about defensive programming and exceptions. Week 9 introduced IllegalArgumentException; this is exactly the situation it was designed for.</p>
+    <p>Note that the check runs on every recursive call, not only the first. That is slightly wasteful but harmless — and Part XI's helper-method pattern shows how to check once and then recurse in a private method that trusts its input.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Trying to Follow Everything at Once</h2>
+  <p class="small">Students often find recursion confusing because they mentally try to execute every recursive call simultaneously. Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+return n * factorial(n - 1);
+</code></pre>
+  <p class="small">A better approach when writing recursive code is:</p>
+  <ol class="small">
+    <li>Identify the base case.</li>
+    <li>Assume the recursive call works correctly for a smaller input.</li>
+    <li>Determine how to use the smaller answer to solve the current problem.</li>
+  </ol>
+  <blockquote class="small">If <code>factorial(n - 1)</code> correctly gives me <code>(n - 1)!</code>, then multiplying it by <code>n</code> gives me <code>n!</code>.</blockquote>
+  <div class="box note"><span class="box-title">Note</span>This style of reasoning becomes extremely important in data structures.</div>
+  <aside class="notes">
+    <p>Students often find recursion confusing because they mentally try to execute every recursive call simultaneously. Looking at the line returning n times factorial of n minus one, they attempt to hold four or five levels of call in their head at once, and they lose track.</p>
+    <p>A better approach when writing recursive code is three steps. Identify the base case. Assume the recursive call works correctly for a smaller input. Determine how to use the smaller answer to solve the current problem.</p>
+    <p>For factorial: if factorial of n minus one correctly gives me n minus one factorial, then multiplying it by n gives me n factorial. That is the whole argument. This style of reasoning becomes extremely important in data structures.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Recursive Definitions and Examples</h2>
+  <p class="part-sub">Structures that are recursive by nature — and four more methods that exploit it.</p>
+</section>
+
+<section>
+  <h2>Recursive Definitions</h2>
+  <p class="small">Many structures in computer science are naturally recursive.</p>
+  <div class="cols">
+    <div>
+      <p class="small">A list can be thought of as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+an item followed by another list
+</code></pre>
+      <p class="small">A directory can contain:</p>
+<pre><code class="language-text" data-trim data-noescape>
+files and other directories
+</code></pre>
+    </div>
+    <div>
+      <p class="small">A tree contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a node and smaller subtrees
+</code></pre>
+      <p class="small">An arithmetic expression might contain:</p>
+<pre><code class="language-text" data-trim data-noescape>
+numbers and smaller expressions
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Recursive data structures naturally lead to recursive algorithms.</div>
+  <details class="acc">
+    <summary>An expression inside an expression</summary>
+    <div class="acc-body">
+      <p>For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+(3 + (4 * 5))
+</code></pre>
+      <p>The expression contains another expression:</p>
+<pre><code class="language-text" data-trim data-noescape>
+(4 * 5)
+</code></pre>
+      <p>The list above included <em>parsing programming languages</em> as a natural home for recursion. This is why: the grammar of an expression is written recursively, so the code that reads one is written recursively too. Every Java expression the class has written since Week 1 was read by a compiler doing something very like this.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Many structures in computer science are naturally recursive. A list can be thought of as an item followed by another list. A directory can contain files and other directories. A tree contains a node and smaller subtrees. An arithmetic expression might contain numbers and smaller expressions.</p>
+    <p>Each of those definitions mentions itself. That is not sloppiness — it is the most economical way to describe a structure of unbounded depth. For example, three plus the quantity four times five: the whole thing is an expression, and inside it, four times five is also an expression. There is no bound on how deep this nesting can go, which is exactly why a recursive definition is the right one.</p>
+    <p>Recursive data structures naturally lead to recursive algorithms. Weeks 12 through 14 are essentially four applications of this sentence.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Palindrome Checking</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A palindrome reads the same forward and backward. Examples:</p>
+<pre><code class="language-text" data-trim data-noescape>
+racecar
+level
+madam
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Think recursively. A string is a palindrome if:</p>
+      <ol class="small">
+        <li>It has zero or one characters, or</li>
+        <li>Its first and last characters match, and the middle portion is also a palindrome.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The definition of "palindrome" is itself recursive — clause 2 mentions palindromes.</div>
+  <aside class="notes">
+    <p>A palindrome reads the same forward and backward. Racecar, level, madam.</p>
+    <p>Think recursively. A string is a palindrome if it has zero or one characters, or if its first and last characters match and the middle portion is also a palindrome.</p>
+    <p>Note that this is a definition, not yet code — and it already has the two-case shape of every recursive method we have written. The base case and the recursive case are clauses one and two.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Palindrome in Java</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isPalindrome(String s) {
+    if (s.length() &lt;= 1) {
+        return true;
+    }
+
+    if (s.charAt(0) != s.charAt(s.length() - 1)) {
+        return false;
+    }
+
+    return isPalindrome(
+        s.substring(1, s.length() - 1)
+    );
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For:</p>
+<pre><code class="language-text" data-trim data-noescape>
+racecar
+</code></pre>
+      <p class="small">the recursive decomposition is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+racecar
+ aceca
+  cec
+   e
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Each smaller problem has exactly the same form as the original.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The Java follows the definition clause by clause. Length zero or one, return true. First and last characters differ, return false. Otherwise, recurse on the middle.</p>
+    <p>For racecar the recursive decomposition strips one character from each end at a time: racecar, aceca, cec, e. The indentation on the right shows the characters being peeled away.</p>
+    <p>Each smaller problem has exactly the same form as the original — a string, to be tested for the palindrome property. That sameness of form is what makes recursion applicable.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Count Occurrences in an Array</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to count how many times <code>target</code> appears.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int count(
+        int[] values,
+        int target,
+        int index) {
+
+    if (index == values.length) {
+        return 0;
+    }
+
+    int countInRest =
+        count(values, target, index + 1);
+
+    if (values[index] == target) {
+        return 1 + countInRest;
+    }
+
+    return countInRest;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int[] values = {4, 7, 4, 2, 4};
+</code></pre>
+      <p class="small">calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+count(values, 4, 0)
+</code></pre>
+      <p class="small">returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want to count how many times target appears in an array. The structure is the index pattern from Part IV: base case when the index runs off the end, returning zero.</p>
+    <p>Then name the count in the rest of the array, and add one to it if the current element matches.</p>
+    <p>For the array four, seven, four, two, four, calling count with target four starting at index zero returns three.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Recursive Power</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We want to calculate <span class="math">base<sup>exponent</sup></span>. For nonnegative exponents:</p>
+      <p><span class="math">x<sup>0</sup> = 1</span></p>
+      <p class="small">and:</p>
+      <p><span class="math">x<sup>n</sup> = x <span class="op">×</span> x<sup>n<span class="op">−</span>1</sup></span></p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static long power(long base, int exponent) {
+    if (exponent &lt; 0) {
+        throw new IllegalArgumentException(
+            "Exponent must be nonnegative.");
+    }
+
+    if (exponent == 0) {
+        return 1;
+    }
+
+    return base * power(base, exponent - 1);
+}
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Tracing <code>power(2, 4)</code></summary>
+    <div class="acc-body">
+      <p>Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+power(2, 4)
+
+2 * power(2, 3)
+2 * 2 * power(2, 2)
+2 * 2 * 2 * power(2, 1)
+2 * 2 * 2 * 2 * power(2, 0)
+2 * 2 * 2 * 2 * 1
+
+16
+</code></pre>
+      <p>Four recursive calls, four multiplications, for an exponent of four. For an exponent of <code>n</code> the method makes <code>n</code> calls — one stack frame each. That is fine for small exponents and wasteful for large ones; the next slide fixes it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>We want to calculate base to the exponent. For nonnegative exponents, x to the zero is one, and x to the n is x times x to the n minus one.</p>
+    <p>The Java version starts with the precondition check from Part VII — exponent must be nonnegative — then the base case, then the recursive case. Note the return type is long, not int. Powers grow fast, and an int overflows at about two billion.</p>
+    <p>Trace power of two to the four: two times power of two cubed, and so on down to power of two to the zero, which returns one. Multiply the chain out and you get sixteen. Ask the class how many recursive calls that took — four, one per unit of the exponent. Hold that number; the next slide cuts it to three, and for an exponent of a thousand it cuts a thousand calls to ten.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A More Efficient Recursive Power</h2>
+  <div class="cols">
+    <div>
+      <p class="small">There is another way to compute powers. Suppose <span class="math">2<sup>8</sup></span>. Instead of calculating:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2 × 2 × 2 × 2 × 2 × 2 × 2 × 2
+</code></pre>
+      <p class="small">notice:</p>
+      <p><span class="math">2<sup>8</sup> = 2<sup>4</sup> <span class="op">×</span> 2<sup>4</sup></span></p>
+      <p class="small">and:</p>
+      <p><span class="math">2<sup>4</sup> = 2<sup>2</sup> <span class="op">×</span> 2<sup>2</sup></span></p>
+    </div>
+    <div>
+      <p class="small">This gives the idea:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static long fastPower(long base, int exponent) {
+    if (exponent == 0) {
+        return 1;
+    }
+
+    long half = fastPower(base, exponent / 2);
+
+    if (exponent % 2 == 0) {
+        return half * half;
+    }
+
+    return base * half * half;
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-fast-power" tabindex="0">Fast exponentiation in full</span>
+  </div>
+  <aside class="notes">
+    <p>There is another way to compute powers. Suppose two to the eighth. Instead of calculating two multiplied by itself eight times, notice that two to the eighth is two to the fourth times two to the fourth, and two to the fourth is two squared times two squared.</p>
+    <p>This gives the idea in the code: compute the half power once, store it in a local variable, and square it. If the exponent is odd, multiply by the base one extra time to make up the difference.</p>
+    <p>The crucial detail is that half is computed once and used twice. Writing fastPower of base and exponent over two twice, instead of storing it, would throw away the entire benefit — and that is exactly the mistake naive Fibonacci makes in Part IX.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Principle Behind <code>fastPower</code></h2>
+  <p class="small">This example introduces an important algorithmic principle:</p>
+  <blockquote>A problem does not always need to become smaller by only one unit.</blockquote>
+  <p class="small">Sometimes we can reduce it dramatically.</p>
+  <div class="box key"><span class="box-title">Key idea</span>This idea will appear again in <strong>divide-and-conquer</strong> algorithms.</div>
+  <div class="chain">
+    <span>exponent 8</span><span class="sep">→</span>
+    <span>4</span><span class="sep">→</span>
+    <span>2</span><span class="sep">→</span>
+    <span>1</span><span class="sep">→</span>
+    <span>0</span>
+  </div>
+  <details class="acc">
+    <summary>The same shape as binary search</summary>
+    <div class="acc-body">
+      <p>Binary search halves a search range; <code>fastPower</code> halves an exponent. Both turn a problem of size <em>n</em> into a problem of size <em>n</em>/2, and both therefore finish in about the number of halvings it takes to reach 1.</p>
+      <p>That is why the notes group them: Pattern 3 in Part XII is "divide the problem", and these two are its examples.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>This example introduces an important algorithmic principle: a problem does not always need to become smaller by only one unit. Sometimes we can reduce it dramatically.</p>
+    <p>Every example before this one shrank the problem by exactly one — one off the number, one character off the string, one step along the index. Binary search was the first exception, and fastPower is the second.</p>
+    <p>This idea will appear again in divide-and-conquer algorithms, which is where Week 11's merge sort comes from.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Fibonacci and the Cost of Recursion</h2>
+  <p class="part-sub">A recursive solution can be correct and still be a poor algorithm.</p>
+</section>
+
+<section>
+  <h2>Fibonacci Numbers</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The Fibonacci sequence begins:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0, 1, 1, 2, 3, 5, 8, 13, 21, ...
+</code></pre>
+      <p class="small">It can be defined recursively:</p>
+      <p><span class="math">F(0) = 0</span></p>
+      <p><span class="math">F(1) = 1</span></p>
+      <p><span class="math">F(n) = F(n<span class="op">−</span>1) + F(n<span class="op">−</span>2)</span></p>
+    </div>
+    <div>
+      <p class="small">A direct Java implementation is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static long fibonacci(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    if (n == 1) {
+        return 1;
+    }
+
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+</code></pre>
+    </div>
+  </div>
+  <p class="small">This code closely matches the mathematical definition. However, it has an important problem.</p>
+  <aside class="notes">
+    <p>The Fibonacci sequence begins zero, one, one, two, three, five, eight, thirteen, twenty-one, and onward. It can be defined recursively: F of zero is zero, F of one is one, and F of n is F of n minus one plus F of n minus two.</p>
+    <p>A direct Java implementation needs two base cases, because the recursive case reaches back two steps. Then it returns the sum of the two smaller Fibonacci numbers.</p>
+    <p>This code closely matches the mathematical definition — which is exactly why students like it, and exactly why the next slide is uncomfortable. However, it has an important problem.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Not All Recursive Solutions Are Efficient</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+fibonacci(5)
+</code></pre>
+      <p class="small">It calls:</p>
+<pre><code class="language-text" data-trim data-noescape>
+fibonacci(4)
+fibonacci(3)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">But <code>fibonacci(4)</code> itself calls:</p>
+<pre><code class="language-text" data-trim data-noescape>
+fibonacci(3)
+fibonacci(2)
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>We calculate <code>fibonacci(3)</code> multiple times.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider fibonacci of five. It calls fibonacci of four and fibonacci of three. But fibonacci of four itself calls fibonacci of three and fibonacci of two.</p>
+    <p>We calculate fibonacci of three multiple times — twice at this level, and the duplication compounds at every level below.</p>
+    <p>Contrast this with fastPower, which computed the half power once and stored it. Fibonacci recomputes because the two recursive calls have different arguments, and nothing remembers the earlier answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Shape of the Waste</h2>
+  <p class="small">The call structure resembles:</p>
+<pre><code class="language-text" data-trim data-noescape>
+                 fib(5)
+               /        \
+           fib(4)       fib(3)
+          /     \       /    \
+      fib(3)  fib(2) fib(2) fib(1)
+      ...
+</code></pre>
+  <p class="small">The same subproblems are repeatedly recomputed. This is a crucial lesson:</p>
+  <blockquote>A recursive solution can be correct and still be a poor algorithm.</blockquote>
+  <div class="box key"><span class="box-title">Key idea</span>Correctness and efficiency are separate questions.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-fibonacci-cost" tabindex="0">Fibonacci: correct but costly</span>
+  </div>
+  <aside class="notes">
+    <p>The call structure resembles a branching tree: fib of five splits into fib of four and fib of three, fib of four splits into fib of three and fib of two, and so on. Look at how many times fib of three and fib of two appear.</p>
+    <p>The same subproblems are repeatedly recomputed. This is a crucial lesson: a recursive solution can be correct and still be a poor algorithm.</p>
+    <p>Correctness and efficiency are separate questions. Students have spent nine weeks being told to make it work; this is the week they are told that making it work is not the end of the job.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Iterative Fibonacci</h2>
+  <div class="cols">
+    <div>
+      <p class="small">An iterative version avoids repeated work:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static long fibonacciIterative(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    long previous = 0;
+    long current = 1;
+
+    for (int i = 2; i &lt;= n; i++) {
+        long next = previous + current;
+        previous = current;
+        current = next;
+    }
+
+    return current;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The iterative version is far more efficient than the naive recursive version.</p>
+      <p class="small">We will develop tools for formally describing this difference in Week 11.</p>
+      <p class="small">For now:</p>
+      <blockquote class="small">Elegant code is not automatically efficient code.</blockquote>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>An iterative version avoids repeated work. It keeps two variables, previous and current, and slides them forward once per step. Each Fibonacci number is computed exactly once.</p>
+    <p>The iterative version is far more efficient than the naive recursive version. We will develop tools for formally describing this difference in Week 11.</p>
+    <p>For now: elegant code is not automatically efficient code. Put that sentence next to "a recursive solution can be correct and still be a poor algorithm" — they are the same claim from two directions.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Decomposition, Templates, and Design</h2>
+  <p class="part-sub">A template to start from, five steps to follow, and a way to trace what you wrote.</p>
+</section>
+
+<section>
+  <h2>Recursion as Problem Decomposition</h2>
+  <p class="small">Recursion is one example of a larger idea: <strong>problem decomposition</strong>.</p>
+  <div class="def"><span class="term">Problem decomposition:</span> take a difficult problem and express it using smaller versions of the same problem.</div>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+sum of 10 values
+</code></pre>
+      <p class="small">can become:</p>
+<pre><code class="language-text" data-trim data-noescape>
+first value + sum of remaining 9 values
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Binary search turns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+search 1000 values
+</code></pre>
+      <p class="small">into approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+search 500 values
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Recursion is one example of a larger idea: problem decomposition. Take a difficult problem and express it using smaller versions of the same problem.</p>
+    <p>For example, the sum of ten values can become the first value plus the sum of the remaining nine values. Binary search turns searching a thousand values into approximately searching five hundred values.</p>
+    <p>Notice that these two decompositions have very different shapes — one peels off a single element, the other halves. Both are decomposition; the difference in shape is what makes one linear and the other logarithmic.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Decomposition Beyond Lists</h2>
+  <p class="small">A tree problem may become:</p>
+<pre><code class="language-text" data-trim data-noescape>
+solve the left subtree
+solve the right subtree
+combine the answers
+</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>Thinking in terms of smaller subproblems is one of the central ideas of algorithms.</div>
+  <details class="acc">
+    <summary>Three subproblems, one combine step</summary>
+    <div class="acc-body">
+      <p>This is the first decomposition this week with <em>two</em> recursive calls whose answers must then be combined. Fibonacci had two calls as well, but the tree version is the one that pays off, because the two subtrees are genuinely different data rather than overlapping subproblems.</p>
+      <p>The second form of the general template on the next slides has exactly this shape.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A tree problem may become: solve the left subtree, solve the right subtree, combine the answers. Three lines that describe most of what Week 14 will do.</p>
+    <p>Thinking in terms of smaller subproblems is one of the central ideas of algorithms. Say it plainly: this is the idea the week exists to teach, and recursion is the syntax that expresses it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A General Recursive Template</h2>
+  <p class="small">Many recursive methods have this structure:</p>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="3-5|7|9-10|12">
+public static ReturnType recursiveMethod(Input input) {
+
+    if (baseCaseCondition) {
+        return baseCaseAnswer;
+    }
+
+    Input smallerInput = makeProblemSmaller(input);
+
+    ReturnType smallerAnswer =
+        recursiveMethod(smallerInput);
+
+    return combine(input, smallerAnswer);
+}
+</code></pre>
+  <p class="small">Not every recursive method fits this exact template, but it is a useful starting point.</p>
+  <aside class="notes">
+    <p>Many recursive methods have this structure. Test the base case and return the base-case answer. Make the problem smaller. Call yourself on the smaller problem and name the answer. Combine the current input with that answer and return the result.</p>
+    <p>Walk the line-number clicks against the methods we have already written. In max, makeProblemSmaller was index plus one; combine was the comparison. In reverse, makeProblemSmaller was substring of one; combine was concatenation.</p>
+    <p>Not every recursive method fits this exact template — binary search does not, because it has no combine step — but it is a useful starting point.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Two-Call Form</h2>
+  <p class="small">A second common form involves multiple recursive calls:</p>
+<pre><code class="language-java" data-trim data-noescape>
+ReturnType left =
+    recursiveMethod(smallerProblem1);
+
+ReturnType right =
+    recursiveMethod(smallerProblem2);
+
+return combine(left, right);
+</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>This structure becomes especially important for <strong>trees</strong> and <strong>divide-and-conquer</strong> algorithms.</div>
+  <details class="acc">
+    <summary>Which of this week's methods use it?</summary>
+    <div class="acc-body">
+      <p>Only <code>fibonacci</code>, and that is the cautionary example. <code>fastPower</code> looks like a two-call method but is not — it makes one call and uses the answer twice.</p>
+      <p>The form comes into its own when the two subproblems are disjoint parts of the data, as in a tree's two subtrees or merge sort's two halves. Then nothing is recomputed and the two calls together do the work of one pass.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A second common form involves multiple recursive calls: solve one subproblem, solve another, and combine the two answers.</p>
+    <p>This structure becomes especially important for trees and divide-and-conquer algorithms. Week 11's merge sort and Week 14's tree traversals are both instances of it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>How to Design a Recursive Method</h2>
+  <p class="small">When solving a recursive problem, use the following process.</p>
+  <div class="cols">
+    <div>
+      <h4>Step 1: Define exactly what the method means</h4>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(values, index)
+</code></pre>
+      <p class="small">means:</p>
+      <blockquote class="small">Return the sum of all array elements from <code>index</code> through the end of the array.</blockquote>
+    </div>
+    <div>
+      <h4>Step 2: Find the smallest problem</h4>
+      <p class="small">For <code>sumArray</code>, the smallest remaining portion is an empty portion.</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (index == values.length) {
+    return 0;
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>A precise method definition makes recursion much easier.</div>
+  <aside class="notes">
+    <p>Step one: define exactly what the method means. For example, sumArray of values and index means return the sum of all array elements from index through the end of the array.</p>
+    <p>That sentence is not documentation you write afterwards. It is the thing that makes the recursion possible, because the leap of faith is faith in <em>this precise statement</em> holding for a smaller input.</p>
+    <p>Step two: find the smallest problem. For sumArray, the smallest remaining portion is an empty portion — index equal to the array length — and its sum is zero.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Steps 3 to 5</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Step 3: Make the problem smaller</h4>
+      <p class="small">Move forward one element:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(values, index + 1)
+</code></pre>
+    </div>
+    <div>
+      <h4>Step 4: Trust the recursive call</h4>
+      <p class="small">Assume:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(values, index + 1)
+</code></pre>
+      <p class="small">correctly computes the sum of everything after the current element.</p>
+    </div>
+    <div>
+      <h4>Step 5: Combine the answers</h4>
+<pre><code class="language-java" data-trim data-noescape>
+return values[index] +
+       sumArray(values, index + 1);
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-design-steps" tabindex="0">The five design steps, worked in full</span>
+  </div>
+  <aside class="notes">
+    <p>Step three: make the problem smaller. Move forward one element. Step four: trust the recursive call — assume sumArray at index plus one correctly computes the sum of everything after the current element. Step five: combine the answers, returning the current element plus that sum.</p>
+    <p>Five steps, and steps four and five are the leap of faith and the combine step from the template. Have students write out all five for one method in lab; it is slower than guessing, and it works.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing Recursive Code</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When a recursive program behaves unexpectedly, trace it systematically. Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int mystery(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    return 2 + mystery(n - 1);
+}
+</code></pre>
+      <p class="small">What does:</p>
+<pre><code class="language-java" data-trim data-noescape>
+mystery(4)
+</code></pre>
+      <p class="small">return?</p>
+    </div>
+    <div>
+      <p class="small">Trace:</p>
+<pre><code class="language-text" data-trim data-noescape>
+mystery(4)
+= 2 + mystery(3)
+
+= 2 + 2 + mystery(2)
+
+= 2 + 2 + 2 + mystery(1)
+
+= 2 + 2 + 2 + 2 + mystery(0)
+
+= 2 + 2 + 2 + 2 + 0
+
+= 8
+</code></pre>
+      <p class="small">The method computes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2 × n
+</code></pre>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>Tracing is an excellent way to understand unfamiliar recursive programs. When you cannot see what a method does, expand it by hand for a small input and look at the pattern.</div>
+  <details class="acc">
+    <summary>Why the trace reveals the formula</summary>
+    <div class="acc-body">
+      <p>The expanded form is four copies of <code>2</code> plus a zero — and there were four recursive calls, one per unit of <code>n</code>. So the answer is <span class="math">2 <span class="op">×</span> n</span>.</p>
+      <p>Seeing the closed form is not necessary to trust the method, but it is a satisfying check: try <code>mystery(0)</code> and confirm it gives 0, which the formula also predicts.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>When a recursive program behaves unexpectedly, trace it systematically. Consider this mystery method: base case at zero returning zero, recursive case returning two plus mystery of n minus one.</p>
+    <p>What does mystery of four return? Substitute one level at a time: two plus mystery of three, then two plus two plus mystery of two, and so on until mystery of zero contributes nothing. The answer is eight, and the method computes two times n.</p>
+    <p>Do this on the board rather than showing it finished. The technique — replace the call with its expansion, one level per line — is the thing being taught, and it is also the technique Part A of the homework asks for explicitly.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Another Tracing Exercise</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void mystery(int n) {
+    if (n &lt;= 0) {
+        return;
+    }
+
+    System.out.print(n + " ");
+    mystery(n - 2);
+    System.out.print(n + " ");
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+mystery(5);
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5 3 1 1 3 5
+</code></pre>
+      <p class="small">Why?</p>
+      <div class="box key"><span class="box-title">Key idea</span>The first print statements happen while recursion moves <strong>downward</strong>. The second print statements happen while recursion <strong>unwinds</strong>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This mystery method prints n, recurses on n minus two, then prints n again. Calling mystery of five prints five, three, one, one, three, five.</p>
+    <p>Why? The first print statements happen while recursion moves downward, giving five, three, one. The second print statements happen while recursion unwinds, giving one, three, five. The output is palindromic because every frame prints on the way in and on the way out.</p>
+    <p>This is Part II's before-and-after lesson in a single method: both positions used at once.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XI</p>
+  <h2>Memory, Objects, and Helper Methods</h2>
+  <p class="part-sub">What a stack frame really holds, where recursion lives in a class, and how to hide the extra parameters.</p>
+</section>
+
+<section>
+  <h2>Stack Overflow</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides limited memory for the call stack. A recursive method that makes too many nested calls can cause:</p>
+<pre><code class="language-text" data-trim data-noescape>
+java.lang.StackOverflowError
+</code></pre>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void forever() {
+    forever();
+}
+</code></pre>
+      <p class="small">This method has no base case.</p>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Watch out</span>Even <em>correct</em> recursion can overflow the stack if the recursion becomes excessively deep.</div>
+      <p class="small">For example, recursively processing millions of array elements may be unsafe.</p>
+      <p class="small">This is one reason recursion is not always appropriate.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java provides limited memory for the call stack. A recursive method that makes too many nested calls can cause java dot lang dot StackOverflowError.</p>
+    <p>The two-line forever method is the minimal example: it has no base case at all.</p>
+    <p>But even correct recursion can overflow the stack if the recursion becomes excessively deep. For example, recursively processing millions of array elements may be unsafe. This is one reason recursion is not always appropriate — and it is the concrete content behind Part VI's advice to prefer a loop when very deep recursion might occur.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursion and Java Memory</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Recall that each method call receives its own local variables. Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void test(int n) {
+    int x = n * 10;
+
+    if (n &gt; 0) {
+        test(n - 1);
+    }
+
+    System.out.println(x);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+test(3)
+</code></pre>
+      <p class="small">creates separate <code>x</code> values:</p>
+<pre><code class="language-text" data-trim data-noescape>
+test(3): x = 30
+test(2): x = 20
+test(1): x = 10
+test(0): x = 0
+</code></pre>
+      <p class="small">When calls unwind, the output is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0
+10
+20
+30
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Each call has its own stack frame and therefore its own version of <code>x</code>.</div>
+  <details class="acc">
+    <summary>Why the output is ascending</summary>
+    <div class="acc-body">
+      <p>The print statement sits <em>after</em> the recursive call, so it runs during unwinding — the deepest frame prints first. The deepest frame is <code>test(0)</code>, whose <code>x</code> is 0.</p>
+      <p>This is the same mechanism as the reversed printing in Part II, now with a local variable making it visible that the values were computed on the way down and printed on the way up.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Recall that each method call receives its own local variables. This test method computes x as n times ten, recurses while n is positive, and then prints x. Calling test of three creates separate x values: thirty, twenty, ten, and zero, one per frame.</p>
+    <p>Students often imagine one x being overwritten. It is not. Four frames, four independent x variables, all alive simultaneously.</p>
+    <p>When calls unwind, the output is zero, ten, twenty, thirty — ascending, because the deepest frame prints first. Each call has its own stack frame and therefore its own version of x. This is the concrete evidence for the abstract claim made back in Part II, that a frame holds parameter values and local variables.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursion and Object-Oriented Programming</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Recursive methods can also appear inside classes. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class NumberUtils {
+
+    public static int sumDigits(int n) {
+        if (n &lt; 10) {
+            return n;
+        }
+
+        return n % 10 + sumDigits(n / 10);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+NumberUtils.sumDigits(472)
+</code></pre>
+      <p class="small">computes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2 + sumDigits(47)
+
+2 + 7 + sumDigits(4)
+
+2 + 7 + 4
+
+13
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Recursive methods can also appear inside classes. Here NumberUtils holds a static sumDigits method that returns n when n is a single digit, and otherwise returns the last digit plus the digit sum of what remains.</p>
+    <p>Calling NumberUtils dot sumDigits of four seven two computes two plus sumDigits of forty-seven, then two plus seven plus sumDigits of four, then two plus seven plus four, which is thirteen.</p>
+    <p>Nothing about recursion changes inside a class. The method is called with the class name because it is static — exactly as in Week 6.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Two Digit Operations</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The key observations are:</p>
+<pre><code class="language-java" data-trim data-noescape>
+n % 10
+</code></pre>
+      <p class="small">gets the last digit, while:</p>
+<pre><code class="language-java" data-trim data-noescape>
+n / 10
+</code></pre>
+      <p class="small">removes the last digit.</p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Each recursive call therefore receives a smaller number.</div>
+      <div class="box note"><span class="box-title">Note</span>Both operators come from Week 1: integer division discards the fraction, and <code>%</code> gives the remainder.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Check the base case</summary>
+    <div class="acc-body">
+      <p>The base case is <code>n &lt; 10</code>: a single-digit number is its own digit sum. It has to be, because <code>n / 10</code> would be 0 and the recursion would have nothing left to shrink.</p>
+      <p>Try it on 472: 472, then 47, then 4 — three calls for three digits, which is exactly right.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The key observations are that n modulo ten gets the last digit, while n divided by ten removes the last digit. Each recursive call therefore receives a smaller number.</p>
+    <p>Both of these are Week 1 operators doing work they were introduced for. Integer division discards the fraction, so 472 divided by 10 is 47, not 47.2. Students who never quite believed integer division was useful get their answer here.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursion and Problem Representation</h2>
+  <p class="small">Often, finding the right recursive solution depends on finding the right <strong>representation</strong> of the problem. Suppose we ask:</p>
+  <blockquote class="small">Find the sum of an array.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">A method like this is difficult to recurse on:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(int[] values)
+</code></pre>
+      <p class="small">because the array never gets smaller.</p>
+    </div>
+    <div>
+      <p class="small">Instead, redefine the problem:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(int[] values, int index)
+</code></pre>
+      <p class="small">Now the meaning becomes:</p>
+      <blockquote class="small">Find the sum beginning at this position.</blockquote>
+      <p class="small">Binary search similarly uses:</p>
+<pre><code class="language-java" data-trim data-noescape>
+low
+high
+</code></pre>
+      <p class="small">to identify the current search range.</p>
+    </div>
+  </div>
+  <blockquote class="small">Additional parameters can describe the part of the problem that remains.</blockquote>
+  <details class="acc">
+    <summary>One parameter or two?</summary>
+    <div class="acc-body">
+      <p><code>sumArray</code> needs one extra parameter because the remaining portion is always a suffix — everything from <code>index</code> onward.</p>
+      <p>Binary search needs two, because its remaining portion is an interval in the middle of the array, and an interval takes two numbers to describe. The number of extra parameters follows from the shape of what remains.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Often, finding the right recursive solution depends on finding the right representation of the problem. Suppose we ask: find the sum of an array. A method taking only the array is difficult to recurse on, because the array never gets smaller. Instead, redefine the problem by adding an index. Now the meaning becomes: find the sum beginning at this position.</p>
+    <p>This is Part X's step one — define exactly what the method means — showing its value. Changing the signature changed the meaning, and the new meaning is one that shrinks.</p>
+    <p>The index allows the remaining problem to shrink. This is an important algorithm-design technique: additional parameters can describe the part of the problem that remains. Binary search similarly uses low and high to identify the current search range — same technique, two parameters instead of one, because the remaining region is an interval rather than a suffix.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Helper Methods</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Sometimes we do not want callers to supply the extra recursive parameters. We can hide them using a <strong>helper method</strong>.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sumArray(int[] values) {
+    return sumArray(values, 0);
+}
+
+private static int sumArray(
+        int[] values,
+        int index) {
+
+    if (index == values.length) {
+        return 0;
+    }
+
+    return values[index] +
+           sumArray(values, index + 1);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The caller writes:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(values);
+</code></pre>
+      <p class="small">instead of:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumArray(values, 0);
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The private recursive helper handles the implementation details. This is also an example of <strong>encapsulation</strong>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Sometimes we do not want callers to supply the extra recursive parameters. Passing zero every time is noise, and a caller who passes the wrong starting index gets a silently wrong answer.</p>
+    <p>We can hide them using a helper method. The public one-argument method simply calls the private two-argument one with the correct starting index. The two methods are overloads, which the class met in Week 4.</p>
+    <p>The caller writes sumArray of values instead of sumArray of values and zero. The private recursive helper handles the implementation details. This is also an example of encapsulation.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursive Binary Search with a Helper</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can use the same pattern for binary search:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int binarySearch(
+        int[] values,
+        int target) {
+
+    return binarySearch(
+        values,
+        target,
+        0,
+        values.length - 1
+    );
+}
+</code></pre>
+      <p class="small">The public method offers a simple interface.</p>
+    </div>
+    <div>
+      <p class="small">The private method contains the recursive state.</p>
+      <div class="box good"><span class="box-title">Do this</span>Make the recursive method <code>private</code> and give the public method the signature a caller would expect.</div>
+      <div class="box note"><span class="box-title">Note</span>The public method is also the natural place for a precondition check — it runs once instead of on every recursive call.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-helper-binary-search" tabindex="0">The full public/private pair</span>
+  </div>
+  <aside class="notes">
+    <p>We can use the same pattern for binary search. The public method takes only the array and the target, and immediately calls the private four-argument version with zero and values dot length minus one.</p>
+    <p>The public method offers a simple interface. The private method contains the recursive state.</p>
+    <p>Note the design point in the second box: because the public method runs exactly once, it is the right home for the kind of input validation Part VII added to factorial. The private method can then trust its arguments.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XII</p>
+  <h2>Patterns, Algorithmic Thinking, and Practice</h2>
+  <p class="part-sub">A checklist, four recurring patterns, four worked examples, and the exercises that make them stick.</p>
+</section>
+
+<section>
+  <h2>Recursion Checklist: Correctness</h2>
+  <p class="small">Before considering a recursive method complete, ask:</p>
+  <ul class="small">
+    <li>What exactly does this method promise to compute?</li>
+    <li>What is the base case?</li>
+    <li>Is the base-case answer correct?</li>
+    <li>Does every recursive call make the problem smaller?</li>
+    <li>Will every valid input eventually reach a base case?</li>
+    <li>Assuming the recursive call works, does the current method compute the correct answer?</li>
+  </ul>
+  <div class="box key"><span class="box-title">Key idea</span>These six questions are the three properties from Part I, made checkable.</div>
+  <aside class="notes">
+    <p>Before considering a recursive method complete, ask six correctness questions. What exactly does this method promise to compute? What is the base case? Is the base-case answer correct? Does every recursive call make the problem smaller? Will every valid input eventually reach a base case? And assuming the recursive call works, does the current method compute the correct answer?</p>
+    <p>Notice how each of these appeared somewhere this week. Question one is Part X's step one. Question three is the product-exercise trap. Questions four and five are the two failure modes of Part VII. Question six is the leap of faith.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Checklist: Safety and Efficiency</h2>
+  <div class="cols">
+    <div>
+      <h4>Safety</h4>
+      <ul class="small">
+        <li>What inputs are valid?</li>
+        <li>Could invalid input cause infinite recursion?</li>
+        <li>Could the recursion become extremely deep?</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Efficiency</h4>
+      <ul class="small">
+        <li>How many recursive calls are made?</li>
+        <li>Does the method repeatedly solve the same subproblem?</li>
+        <li>Would iteration be simpler?</li>
+        <li>Is recursion natural for the structure of the problem?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-checklist" tabindex="0">The full recursion checklist</span>
+  </div>
+  <aside class="notes">
+    <p>The safety questions are: what inputs are valid; could invalid input cause infinite recursion; could the recursion become extremely deep. Factorial of negative three answers the second; recursively processing millions of elements answers the third.</p>
+    <p>The efficiency questions are: how many recursive calls are made; does the method repeatedly solve the same subproblem; would iteration be simpler; is recursion natural for the structure of the problem. Naive Fibonacci fails the second badly.</p>
+    <p>Require the checklist on submitted work. It converts "my code crashed and I do not know why" into a diagnosis.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Common Recursive Patterns (1 and 2)</h2>
+  <div class="cols">
+    <div>
+      <h4>Pattern 1: Reduce by One</h4>
+<pre><code class="language-java" data-trim data-noescape>
+solve(n)
+    → solve(n - 1)
+</code></pre>
+      <p class="small">Examples:</p>
+      <ul class="small">
+        <li>factorial,</li>
+        <li>sum from 1 to n,</li>
+        <li>processing an array one element at a time.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Pattern 2: Reduce the Input Size</h4>
+<pre><code class="language-java" data-trim data-noescape>
+solve(string)
+    → solve(smaller substring)
+</code></pre>
+      <p class="small">Examples:</p>
+      <ul class="small">
+        <li>reversing a string,</li>
+        <li>palindrome checking.</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>There are several recurring patterns worth recognizing. Pattern one, reduce by one: solve of n becomes solve of n minus one. Examples are factorial, sum from one to n, and processing an array one element at a time.</p>
+    <p>Pattern two, reduce the input size: solve of a string becomes solve of a smaller substring. Examples are reversing a string and palindrome checking.</p>
+    <p>Patterns one and two are the same idea applied to numbers and to strings. The distinction is worth keeping because the mechanism differs — arithmetic in one case, substring in the other.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Common Recursive Patterns (3 and 4)</h2>
+  <div class="cols">
+    <div>
+      <h4>Pattern 3: Divide the Problem</h4>
+<pre><code class="language-java" data-trim data-noescape>
+solve(n)
+    → solve(n / 2)
+</code></pre>
+      <p class="small">Examples:</p>
+      <ul class="small">
+        <li>binary search,</li>
+        <li>fast exponentiation.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Pattern 4: Multiple Recursive Subproblems</h4>
+<pre><code class="language-java" data-trim data-noescape>
+solve(problem)
+    → solve(part1) + solve(part2)
+</code></pre>
+      <p class="small">Examples:</p>
+      <ul class="small">
+        <li>Fibonacci,</li>
+        <li>tree traversal,</li>
+        <li>merge sort,</li>
+        <li>divide-and-conquer algorithms.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>These patterns will recur throughout computer science.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-patterns" tabindex="0">All four patterns, with this week's examples</span>
+  </div>
+  <aside class="notes">
+    <p>Pattern three, divide the problem: solve of n becomes solve of n over two. Examples are binary search and fast exponentiation — the two methods this week that shrink dramatically rather than by one.</p>
+    <p>Pattern four, multiple recursive subproblems: solve of a problem becomes solve of part one plus solve of part two. Examples are Fibonacci, tree traversal, merge sort, and divide-and-conquer algorithms.</p>
+    <p>These patterns will recur throughout computer science. Ask students to classify every method they wrote this week into one of the four; almost all of them fit.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursion Is Not Magic</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A recursive call is still just a normal method call. The computer does not "understand recursion" as a special concept. It simply:</p>
+      <ol class="small">
+        <li>calls a method,</li>
+        <li>creates a stack frame,</li>
+        <li>executes the method,</li>
+        <li>possibly calls another method,</li>
+        <li>waits for that call to return,</li>
+        <li>continues execution.</li>
+      </ol>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Recursion is powerful because the method happens to call another instance of itself.</div>
+      <div class="box note"><span class="box-title">Note</span>There is no recursion keyword in Java. Nothing in the language knows or cares that the method being called is the one already running.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A recursive call is still just a normal method call. The computer does not understand recursion as a special concept. It simply calls a method, creates a stack frame, executes the method, possibly calls another method, waits for that call to return, and continues execution.</p>
+    <p>Those six steps are the same six steps for any method call the class has written since Week 4. Recursion is powerful because the method happens to call another instance of itself.</p>
+    <p>This slide is reassurance. Students who have been treating recursion as a mysterious new mechanism can put that down; the mechanism is the one they already know.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Algorithmic Thinking</h2>
+  <p class="small">This week is not only about learning recursive syntax. The larger objective is learning to think <strong>algorithmically</strong>. When given a problem, ask:</p>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>What is the input?</li>
+        <li>What is the output?</li>
+        <li>What special cases exist?</li>
+        <li>Can I break the problem into smaller subproblems?</li>
+        <li>What information must I keep track of?</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="small">
+        <li>What guarantees that the algorithm eventually stops?</li>
+        <li>How much work does the algorithm perform?</li>
+        <li>Are there multiple ways to solve the problem?</li>
+        <li>What are the tradeoffs among those solutions?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>These questions are central to computer science.</div>
+  <aside class="notes">
+    <p>This week is not only about learning recursive syntax. The larger objective is learning to think algorithmically.</p>
+    <p>When given a problem, ask: what is the input; what is the output; what special cases exist; can I break the problem into smaller subproblems; what information must I keep track of; what guarantees that the algorithm eventually stops; how much work does the algorithm perform; are there multiple ways to solve the problem; and what are the tradeoffs among those solutions.</p>
+    <p>Nine questions, and only one of them mentions decomposition. These questions are central to computer science, and they are the ones Week 11 will start answering quantitatively.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Sum of Digits</h2>
+  <p class="small">Problem:</p>
+  <blockquote class="small">Write a recursive method that computes the sum of the digits of a nonnegative integer.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+472 → 4 + 7 + 2 → 13
+</code></pre>
+      <p class="small">First observe:</p>
+<pre><code class="language-java" data-trim data-noescape>
+472 % 10
+</code></pre>
+      <p class="small">is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2
+</code></pre>
+    </div>
+    <div>
+      <p class="small">and:</p>
+<pre><code class="language-java" data-trim data-noescape>
+472 / 10
+</code></pre>
+      <p class="small">is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+47
+</code></pre>
+      <p class="small">So:</p>
+<pre><code class="language-text" data-trim data-noescape>
+sumDigits(472)
+</code></pre>
+      <p class="small">can be expressed as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+2 + sumDigits(47)
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Problem: write a recursive method that computes the sum of the digits of a nonnegative integer. For example, four seven two gives four plus seven plus two, which is thirteen.</p>
+    <p>First observe that 472 modulo 10 is 2, and 472 divided by 10 is 47. So sumDigits of 472 can be expressed as 2 plus sumDigits of 47.</p>
+    <p>Work these two arithmetic facts before writing any code. Once students see that modulo peels a digit off the right and integer division shortens the number, the method writes itself.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Sum of Digits: Solution and Trace</h2>
+  <p class="small">The base case occurs when the number has only one digit.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Solution:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sumDigits(int n) {
+    if (n &lt; 10) {
+        return n;
+    }
+
+    return n % 10 + sumDigits(n / 10);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Trace:</p>
+<pre><code class="language-text" data-trim data-noescape>
+sumDigits(472)
+= 2 + sumDigits(47)
+
+= 2 + 7 + sumDigits(4)
+
+= 2 + 7 + 4
+
+= 13
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The same method appeared in Part XI</summary>
+    <div class="acc-body">
+      <p>This is character-for-character the method inside <code>NumberUtils</code>. Seeing it twice is deliberate: once as an illustration that recursion works inside a class, and once as a worked example designed from scratch.</p>
+      <p>Designing it the second way — problem statement, observation, base case, solution, trace — is the process the lab expects students to follow for every method.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The base case occurs when the number has only one digit — n less than ten — and a single-digit number is its own digit sum.</p>
+    <p>Trace sumDigits of 472: 2 plus sumDigits of 47, then 2 plus 7 plus sumDigits of 4, then 2 plus 7 plus 4, which is 13.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Count a Character</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Problem:</p>
+      <blockquote class="small">Count how many times a particular character occurs in a string.</blockquote>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+"banana", 'a'
+</code></pre>
+      <p class="small">should return:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Solution:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int countChar(
+        String s,
+        char target) {
+
+    if (s.isEmpty()) {
+        return 0;
+    }
+
+    int countInRest =
+        countChar(s.substring(1), target);
+
+    if (s.charAt(0) == target) {
+        return 1 + countInRest;
+    }
+
+    return countInRest;
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Problem: count how many times a particular character occurs in a string. For banana and the character a, the answer should be three.</p>
+    <p>The solution follows the same shape as the array count method from Part VIII, with substring in place of the index. Empty string returns zero; otherwise name the count in the rest and add one if the first character matches.</p>
+    <p>Note s dot isEmpty rather than s dot length equals zero. Both are correct; isEmpty says what it means.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A More Compact <code>countChar</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">A more compact version is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int countChar(
+        String s,
+        char target) {
+
+    if (s.isEmpty()) {
+        return 0;
+    }
+
+    int current =
+        s.charAt(0) == target ? 1 : 0;
+
+    return current +
+           countChar(s.substring(1), target);
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box note"><span class="box-title">Note</span>The conditional operator <code>? :</code> turns the match test into a value of 0 or 1, so the combine step becomes a single addition.</div>
+      <div class="box key"><span class="box-title">Key idea</span>Both versions are correct and compute the same answer. The difference is only how the combine step is written.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Which version should students write?</summary>
+    <div class="acc-body">
+      <p>Either. The first names the recursive result and branches on the match; the second names the current contribution and always adds. The second maps more directly onto the general template from Part X — smaller answer, combine — which is a mild argument in its favour.</p>
+      <p>What matters is that both make the recursive call exactly once. A version that called <code>countChar</code> inside both branches of an <code>if</code> would be doing the Fibonacci mistake.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A more compact version computes the current character's contribution as one or zero using the conditional operator, then returns that plus the count of the rest.</p>
+    <p>Both versions are correct. The compact one has the shape of the general template most clearly: a value for the current position, plus the answer for the smaller problem.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Is an Array Sorted?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Problem:</p>
+      <blockquote class="small">Determine recursively whether an array is sorted in nondecreasing order.</blockquote>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[2, 5, 5, 9, 12]
+</code></pre>
+      <p class="small">is sorted. But:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[2, 8, 4, 10]
+</code></pre>
+      <p class="small">is not.</p>
+    </div>
+    <div>
+      <p class="small">Recursive idea:</p>
+      <ul class="small">
+        <li>Compare the current element with the next one.</li>
+        <li>If they are out of order, return <code>false</code>.</li>
+        <li>Otherwise ask whether the remainder of the array is sorted.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>"Nondecreasing" is why <code>[2, 5, 5, 9, 12]</code> counts as sorted despite the repeated 5.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Problem: determine recursively whether an array is sorted in nondecreasing order. Two, five, five, nine, twelve is sorted. Two, eight, four, ten is not.</p>
+    <p>The recursive idea is three lines. Compare the current element with the next one. If they are out of order, return false. Otherwise ask whether the remainder of the array is sorted.</p>
+    <p>Note the word nondecreasing rather than increasing. Equal neighbours are allowed, which is why the comparison in the code will be strictly greater than.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>isSorted</code> in Java</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isSorted(
+        int[] values,
+        int index) {
+
+    if (index &gt;= values.length - 1) {
+        return true;
+    }
+
+    if (values[index] &gt; values[index + 1]) {
+        return false;
+    }
+
+    return isSorted(values, index + 1);
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>The base case is "one element or fewer left to compare" — there is no pair to be out of order, so the answer is <code>true</code>.</div>
+      <div class="box note"><span class="box-title">Note</span>The method stops early: the moment a bad pair is found, <code>false</code> is returned and no deeper call is made.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why <code>&gt;=</code> and not <code>==</code> in the base case?</summary>
+    <div class="acc-body">
+      <p>Using <code>&gt;=</code> makes the method safe for an empty array as well. If <code>values.length</code> is 0, then <code>values.length - 1</code> is <code>-1</code>, and an initial call with <code>index</code> 0 stops immediately rather than reading past the end.</p>
+      <p>This is the kind of boundary case the lab brief asks students to test explicitly.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The Java takes the array and an index. If the index is at or past the second-to-last element, there is no pair left to compare, so return true. If the element at index is greater than the next, they are out of order, so return false. Otherwise recurse on the next index.</p>
+    <p>The comparison uses strictly greater than, not greater than or equal to, precisely because equal neighbours are permitted in nondecreasing order.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Decimal to Binary</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Recursion can reveal structure in number systems. Suppose we want to print the binary representation of a positive integer. Repeated division by 2 gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+13 / 2 = 6 remainder 1
+6  / 2 = 3 remainder 0
+3  / 2 = 1 remainder 1
+1  / 2 = 0 remainder 1
+</code></pre>
+      <p class="small">The remainders appear in <strong>reverse</strong> order.</p>
+    </div>
+    <div>
+      <p class="small">Recursion naturally handles this reversal.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printBinary(int n) {
+    if (n &lt; 2) {
+        System.out.print(n);
+        return;
+    }
+
+    printBinary(n / 2);
+    System.out.print(n % 2);
+}
+</code></pre>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+printBinary(13);
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1101
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>This is a good example of using the <strong>unwinding phase</strong> of recursion.</div>
+  <details class="acc">
+    <summary>Follow the frames</summary>
+    <div class="acc-body">
+      <p>The calls descend 13, 6, 3, 1. The frame for 1 hits the base case (<code>n &lt; 2</code>), prints <code>1</code>, and returns. Then 3 prints <code>3 % 2</code>, which is 1. Then 6 prints <code>6 % 2</code>, which is 0. Then 13 prints <code>13 % 2</code>, which is 1.</p>
+      <p>Reading the printed characters in order: 1, 1, 0, 1. The remainder table's column, reversed. Move <code>System.out.print(n % 2);</code> above the recursive call and the output becomes <code>1011</code> — the digits backwards.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Recursion can reveal structure in number systems. Suppose we want to print the binary representation of a positive integer. Repeated division by two gives thirteen over two is six remainder one, six over two is three remainder zero, three over two is one remainder one, one over two is zero remainder one.</p>
+    <p>The remainders appear in reverse order — the first remainder computed is the last binary digit. An iterative version would have to store them and reverse them. Recursion naturally handles this reversal, because the print statement sits after the recursive call and therefore runs during unwinding.</p>
+    <p>Calling printBinary of thirteen prints one one zero one. This is a good example of using the unwinding phase of recursion; compare it with the reverse method from Part III. Moving one line changes 1101 to 1011, which is worth demonstrating live if there is a machine in the room.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Code-Tracing Exercise</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Without running the program, determine the output:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void puzzle(int n) {
+    if (n &lt;= 0) {
+        return;
+    }
+
+    System.out.print(n + " ");
+    puzzle(n / 2);
+    System.out.print(n + " ");
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+puzzle(8);
+</code></pre>
+      <p class="small">Try to draw the stack before checking the answer.</p>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+8 4 2 1 1 2 4 8
+</code></pre>
+          <p>Eight prints on the way down, then four, then two, then one. The call <code>puzzle(0)</code> returns immediately, and the same four numbers print again on the way back out.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-tracing-exercises" tabindex="0">All three tracing exercises</span>
+  </div>
+  <aside class="notes">
+    <p>Without running the program, determine the output of puzzle of eight. Give the room three or four minutes and ask them to draw the stack first.</p>
+    <p>The answer is eight, four, two, one, one, two, four, eight. This is Part X's mystery method with division instead of subtraction — same print-descend-print structure, so the same palindromic output, but only four levels deep instead of three.</p>
+    <p>Ask what puzzle of nine would print, to check whether they understood that integer division is what controls the descent.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Design Exercise: Product</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Write a recursive method:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int product(int[] values, int index)
+</code></pre>
+      <p class="small">that returns the product of all elements from <code>index</code> to the end. For:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int[] values = {2, 3, 4};
+</code></pre>
+      <p class="small">calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+product(values, 0)
+</code></pre>
+      <p class="small">should return:</p>
+<pre><code class="language-text" data-trim data-noescape>
+24
+</code></pre>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Watch out</span>Think about the base case carefully.</div>
+      <p class="small">The correct identity value for multiplication is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+</code></pre>
+      <p class="small">not:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0
+</code></pre>
+      <details class="acc">
+        <summary>One solution</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+public static int product(
+        int[] values,
+        int index) {
+
+    if (index == values.length) {
+        return 1;
+    }
+
+    return values[index] *
+           product(values, index + 1);
+}
+</code></pre>
+          <p>The structure is identical to <code>sumArray</code>. Only the operator and the base-case value change — and the base-case value is the one students forget.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Write a recursive method product taking an array and an index, returning the product of all elements from index to the end. For the array two, three, four, calling product with index zero should return twenty-four.</p>
+    <p>Think about the base case carefully. The correct identity value for multiplication is one, not zero. A student who copies sumArray and forgets to change the base case gets zero for every array — and it is a wonderfully instructive bug, because the method is otherwise perfect. This is checklist question three: is the base-case answer correct?</p>
+    <p>One solution: if the index has run past the end, return one; otherwise return the element at index times the product of the rest. The structure is identical to sumArray, and only the operator and the base-case value change.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Design Exercise: Find a Value</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Write a recursive method that returns whether a target exists in an array.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean contains(
+        int[] values,
+        int target,
+        int index)
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Notice that this method can stop early as soon as it finds the target.</div>
+    </div>
+    <div>
+      <p class="small">One solution:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean contains(
+        int[] values,
+        int target,
+        int index) {
+
+    if (index == values.length) {
+        return false;
+    }
+
+    if (values[index] == target) {
+        return true;
+    }
+
+    return contains(
+        values,
+        target,
+        index + 1
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Write a recursive method that returns whether a target exists in an array. The signature takes the array, the target, and an index.</p>
+    <p>One solution: base case false when the index runs off the end, true when the current element matches, otherwise recurse on the next index.</p>
+    <p>Notice that this method can stop early as soon as it finds the target. Compare with count from Part VIII, which must always run to the end because it has to examine every element. Early exit is possible whenever the answer at one position settles the whole question.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursion vs. Loops: Practical Guidelines</h2>
+  <div class="cols">
+    <div>
+      <h4>Prefer a loop when</h4>
+      <ul class="small">
+        <li>the operation is naturally repetitive,</li>
+        <li>the data structure is linear,</li>
+        <li>recursion adds no conceptual clarity,</li>
+        <li>very deep recursion might occur.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Consider recursion when</h4>
+      <ul class="small">
+        <li>the problem is naturally defined in terms of smaller versions of itself,</li>
+        <li>the data structure is recursive,</li>
+        <li>the problem divides into subproblems,</li>
+        <li>the recursive formulation closely matches the conceptual solution.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Neither technique is inherently superior. <strong>Good programmers know both.</strong></div>
+  <aside class="notes">
+    <p>Prefer a loop when the operation is naturally repetitive, the data structure is linear, recursion adds no conceptual clarity, or very deep recursion might occur.</p>
+    <p>Consider recursion when the problem is naturally defined in terms of smaller versions of itself, the data structure is recursive, the problem divides into subproblems, or the recursive formulation closely matches the conceptual solution.</p>
+    <p>Neither technique is inherently superior. Good programmers know both. Apply these eight bullets to this week's methods out loud: sumArray fails three of the four "prefer a loop" tests, and binary search passes all four "consider recursion" tests.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Preview: Why Recursion Matters for Data Structures</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Next we will study algorithms and data structures in greater depth. Recursion will become particularly useful for <strong>trees</strong>. Imagine a binary tree:</p>
+<pre><code class="language-text" data-trim data-noescape>
+        8
+       / \
+      3   10
+     / \    \
+    1   6    14
+</code></pre>
+    </div>
+    <div>
+      <p class="small">To process the entire tree, we can think recursively:</p>
+<pre><code class="language-text" data-trim data-noescape>
+process current node
+process left subtree
+process right subtree
+</code></pre>
+      <p class="small">Each subtree is itself another tree. That is why recursion is such a natural fit.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>You do not need to understand trees yet. The important point is that recursive programming is preparation for the data structures that follow.</div>
+  <aside class="notes">
+    <p>Next we will study algorithms and data structures in greater depth. Recursion will become particularly useful for trees.</p>
+    <p>Imagine a binary tree with eight at the top, three and ten below it, and one, six and fourteen below those. To process the entire tree, we can think recursively: process the current node, process the left subtree, process the right subtree.</p>
+    <p>Each subtree is itself another tree. That is why recursion is such a natural fit. You do not need to understand trees yet — the important point is that recursive programming is preparation for the data structures that follow.</p>
+  </aside>
+</section>
+
+<!-- ==================== CLOSING ==================== -->
+
+<section>
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>A <strong>recursive method</strong> calls itself on a smaller version of the problem.</li>
+    <li>The <strong>base case</strong> stops recursion; the <strong>recursive case</strong> reduces the problem.</li>
+    <li><strong>Progress:</strong> every recursive call must move toward a base case.</li>
+    <li>The <strong>call stack</strong> holds one waiting invocation per call; <strong>unwinding</strong> returns them in reverse order.</li>
+    <li><strong>Recursive thinking:</strong> assume the smaller problem is solved, then use its result.</li>
+    <li><strong>Algorithmic thinking:</strong> different correct solutions may require very different amounts of computational work.</li>
+    <li>A difficult problem can often be solved by reducing it to one or more smaller instances of the same problem.</li>
+  </ul>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-week10-summary" tabindex="0">Week 10 summary, in the notes' own words</span>
+  </div>
+  <aside class="notes">
+    <p>The central ideas from this week: a recursive method calls itself on a smaller version of the problem. The base case is the condition that stops recursion. The recursive case is the part of the method that reduces the problem. Every recursive call must move toward a base case.</p>
+    <p>Each recursive call creates a separate method invocation that waits for deeper calls to return. After the base case returns, pending recursive calls complete in reverse order — unwinding.</p>
+    <p>Recursive thinking: assume the smaller recursive problem can be solved correctly, then determine how its result helps solve the current problem. Algorithmic thinking: different correct solutions may require very different amounts of computational work.</p>
+    <p>And the takeaway the notes end on: the most important idea from recursion is not the syntax of calling a method from itself. It is that a difficult problem can often be solved by reducing it to one or more smaller instances of the same problem.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Recursion</td><td>Solving a problem by reducing it to a smaller instance of the same problem.</td></tr>
+        <tr><td>Recursive method</td><td>A method that calls itself, either directly or indirectly.</td></tr>
+        <tr><td>Base case</td><td>A condition for which the method returns an answer without another recursive call.</td></tr>
+        <tr><td>Recursive case</td><td>The part that reduces the problem to a smaller problem of the same form.</td></tr>
+        <tr><td>Recursive call</td><td>The call a recursive method makes to itself.</td></tr>
+        <tr><td>Call stack</td><td>Where Java stores information about each in-progress method call.</td></tr>
+        <tr><td>Stack frame</td><td>One call's parameters, locals, and return location on the stack.</td></tr>
+        <tr><td>Stack overflow</td><td>Running out of call-stack space; reported as <code>StackOverflowError</code>.</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Unwinding</td><td>The stage in which pending recursive calls return in reverse order.</td></tr>
+        <tr><td>Iteration</td><td>Repetition using a loop rather than recursive calls.</td></tr>
+        <tr><td>Problem decomposition</td><td>Expressing a difficult problem using smaller versions of the same problem.</td></tr>
+        <tr><td>Subproblem</td><td>One of the smaller problems a decomposition produces.</td></tr>
+        <tr><td>Binary search</td><td>Searching a sorted collection by repeatedly examining the middle element.</td></tr>
+        <tr><td>Divide and conquer</td><td>Reducing a problem dramatically — often by half — rather than by one unit.</td></tr>
+        <tr><td>Precondition</td><td>A requirement on a method's input that the method assumes or checks.</td></tr>
+        <tr><td>Algorithm</td><td>The method used to solve a problem, independent of any implementation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">
+    <p>These sixteen terms are the notes' own key vocabulary list, in the notes' own order. Students should be able to explain each one.</p>
+    <p>Review question one through five are essentially asking for five of these definitions, so the table doubles as quiz preparation. Pair it with the review-questions modal on the lab slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Week 10 Lab: Recursive Utilities</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Create a class called:</p>
+<pre><code class="language-java" data-trim data-noescape>
+RecursiveUtils
+</code></pre>
+      <p class="small">Implement its methods recursively — factorial, digit sum, string reverse, palindrome test, array sum, occurrence count, sorted test, and binary search.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>Do not use loops inside the recursive implementations unless specifically instructed.</div>
+    </div>
+    <div>
+      <p class="small">For every method:</p>
+      <ul class="small">
+        <li>identify the base case,</li>
+        <li>identify how the problem becomes smaller,</li>
+        <li>test normal cases,</li>
+        <li>test boundary cases,</li>
+        <li>test invalid input where appropriate.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m10-lab" tabindex="0">Full lab brief with signatures</span>
+    <span class="mbtn" data-modal="m10-practice-problems" tabindex="0">8 practice problems</span>
+    <span class="mbtn" data-modal="m10-homework" tabindex="0">Homework Parts A–C</span>
+    <span class="mbtn" data-modal="m10-review-questions" tabindex="0">15 review questions</span>
+  </div>
+  <aside class="notes">
+    <p>The lab is a single class, RecursiveUtils, holding eight recursive methods. Several of them are methods we wrote in lecture; two of them — countOccurrences and the public binarySearch — require the helper-method pattern from Part XI, because their public signatures have no index parameter.</p>
+    <p>For every method: identify the base case, identify how the problem becomes smaller, test normal cases, test boundary cases, and test invalid input where appropriate. Those five bullets are the deliverable as much as the code is.</p>
+    <p>Do not use loops inside the recursive implementations unless specifically instructed. The point of the exercise is the recursive formulation, and a loop hidden inside defeats it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">This week ended with a comparison we could describe but not measure. Binary search took about:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+</code></pre>
+      <p class="small">steps where linear search took a thousand — and naive Fibonacci was correct but wasteful.</p>
+      <p class="small">We said twice that we would <em>formalize</em> this. That is Week 11.</p>
+    </div>
+    <div>
+      <div class="def"><span class="term">Week 11:</span> Algorithm Analysis, Searching, and Sorting</div>
+      <div class="box note"><span class="box-title">Note</span>Big-O notation gives us language for "dramatically different amounts of work" — and merge sort will turn Pattern 4 from Part XII into a sorting algorithm.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We will develop tools for formally describing this difference in Week 11. That promise was made twice — once about binary search and once about Fibonacci — and next week is where it is kept.</p>
+    <p>Big-O notation gives us the language for "different algorithms can solve the same problem with dramatically different amounts of work". And the divide-and-conquer pattern from this week becomes merge sort.</p>
+    <p>Close by rereading the week's final takeaway: a difficult problem can often be solved by reducing it to one or more smaller instances of the same problem. Everything in Weeks 11 through 14 is an application of it.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 10 — Recursion and Algorithmic Thinking
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m10-factorial-definition"
+          data-kicker="Deep dive" data-title="Factorial: from mathematics to Java">
+  <h4>The ordinary definition</h4>
+  <p>Consider the mathematical definition of factorial:</p>
+  <p><span class="math">n! = n <span class="op">×</span> (n<span class="op">−</span>1) <span class="op">×</span> (n<span class="op">−</span>2) <span class="op">×</span> ⋯ <span class="op">×</span> 1</span></p>
+  <p>For example:</p>
+  <p><span class="math">5! = 5 <span class="op">×</span> 4 <span class="op">×</span> 3 <span class="op">×</span> 2 <span class="op">×</span> 1 = 120</span></p>
+  <h4>The recursive definition</h4>
+  <p>Factorial can also be defined recursively, as two cases:</p>
+  <p><span class="math">n! = 1 &nbsp;&nbsp;if n = 0</span></p>
+  <p><span class="math">n! = n <span class="op">×</span> (n<span class="op">−</span>1)! &nbsp;&nbsp;if n <span class="op">&gt;</span> 0</span></p>
+  <p>This definition says:</p>
+  <ul>
+    <li>We already know the answer for <code>0!</code>.</li>
+    <li>To find <code>n!</code>, we reduce the problem to a smaller version of the same problem.</li>
+  </ul>
+  <p>That idea is the essence of recursion.</p>
+  <h4>In Java</h4>
+<pre><code class="language-java">public static int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}</code></pre>
+  <p>Calling:</p>
+<pre><code class="language-java">factorial(4)</code></pre>
+  <p>conceptually produces:</p>
+<pre><code class="language-text">factorial(4)
+= 4 * factorial(3)
+= 4 * 3 * factorial(2)
+= 4 * 3 * 2 * factorial(1)
+= 4 * 3 * 2 * 1 * factorial(0)
+= 4 * 3 * 2 * 1 * 1
+= 24</code></pre>
+  <h4>The two essential parts</h4>
+  <p>The <strong>base case</strong> is a condition for which the method can return an answer immediately without making another recursive call:</p>
+<pre><code class="language-java">if (n == 0) {
+    return 1;
+}</code></pre>
+  <p>Without a base case, recursion does not stop.</p>
+  <p>The <strong>recursive case</strong> reduces the original problem to a smaller problem of the same form:</p>
+<pre><code class="language-java">return n * factorial(n - 1);</code></pre>
+  <p>The important idea is that:</p>
+<pre><code class="language-text">factorial(n)</code></pre>
+  <p>depends on:</p>
+<pre><code class="language-text">factorial(n - 1)</code></pre>
+  <p>and <code>n - 1</code> is smaller than <code>n</code>.</p>
+  <h4>Three properties of a well-designed recursive method</h4>
+  <ol>
+    <li>A base case exists.</li>
+    <li>Each recursive call moves toward the base case.</li>
+    <li>The recursive result is used to solve the current problem.</li>
+  </ol>
+</template>
+
+<template class="csc-modal-tpl" id="m10-call-stack"
+          data-kicker="Mechanism" data-title="The call stack, descending and unwinding">
+  <h4>What the stack holds</h4>
+  <p>To understand recursion, you need to understand the <strong>call stack</strong>. Whenever Java calls a method, information about that method call is placed on the stack. This information includes things such as:</p>
+  <ul>
+    <li>parameter values,</li>
+    <li>local variables,</li>
+    <li>where execution should return after the method finishes.</li>
+  </ul>
+  <h4>The method under discussion</h4>
+<pre><code class="language-java">public static int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}</code></pre>
+  <h4>Descending</h4>
+  <p>When we call:</p>
+<pre><code class="language-java">factorial(3)</code></pre>
+  <p>the stack grows approximately like this:</p>
+<pre><code class="language-text">factorial(3)
+factorial(2)
+factorial(1)
+factorial(0)</code></pre>
+  <p>At the deepest point:</p>
+<pre><code class="language-text">factorial(0)</code></pre>
+  <p>returns <code>1</code>. Then the stack begins to unwind.</p>
+  <h4>Unwinding</h4>
+<pre><code class="language-text">factorial(1) returns 1 * 1 = 1
+factorial(2) returns 2 * 1 = 2
+factorial(3) returns 3 * 2 = 6</code></pre>
+  <h4>Two conceptual stages</h4>
+  <p><strong>Descending.</strong> The program repeatedly makes smaller recursive calls.</p>
+  <p><strong>Unwinding.</strong> The recursive calls return in reverse order.</p>
+  <h4>Every frame keeps its own variables</h4>
+  <p>Recall that each method call receives its own local variables. Consider:</p>
+<pre><code class="language-java">public static void test(int n) {
+    int x = n * 10;
+
+    if (n &gt; 0) {
+        test(n - 1);
+    }
+
+    System.out.println(x);
+}</code></pre>
+  <p>Calling:</p>
+<pre><code class="language-java">test(3)</code></pre>
+  <p>creates separate <code>x</code> values:</p>
+<pre><code class="language-text">test(3): x = 30
+test(2): x = 20
+test(1): x = 10
+test(0): x = 0</code></pre>
+  <p>When calls unwind, the output is:</p>
+<pre><code class="language-text">0
+10
+20
+30</code></pre>
+  <p>Each call has its own stack frame and therefore its own version of <code>x</code>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-before-after"
+          data-kicker="Comparison" data-title="Recursion before and after the recursive call">
+  <p>The location of code relative to the recursive call matters.</p>
+  <h4>Version 1 — print before the call</h4>
+<pre><code class="language-java">public static void example(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+    example(n - 1);
+}</code></pre>
+  <p>Calling:</p>
+<pre><code class="language-java">example(3);</code></pre>
+  <p>prints:</p>
+<pre><code class="language-text">3
+2
+1</code></pre>
+  <h4>Version 2 — print after the call</h4>
+  <p>Now move the print statement:</p>
+<pre><code class="language-java">public static void example(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    example(n - 1);
+    System.out.println(n);
+}</code></pre>
+  <p>The result becomes:</p>
+<pre><code class="language-text">1
+2
+3</code></pre>
+  <h4>Why?</h4>
+  <p>In the second version, printing happens while the recursive calls are <strong>returning</strong>.</p>
+  <p>Trace:</p>
+<pre><code class="language-text">example(3)
+    example(2)
+        example(1)
+            example(0)
+        print 1
+    print 2
+print 3</code></pre>
+  <p>This ability to perform operations during the unwinding stage is one of the most powerful aspects of recursion.</p>
+  <h4>Where else this week uses it</h4>
+  <ul>
+    <li><code>reverse</code> concatenates during unwinding, which is what reverses the string.</li>
+    <li><code>printBinary</code> prints during unwinding, which is what puts the remainders in the right order.</li>
+    <li><code>test</code> prints <code>x</code> during unwinding, which is why the output ascends.</li>
+    <li>The <code>mystery</code> and <code>puzzle</code> tracing exercises print in <em>both</em> stages, producing palindromic output.</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m10-reverse-trace"
+          data-kicker="Worked example" data-title="Reversing a string, both directions">
+  <h4>The method</h4>
+<pre><code class="language-java">public static String reverse(String s) {
+    if (s.length() &lt;= 1) {
+        return s;
+    }
+
+    return reverse(s.substring(1)) + s.charAt(0);
+}</code></pre>
+  <h4>Descending</h4>
+  <p>Calling:</p>
+<pre><code class="language-java">reverse("DOG")</code></pre>
+  <p>works as follows:</p>
+<pre><code class="language-text">reverse("DOG")
+= reverse("OG") + "D"
+
+reverse("OG")
+= reverse("G") + "O"
+
+reverse("G")
+= "G"</code></pre>
+  <h4>Unwinding</h4>
+  <p>Now the calls unwind:</p>
+<pre><code class="language-text">reverse("G") = "G"
+
+reverse("OG")
+= "G" + "O"
+= "GO"
+
+reverse("DOG")
+= "GO" + "D"
+= "GOD"</code></pre>
+  <p>Notice again that the important work happens while the recursive calls return.</p>
+  <h4>The simpler sibling</h4>
+  <p>Compare with printing the characters of a string one at a time:</p>
+<pre><code class="language-java">public static void printChars(String s) {
+    if (s.length() == 0) {
+        return;
+    }
+
+    System.out.println(s.charAt(0));
+    printChars(s.substring(1));
+}</code></pre>
+  <p>Calling:</p>
+<pre><code class="language-java">printChars("CAT");</code></pre>
+  <p>produces:</p>
+<pre><code class="language-text">C
+A
+T</code></pre>
+  <p>The recursive calls are:</p>
+<pre><code class="language-text">printChars("CAT")
+printChars("AT")
+printChars("T")
+printChars("")</code></pre>
+  <p>The problem gets smaller because the string becomes shorter with each call. Both methods decompose a string the same way; only the placement of the work differs.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-binary-search-code"
+          data-kicker="Algorithm" data-title="Recursive binary search, end to end">
+  <h4>The idea</h4>
+  <p>Binary search works on a sorted collection. Suppose we have:</p>
+<pre><code class="language-text">[3, 7, 12, 18, 25, 31, 42]</code></pre>
+  <p>and want to find <code>25</code>. Instead of examining every element, binary search examines the middle element.</p>
+  <p>Middle:</p>
+<pre><code class="language-text">18</code></pre>
+  <p>Since:</p>
+<pre><code class="language-text">25 &gt; 18</code></pre>
+  <p>we can ignore the entire left half. Now search only:</p>
+<pre><code class="language-text">[25, 31, 42]</code></pre>
+  <p>The problem gets approximately half as large after each step.</p>
+  <h4>The implementation</h4>
+<pre><code class="language-java">public static int binarySearch(
+        int[] values,
+        int target,
+        int low,
+        int high) {
+
+    if (low &gt; high) {
+        return -1;
+    }
+
+    int mid = low + (high - low) / 2;
+
+    if (values[mid] == target) {
+        return mid;
+    }
+
+    if (target &lt; values[mid]) {
+        return binarySearch(values, target, low, mid - 1);
+    }
+
+    return binarySearch(values, target, mid + 1, high);
+}</code></pre>
+  <p>We might call it like this:</p>
+<pre><code class="language-java">int index = binarySearch(values, 25, 0, values.length - 1);</code></pre>
+  <h4>Two base-case outcomes</h4>
+  <p><strong>Target found:</strong></p>
+<pre><code class="language-java">if (values[mid] == target) {
+    return mid;
+}</code></pre>
+  <p><strong>Search range becomes empty:</strong></p>
+<pre><code class="language-java">if (low &gt; high) {
+    return -1;
+}</code></pre>
+  <p>The recursive call always searches a smaller interval.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-why-binary-search"
+          data-kicker="Analysis" data-title="Why binary search matters">
+  <h4>Linear search</h4>
+  <p>Compare linear search and binary search. A linear search might examine:</p>
+<pre><code class="language-text">1 element
+2 elements
+3 elements
+...
+n elements</code></pre>
+  <p>In the worst case, it examines all <code>n</code> elements.</p>
+  <h4>Binary search</h4>
+  <p>Binary search repeatedly cuts the problem approximately in half. For 1,000 elements:</p>
+<pre><code class="language-text">1000
+500
+250
+125
+62
+31
+15
+7
+3
+1</code></pre>
+  <p>Only about 10 reductions are necessary.</p>
+  <p>For 1,000,000 elements, only about 20 reductions are necessary.</p>
+  <h4>What this is the beginning of</h4>
+  <p>We will formalize this comparison using <strong>Big-O notation</strong> next week. For now, the key observation is:</p>
+  <blockquote>Different algorithms can solve the same problem with dramatically different amounts of work.</blockquote>
+  <p>This is the beginning of algorithm analysis.</p>
+  <h4>The same shape, applied to exponents</h4>
+  <p>Binary search halves a search range. Fast exponentiation halves an exponent. Both belong to Pattern 3, <em>divide the problem</em>:</p>
+<pre><code class="language-java">solve(n)
+    → solve(n / 2)</code></pre>
+  <p>Examples: binary search, fast exponentiation.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-infinite-recursion"
+          data-kicker="Debugging" data-title="Three ways recursion fails to stop">
+  <h4>1. The recursive call makes no progress</h4>
+  <p>One of the most common recursion errors is failing to move toward the base case. Consider:</p>
+<pre><code class="language-java">public static void countdown(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+    countdown(n);
+}</code></pre>
+  <p>The recursive call is:</p>
+<pre><code class="language-java">countdown(n);</code></pre>
+  <p>But <code>n</code> never changes. If we call:</p>
+<pre><code class="language-java">countdown(5)</code></pre>
+  <p>the program repeatedly calls:</p>
+<pre><code class="language-text">countdown(5)
+countdown(5)
+countdown(5)
+...</code></pre>
+  <p>Eventually it crashes with a <code>StackOverflowError</code>. The correct call is:</p>
+<pre><code class="language-java">countdown(n - 1);</code></pre>
+  <h4>2. A base case exists but is unreachable</h4>
+<pre><code class="language-java">public static void countdown(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    countdown(n + 1);
+}</code></pre>
+  <p>There is technically a base case. However, if <code>n</code> starts at <code>5</code>, the sequence becomes:</p>
+<pre><code class="language-text">5
+6
+7
+8
+9
+...</code></pre>
+  <p>The calls move away from the base case. The correct question is therefore not merely:</p>
+  <blockquote>Does the method have a base case?</blockquote>
+  <p>You must also ask:</p>
+  <blockquote>Does every recursive call make progress toward it?</blockquote>
+  <h4>3. There is no base case at all</h4>
+  <p>Java provides limited memory for the call stack. A recursive method that makes too many nested calls can cause:</p>
+<pre><code class="language-text">java.lang.StackOverflowError</code></pre>
+  <p>For example:</p>
+<pre><code class="language-java">public static void forever() {
+    forever();
+}</code></pre>
+  <p>This method has no base case. But even correct recursion can overflow the stack if the recursion becomes excessively deep. For example, recursively processing millions of array elements may be unsafe. This is one reason recursion is not always appropriate.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-preconditions"
+          data-kicker="Defensive programming" data-title="Input preconditions and recursion">
+  <h4>The problem</h4>
+  <p>Consider factorial again:</p>
+<pre><code class="language-java">public static int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}</code></pre>
+  <p>What happens if we call:</p>
+<pre><code class="language-java">factorial(-3);</code></pre>
+  <p>The sequence becomes:</p>
+<pre><code class="language-text">factorial(-3)
+factorial(-4)
+factorial(-5)
+...</code></pre>
+  <p>It never reaches zero.</p>
+  <h4>The fix</h4>
+  <p>One solution is to validate the input:</p>
+<pre><code class="language-java">public static int factorial(int n) {
+    if (n &lt; 0) {
+        throw new IllegalArgumentException(
+            "Factorial requires a nonnegative integer.");
+    }
+
+    if (n == 0) {
+        return 1;
+    }
+
+    return n * factorial(n - 1);
+}</code></pre>
+  <p>This connects recursion with ideas from previous weeks about defensive programming and exceptions.</p>
+  <h4>The same guard, elsewhere</h4>
+  <p>Recursive power uses exactly the same technique:</p>
+<pre><code class="language-java">public static long power(long base, int exponent) {
+    if (exponent &lt; 0) {
+        throw new IllegalArgumentException(
+            "Exponent must be nonnegative.");
+    }
+
+    if (exponent == 0) {
+        return 1;
+    }
+
+    return base * power(base, exponent - 1);
+}</code></pre>
+  <h4>The checklist questions this answers</h4>
+  <ul>
+    <li>What inputs are valid?</li>
+    <li>Could invalid input cause infinite recursion?</li>
+    <li>Could the recursion become extremely deep?</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m10-fast-power"
+          data-kicker="Deep dive" data-title="A more efficient recursive power">
+  <h4>The straightforward version</h4>
+  <p>We want to calculate <span class="math">base<sup>exponent</sup></span>. For nonnegative exponents:</p>
+  <p><span class="math">x<sup>0</sup> = 1</span></p>
+  <p>and:</p>
+  <p><span class="math">x<sup>n</sup> = x <span class="op">×</span> x<sup>n<span class="op">−</span>1</sup></span></p>
+  <p>Example:</p>
+<pre><code class="language-text">power(2, 4)
+
+2 * power(2, 3)
+2 * 2 * power(2, 2)
+2 * 2 * 2 * power(2, 1)
+2 * 2 * 2 * 2 * power(2, 0)
+2 * 2 * 2 * 2 * 1
+
+16</code></pre>
+  <h4>A better idea</h4>
+  <p>There is another way to compute powers. Suppose:</p>
+  <p><span class="math">2<sup>8</sup></span></p>
+  <p>Instead of calculating:</p>
+<pre><code class="language-text">2 × 2 × 2 × 2 × 2 × 2 × 2 × 2</code></pre>
+  <p>notice:</p>
+  <p><span class="math">2<sup>8</sup> = 2<sup>4</sup> <span class="op">×</span> 2<sup>4</sup></span></p>
+  <p>and:</p>
+  <p><span class="math">2<sup>4</sup> = 2<sup>2</sup> <span class="op">×</span> 2<sup>2</sup></span></p>
+  <h4>The implementation</h4>
+<pre><code class="language-java">public static long fastPower(long base, int exponent) {
+    if (exponent == 0) {
+        return 1;
+    }
+
+    long half = fastPower(base, exponent / 2);
+
+    if (exponent % 2 == 0) {
+        return half * half;
+    }
+
+    return base * half * half;
+}</code></pre>
+  <h4>The principle</h4>
+  <p>This example introduces an important algorithmic principle:</p>
+  <blockquote>A problem does not always need to become smaller by only one unit.</blockquote>
+  <p>Sometimes we can reduce it dramatically. This idea will appear again in divide-and-conquer algorithms.</p>
+  <p>Note the single recursive call whose result is stored in <code>half</code> and used twice. Calling <code>fastPower</code> twice instead of storing the result would recompute the same subproblem — the mistake naive Fibonacci makes.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-fibonacci-cost"
+          data-kicker="Cautionary tale" data-title="Fibonacci: correct, and still a poor algorithm">
+  <h4>The definition</h4>
+  <p>The Fibonacci sequence begins:</p>
+<pre><code class="language-text">0, 1, 1, 2, 3, 5, 8, 13, 21, ...</code></pre>
+  <p>It can be defined recursively:</p>
+  <p><span class="math">F(0) = 0</span></p>
+  <p><span class="math">F(1) = 1</span></p>
+  <p><span class="math">F(n) = F(n<span class="op">−</span>1) + F(n<span class="op">−</span>2)</span></p>
+  <h4>The direct implementation</h4>
+<pre><code class="language-java">public static long fibonacci(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    if (n == 1) {
+        return 1;
+    }
+
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}</code></pre>
+  <p>This code closely matches the mathematical definition. However, it has an important problem.</p>
+  <h4>The repeated work</h4>
+  <p>Consider:</p>
+<pre><code class="language-text">fibonacci(5)</code></pre>
+  <p>It calls:</p>
+<pre><code class="language-text">fibonacci(4)
+fibonacci(3)</code></pre>
+  <p>But <code>fibonacci(4)</code> itself calls:</p>
+<pre><code class="language-text">fibonacci(3)
+fibonacci(2)</code></pre>
+  <p>We calculate <code>fibonacci(3)</code> multiple times. The call structure resembles:</p>
+<pre><code class="language-text">                 fib(5)
+               /        \
+           fib(4)       fib(3)
+          /     \       /    \
+      fib(3)  fib(2) fib(2) fib(1)
+      ...</code></pre>
+  <p>The same subproblems are repeatedly recomputed. This is a crucial lesson:</p>
+  <blockquote>A recursive solution can be correct and still be a poor algorithm.</blockquote>
+  <p>Correctness and efficiency are separate questions.</p>
+  <h4>The iterative version</h4>
+  <p>An iterative version avoids repeated work:</p>
+<pre><code class="language-java">public static long fibonacciIterative(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    long previous = 0;
+    long current = 1;
+
+    for (int i = 2; i &lt;= n; i++) {
+        long next = previous + current;
+        previous = current;
+        current = next;
+    }
+
+    return current;
+}</code></pre>
+  <p>The iterative version is far more efficient than the naive recursive version. We will develop tools for formally describing this difference in Week 11. For now:</p>
+  <blockquote>Elegant code is not automatically efficient code.</blockquote>
+</template>
+
+<template class="csc-modal-tpl" id="m10-design-steps"
+          data-kicker="Method" data-title="How to design a recursive method">
+  <p>When solving a recursive problem, use the following process.</p>
+  <h4>Step 1: Define exactly what the method means</h4>
+  <p>For example:</p>
+<pre><code class="language-java">sumArray(values, index)</code></pre>
+  <p>means:</p>
+  <blockquote>Return the sum of all array elements from <code>index</code> through the end of the array.</blockquote>
+  <p>A precise method definition makes recursion much easier.</p>
+  <h4>Step 2: Find the smallest problem</h4>
+  <p>For <code>sumArray</code>, the smallest remaining portion is an empty portion.</p>
+<pre><code class="language-java">if (index == values.length) {
+    return 0;
+}</code></pre>
+  <h4>Step 3: Make the problem smaller</h4>
+  <p>Move forward one element:</p>
+<pre><code class="language-java">sumArray(values, index + 1)</code></pre>
+  <h4>Step 4: Trust the recursive call</h4>
+  <p>Assume:</p>
+<pre><code class="language-java">sumArray(values, index + 1)</code></pre>
+  <p>correctly computes the sum of everything after the current element.</p>
+  <h4>Step 5: Combine the answers</h4>
+<pre><code class="language-java">return values[index] +
+       sumArray(values, index + 1);</code></pre>
+  <h4>The general template</h4>
+  <p>Many recursive methods have this structure:</p>
+<pre><code class="language-java">public static ReturnType recursiveMethod(Input input) {
+
+    if (baseCaseCondition) {
+        return baseCaseAnswer;
+    }
+
+    Input smallerInput = makeProblemSmaller(input);
+
+    ReturnType smallerAnswer =
+        recursiveMethod(smallerInput);
+
+    return combine(input, smallerAnswer);
+}</code></pre>
+  <p>Not every recursive method fits this exact template, but it is a useful starting point.</p>
+  <p>A second common form involves multiple recursive calls:</p>
+<pre><code class="language-java">ReturnType left =
+    recursiveMethod(smallerProblem1);
+
+ReturnType right =
+    recursiveMethod(smallerProblem2);
+
+return combine(left, right);</code></pre>
+  <p>This structure becomes especially important for trees and divide-and-conquer algorithms.</p>
+  <h4>Do not try to follow everything at once</h4>
+  <p>Students often find recursion confusing because they mentally try to execute every recursive call simultaneously. Consider:</p>
+<pre><code class="language-java">return n * factorial(n - 1);</code></pre>
+  <p>A better approach when writing recursive code is:</p>
+  <ol>
+    <li>Identify the base case.</li>
+    <li>Assume the recursive call works correctly for a smaller input.</li>
+    <li>Determine how to use the smaller answer to solve the current problem.</li>
+  </ol>
+  <p>For factorial:</p>
+  <blockquote>If <code>factorial(n - 1)</code> correctly gives me <code>(n - 1)!</code>, then multiplying it by <code>n</code> gives me <code>n!</code>.</blockquote>
+  <p>This style of reasoning becomes extremely important in data structures.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-helper-binary-search"
+          data-kicker="Design pattern" data-title="Helper methods: hiding the recursive parameters">
+  <h4>Why a helper</h4>
+  <p>Sometimes we do not want callers to supply the extra recursive parameters. We can hide them using a helper method. For example:</p>
+<pre><code class="language-java">public static int sumArray(int[] values) {
+    return sumArray(values, 0);
+}
+
+private static int sumArray(
+        int[] values,
+        int index) {
+
+    if (index == values.length) {
+        return 0;
+    }
+
+    return values[index] +
+           sumArray(values, index + 1);
+}</code></pre>
+  <p>The caller writes:</p>
+<pre><code class="language-java">sumArray(values);</code></pre>
+  <p>instead of:</p>
+<pre><code class="language-java">sumArray(values, 0);</code></pre>
+  <p>The private recursive helper handles the implementation details. This is also an example of encapsulation.</p>
+  <h4>The same pattern for binary search</h4>
+<pre><code class="language-java">public static int binarySearch(
+        int[] values,
+        int target) {
+
+    return binarySearch(
+        values,
+        target,
+        0,
+        values.length - 1
+    );
+}
+
+private static int binarySearch(
+        int[] values,
+        int target,
+        int low,
+        int high) {
+
+    if (low &gt; high) {
+        return -1;
+    }
+
+    int mid = low + (high - low) / 2;
+
+    if (values[mid] == target) {
+        return mid;
+    }
+
+    if (target &lt; values[mid]) {
+        return binarySearch(
+            values,
+            target,
+            low,
+            mid - 1
+        );
+    }
+
+    return binarySearch(
+        values,
+        target,
+        mid + 1,
+        high
+    );
+}</code></pre>
+  <p>The public method offers a simple interface. The private method contains the recursive state.</p>
+  <h4>Where the extra parameters come from</h4>
+  <p>Often, finding the right recursive solution depends on finding the right representation of the problem. A method like this is difficult to recurse on:</p>
+<pre><code class="language-java">sumArray(int[] values)</code></pre>
+  <p>because the array never gets smaller. Instead, redefine the problem:</p>
+<pre><code class="language-java">sumArray(int[] values, int index)</code></pre>
+  <p>Now the meaning becomes:</p>
+  <blockquote>Find the sum beginning at this position.</blockquote>
+  <p>The index allows the remaining problem to shrink. This is an important algorithm-design technique:</p>
+  <blockquote>Additional parameters can describe the part of the problem that remains.</blockquote>
+  <p>Binary search similarly uses:</p>
+<pre><code class="language-java">low
+high</code></pre>
+  <p>to identify the current search range.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-checklist"
+          data-kicker="Reference" data-title="The recursion checklist">
+  <p>Before considering a recursive method complete, ask:</p>
+  <h4>Correctness</h4>
+  <ul>
+    <li>What exactly does this method promise to compute?</li>
+    <li>What is the base case?</li>
+    <li>Is the base-case answer correct?</li>
+    <li>Does every recursive call make the problem smaller?</li>
+    <li>Will every valid input eventually reach a base case?</li>
+    <li>Assuming the recursive call works, does the current method compute the correct answer?</li>
+  </ul>
+  <h4>Safety</h4>
+  <ul>
+    <li>What inputs are valid?</li>
+    <li>Could invalid input cause infinite recursion?</li>
+    <li>Could the recursion become extremely deep?</li>
+  </ul>
+  <h4>Efficiency</h4>
+  <ul>
+    <li>How many recursive calls are made?</li>
+    <li>Does the method repeatedly solve the same subproblem?</li>
+    <li>Would iteration be simpler?</li>
+    <li>Is recursion natural for the structure of the problem?</li>
+  </ul>
+  <h4>Recursion is not magic</h4>
+  <p>A recursive call is still just a normal method call. The computer does not "understand recursion" as a special concept. It simply:</p>
+  <ol>
+    <li>calls a method,</li>
+    <li>creates a stack frame,</li>
+    <li>executes the method,</li>
+    <li>possibly calls another method,</li>
+    <li>waits for that call to return,</li>
+    <li>continues execution.</li>
+  </ol>
+  <p>Recursion is powerful because the method happens to call another instance of itself.</p>
+  <h4>Recursion vs. loops: practical guidelines</h4>
+  <p><strong>Prefer a loop when:</strong> the operation is naturally repetitive; the data structure is linear; recursion adds no conceptual clarity; very deep recursion might occur.</p>
+  <p><strong>Consider recursion when:</strong> the problem is naturally defined in terms of smaller versions of itself; the data structure is recursive; the problem divides into subproblems; the recursive formulation closely matches the conceptual solution.</p>
+  <p>Neither technique is inherently superior. Good programmers know both.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-patterns"
+          data-kicker="Reference" data-title="Four recurring recursive patterns">
+  <p>There are several recurring patterns worth recognizing.</p>
+  <h4>Pattern 1: Reduce by One</h4>
+<pre><code class="language-java">solve(n)
+    → solve(n - 1)</code></pre>
+  <p>Examples:</p>
+  <ul>
+    <li>factorial,</li>
+    <li>sum from 1 to n,</li>
+    <li>processing an array one element at a time.</li>
+  </ul>
+  <h4>Pattern 2: Reduce the Input Size</h4>
+<pre><code class="language-java">solve(string)
+    → solve(smaller substring)</code></pre>
+  <p>Examples:</p>
+  <ul>
+    <li>reversing a string,</li>
+    <li>palindrome checking.</li>
+  </ul>
+  <h4>Pattern 3: Divide the Problem</h4>
+<pre><code class="language-java">solve(n)
+    → solve(n / 2)</code></pre>
+  <p>Examples:</p>
+  <ul>
+    <li>binary search,</li>
+    <li>fast exponentiation.</li>
+  </ul>
+  <h4>Pattern 4: Multiple Recursive Subproblems</h4>
+<pre><code class="language-java">solve(problem)
+    → solve(part1) + solve(part2)</code></pre>
+  <p>Examples:</p>
+  <ul>
+    <li>Fibonacci,</li>
+    <li>tree traversal,</li>
+    <li>merge sort,</li>
+    <li>divide-and-conquer algorithms.</li>
+  </ul>
+  <p>These patterns will recur throughout computer science.</p>
+  <h4>Recursive definitions produce recursive algorithms</h4>
+  <p>Many structures in computer science are naturally recursive. A list can be thought of as:</p>
+<pre><code class="language-text">an item followed by another list</code></pre>
+  <p>A directory can contain:</p>
+<pre><code class="language-text">files and other directories</code></pre>
+  <p>A tree contains:</p>
+<pre><code class="language-text">a node and smaller subtrees</code></pre>
+  <p>An arithmetic expression might contain:</p>
+<pre><code class="language-text">numbers and smaller expressions</code></pre>
+  <p>For example:</p>
+<pre><code class="language-text">(3 + (4 * 5))</code></pre>
+  <p>The expression contains another expression:</p>
+<pre><code class="language-text">(4 * 5)</code></pre>
+  <p>Recursive data structures naturally lead to recursive algorithms.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-tracing-exercises"
+          data-kicker="Practice" data-title="Three tracing exercises, with answers">
+  <h4>Exercise 1 — what does it return?</h4>
+  <p>When a recursive program behaves unexpectedly, trace it systematically. Consider:</p>
+<pre><code class="language-java">public static int mystery(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    return 2 + mystery(n - 1);
+}</code></pre>
+  <p>What does:</p>
+<pre><code class="language-java">mystery(4)</code></pre>
+  <p>return? Trace:</p>
+<pre><code class="language-text">mystery(4)
+= 2 + mystery(3)
+
+= 2 + 2 + mystery(2)
+
+= 2 + 2 + 2 + mystery(1)
+
+= 2 + 2 + 2 + 2 + mystery(0)
+
+= 2 + 2 + 2 + 2 + 0
+
+= 8</code></pre>
+  <p>The method computes:</p>
+<pre><code class="language-text">2 × n</code></pre>
+  <p>Tracing is an excellent way to understand unfamiliar recursive programs.</p>
+  <h4>Exercise 2 — what does it print?</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">public static void mystery(int n) {
+    if (n &lt;= 0) {
+        return;
+    }
+
+    System.out.print(n + " ");
+    mystery(n - 2);
+    System.out.print(n + " ");
+}</code></pre>
+  <p>Calling:</p>
+<pre><code class="language-java">mystery(5);</code></pre>
+  <p>prints:</p>
+<pre><code class="language-text">5 3 1 1 3 5</code></pre>
+  <p>Why? The first print statements happen while recursion moves downward. The second print statements happen while recursion unwinds.</p>
+  <h4>Exercise 3 — the in-class puzzle</h4>
+  <p>Without running the program, determine the output:</p>
+<pre><code class="language-java">public static void puzzle(int n) {
+    if (n &lt;= 0) {
+        return;
+    }
+
+    System.out.print(n + " ");
+    puzzle(n / 2);
+    System.out.print(n + " ");
+}</code></pre>
+  <p>Call:</p>
+<pre><code class="language-java">puzzle(8);</code></pre>
+  <p>Try to draw the stack before checking the answer.</p>
+  <p>Answer:</p>
+<pre><code class="language-text">8 4 2 1 1 2 4 8</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m10-lab"
+          data-kicker="Lab" data-title="Suggested lab — Recursive Utilities">
+  <p>Create a class called:</p>
+<pre><code class="language-java">RecursiveUtils</code></pre>
+  <p>Implement the following methods recursively:</p>
+<pre><code class="language-java">public static int factorial(int n)
+
+public static int sumDigits(int n)
+
+public static String reverse(String s)
+
+public static boolean isPalindrome(String s)
+
+public static int sumArray(int[] values)
+
+public static int countOccurrences(
+        int[] values,
+        int target)
+
+public static boolean isSorted(int[] values)
+
+public static int binarySearch(
+        int[] values,
+        int target)</code></pre>
+  <p>For every method:</p>
+  <ul>
+    <li>identify the base case,</li>
+    <li>identify how the problem becomes smaller,</li>
+    <li>test normal cases,</li>
+    <li>test boundary cases,</li>
+    <li>test invalid input where appropriate.</li>
+  </ul>
+  <p>Do not use loops inside the recursive implementations unless specifically instructed.</p>
+  <h4>A note on the signatures</h4>
+  <p>Four of these public signatures — <code>sumArray</code>, <code>countOccurrences</code>, <code>isSorted</code> and <code>binarySearch</code> — take no index or range parameter. Each therefore needs the helper pattern from Part XI: a public method with the signature above, delegating to a private recursive method that carries the extra state.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-practice-problems"
+          data-kicker="Practice" data-title="Eight practice problems">
+  <h4>Problem 1 — Sum</h4>
+  <p>Write:</p>
+<pre><code class="language-java">public static int sumTo(int n)</code></pre>
+  <p>that recursively computes:</p>
+<pre><code class="language-text">1 + 2 + ... + n</code></pre>
+  <h4>Problem 2 — Even Numbers</h4>
+  <p>Write a recursive method that counts the number of even integers in an array.</p>
+  <h4>Problem 3 — Minimum</h4>
+  <p>Write a recursive method that finds the minimum element in an integer array.</p>
+  <h4>Problem 4 — Character Removal</h4>
+  <p>Write:</p>
+<pre><code class="language-java">public static String removeChar(
+        String s,
+        char target)</code></pre>
+  <p>that recursively removes all occurrences of <code>target</code>. Example:</p>
+<pre><code class="language-text">removeChar("banana", 'a')</code></pre>
+  <p>returns:</p>
+<pre><code class="language-text">"bnn"</code></pre>
+  <h4>Problem 5 — Palindrome</h4>
+  <p>Write a recursive method that determines whether a string is a palindrome.</p>
+  <h4>Problem 6 — Digit Count</h4>
+  <p>Write a recursive method that determines how many digits a positive integer contains. Example:</p>
+<pre><code class="language-text">digitCount(5278)</code></pre>
+  <p>returns:</p>
+<pre><code class="language-text">4</code></pre>
+  <h4>Problem 7 — Array Search</h4>
+  <p>Write a recursive method that returns the index of the first occurrence of a target in an array, or <code>-1</code> if it does not occur.</p>
+  <h4>Problem 8 — Binary Representation</h4>
+  <p>Write a recursive method that returns, rather than prints, the binary representation of a positive integer as a <code>String</code>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m10-homework"
+          data-kicker="Homework" data-title="Suggested homework, Parts A to C">
+  <h4>Part A — Code Tracing</h4>
+  <p>Trace five provided recursive methods by hand. For each one, show:</p>
+<pre><code class="language-text">method calls
+parameter values
+return values
+final result</code></pre>
+  <h4>Part B — Implementation</h4>
+  <p>Implement:</p>
+  <ul>
+    <li>recursive multiplication using repeated addition,</li>
+    <li>recursive array maximum,</li>
+    <li>recursive count of a character,</li>
+    <li>recursive palindrome checking,</li>
+    <li>recursive binary search.</li>
+  </ul>
+  <h4>Part C — Comparison</h4>
+  <p>Choose one problem that can be solved with both iteration and recursion. Write both implementations and briefly answer:</p>
+  <ul>
+    <li>Which implementation is easier to understand?</li>
+    <li>Which implementation uses less call-stack memory?</li>
+    <li>Which more directly reflects the structure of the problem?</li>
+    <li>Which would you choose in production code, and why?</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m10-review-questions"
+          data-kicker="Review" data-title="Fifteen review questions">
+  <ol>
+    <li>What two components must every recursive method have?</li>
+    <li>What happens if a recursive method has no base case?</li>
+    <li>Why is simply having a base case not enough?</li>
+    <li>What does the Java call stack store?</li>
+    <li>What happens during the unwinding phase of recursion?</li>
+    <li>What is the output?</li>
+  </ol>
+<pre><code class="language-java">public static void f(int n) {
+    if (n == 0) {
+        return;
+    }
+
+    System.out.print(n + " ");
+    f(n - 1);
+}</code></pre>
+  <p>for:</p>
+<pre><code class="language-java">f(4);</code></pre>
+  <ol start="7">
+    <li>What is the output if the print statement is moved after the recursive call?</li>
+    <li>What is wrong with:</li>
+  </ol>
+<pre><code class="language-java">public static int sum(int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    return n + sum(n);
+}</code></pre>
+  <ol start="9">
+    <li>Why can naive recursive Fibonacci be inefficient?</li>
+    <li>Why is binary search a good example of recursive problem decomposition?</li>
+    <li>What additional parameter might you use to recursively process an array?</li>
+    <li>When might iteration be preferable to recursion?</li>
+    <li>What is <code>StackOverflowError</code>?</li>
+    <li>What does it mean for a recursive call to make progress?</li>
+    <li>Why will recursive algorithms be especially useful when we study trees?</li>
+  </ol>
+</template>
+
+<template class="csc-modal-tpl" id="m10-week10-summary"
+          data-kicker="Summary" data-title="Week 10 — the central ideas">
+  <h4>Recursion</h4>
+  <p>A recursive method calls itself on a smaller version of the problem.</p>
+  <h4>Base Case</h4>
+  <p>The condition that stops recursion.</p>
+  <h4>Recursive Case</h4>
+  <p>The part of the method that reduces the problem.</p>
+  <h4>Progress</h4>
+  <p>Every recursive call must move toward a base case.</p>
+  <h4>Call Stack</h4>
+  <p>Each recursive call creates a separate method invocation that waits for deeper calls to return.</p>
+  <h4>Unwinding</h4>
+  <p>After the base case returns, pending recursive calls complete in reverse order.</p>
+  <h4>Recursive Thinking</h4>
+  <p>Assume the smaller recursive problem can be solved correctly, then determine how its result helps solve the current problem.</p>
+  <h4>Algorithmic Thinking</h4>
+  <p>Different correct solutions may require very different amounts of computational work.</p>
+  <h4>Algorithmic thinking, as a set of questions</h4>
+  <p>This week is not only about learning recursive syntax. The larger objective is learning to think algorithmically. When given a problem, ask:</p>
+  <ul>
+    <li>What is the input?</li>
+    <li>What is the output?</li>
+    <li>What special cases exist?</li>
+    <li>Can I break the problem into smaller subproblems?</li>
+    <li>What information must I keep track of?</li>
+    <li>What guarantees that the algorithm eventually stops?</li>
+    <li>How much work does the algorithm perform?</li>
+    <li>Are there multiple ways to solve the problem?</li>
+    <li>What are the tradeoffs among those solutions?</li>
+  </ul>
+  <p>These questions are central to computer science.</p>
+  <h4>The takeaway</h4>
+  <p>The most important idea from recursion is not the syntax of calling a method from itself. It is this:</p>
+  <blockquote>A difficult problem can often be solved by reducing it to one or more smaller instances of the same problem.</blockquote>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

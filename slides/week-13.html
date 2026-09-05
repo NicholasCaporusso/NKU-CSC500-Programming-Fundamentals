@@ -1,0 +1,4325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 13: Stacks, Queues, Sets, and Maps</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Stacks, Queues, Sets, and Maps</h1>
+  <p class="subtitle">Week 13 — what operations should my collection support, and how fast should they be?</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">By the end of this week, you should be able to:</p>
+  <ul>
+    <li>Explain the difference between an abstract data type and its implementation.</li>
+    <li>Describe the behavior of a stack and identify applications of stacks.</li>
+    <li>Implement and use a stack in Java.</li>
+    <li>Describe the behavior of a queue and identify applications of queues.</li>
+    <li>Implement and use a queue in Java.</li>
+  </ul>
+  <div class="box key"><span class="box-title">Key idea</span>Objectives 1 through 5 are all one idea seen twice: a collection is defined by its <em>behavior</em>, and the Java class is only one way to get that behavior.</div>
+  <aside class="notes">
+    <p>So far, we have learned how to store collections of data using arrays, <code>ArrayList</code>, and linked structures. This week we study several important abstract data types: stacks, queues, sets, and maps. These structures appear throughout computer science and software development.</p>
+    <p>Read the first five objectives out loud at the start of the lecture. They pair up: describe the behavior, then implement it. That pairing is the whole point of the week — behavior first, implementation second.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul>
+    <li>Explain the purpose of sets and maps.</li>
+    <li>Use Java's <code>HashSet</code> and <code>HashMap</code>.</li>
+    <li>Explain the basic idea behind hashing.</li>
+    <li>Analyze the expected running time of common stack, queue, set, and map operations.</li>
+    <li>Select an appropriate data structure for a programming problem.</li>
+  </ul>
+  <div class="box key"><span class="box-title">The last one is the real one</span>Objective 10 — selecting an appropriate data structure — is the skill everything else on this list exists to support.</div>
+  <aside class="notes">
+    <p>The second half of the list moves from stacks and queues to sets and maps, then to the machinery underneath them, hashing, and finally to the judgement call: which structure fits this problem.</p>
+    <p>Objective 9 is worth flagging early. We will say "expected O(1)" repeatedly this week, and the word <em>expected</em> is doing real work in that phrase. It is an average, not a guarantee.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap</h2>
+  <div class="cols small">
+    <ol>
+      <li>Abstract Data Types</li>
+      <li>The Stack ADT</li>
+      <li>Stacks in Java and in Practice</li>
+      <li>Queues</li>
+      <li>Sets</li>
+    </ol>
+    <ol start="6">
+      <li>Maps</li>
+      <li>Hashing</li>
+      <li>Choosing the Right Data Structure</li>
+      <li>Worked Problems and Deeper Connections</li>
+      <li>Common Mistakes, Practice, and Wrap-up</li>
+    </ol>
+  </div>
+  <div class="chain">
+    <span>Behavior</span><span class="sep">→</span>
+    <span>ADT</span><span class="sep">→</span>
+    <span>Java class</span><span class="sep">→</span>
+    <span>Complexity</span><span class="sep">→</span>
+    <span>Choice</span>
+  </div>
+  <aside class="notes">
+    <p>The week is organised in ten sections. Parts I through III build the stack: what an ADT is, what a stack does, and how Java gives you one. Parts IV through VI do the same for queues, sets, and maps.</p>
+    <p>Part VII opens the box and looks at hashing, which is what makes sets and maps fast. Part VIII is the judgement section — picking the structure. Parts IX and X are worked problems, common mistakes, and practice.</p>
+    <p>The chain at the bottom is the shape of every section: start from the behavior we need, name the ADT, reach for the Java class, then ask what it costs.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Abstract Data Types</h2>
+  <p class="part-sub">What operations should my collection support — and what do they mean?</p>
+</section>
+
+<section>
+  <h2>A Better Question</h2>
+  <div class="cols">
+    <div>
+      <p class="small">So far we have stored collections using arrays, <code>ArrayList</code>, and linked structures.</p>
+      <p class="small">The important question is no longer simply:</p>
+      <blockquote class="small">How can I store several values?</blockquote>
+    </div>
+    <div>
+      <p class="small">Instead, we begin asking:</p>
+      <blockquote class="small">What operations should my collection support, and how efficiently should those operations work?</blockquote>
+      <div class="box key"><span class="box-title">Key idea</span>This distinction leads us to the idea of an <strong>Abstract Data Type</strong>, or ADT.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The four abstract data types we study this week</summary>
+    <div class="acc-body">
+      <ul>
+        <li>Stacks</li>
+        <li>Queues</li>
+        <li>Sets</li>
+        <li>Maps</li>
+      </ul>
+      <p>These structures appear throughout computer science and software development. Each one is introduced the same way: first the behavior it promises, then the Java class that provides it, then what its operations cost.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>So far, we have learned how to store collections of data using arrays, ArrayList, and linked structures. This week we study several important abstract data types: stacks, queues, sets, and maps. These structures appear throughout computer science and software development.</p>
+    <p>The important question is no longer simply "How can I store several values?" Instead, we begin asking "What operations should my collection support, and how efficiently should those operations work?" This distinction leads us to the idea of an Abstract Data Type, or ADT.</p>
+    <p>Make the shift explicit. Weeks 5 and 12 were about storage. Week 13 is about contracts.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Is an Abstract Data Type?</h2>
+  <div class="def"><span class="term">Abstract Data Type (ADT):</span> a specification of what kind of data is stored, what operations are supported, and what those operations mean.</div>
+  <div class="cols">
+    <div>
+      <p class="small">An ADT specifies:</p>
+      <ul class="small">
+        <li>what kind of data is stored,</li>
+        <li>what operations are supported,</li>
+        <li>and what those operations mean.</li>
+      </ul>
+      <p class="small">An ADT does <strong>not</strong> necessarily specify how those operations are implemented.</p>
+    </div>
+    <div>
+      <p class="small">Consider a stack. A stack supports operations such as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+push
+pop
+peek
+isEmpty
+</code></pre>
+      <p class="small">This describes the <strong>behavior</strong> of a stack.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>An Abstract Data Type, or ADT, specifies what kind of data is stored, what operations are supported, and what those operations mean. An ADT does not necessarily specify how those operations are implemented.</p>
+    <p>Consider a stack. A stack supports operations such as push, pop, peek, and isEmpty. This describes the behavior of a stack. It does not tell us whether the stack is implemented using an array, an ArrayList, a linked list, or some other representation.</p>
+    <p>That distinction is extremely important, and the next slide draws it as a picture.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>ADT versus Implementation</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The list of operations does not tell us whether the stack is implemented using:</p>
+      <ul class="small">
+        <li>an array,</li>
+        <li>an <code>ArrayList</code>,</li>
+        <li>a linked list,</li>
+        <li>or some other representation.</li>
+      </ul>
+      <p class="small">That distinction is extremely important.</p>
+    </div>
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+Stack ADT
+    |
+    +-- Array implementation
+    |
+    +-- ArrayList implementation
+    |
+    +-- Linked-list implementation
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the user of the stack does not care</summary>
+    <div class="acc-body">
+      <p>All three implementations can behave like stacks. The user of the stack does not necessarily need to know which implementation is being used.</p>
+      <p>This is another example of <strong>abstraction</strong>, a concept we have repeatedly encountered in object-oriented programming. In Week 7 we hid a class's fields behind its methods; here we hide a data structure's representation behind its operations. Same move, larger scale.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-adt-vs-impl" tabindex="0">ADT versus implementation, in full</span>
+  </div>
+  <aside class="notes">
+    <p>It does not tell us whether the stack is implemented using an array, an ArrayList, a linked list, or some other representation. That distinction is extremely important.</p>
+    <p>All three implementations can behave like stacks. The user of the stack does not necessarily need to know which implementation is being used.</p>
+    <p>This is another example of abstraction, a concept we have repeatedly encountered in object-oriented programming.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>The Stack ADT</h2>
+  <p class="part-sub">Last In, First Out — and the four operations that define it.</p>
+</section>
+
+<section>
+  <h2>Last In, First Out</h2>
+  <div class="def"><span class="term">Stack:</span> a collection in which elements are removed in the reverse order from which they were added.</div>
+  <div class="cols-38">
+    <div>
+      <p class="small">This behavior is called:</p>
+      <blockquote class="small"><strong>Last In, First Out (LIFO)</strong></blockquote>
+      <p class="small">Imagine a stack of plates. If we place plates onto the top, the first plate we remove is <code>C</code>.</p>
+    </div>
+    <div>
+      <div class="cols-3">
+        <div>
+<pre><code class="language-text" data-trim data-noescape>
+      C   &lt;- top
+      B
+      A
+</code></pre>
+        </div>
+        <div>
+<pre><code class="language-text" data-trim data-noescape>
+      B   &lt;- top
+      A
+</code></pre>
+        </div>
+        <div>
+<pre><code class="language-text" data-trim data-noescape>
+      A   &lt;- top
+</code></pre>
+        </div>
+      </div>
+      <p class="small">The last item inserted is the first item removed.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A stack is a collection in which elements are removed in the reverse order from which they were added. This behavior is called Last In, First Out, or LIFO.</p>
+    <p>Imagine a stack of plates. If we place plates onto the top — A, then B, then C — the first plate we remove is C. Then B is on top. Then A. The last item inserted is the first item removed.</p>
+    <p>The plate image is worth a moment of theatre at the board. Students who can see the plates never confuse a stack with a queue again.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Core Operation: <code>push</code></h2>
+  <p class="small">A stack typically provides four operations. The first adds an item to the top of the stack.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+push(x)
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span><code>push</code> always adds at the top. There is no "push into the middle" — that is what makes a stack a stack.</div>
+    </div>
+    <div>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Stack before:
+
+B
+A
+
+push(C)
+
+Stack after:
+
+C
+B
+A
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A stack typically provides the following operations. Push adds an item to the top of the stack.</p>
+    <p>For example: the stack before contains B on top of A. We call push of C. The stack after contains C, B, A, reading from the top down.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Core Operation: <code>pop</code></h2>
+  <p class="small"><code>pop</code> removes and returns the item on top.</p>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+pop()
+</code></pre>
+      <p class="smaller">Example — the stack:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Stack:
+
+C
+B
+A
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+pop()
+</code></pre>
+      <p class="smaller">returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+C
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">and leaves:</p>
+<pre><code class="language-text" data-trim data-noescape>
+B
+A
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span><code>pop</code> does two things at once: it returns a value <em>and</em> it changes the stack.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The read-only alternative</summary>
+    <div class="acc-body">
+      <p><code>peek</code> returns the top item <em>without</em> removing it. Given the same stack of C, B, A, <code>peek()</code> also returns <code>C</code> — but the stack remains unchanged.</p>
+      <p>So the two operations answer the same question and differ only in whether they consume the answer.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Pop removes and returns the item on top. Given a stack containing C, B, A from the top down, calling pop returns C and leaves B on top of A.</p>
+    <p>Emphasise that pop is both a query and a mutation. Students who forget the mutation half write loops that never terminate; students who forget the query half throw away the value they wanted.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Core Operations: <code>peek</code> and <code>isEmpty</code></h2>
+  <div class="cols">
+    <div>
+      <h4><code>peek</code></h4>
+      <p class="smaller">Return the top item without removing it.</p>
+<pre><code class="language-java" data-trim data-noescape>
+peek()
+</code></pre>
+      <p class="smaller">If the stack contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+C
+B
+A
+</code></pre>
+      <p class="smaller">then <code>peek()</code> returns <code>C</code>, but the stack remains unchanged.</p>
+    </div>
+    <div>
+      <h4><code>isEmpty</code></h4>
+      <p class="smaller">Determines whether the stack contains any elements.</p>
+<pre><code class="language-java" data-trim data-noescape>
+isEmpty()
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span><code>peek</code> is the read-only twin of <code>pop</code>. <code>isEmpty</code> is what stops you popping an empty stack.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-stack-ops" tabindex="0">All four operations, with every example</span>
+  </div>
+  <aside class="notes">
+    <p>Peek returns the top item without removing it. If the stack contains C, B, A, then peek returns C but the stack remains unchanged.</p>
+    <p>isEmpty determines whether the stack contains any elements. These four — push, pop, peek, isEmpty — are the entire stack ADT. Everything else this week is built from them.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing a Stack (1 of 2)</h2>
+  <div class="cols-38">
+    <div>
+      <p class="small">Suppose we perform:</p>
+<pre><code class="language-text" data-trim data-noescape>
+push(10)
+push(20)
+push(30)
+pop()
+push(40)
+</code></pre>
+      <p class="small">Trace the stack.</p>
+    </div>
+    <div>
+      <div class="cols-3">
+        <div>
+          <p class="smaller">Initially:</p>
+<pre><code class="language-text" data-trim data-noescape>
+empty
+</code></pre>
+        </div>
+        <div>
+          <p class="smaller">After <code>push(10)</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+push(10)
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+10
+</code></pre>
+        </div>
+        <div>
+          <p class="smaller">After <code>push(20)</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+push(20)
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+20
+10
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we perform the following operations: push 10, push 20, push 30, pop, push 40. Trace the stack.</p>
+    <p>Initially the stack is empty. After push of 10 we have 10. After push of 20 we have 20 on top of 10 — note that the newest value is always written at the top of the picture.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing a Stack (2 of 2)</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">After:</p>
+<pre><code class="language-text" data-trim data-noescape>
+push(30)
+</code></pre>
+      <p class="smaller">we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+30
+20
+10
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+pop()
+</code></pre>
+      <p class="smaller">returns <code>30</code>. The stack becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+10
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Finally:</p>
+<pre><code class="language-text" data-trim data-noescape>
+push(40)
+</code></pre>
+      <p class="smaller">produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+40
+20
+10
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span><code>40</code> lands where <code>30</code> used to be. The stack has no memory of what was removed.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-stack-trace" tabindex="0">The whole trace, step by step</span>
+  </div>
+  <aside class="notes">
+    <p>After push of 30 we have 30, 20, 10. Then pop returns 30 and the stack becomes 20, 10. Finally push of 40 produces 40, 20, 10.</p>
+    <p>Ask the class what pop would return next. The answer, 40, is the whole LIFO rule in one word.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Stacks in Java and in Practice</h2>
+  <p class="part-sub">The call stack you have been using all semester, and the <code>Deque</code> you should reach for now.</p>
+</section>
+
+<section>
+  <h2>Why Are Stacks Useful?</h2>
+  <p class="small">Stacks occur naturally whenever the most recently created task must be handled first.</p>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>method calls,</li>
+        <li>recursion,</li>
+        <li>undo operations,</li>
+        <li>browser navigation,</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="small">
+        <li>expression evaluation,</li>
+        <li>syntax checking,</li>
+        <li>depth-first search,</li>
+        <li>backtracking algorithms.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Every item on that list has the same shape: something interrupts something else, and the interruption must finish first.</div>
+  <details class="acc">
+    <summary>The first two are not examples — they are the machinery</summary>
+    <div class="acc-body">
+      <p>You have already been using stacks throughout this course. Whenever Java calls a method, information about that method call is stored on the <strong>call stack</strong>.</p>
+      <p>So "method calls" and "recursion" are not applications you might choose to build with a stack; they are places where the JVM is already running one on your behalf. The next two slides open that up.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Stacks occur naturally whenever the most recently created task must be handled first. Examples include method calls, recursion, undo operations, browser navigation, expression evaluation, syntax checking, depth-first search, and backtracking algorithms.</p>
+    <p>Walk the list and name the "most recent first" in each: the innermost method call returns first, the last edit is undone first, the last page visited is the one Back returns to.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Call Stack</h2>
+  <div class="cols">
+    <div>
+      <p class="small">You have already been using stacks throughout this course.</p>
+      <p class="small">Whenever Java calls a method, information about that method call is stored on the <strong>call stack</strong>.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The call stack is not a metaphor. It is a real stack, maintained by the JVM, holding one frame per active call.</div>
+    </div>
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args) {
+    methodA();
+}
+
+public static void methodA() {
+    methodB();
+}
+
+public static void methodB() {
+    System.out.println("Hello");
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>You have already been using stacks throughout this course. Whenever Java calls a method, information about that method call is stored on the call stack.</p>
+    <p>Consider three methods: main calls methodA, methodA calls methodB, and methodB prints Hello. The call stack evolves as those calls are made and returned from — the next slide draws it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>How the Call Stack Evolves</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">First:</p>
+<pre><code class="language-text" data-trim data-noescape>
+main
+</code></pre>
+      <p class="smaller">Then <code>main</code> calls <code>methodA</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+methodA
+main
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Then <code>methodA</code> calls <code>methodB</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+methodB
+methodA
+main
+</code></pre>
+      <p class="smaller">When <code>methodB</code> finishes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+methodA
+main
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Then <code>methodA</code> finishes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+main
+</code></pre>
+      <p class="smaller">Finally <code>main</code> finishes.</p>
+      <div class="box note"><span class="box-title">Note</span>The stack grows on the way in and shrinks on the way out. It is perfectly symmetric.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why recursion works</summary>
+    <div class="acc-body">
+      <p>This is why recursion naturally works using a stack. Each recursive call creates another stack frame.</p>
+      <p>Nothing special is required to make recursion work — the same mechanism that supports <code>main</code> calling <code>methodA</code> supports a method calling itself. We return to this idea in Part IX.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-call-stack" tabindex="0">The call stack, frame by frame</span>
+  </div>
+  <aside class="notes">
+    <p>The call stack evolves approximately as follows. First main. Then main calls methodA, so methodA sits above main. Then methodA calls methodB, so methodB sits above both.</p>
+    <p>When methodB finishes we are back to methodA above main. Then methodA finishes, leaving main. Finally main finishes.</p>
+    <p>This is why recursion naturally works using a stack. Each recursive call creates another stack frame.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Using a Stack in Java</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides several ways of implementing stack behavior. An older Java class called <code>Stack</code> exists:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+</code></pre>
+      <p class="small">However, modern Java generally prefers using the <code>Deque</code> interface.</p>
+      <div class="box note"><span class="box-title">Note</span>Both work. <code>Deque</code> is the one to write in new code and the one used everywhere in these notes.</div>
+      <details class="acc">
+        <summary>Reading <code>StackDemo</code></summary>
+        <div class="acc-body">
+          <p>Three pushes put 10, 20, and 30 on the stack, with 30 on top. The first <code>println</code> pops, so it prints 30 and removes it. The second peeks, so it prints 20 and leaves the stack alone.</p>
+          <p>Note that both statements are printing the results of stack operations — the stack itself is never printed.</p>
+        </div>
+      </details>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class StackDemo {
+    public static void main(String[] args) {
+
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println(stack.pop());
+        System.out.println(stack.peek());
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java provides several ways of implementing stack behavior. An older Java class called Stack exists — Stack of Integer equals new Stack. However, modern Java generally prefers using the Deque interface.</p>
+    <p>The StackDemo program on the right pushes 10, 20, and 30, then prints a pop followed by a peek.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Programming to an Abstraction</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Output of <code>StackDemo</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+30
+20
+</code></pre>
+      <p class="small">Notice the declaration:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This uses an <strong>interface type</strong> for the variable and a <strong>concrete implementation</strong> for the object.</p>
+      <div class="box key"><span class="box-title">Key idea</span>That is an example of programming to an abstraction — exactly the ADT-versus-implementation split from Part I, written in one line of Java.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Reading the output</summary>
+    <div class="acc-body">
+      <p>The stack after three pushes holds 30 on top of 20 on top of 10. <code>stack.pop()</code> removes and returns 30 — that is the first line of output. The stack is now 20, 10. <code>stack.peek()</code> then returns 20 without removing it — that is the second line.</p>
+      <p>If the second call had been <code>pop()</code> instead of <code>peek()</code>, the printed output would be the same, but the stack would be left holding only 10.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The output is 30 then 20. Notice the declaration: Deque of Integer stack equals new ArrayDeque. This uses an interface type for the variable and a concrete implementation for the object. That is an example of programming to an abstraction.</p>
+    <p>Connect it back to Part I explicitly. The left-hand side of that assignment is the ADT; the right-hand side is the implementation. Java lets you write the distinction down.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Reverse a String Using a Stack</h2>
+  <p class="small">A stack naturally reverses order. Suppose we want to reverse <code>computer</code>.</p>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Suppose we want to reverse:</p>
+<pre><code class="language-text" data-trim data-noescape>
+computer
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Push every character:</p>
+<pre><code class="language-text" data-trim data-noescape>
+c
+o
+m
+p
+u
+t
+e
+r
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Because the last character pushed is removed first, popping all characters produces:</p>
+<pre><code class="language-text" data-trim data-noescape>
+retupmoc
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>We did not write any reversing logic. The LIFO rule did the reversing for us.</div>
+  <aside class="notes">
+    <p>A stack naturally reverses order. Suppose we want to reverse the word computer. Push every character: c, o, m, p, u, t, e, r.</p>
+    <p>Because the last character pushed is removed first, popping all characters produces retupmoc.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>ReverseString</code>, in Java</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The two loops are the whole algorithm — push everything, then pop everything:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+
+for (char c : text.toCharArray()) {
+    stack.push(c);
+}
+
+StringBuilder result = new StringBuilder();
+
+while (!stack.isEmpty()) {
+    result.append(stack.pop());
+}
+
+return result.toString();
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+retupmoc
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span><code>!stack.isEmpty()</code> is the loop guard. Without it, the last <code>pop()</code> would run on an empty stack.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m13-reverse-string" tabindex="0">The complete <code>ReverseString</code> program</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The Java implementation declares a Deque of Character, pushes every character of the text onto it, then builds a StringBuilder by popping until the stack is empty and returns the result as a String.</p>
+    <p>Calling reverse of the string computer prints retupmoc.</p>
+    <p>Point out that <code>isEmpty</code>, one of the four ADT operations from Part II, is what makes the second loop safe.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Matching Parentheses</h2>
+  <p class="small">Stacks are useful for determining whether brackets are correctly nested.</p>
+  <div class="cols-3">
+    <div>
+      <span class="tag ok">Valid</span>
+<pre><code class="language-text" data-trim data-noescape>
+((a + b) * c)
+</code></pre>
+    </div>
+    <div>
+      <span class="tag no">Not valid</span>
+<pre><code class="language-text" data-trim data-noescape>
+((a + b) * c
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Something more complicated:</p>
+<pre><code class="language-text" data-trim data-noescape>
+{ [ (a + b) * c ] + d }
+</code></pre>
+    </div>
+  </div>
+  <h4>To check the expression</h4>
+  <ol class="small">
+    <li>When we encounter an opening symbol, push it.</li>
+    <li>When we encounter a closing symbol, pop the corresponding opening symbol.</li>
+    <li>If the symbols do not match, the expression is invalid.</li>
+    <li>At the end, the stack should be empty.</li>
+  </ol>
+  <aside class="notes">
+    <p>Stacks are useful for determining whether brackets are correctly nested. The expression open-open a plus b close star c close is valid. The same expression missing its final close paren is not.</p>
+    <p>Consider something more complicated: brace bracket paren a plus b paren star c bracket plus d brace. Mixed bracket types are where the algorithm earns its keep.</p>
+    <p>To check the expression: when we encounter an opening symbol, push it. When we encounter a closing symbol, pop the corresponding opening symbol. If the symbols do not match, the expression is invalid. At the end, the stack should be empty.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing the Bracket Checker</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Input:
+
+{ [ ( ) ] }
+</code></pre>
+      <p class="small">Therefore the brackets are balanced.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Rule 4 matters as much as rules 1 to 3. A leftover opening symbol means an unclosed bracket.</div>
+    </div>
+    <div>
+      <p class="small">Trace:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Read {    stack: {
+
+Read [    stack: [
+                   {
+
+Read (    stack: (
+                   [
+                   {
+
+Read )    pop (
+
+Read ]    pop [
+
+Read }    pop {
+
+stack is empty
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-brackets" tabindex="0">Matching parentheses, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Take the input brace bracket paren paren bracket brace. Reading the opening brace pushes it. Reading the opening bracket pushes it on top. Reading the open paren pushes it on top of that.</p>
+    <p>Then the closing paren pops the open paren, the closing bracket pops the open bracket, and the closing brace pops the open brace. The stack is empty. Therefore the brackets are balanced.</p>
+    <p>Notice that the stack picture is written with the top at the left of each line — the newest symbol is the one the next closing symbol will match.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Queues</h2>
+  <p class="part-sub">First In, First Out — the fairness structure.</p>
+</section>
+
+<section>
+  <h2>The Queue ADT</h2>
+  <div class="def"><span class="term">Queue:</span> a collection that stores elements in the order in which they arrive.</div>
+  <div class="cols">
+    <div>
+      <p class="small">A queue follows:</p>
+      <blockquote class="small"><strong>First In, First Out (FIFO)</strong></blockquote>
+      <p class="small">Think about people waiting in line. Suppose:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice arrives
+Bob arrives
+Carol arrives
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The queue is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Front                      Back
+Alice   Bob   Carol
+</code></pre>
+      <p class="small">Alice is served first. Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Front                Back
+Bob   Carol
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What the two ends are for</summary>
+    <div class="acc-body">
+      <p>Arrivals join at the back; service happens at the front. Alice arrived first, so Alice is served first, and removing her leaves Bob at the front with Carol behind him — the people who remain keep their relative order.</p>
+      <p>That is the difference from a stack in one sentence: a queue adds at one end and removes at the other.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A queue stores elements in the order in which they arrive. A queue follows First In, First Out, or FIFO.</p>
+    <p>Think about people waiting in line. Suppose Alice arrives, then Bob, then Carol. The queue reads Alice, Bob, Carol from front to back. Alice is served first, leaving Bob and Carol.</p>
+    <p>Contrast this with the plates from Part II. A queue has two ends that do different jobs; a stack has one end that does both.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Queue Operations</h2>
+  <div class="cols">
+    <div>
+      <h4>Enqueue</h4>
+      <p class="smaller">Add an element to the back.</p>
+<pre><code class="language-text" data-trim data-noescape>
+enqueue(x)
+</code></pre>
+      <h4>Dequeue</h4>
+      <p class="smaller">Remove an element from the front.</p>
+<pre><code class="language-text" data-trim data-noescape>
+dequeue()
+</code></pre>
+    </div>
+    <div>
+      <h4>Peek</h4>
+      <p class="smaller">Look at the front element.</p>
+<pre><code class="language-text" data-trim data-noescape>
+peek()
+</code></pre>
+      <h4>isEmpty</h4>
+      <p class="smaller">Check whether the queue contains any elements.</p>
+      <div class="box note"><span class="box-title">Note</span>Four operations again — and <code>peek</code> and <code>isEmpty</code> mean exactly what they meant for a stack.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A queue commonly supports four operations. Enqueue adds an element to the back. Dequeue removes an element from the front. Peek looks at the front element. isEmpty checks whether the queue contains any elements.</p>
+    <p>The names differ from the stack's, but two of the four are identical. That is not a coincidence — peek and isEmpty are questions any collection can answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing a Queue (1 of 2)</h2>
+  <div class="cols-38">
+    <div>
+      <p class="small">Suppose the following operations occur:</p>
+<pre><code class="language-text" data-trim data-noescape>
+enqueue(10)
+enqueue(20)
+enqueue(30)
+dequeue()
+enqueue(40)
+</code></pre>
+    </div>
+    <div>
+      <div class="cols-3">
+        <div>
+          <p class="smaller">Initially:</p>
+<pre><code class="language-text" data-trim data-noescape>
+empty
+</code></pre>
+        </div>
+        <div>
+          <p class="smaller">After:</p>
+<pre><code class="language-text" data-trim data-noescape>
+enqueue(10)
+</code></pre>
+          <p class="smaller">we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Front
+10
+</code></pre>
+        </div>
+        <div>
+          <p class="smaller">After:</p>
+<pre><code class="language-text" data-trim data-noescape>
+enqueue(20)
+</code></pre>
+          <p class="smaller">we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Front       Back
+10    20
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose the following operations occur: enqueue 10, enqueue 20, enqueue 30, dequeue, enqueue 40. Initially the queue is empty.</p>
+    <p>After enqueue of 10 the queue holds 10 at the front. After enqueue of 20 the queue reads 10 then 20, front to back. Compare this with the stack trace in Part II, which used the same numbers.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing a Queue (2 of 2)</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">After:</p>
+<pre><code class="language-text" data-trim data-noescape>
+enqueue(30)
+</code></pre>
+      <p class="smaller">we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Front             Back
+10    20    30
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+dequeue()
+</code></pre>
+      <p class="smaller">returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+</code></pre>
+      <p class="smaller">and leaves:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Front       Back
+20    30
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">After:</p>
+<pre><code class="language-text" data-trim data-noescape>
+enqueue(40)
+</code></pre>
+      <p class="smaller">we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Front             Back
+20    30    40
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Same five operations as the stack trace, same numbers — different answer. <code>dequeue()</code> returned <code>10</code>, not <code>30</code>.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-queue-trace" tabindex="0">The whole queue trace, step by step</span>
+  </div>
+  <aside class="notes">
+    <p>After enqueue of 30 the queue reads 10, 20, 30. Then dequeue returns 10 and leaves 20, 30. After enqueue of 40 the queue reads 20, 30, 40.</p>
+    <p>Put this trace beside the stack trace from Part II. The operations were push 10, 20, 30, pop, push 40 and the pop returned 30. Here the dequeue returned 10. Identical inputs, opposite answers.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Queue Applications</h2>
+  <p class="small">Queues appear whenever tasks should generally be handled in arrival order.</p>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>printer jobs,</li>
+        <li>customer-service requests,</li>
+        <li>web-server requests,</li>
+        <li>event processing,</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="small">
+        <li>operating-system scheduling,</li>
+        <li>breadth-first search,</li>
+        <li>simulations,</li>
+        <li>message systems.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The word underneath most of this list is <em>fairness</em>. A queue is what you use when arriving earlier should mean being served earlier.</div>
+  <details class="acc">
+    <summary>Breadth-first search is the outlier</summary>
+    <div class="acc-body">
+      <p>Suppose tasks generate additional tasks. A queue allows us to process them in discovery order. This idea is the foundation of <strong>breadth-first search</strong>, an algorithm you will encounter again in data structures and algorithms courses.</p>
+      <p>Here the queue is not being fair to anybody — it is controlling the shape of a search. We return to this in Part IX.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Queues appear whenever tasks should generally be handled in arrival order. Examples include printer jobs, customer-service requests, web-server requests, event processing, operating-system scheduling, breadth-first search, simulations, and message systems.</p>
+    <p>Breadth-first search is the odd one out on that list — it is an algorithm, not a service. We return to it in Part IX.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Using a Queue in Java</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The Java Collections Framework provides the <code>Queue</code> interface. A common implementation is <code>ArrayDeque</code>.</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice
+Bob
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span><code>ArrayDeque</code> again — the same class implements both the stack and the queue behavior. The <em>interface</em> you declare decides which one you get.</div>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.ArrayDeque;
+import java.util.Queue;
+
+public class QueueDemo {
+
+    public static void main(String[] args) {
+
+        Queue&lt;String&gt; customers = new ArrayDeque&lt;&gt;();
+
+        customers.offer("Alice");
+        customers.offer("Bob");
+        customers.offer("Carol");
+
+        System.out.println(customers.poll());
+
+        System.out.println(customers.peek());
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The Java Collections Framework provides the Queue interface. A common implementation is ArrayDeque. The QueueDemo program offers Alice, Bob, and Carol, then prints a poll followed by a peek.</p>
+    <p>The output is Alice then Bob. Alice was polled off the front; Bob is now at the front and peek reports him without removing him.</p>
+    <p>Note that ArrayDeque appeared on the stack slides too. One class, two ADTs — which is exactly why the declared interface type matters.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Java Names for the Queue Operations</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Here:</p>
+<pre><code class="language-java" data-trim data-noescape>
+offer()
+</code></pre>
+      <p class="smaller">adds an item.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+poll()
+</code></pre>
+      <p class="smaller">removes the front item.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+peek()
+</code></pre>
+      <p class="smaller">examines the front item.</p>
+    </div>
+  </div>
+  <div class="def"><span class="term">Vocabulary shift:</span> the ADT calls them <em>enqueue</em>, <em>dequeue</em>, and <em>peek</em>; Java calls them <code>offer</code>, <code>poll</code>, and <code>peek</code>.</div>
+  <details class="acc">
+    <summary>Why two sets of names?</summary>
+    <div class="acc-body">
+      <p>The ADT names — enqueue and dequeue — describe the <em>behavior</em>, and they are the names you will meet in textbooks and in other languages. The Java names are the ones you actually type.</p>
+      <p>Keeping both straight is part of the ADT-versus-implementation habit from Part I: the concept has one name, the API has another, and the concept is the one that transfers.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Here offer adds an item, poll removes the front item, and peek examines the front item.</p>
+    <p>Insist that students can say both vocabularies. On an exam the word will be enqueue; in their editor the method will be offer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Stack versus Queue</h2>
+  <p class="small">Stacks and queues differ <strong>only</strong> in the order in which elements are removed.</p>
+  <div class="cols-53">
+    <table class="small">
+      <thead><tr><th>Property</th><th>Stack</th><th>Queue</th></tr></thead>
+      <tbody>
+        <tr><td>Rule</td><td>LIFO</td><td>FIFO</td></tr>
+        <tr><td>Add operation</td><td>push</td><td>enqueue / offer</td></tr>
+        <tr><td>Remove operation</td><td>pop</td><td>dequeue / poll</td></tr>
+        <tr><td>Inspect next item</td><td>peek</td><td>peek</td></tr>
+        <tr><td>Typical example</td><td>Undo history</td><td>Waiting line</td></tr>
+      </tbody>
+    </table>
+    <div>
+      <p class="smaller">Suppose we insert:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A
+B
+C
+</code></pre>
+      <div class="cols">
+        <div>
+          <p class="smaller">A stack removes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+C
+B
+A
+</code></pre>
+        </div>
+        <div>
+          <p class="smaller">A queue removes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A
+B
+C
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>That small difference leads to very different algorithms.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-stack-vs-queue" tabindex="0">Stack versus queue, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Stacks and queues differ only in the order in which elements are removed. The table lists the rule, the add operation, the remove operation, how to inspect the next item, and a typical example for each.</p>
+    <p>Suppose we insert A, B, C. A stack removes C, B, A. A queue removes A, B, C. That small difference leads to very different algorithms.</p>
+    <p>Depth-first search and breadth-first search are literally the same algorithm with a stack swapped for a queue. Mention it now; Part IX picks it up.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Sets</h2>
+  <p class="part-sub">Have I seen this before? — collections without duplicates.</p>
+</section>
+
+<section>
+  <h2>The Set ADT</h2>
+  <div class="def"><span class="term">Set:</span> a collection that does not contain duplicate elements.</div>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Mathematically:</p>
+<pre><code class="language-text" data-trim data-noescape>
+{1, 2, 3}
+</code></pre>
+      <p class="smaller">is a set.</p>
+    </div>
+    <div>
+      <p class="smaller">Adding <code>2</code> again does <strong>not</strong> produce:</p>
+<pre><code class="language-text" data-trim data-noescape>
+{1, 2, 2, 3}
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">The set remains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+{1, 2, 3}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Adding a duplicate is not an error. It simply has no effect.</div>
+  <aside class="notes">
+    <p>A set is a collection that does not contain duplicate elements. Mathematically, the set containing 1, 2, and 3 is a set.</p>
+    <p>Adding 2 again does not produce a collection containing 1, 2, 2, 3. The set remains 1, 2, 3.</p>
+    <p>Stress that this is the defining property, not a feature bolted on. Uniqueness is what a set <em>is</em>.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Use a Set?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we are storing usernames that have visited a website:</p>
+<pre><code class="language-text" data-trim data-noescape>
+alice
+bob
+alice
+carol
+bob
+david
+</code></pre>
+    </div>
+    <div>
+      <p class="small">If we only care about unique visitors, the relevant collection is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+alice
+bob
+carol
+david
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>A set naturally represents this concept — you do not write de-duplication logic, you choose a structure that cannot hold duplicates.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we are storing usernames that have visited a website: alice, bob, alice, carol, bob, david. If we only care about unique visitors, the relevant collection is alice, bob, carol, david.</p>
+    <p>A set naturally represents this concept. Notice the phrasing — the structure represents the concept. That is the ADT habit again.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Java <code>HashSet</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides the <code>Set</code> interface. A common implementation is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+HashSet
+</code></pre>
+      <p class="small">Although we inserted <code>"Alice"</code> twice, only one copy is stored.</p>
+      <div class="box note"><span class="box-title">Note</span><code>Set&lt;String&gt; names = new HashSet&lt;&gt;();</code> — interface on the left, implementation on the right, exactly as with <code>Deque</code>.</div>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.HashSet;
+import java.util.Set;
+
+public class SetDemo {
+
+    public static void main(String[] args) {
+
+        Set&lt;String&gt; names = new HashSet&lt;&gt;();
+
+        names.add("Alice");
+        names.add("Bob");
+        names.add("Carol");
+        names.add("Alice");
+
+        System.out.println(names);
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java provides the Set interface. A common implementation is HashSet. The SetDemo program adds Alice, Bob, Carol, and then Alice again, and prints the set.</p>
+    <p>Although we inserted Alice twice, only one copy is stored. Do not promise the class any particular print order here — that is a mistake we name explicitly in Part X.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Important Set Operations</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Add</h4>
+<pre><code class="language-java" data-trim data-noescape>
+names.add("Alice");
+</code></pre>
+      <h4>Remove</h4>
+<pre><code class="language-java" data-trim data-noescape>
+names.remove("Alice");
+</code></pre>
+    </div>
+    <div>
+      <h4>Membership</h4>
+<pre><code class="language-java" data-trim data-noescape>
+names.contains("Alice");
+</code></pre>
+      <h4>Size</h4>
+<pre><code class="language-java" data-trim data-noescape>
+names.size();
+</code></pre>
+    </div>
+    <div>
+      <h4>Empty check</h4>
+<pre><code class="language-java" data-trim data-noescape>
+names.isEmpty();
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span><code>contains</code> is the operation a set exists for. Everything else is bookkeeping.</div>
+      <details class="acc">
+        <summary>What <code>contains</code> saves you</summary>
+        <div class="acc-body">
+          <p>To decide whether an array holds a duplicate, a simple nested-loop solution might take <span class="pill">O(n²)</span> time. Using a hash set, we can often solve the problem in expected <span class="pill">O(n)</span> time.</p>
+          <p>The whole saving comes from <code>contains</code>. Part VII explains how it can be that fast.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The important set operations are add, remove, membership testing with contains, size, and the empty check isEmpty.</p>
+    <p>Contrast contains on a set with a linear scan over an ArrayList. Same question, very different cost — and that difference is the subject of Part VII.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Detecting Duplicates</h2>
+  <p class="small">Suppose we want to determine whether an array contains duplicate values.</p>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">A simple nested-loop solution might take:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n²)
+</code></pre>
+      <p class="smaller">time.</p>
+    </div>
+    <div>
+      <p class="smaller">Using a hash set, we can often solve the problem in expected:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="smaller">time.</p>
+    </div>
+    <div>
+      <p class="smaller">The key idea is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Have I already seen this element?
+</code></pre>
+      <p class="smaller">A set answers exactly that question.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Choosing the right structure turned a quadratic algorithm into a linear one without any cleverness in the code.</div>
+  <aside class="notes">
+    <p>Suppose we want to determine whether an array contains duplicate values. A simple nested-loop solution might take O of n squared time. Using a hash set, we can often solve the problem in expected O of n time.</p>
+    <p>The key idea is the question "Have I already seen this element?" A set answers exactly that question.</p>
+    <p>This slide is a preview of Part VIII. The improvement came from data structure selection, not from a smarter loop.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>DuplicateDetector</code>, in Java</h2>
+  <div class="cols-53">
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.HashSet;
+import java.util.Set;
+
+public class DuplicateDetector {
+
+    public static boolean containsDuplicate(int[] numbers) {
+
+        Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+
+        for (int value : numbers) {
+
+            if (seen.contains(value)) {
+                return true;
+            }
+
+            seen.add(value);
+        }
+
+        return false;
+    }
+}
+</code></pre>
+    <div>
+      <div class="box key"><span class="box-title">The shape</span>Ask before adding. If the value is already in <code>seen</code>, we are done; otherwise record it and continue.</div>
+      <details class="acc">
+        <summary>Why the order of the two statements matters</summary>
+        <div class="acc-body">
+          <p>The <code>contains</code> check comes <em>before</em> the <code>add</code>. If we added first, every value would already be in the set by the time we asked, and the method would report a duplicate on the first element.</p>
+          <p>Returning <code>false</code> after the loop is the "we never found one" case: the loop ran to completion without ever seeing a repeat.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The DuplicateDetector class declares a Set of Integer called seen. For each value in the array, if seen already contains the value we return true; otherwise we add the value and continue. If the loop finishes, we return false.</p>
+    <p>Note that we never store the array twice and we never compare pairs of elements. The set does the remembering.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Counting Distinct Values</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Given:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 20 10 30 20 40
+</code></pre>
+      <p class="small">how many distinct values appear? We can insert everything into a set:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Set&lt;Integer&gt; values = new HashSet&lt;&gt;();
+
+values.add(10);
+values.add(20);
+values.add(10);
+values.add(30);
+values.add(20);
+values.add(40);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The set contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+20
+30
+40
+</code></pre>
+      <p class="small">Therefore:</p>
+<pre><code class="language-java" data-trim data-noescape>
+values.size()
+</code></pre>
+      <p class="small">is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+4
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Given the values 10, 20, 10, 30, 20, 40, how many distinct values appear? We can insert everything into a set — six calls to add, two of which are repeats.</p>
+    <p>The set contains 10, 20, 30, and 40. Therefore values.size() is 4.</p>
+    <p>Six adds, four elements. The duplicates were absorbed silently, which is exactly what we wanted.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Maps</h2>
+  <p class="part-sub">Given this key, what value is associated with it?</p>
+</section>
+
+<section>
+  <h2>The Map ADT</h2>
+  <div class="def"><span class="term">Map:</span> a collection that associates one value with another.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Each entry contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+key -&gt; value
+</code></pre>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+student ID -&gt; student name
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+word -&gt; frequency
+</code></pre>
+    </div>
+    <div>
+      <p class="small">or:</p>
+<pre><code class="language-text" data-trim data-noescape>
+username -&gt; password hash
+</code></pre>
+      <p class="small">or:</p>
+<pre><code class="language-text" data-trim data-noescape>
+state -&gt; capital
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Every one of these is a lookup: you hold one thing and want the other.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A map associates one value with another. Each entry contains a key arrow a value. For example, student ID to student name, or word to frequency, or username to password hash, or state to capital.</p>
+    <p>Read the arrow out loud as "maps to". The left side is what you have; the right side is what you want.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Concrete Map</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+"Colorado" -&gt; "Denver"
+"Florida"  -&gt; "Tallahassee"
+"Texas"    -&gt; "Austin"
+</code></pre>
+    </div>
+    <div>
+      <div class="chain">
+        <span>key</span><span class="sep">→</span>
+        <span>map</span><span class="sep">→</span>
+        <span>value</span>
+      </div>
+      <div class="box key"><span class="box-title">Key idea</span>A map is a lookup table you can build at run time — and, unlike an array, its "index" can be any type of key.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Compared with an array</summary>
+    <div class="acc-body">
+      <p>An array is already a kind of map: it associates an <code>int</code> index with a value. A map generalises that idea so the key can be a <code>String</code>, an <code>Integer</code>, or an object of your own class.</p>
+      <p>That generalisation is what lets us write <code>"Colorado"</code> where an array would have forced us to invent a numeric code for each state.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>For example, Colorado maps to Denver, Florida maps to Tallahassee, and Texas maps to Austin.</p>
+    <p>These are pairs, not two parallel lists. The map keeps them together, so you never have to keep two arrays in step by hand.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Keys Are Unique</h2>
+  <p class="small">A map associates each key with <strong>at most one</strong> value.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice -&gt; 90
+Bob   -&gt; 85
+Carol -&gt; 95
+</code></pre>
+    </div>
+    <div>
+      <p class="small">If we later do:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice -&gt; 100
+</code></pre>
+      <p class="small">the value associated with <code>Alice</code> changes.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>We do <strong>not</strong> create another independent Alice entry.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The connection to sets</summary>
+    <div class="acc-body">
+      <p>The keys of a map form a set: no duplicates, and membership is the natural question to ask about them. That is why <code>containsKey</code> feels so much like <code>contains</code> on a <code>HashSet</code> — underneath, it is the same mechanism.</p>
+      <p>Values, by contrast, may repeat freely. Two students can have the same score.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A map associates each key with at most one value. Consider Alice mapping to 90, Bob to 85, and Carol to 95. If we later map Alice to 100, the value associated with Alice changes. We do not create another independent Alice entry.</p>
+    <p>This is the single most common surprise for students coming from lists, where adding always grows the collection.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Java <code>HashMap</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides the <code>Map</code> interface. A common implementation is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+HashMap
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+95
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span><code>Map&lt;String, Integer&gt;</code> takes <strong>two</strong> type parameters — the key type first, then the value type.</div>
+      <details class="acc">
+        <summary>Why the output is <code>95</code></summary>
+        <div class="acc-body">
+          <p>Three <code>put</code> calls store Alice with 95, Bob with 87, and Carol with 91. The <code>println</code> then retrieves the value stored under the key <code>"Alice"</code>, which is 95.</p>
+          <p>Nothing was searched for. The map was asked directly for the value filed under that key.</p>
+        </div>
+      </details>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapDemo {
+
+    public static void main(String[] args) {
+
+        Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+
+        scores.put("Alice", 95);
+        scores.put("Bob", 87);
+        scores.put("Carol", 91);
+
+        System.out.println(scores.get("Alice"));
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java provides the Map interface. A common implementation is HashMap. The MapDemo program declares a Map of String to Integer called scores, puts three entries, and prints the value retrieved for Alice.</p>
+    <p>The output is 95. Note the two type parameters in the declaration — this is the first collection this semester that needs two.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Map Operations</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Insert or update</h4>
+<pre><code class="language-java" data-trim data-noescape>
+scores.put("Alice", 95);
+</code></pre>
+      <h4>Retrieve a value</h4>
+<pre><code class="language-java" data-trim data-noescape>
+scores.get("Alice");
+</code></pre>
+    </div>
+    <div>
+      <h4>Determine whether a key exists</h4>
+<pre><code class="language-java" data-trim data-noescape>
+scores.containsKey("Alice");
+</code></pre>
+      <h4>Remove an entry</h4>
+<pre><code class="language-java" data-trim data-noescape>
+scores.remove("Alice");
+</code></pre>
+    </div>
+    <div>
+      <h4>Number of entries</h4>
+<pre><code class="language-java" data-trim data-noescape>
+scores.size();
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>One method, two jobs: <code>put</code> inserts if the key is new and updates if it is not.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The map operations are put to insert or update, get to retrieve a value, containsKey to determine whether a key exists, remove to delete an entry, and size for the number of entries.</p>
+    <p>The heading on the first operation is deliberately "insert or update" — that is the behavior we established two slides ago when Alice's 90 became 100.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Phone Directory</h2>
+  <p class="small">A map is ideal when we want to look up information using some key.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;String, String&gt; phoneBook = new HashMap&lt;&gt;();
+
+phoneBook.put("Alice", "555-1234");
+phoneBook.put("Bob", "555-9876");
+phoneBook.put("Carol", "555-4321");
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We can retrieve Alice's number with:</p>
+<pre><code class="language-java" data-trim data-noescape>
+phoneBook.get("Alice");
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>There is no need to scan the entire collection manually.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Both type parameters are <code>String</code> here</summary>
+    <div class="acc-body">
+      <p><code>Map&lt;String, String&gt;</code> is perfectly ordinary — nothing requires the key and value types to differ. The key is a name; the value is a phone number that happens also to be text.</p>
+      <p>Storing the number as a <code>String</code> rather than an <code>int</code> is the right call: phone numbers contain hyphens, may start with zero, and are never added together.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A map is ideal when we want to look up information using some key. Here a Map of String to String called phoneBook stores three names and numbers.</p>
+    <p>We can retrieve Alice's number with phoneBook.get of Alice. There is no need to scan the entire collection manually.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Word Frequency</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+the cat chased the dog
+</code></pre>
+      <p class="small">We want:</p>
+<pre><code class="language-text" data-trim data-noescape>
+the     -&gt; 2
+cat     -&gt; 1
+chased  -&gt; 1
+dog     -&gt; 1
+</code></pre>
+    </div>
+    <div>
+      <p class="small">A map is ideal.</p>
+      <div class="chain">
+        <span>word</span><span class="sep">→</span>
+        <span>count</span>
+      </div>
+      <div class="box key"><span class="box-title">Key idea</span>Counting is a map problem. The thing being counted is the key; the running total is the value.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we have the sentence "the cat chased the dog". We want the to map to 2, cat to 1, chased to 1, and dog to 1. A map is ideal.</p>
+    <p>Note that "the" appears twice in the input but once in the output — the key is unique, the count is what changes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>WordFrequency</code>, in Java</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The counting loop:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (String word : words) {
+
+    if (counts.containsKey(word)) {
+        counts.put(word, counts.get(word) + 1);
+    } else {
+        counts.put(word, 1);
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The two branches say: <em>seen before, so add one</em>, or <em>first sighting, so start at one</em>.</p>
+      <div class="box note"><span class="box-title">Note</span>The <code>if</code>/<code>else</code> exists only because <code>get</code> has nothing sensible to return for a brand-new word. The next slide removes it.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m13-word-frequency" tabindex="0">The complete <code>WordFrequency</code> program</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The WordFrequency program splits the text on spaces into an array of words, creates a Map of String to Integer called counts, and loops over the words.</p>
+    <p>If counts already contains the word, we put the word with its current count plus one. Otherwise we put the word with a count of 1. Finally we print the map.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Simplifying with <code>getOrDefault()</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can simplify this using:</p>
+<pre><code class="language-java" data-trim data-noescape>
+getOrDefault()
+</code></pre>
+<pre><code class="language-java" data-trim data-noescape>
+for (String word : words) {
+    counts.put(word, counts.getOrDefault(word, 0) + 1);
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>This pattern is extremely common. Memorise its shape: <code>put(k, getOrDefault(k, 0) + 1)</code>.</div>
+      <details class="acc">
+        <summary>What the second argument means</summary>
+        <div class="acc-body">
+          <p><code>getOrDefault(word, 0)</code> returns the stored count if the word is present, and <code>0</code> if it is not. Adding one to that answer gives the correct new count in both cases, so the <code>if</code>/<code>else</code> disappears.</p>
+          <p>The default value is chosen to make the arithmetic work out. For counting it is <code>0</code>; for a running product it would be <code>1</code>.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We can simplify the counting loop using getOrDefault. The one-line body puts the word with getOrDefault of the word and zero, plus one.</p>
+    <p>This pattern is extremely common. Students will meet it again in the lab at the end of the week and in almost every counting problem they ever write.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Iterating Through a Map</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+</code></pre>
+      <p class="small">We can iterate through the keys:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (String name : scores.keySet()) {
+    System.out.println(name);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Or through both keys and values:</p>
+<pre><code class="language-java" data-trim data-noescape>
+for (Map.Entry&lt;String, Integer&gt; entry : scores.entrySet()) {
+
+    System.out.println(
+        entry.getKey() + ": " + entry.getValue()
+    );
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span><code>keySet()</code> gives you a <code>Set</code> — the very structure we studied in Part V. The keys of a map <em>are</em> a set.</div>
+  <aside class="notes">
+    <p>Suppose we have a Map of String to Integer called scores. We can iterate through the keys with a for-each over scores.keySet, printing each name.</p>
+    <p>Or we can iterate through both keys and values with a for-each over scores.entrySet, where each entry is a Map.Entry of String and Integer and we print entry.getKey, a colon, and entry.getValue.</p>
+    <p>Use entrySet when you need both halves. Looping over keySet and calling get inside the loop does the lookup work twice.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Hashing</h2>
+  <p class="part-sub">Why <code>contains</code> and <code>get</code> can be fast — and what "expected" means.</p>
+</section>
+
+<section>
+  <h2>The Lookup Problem</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Suppose we have 1,000,000 usernames. We want to determine:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Does "alice42" exist?
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">If we store usernames in an ordinary list, we may have to search through many elements. Linear search requires:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="smaller">time.</p>
+    </div>
+    <div>
+      <p class="smaller">Can we do better? Hash-based data structures attempt to make lookup approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+      <p class="smaller">on average.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>With a million names, the difference between <span class="pill">O(n)</span> and <span class="pill">O(1)</span> is the difference between a million comparisons and one.</div>
+  <aside class="notes">
+    <p>Suppose we have one million usernames and we want to determine whether alice42 exists. If we store usernames in an ordinary list, we may have to search through many elements. Linear search requires O of n time.</p>
+    <p>Can we do better? Hash-based data structures attempt to make lookup approximately O of 1 on average.</p>
+    <p>This is the payoff slide for Weeks 11 and 12. Big-O finally buys something concrete.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Basic Idea of Hashing</h2>
+  <div class="def"><span class="term">Hash function:</span> a function that converts a key into an integer.</div>
+  <div class="cols">
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+key
+ |
+ v
+hash function
+ |
+ v
+integer
+ |
+ v
+array location
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+"Alice"
+    |
+    v
+ hash(...)
+    |
+    v
+  29384
+</code></pre>
+      <p class="small">That hash value can help determine where the item should be stored.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A hash function converts a key into an integer. Conceptually the key goes into the hash function, an integer comes out, and that integer determines an array location.</p>
+    <p>For example, the string Alice goes through hash and produces 29384. That hash value can help determine where the item should be stored.</p>
+    <p>Emphasise "can help determine". The hash is not the address yet — the next slide does the arithmetic that turns it into one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Simplified Hash Table</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Imagine an array with ten locations:</p>
+<pre><code class="language-text" data-trim data-noescape>
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Suppose we compute:</p>
+<pre><code class="language-text" data-trim data-noescape>
+hash("Alice") = 173
+</code></pre>
+      <p class="smaller">We might calculate:</p>
+<pre><code class="language-text" data-trim data-noescape>
+173 % 10
+</code></pre>
+      <p class="smaller">which gives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">So <code>"Alice"</code> could be placed at index <code>3</code>.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The remainder operator from Week 1 is what squeezes an arbitrary integer into the range of the table.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Imagine an array with ten locations, indices 0 through 9. Suppose we compute hash of Alice equals 173. We might calculate 173 modulo 10, which gives 3. So Alice could be placed at index 3.</p>
+    <p>The modulo operator is doing the whole job of fitting the hash into the table. Any table size would work the same way.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Storing and Finding <code>"Alice"</code></h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+0
+1
+2
+3  Alice
+4
+5
+6
+7
+8
+9
+</code></pre>
+    </div>
+    <div>
+      <h4>To search for Alice later</h4>
+      <ol class="small">
+        <li>Compute Alice's hash.</li>
+        <li>Calculate the corresponding position.</li>
+        <li>Check that location.</li>
+      </ol>
+      <div class="box key"><span class="box-title">Key idea</span>We do not necessarily search the entire table. We compute where the answer would have to be, and look there.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why this is different from every search we have written before</summary>
+    <div class="acc-body">
+      <p>Linear search and binary search both <em>look</em> at stored data to decide where to go next. Hashing looks only at the key you are searching for: the position is computed from the key itself, without consulting the table at all.</p>
+      <p>That is why the cost does not grow with the number of elements — and also why a bad hash function ruins everything, as the next slide shows.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-hashing" tabindex="0">Hashing, end to end</span>
+  </div>
+  <aside class="notes">
+    <p>With Alice placed at index 3, the table now reads empty at every index except 3, which holds Alice.</p>
+    <p>To search for Alice later: compute Alice's hash, calculate the corresponding position, and check that location. We do not necessarily search the entire table.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Collisions</h2>
+  <p class="small">A complication occurs when two keys map to the same location.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-text" data-trim data-noescape>
+hash("Alice") % 10 = 3
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-text" data-trim data-noescape>
+hash("David") % 10 = 3
+</code></pre>
+      <p class="small">Both want position <code>3</code>.</p>
+    </div>
+    <div>
+      <div class="def"><span class="term">Collision:</span> two keys mapping to the same table location.</div>
+      <p class="small">Hash tables therefore need a strategy for resolving collisions. Common approaches include:</p>
+      <ul class="small">
+        <li>chaining,</li>
+        <li>open addressing.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>We will not implement a full production-quality hash table in this course, but you should understand that collisions are <strong>normal</strong> and must be handled correctly.</div>
+  <details class="acc">
+    <summary>Why collisions are unavoidable</summary>
+    <div class="acc-body">
+      <p>There are far more possible keys than table positions — a million usernames cannot fit into ten slots without sharing. So a collision is not a sign that the hash function is broken; it is arithmetic.</p>
+      <p>What a good hash function buys you is that collisions stay <em>rare and evenly spread</em>. That is precisely the condition under which the expected <span class="pill">O(1)</span> claim on the next slide holds.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A complication occurs when two keys map to the same location. Suppose hash of Alice modulo 10 is 3 and hash of David modulo 10 is also 3. Both want position 3. This is called a collision.</p>
+    <p>Hash tables therefore need a strategy for resolving collisions. Common approaches include chaining and open addressing.</p>
+    <p>We will not implement a full production-quality hash table in this course, but you should understand that collisions are normal and must be handled correctly.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Expected Complexity of Hash Tables</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For a well-designed hash table, operations such as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+put
+get
+contains
+remove
+</code></pre>
+      <p class="small">are typically expected to take:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+      <p class="small">time on average.</p>
+    </div>
+    <div>
+      <div class="box warn"><span class="box-title">Watch out</span>This is <strong>not</strong> a guarantee that every operation always requires constant time. In pathological situations involving many collisions, operations may become slower.</div>
+      <p class="small">For CSC500, remember:</p>
+<pre><code class="language-text" data-trim data-noescape>
+HashSet membership: expected O(1)
+
+HashMap lookup: expected O(1)
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>For a well-designed hash table, operations such as put, get, contains, and remove are typically expected to take O of 1 time on average.</p>
+    <p>However, this is not a guarantee that every operation always requires constant time. In pathological situations involving many collisions, operations may become slower.</p>
+    <p>For CSC500, remember: HashSet membership is expected O of 1, and HashMap lookup is expected O of 1. The word "expected" is not decoration — it is the honest form of the claim.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why <code>equals()</code> and <code>hashCode()</code> Matter</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java objects used as hash keys rely on two important methods:</p>
+<pre><code class="language-java" data-trim data-noescape>
+equals()
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-java" data-trim data-noescape>
+hashCode()
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Conceptually:</p>
+      <ul class="small">
+        <li><code>hashCode()</code> helps determine where an object should be stored.</li>
+        <li><code>equals()</code> determines whether two keys should be considered equal.</li>
+      </ul>
+      <div class="box key"><span class="box-title">The rule</span>If two objects are equal according to <code>equals()</code>, they must produce the same hash code.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>When this becomes your problem</summary>
+    <div class="acc-body">
+      <p>This becomes especially important when you create your own classes and use instances of those classes in a <code>HashSet</code> or as keys in a <code>HashMap</code>.</p>
+      <p>If you override <code>equals()</code> and forget <code>hashCode()</code>, two objects that are "equal" can hash to different buckets — so the set will happily store both, and <code>contains</code> will fail to find one you just added.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Java objects used as hash keys rely on two important methods: equals and hashCode. Conceptually, hashCode helps determine where an object should be stored, and equals determines whether two keys should be considered equal.</p>
+    <p>An important Java rule is: if two objects are equal according to equals, they must produce the same hash code.</p>
+    <p>This becomes especially important when you create your own classes and use instances of those classes in a HashSet or as keys in a HashMap.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Choosing the Right Data Structure</h2>
+  <p class="part-sub">What operations matter most?</p>
+</section>
+
+<section>
+  <h2>Data Structure Selection</h2>
+  <div class="cols">
+    <div>
+      <p class="small">An important programming skill is deciding which structure best fits a problem.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>Do not simply choose whichever structure you remember first.</div>
+    </div>
+    <div>
+      <p class="small">Ask:</p>
+      <blockquote>What operations matter most?</blockquote>
+      <div class="chain">
+        <span>Operations</span><span class="sep">→</span>
+        <span>ADT</span><span class="sep">→</span>
+        <span>Class</span>
+      </div>
+    </div>
+  </div>
+  <p class="small">The next five scenarios each name a required behavior — and the behavior picks the structure.</p>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-selection" tabindex="0">All five scenarios, in full</span>
+  </div>
+  <aside class="notes">
+    <p>An important programming skill is deciding which structure best fits a problem. Do not simply choose whichever structure you remember first. Ask: what operations matter most?</p>
+    <p>The five scenarios that follow are deliberately short. Read the scenario aloud, pause, and let the class answer before revealing the structure.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Scenarios 1 and 2</h2>
+  <div class="cols">
+    <div>
+      <h4>Scenario 1</h4>
+      <p class="small">You need an undo system. The most recent action should be undone first.</p>
+      <p class="small">Use:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Stack
+</code></pre>
+      <p class="small">because the behavior is LIFO.</p>
+    </div>
+    <div>
+      <h4>Scenario 2</h4>
+      <p class="small">Customers should be served in arrival order.</p>
+      <p class="small">Use:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Queue
+</code></pre>
+      <p class="small">because the behavior is FIFO.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Both answers were decided by a phrase in the problem statement: "most recent first" and "arrival order".</div>
+  <aside class="notes">
+    <p>Scenario 1: you need an undo system, and the most recent action should be undone first. Use a stack, because the behavior is LIFO.</p>
+    <p>Scenario 2: customers should be served in arrival order. Use a queue, because the behavior is FIFO.</p>
+    <p>Teach students to underline the ordering phrase in the requirement. That phrase is the answer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Scenarios 3 and 4</h2>
+  <div class="cols">
+    <div>
+      <h4>Scenario 3</h4>
+      <p class="small">You want to know whether a username has already appeared.</p>
+      <p class="small">Use:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Set
+</code></pre>
+      <p class="small">because you care about membership and uniqueness.</p>
+    </div>
+    <div>
+      <h4>Scenario 4</h4>
+      <p class="small">You want to look up a student's GPA using their student ID.</p>
+      <p class="small">Use:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Map
+</code></pre>
+      <p class="small">because you want:</p>
+<pre><code class="language-text" data-trim data-noescape>
+student ID -&gt; GPA
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Scenario 3: you want to know whether a username has already appeared. Use a set, because you care about membership and uniqueness.</p>
+    <p>Scenario 4: you want to look up a student's GPA using their student ID. Use a map, because you want student ID mapping to GPA.</p>
+    <p>Scenario 4 is the one to write on the board as an arrow. If you can draw the arrow, you need a map.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Scenario 5</h2>
+  <div class="cols">
+    <div>
+      <p class="small">You need elements in index order and frequently access:</p>
+<pre><code class="language-java" data-trim data-noescape>
+values.get(i)
+</code></pre>
+      <p class="small">Use:</p>
+<pre><code class="language-text" data-trim data-noescape>
+ArrayList
+</code></pre>
+      <p class="small">rather than a set, queue, or stack.</p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>None of this week's structures replaces <code>ArrayList</code>. If the problem is about <em>position</em>, an indexed list is still the right answer.</div>
+      <details class="acc">
+        <summary>What the other structures cannot do</summary>
+        <div class="acc-body">
+          <p>A stack and a queue only let you reach one end. A set has no notion of position at all, and a <code>HashSet</code> does not even promise a stable iteration order.</p>
+          <p>So <code>values.get(i)</code> is not merely slow on those structures — for most of them it is not an operation the ADT offers.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Scenario 5: you need elements in index order and frequently access values.get of i. Use an ArrayList rather than a set, queue, or stack.</p>
+    <p>This scenario exists to stop over-application. A new tool is not always the right tool.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Comparing Our Structures</h2>
+  <table class="small">
+    <thead><tr><th>Structure</th><th>Main Idea</th><th>Common Operations</th></tr></thead>
+    <tbody>
+      <tr><td>Array</td><td>Indexed collection</td><td>get/set by index</td></tr>
+      <tr><td>ArrayList</td><td>Dynamic indexed collection</td><td>add/get/remove</td></tr>
+      <tr><td>Linked List</td><td>Elements connected by references</td><td>insert/remove</td></tr>
+      <tr><td>Stack</td><td>LIFO</td><td>push/pop</td></tr>
+      <tr><td>Queue</td><td>FIFO</td><td>offer/poll</td></tr>
+      <tr><td>Set</td><td>Unique collection</td><td>add/contains</td></tr>
+      <tr><td>Map</td><td>Key-value associations</td><td>put/get</td></tr>
+    </tbody>
+  </table>
+  <div class="box key"><span class="box-title">Key idea</span>The correct structure depends on the problem.</div>
+  <details class="acc">
+    <summary>The first three rows are from earlier weeks</summary>
+    <div class="acc-body">
+      <p>An array is an indexed collection accessed with get and set by index; an <code>ArrayList</code> is a dynamic indexed collection with add, get, and remove; a linked list connects elements by references and is good at insert and remove.</p>
+      <p>This week added the last four rows. Nothing was replaced — the table grew.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>This table gathers every structure from Weeks 5, 12, and 13: array, ArrayList, linked list, stack, queue, set, and map, each with its main idea and its common operations.</p>
+    <p>The correct structure depends on the problem. Tell students to copy this table onto one page — it is the single most useful revision artefact of the week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Complexity Summary</h2>
+  <p class="small">Typical complexities are:</p>
+  <table class="small">
+    <thead><tr><th>Operation</th><th>Stack</th><th>Queue</th><th>HashSet</th><th>HashMap</th></tr></thead>
+    <tbody>
+      <tr><td>Add</td><td>O(1)</td><td>O(1)</td><td>O(1) expected</td><td>O(1) expected</td></tr>
+      <tr><td>Remove</td><td>O(1)</td><td>O(1)</td><td>O(1) expected</td><td>O(1) expected</td></tr>
+      <tr><td>Inspect next</td><td>O(1)</td><td>O(1)</td><td>N/A</td><td>N/A</td></tr>
+      <tr><td>Membership</td><td>O(n)</td><td>O(n)</td><td>O(1) expected</td><td>O(1) expected</td></tr>
+      <tr><td>Lookup by key</td><td>N/A</td><td>N/A</td><td>N/A</td><td>O(1) expected</td></tr>
+    </tbody>
+  </table>
+  <div class="box note"><span class="box-title">Note</span>These complexities assume appropriate standard implementations. The <code>N/A</code> entries are not "slow" — they are operations the ADT does not offer.</div>
+  <aside class="notes">
+    <p>Typical complexities: add and remove are constant time for all four structures, expected for the hash-based ones. Inspecting the next item is constant for stacks and queues and not applicable for sets and maps.</p>
+    <p>Membership testing is linear on a stack or queue and expected constant on a HashSet or HashMap. Lookup by key applies only to a HashMap.</p>
+    <p>These complexities assume appropriate standard implementations. The membership row is the one that justifies the whole of Part V.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Worked Problems and Deeper Connections</h2>
+  <p class="part-sub">Four problems solved with this week's structures — and why they connect back to recursion.</p>
+</section>
+
+<section>
+  <h2>Problem: Valid Parentheses</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Given a string containing:</p>
+<pre><code class="language-text" data-trim data-noescape>
+(
+)
+[
+]
+{
+}
+</code></pre>
+      <p class="smaller">determine whether the brackets are correctly balanced.</p>
+    </div>
+    <div>
+      <p class="smaller">Examples:</p>
+      <span class="tag ok">Valid</span>
+<pre><code class="language-text" data-trim data-noescape>
+([]{})
+</code></pre>
+      <span class="tag no">Not valid</span>
+<pre><code class="language-text" data-trim data-noescape>
+([)]
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span><code>([)]</code> has the right <em>count</em> of every bracket. Counting is not enough — the nesting has to match too.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Given a string containing the six bracket characters — open and close paren, open and close square bracket, open and close brace — determine whether the brackets are correctly balanced.</p>
+    <p>The string open-paren open-bracket close-bracket open-brace close-brace close-paren is valid. The string open-paren open-bracket close-paren close-bracket is not valid.</p>
+    <p>Ask why the second one fails. Three of each bracket type are present in both; only the nesting differs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Solution Strategy</h2>
+  <p class="small">Use a stack.</p>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Whenever we see:</p>
+<pre><code class="language-text" data-trim data-noescape>
+(
+[
+{
+</code></pre>
+      <p class="smaller">push it.</p>
+    </div>
+    <div>
+      <p class="smaller">Whenever we see:</p>
+<pre><code class="language-text" data-trim data-noescape>
+)
+]
+}
+</code></pre>
+      <p class="smaller">check whether the top of the stack contains the matching opening symbol.</p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>The stack remembers <em>which</em> bracket is still open and <em>in what order</em> — the two facts a counter cannot hold.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Use a stack. Whenever we see an opening paren, bracket, or brace, push it. Whenever we see a closing paren, bracket, or brace, check whether the top of the stack contains the matching opening symbol.</p>
+    <p>This is the same algorithm as the matching-parentheses example in Part III, now written out as a complete Java method.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>BalancedBrackets</code>, in Java</h2>
+  <div class="cols">
+    <div>
+      <p class="small">The heart of the method:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (c == '(' || c == '[' || c == '{') {
+
+    stack.push(c);
+
+} else if (c == ')' || c == ']' || c == '}') {
+
+    if (stack.isEmpty()) {
+        return false;
+    }
+
+    char opening = stack.pop();
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Then three checks, one per bracket type, and finally:</p>
+<pre><code class="language-java" data-trim data-noescape>
+return stack.isEmpty();
+</code></pre>
+      <div class="box key"><span class="box-title">Two ways to fail</span><code>stack.isEmpty()</code> on a closing symbol means a bracket closed that was never opened. A non-empty stack at the end means a bracket opened that was never closed.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m13-balanced-brackets" tabindex="0">The complete <code>BalancedBrackets</code> class</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The isBalanced method declares a Deque of Character and walks the characters of the text. If the character is an opening symbol it is pushed. If it is a closing symbol, we first check whether the stack is empty — if it is, we return false — then pop the opening symbol.</p>
+    <p>Three checks follow: a close paren must match an open paren, a close bracket an open bracket, a close brace an open brace. Any mismatch returns false.</p>
+    <p>Finally the method returns stack.isEmpty, which is true only if every opened bracket was closed.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Problem: Customer Service Queue</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose customers arrive at a help desk. Each customer should be served in arrival order.</p>
+<pre><code class="language-java" data-trim data-noescape>
+while (!customers.isEmpty()) {
+
+    String customer = customers.poll();
+
+    System.out.println(
+        "Helping " + customer
+    );
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Helping Alice
+Helping Bob
+Helping Carol
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Same loop shape as <code>ReverseString</code> — drain until empty — but the queue hands them back in arrival order instead of reversed.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m13-help-desk" tabindex="0">The complete <code>HelpDesk</code> program</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose customers arrive at a help desk and each customer should be served in arrival order. The HelpDesk program offers Alice, Bob, and Carol onto a Queue of String, then loops while the queue is not empty, polling each customer and printing "Helping" followed by the name.</p>
+    <p>The output is Helping Alice, Helping Bob, Helping Carol.</p>
+    <p>Put this beside ReverseString from Part III. Identical drain-the-collection loop; the ADT alone decides the order.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Problem: Unique Words</h2>
+  <p class="small">Given a sentence, determine how many unique words it contains.</p>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+String text =
+    "to be or not to be";
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">The unique words are:</p>
+<pre><code class="language-text" data-trim data-noescape>
+to
+be
+or
+not
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">There are:</p>
+<pre><code class="language-text" data-trim data-noescape>
+4
+</code></pre>
+      <p class="smaller">unique words.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Six words go in; four come out. The set discards the repeats without being asked.</div>
+  <aside class="notes">
+    <p>Given a sentence, determine how many unique words it contains. Take the text "to be or not to be". The unique words are to, be, or, and not. There are 4 unique words.</p>
+    <p>This is Counting Distinct Values from Part V with strings instead of integers. Point that out — the technique transferred without change.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>UniqueWords</code>, in Java</h2>
+  <div class="cols-53">
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.HashSet;
+import java.util.Set;
+
+public class UniqueWords {
+
+    public static void main(String[] args) {
+
+        String text = "to be or not to be";
+
+        String[] words = text.split(" ");
+
+        Set&lt;String&gt; unique = new HashSet&lt;&gt;();
+
+        for (String word : words) {
+            unique.add(word);
+        }
+
+        System.out.println(unique.size());
+    }
+}
+</code></pre>
+    <div>
+      <div class="box key"><span class="box-title">The shape</span>Split, insert everything, ask for the size. No comparisons, no <code>contains</code> check, no nested loop.</div>
+      <details class="acc">
+        <summary>Why no <code>contains</code> check is needed</summary>
+        <div class="acc-body">
+          <p><code>DuplicateDetector</code> in Part V had to call <code>contains</code> because it needed to <em>report</em> the duplicate. Here we only need the final count, so we can add unconditionally and let the set absorb the repeats.</p>
+          <p>Adding a word that is already present simply has no effect — the property we established when we defined the set ADT.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The UniqueWords program splits the text on spaces, creates a Set of String called unique, adds every word, and prints the set's size.</p>
+    <p>The word "be" is added twice and "to" is added twice, but the printed size is 4.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Problem: Most Frequent Word</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-text" data-trim data-noescape>
+cat dog cat bird dog cat
+</code></pre>
+      <p class="small">We want:</p>
+<pre><code class="language-text" data-trim data-noescape>
+cat -&gt; 3
+dog -&gt; 2
+bird -&gt; 1
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Use a map.</p>
+      <div class="chain">
+        <span>count</span><span class="sep">→</span>
+        <span>scan</span><span class="sep">→</span>
+        <span>maximum</span>
+      </div>
+      <div class="box key"><span class="box-title">Key idea</span>Two passes: build the map, then find the key with the largest value. The map cannot answer "which is biggest" by itself.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose the text is cat dog cat bird dog cat. We want cat mapping to 3, dog to 2, and bird to 1. Use a map.</p>
+    <p>Then find the key with the largest value. A HashMap has no notion of a largest value, so we have to scan the entries ourselves.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting, Then Finding the Maximum</h2>
+  <div class="cols">
+    <div>
+      <h4>Count with a map</h4>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;String, Integer&gt; counts = new HashMap&lt;&gt;();
+
+for (String word : words) {
+
+    counts.put(
+        word,
+        counts.getOrDefault(word, 0) + 1
+    );
+}
+</code></pre>
+    </div>
+    <div>
+      <h4>Then scan the entries</h4>
+<pre><code class="language-java" data-trim data-noescape>
+String mostFrequent = null;
+int largestCount = 0;
+
+for (Map.Entry&lt;String, Integer&gt; entry :
+        counts.entrySet()) {
+
+    if (entry.getValue() &gt; largestCount) {
+
+        largestCount = entry.getValue();
+
+        mostFrequent = entry.getKey();
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-most-frequent" tabindex="0">Most frequent word, in full</span>
+  </div>
+  <aside class="notes">
+    <p>The counting loop is the getOrDefault pattern from Part VI, applied to the word array.</p>
+    <p>Then we track the answer in two variables: mostFrequent, initially null, and largestCount, initially zero. For each entry in counts.entrySet, if the entry's value exceeds largestCount we record both the new count and the new key.</p>
+    <p>This is the running-maximum pattern from Week 5, now iterating over map entries instead of an array.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Stacks and Recursion</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void countdown(int n) {
+
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+
+    countdown(n - 1);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+countdown(3);
+</code></pre>
+      <p class="small">creates calls approximately like:</p>
+<pre><code class="language-text" data-trim data-noescape>
+countdown(3)
+countdown(2)
+countdown(1)
+countdown(0)
+</code></pre>
+      <p class="small">These are stacked on the call stack.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Recursion and explicit stack-based algorithms are closely related. Many recursive algorithms can be rewritten using an explicit stack.</div>
+  <details class="acc">
+    <summary>What "rewritten using an explicit stack" means</summary>
+    <div class="acc-body">
+      <p>In the recursive version the call stack holds the pending work, and Java maintains it for you. In the rewritten version you declare a <code>Deque</code> yourself, push the pending work onto it, and loop until it is empty.</p>
+      <p>The bracket checker in this Part is exactly that shape: it does with an explicit stack what a recursive parser would do with the call stack.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider the countdown method: if n is zero it returns, otherwise it prints n and calls itself with n minus one. Calling countdown of 3 creates calls approximately like countdown 3, countdown 2, countdown 1, countdown 0. These are stacked on the call stack.</p>
+    <p>This means recursion and explicit stack-based algorithms are closely related. Many recursive algorithms can be rewritten using an explicit stack.</p>
+    <p>Tie this back to Part III. The call stack picture we drew for main, methodA, and methodB is exactly what countdown builds — just with the same method name at every level.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Queues and Breadth-First Processing</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose tasks generate additional tasks. A queue allows us to process them in discovery order.</p>
+      <p class="small">This idea is the foundation of <strong>breadth-first search</strong>, an algorithm you will encounter again in data structures and algorithms courses.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Notice how the queue determines the order in which work happens.</div>
+    </div>
+    <div>
+      <p class="small">Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+place starting item in queue
+
+while queue not empty:
+    remove next item
+    process it
+    add newly discovered items
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Swap the queue for a stack</summary>
+    <div class="acc-body">
+      <p>Leave that pseudocode exactly as it is and replace the queue with a stack, and the same six lines become depth-first search: the algorithm dives down one branch as far as it can go before backing up.</p>
+      <p>This is the clearest possible illustration of the claim from Part IV that "that small difference leads to very different algorithms".</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose tasks generate additional tasks. A queue allows us to process them in discovery order. This idea is the foundation of breadth-first search, an algorithm you will encounter again in data structures and algorithms courses.</p>
+    <p>Conceptually: place the starting item in the queue; while the queue is not empty, remove the next item, process it, and add newly discovered items.</p>
+    <p>Notice how the queue determines the order in which work happens.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Maps as Indexes</h2>
+  <p class="small">A map can be thought of as an <strong>index</strong>.</p>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Suppose we have:</p>
+<pre><code class="language-java" data-trim data-noescape>
+class Student {
+    private int id;
+    private String name;
+}
+</code></pre>
+      <p class="smaller">If students are stored in a list:</p>
+<pre><code class="language-java" data-trim data-noescape>
+List&lt;Student&gt; students;
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">finding student <code>12345</code> might require scanning the list. Instead we could maintain:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;Integer, Student&gt; studentsById;
+</code></pre>
+      <p class="smaller">Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+studentsById.get(12345);
+</code></pre>
+      <p class="smaller">directly expresses what we want.</p>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">A general technique</span>Organize data according to how you need to retrieve it.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A map can be thought of as an index. Suppose we have a Student class with an id and a name. If students are stored in a List of Student, finding student 12345 might require scanning the list.</p>
+    <p>Instead we could maintain a Map of Integer to Student called studentsById. Then studentsById.get of 12345 directly expresses what we want.</p>
+    <p>This is a powerful general programming technique: organize data according to how you need to retrieve it. It is also the idea behind the inverted index in this week's lab.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Common Mistakes, Practice, and Wrap-up</h2>
+  <p class="part-sub">Five mistakes worth naming, then everything you do with this week's material.</p>
+</section>
+
+<section>
+  <h2>Mistake: Using a Stack When You Need a Queue</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Suppose jobs arrive:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A
+B
+C
+</code></pre>
+      <p class="smaller">If fairness requires processing:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A
+B
+C
+</code></pre>
+      <p class="smaller">then a stack is incorrect.</p>
+    </div>
+    <div>
+      <p class="smaller">A stack would produce:</p>
+<pre><code class="language-text" data-trim data-noescape>
+C
+B
+A
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>The program compiles, runs, and produces plausible output — in exactly the wrong order.</div>
+    </div>
+    <div>
+      <p class="smaller">Always identify whether the problem requires:</p>
+<pre><code class="language-text" data-trim data-noescape>
+LIFO
+</code></pre>
+      <p class="smaller">or:</p>
+<pre><code class="language-text" data-trim data-noescape>
+FIFO
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the compiler cannot help you here</summary>
+    <div class="acc-body">
+      <p>Both <code>Deque</code> and <code>Queue</code> are backed by <code>ArrayDeque</code>, both accept the same jobs, and both hand them back one at a time. Every type checks out.</p>
+      <p>The only thing that differs is the order — which makes this a logic error of the kind we first named in Week 1. It is caught by tracing or testing, never by compiling.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose jobs arrive as A, B, C. If fairness requires processing A, B, C, then a stack is incorrect. A stack would produce C, B, A.</p>
+    <p>Always identify whether the problem requires LIFO or FIFO. This is a logic error, not a syntax error — nothing in the compiler will catch it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Mistake: Assuming Hash Structures Are Ordered</h2>
+  <div class="cols">
+    <div>
+      <h4>A <code>HashSet</code> is not in insertion order</h4>
+      <p class="smaller">A <code>HashSet</code> does not promise that iteration will occur in insertion order. This code:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Set&lt;String&gt; values = new HashSet&lt;&gt;();
+
+values.add("A");
+values.add("B");
+values.add("C");
+</code></pre>
+      <p class="smaller">should not be interpreted as promising that iteration will always print:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A B C
+</code></pre>
+    </div>
+    <div>
+      <h4>A <code>HashMap</code> is not sorted</h4>
+      <p class="smaller">A <code>HashMap</code> does not keep its keys sorted. If you need ordering, Java provides alternatives such as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+TreeMap
+</code></pre>
+      <p class="smaller">but our focus this week is <code>HashMap</code>.</p>
+      <div class="box pitfall"><span class="box-title">Common error</span>Testing a program once, seeing a convenient order, and treating it as a guarantee. If ordering matters, another data structure may be more appropriate.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A HashSet does not promise that iteration will occur in insertion order. Adding A, then B, then C should not be interpreted as promising that iteration will always print A B C. If ordering matters, another data structure may be more appropriate.</p>
+    <p>Likewise a HashMap does not keep its keys sorted. If you need ordering, Java provides alternatives such as TreeMap, but our focus this week is HashMap.</p>
+    <p>Connect this back to Part VII. The iteration order follows from the hash values and the table size — neither of which has anything to do with when you inserted.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Mistake: Confusing <code>containsKey()</code> and <code>containsValue()</code></h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
+
+ages.put("Alice", 30);
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+ages.containsKey("Alice")
+</code></pre>
+      <p class="smaller">is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+true
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller">while:</p>
+<pre><code class="language-java" data-trim data-noescape>
+ages.containsValue(30)
+</code></pre>
+      <p class="smaller">is also:</p>
+<pre><code class="language-text" data-trim data-noescape>
+true
+</code></pre>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>These answer completely different questions. Both happen to be <code>true</code> here, which is exactly what makes the confusion survive testing.</div>
+  <details class="acc">
+    <summary>They do not even cost the same</summary>
+    <div class="acc-body">
+      <p><code>containsKey</code> is a hash lookup — expected <span class="pill">O(1)</span>, as the complexity table in Part VIII records.</p>
+      <p><code>containsValue</code> has no index to work from, so it must examine the values one by one. Reaching for it inside a loop is a common way to turn a linear algorithm into a quadratic one.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose a Map of String to Integer called ages, with Alice mapped to 30. Then ages.containsKey of Alice is true, while ages.containsValue of 30 is also true.</p>
+    <p>These answer completely different questions. Ask the class which one answers "is Alice in the map" and which answers "does anybody here happen to be 30".</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Mistake: Forgetting That <code>get()</code> May Return <code>null</code></h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+scores.get("David");
+</code></pre>
+      <p class="smaller">If <code>"David"</code> is not present, <code>get()</code> may return <code>null</code>.</p>
+    </div>
+    <div>
+      <p class="smaller">Therefore you may need:</p>
+<pre><code class="language-java" data-trim data-noescape>
+containsKey()
+</code></pre>
+      <p class="smaller">or:</p>
+<pre><code class="language-java" data-trim data-noescape>
+getOrDefault()
+</code></pre>
+      <p class="smaller">depending on the problem.</p>
+    </div>
+    <div>
+      <div class="box pitfall"><span class="box-title">Common error</span>Doing arithmetic on the result of <code>get()</code> without checking. That is where a <code>NullPointerException</code> comes from.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Which one to choose</summary>
+    <div class="acc-body">
+      <p>Use <code>containsKey()</code> when a missing key means something different from a present one — a lookup failure you must report.</p>
+      <p>Use <code>getOrDefault()</code> when a missing key has a sensible stand-in value, as in the word-counting loop from Part VI where the stand-in is <code>0</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider scores.get of David. If David is not present, get may return null. Therefore you may need containsKey or getOrDefault, depending on the problem.</p>
+    <p>This is the one mistake in Part X that produces a crash rather than a wrong answer — which, on balance, is the friendlier failure.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercises 1 and 2 — Trace These</h2>
+  <div class="cols">
+    <div>
+      <h4>Exercise 1 — Stack Trace</h4>
+<pre><code class="language-java" data-trim data-noescape>
+Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+
+stack.push(4);
+stack.push(8);
+stack.push(12);
+
+System.out.println(stack.pop());
+
+stack.push(16);
+
+System.out.println(stack.peek());
+System.out.println(stack.pop());
+</code></pre>
+    </div>
+    <div>
+      <h4>Exercise 2 — Queue Trace</h4>
+<pre><code class="language-java" data-trim data-noescape>
+Queue&lt;String&gt; q = new ArrayDeque&lt;&gt;();
+
+q.offer("A");
+q.offer("B");
+q.offer("C");
+
+System.out.println(q.poll());
+
+q.offer("D");
+
+System.out.println(q.poll());
+</code></pre>
+    </div>
+  </div>
+  <p class="small">For each: <strong>1.</strong> What is printed? &nbsp; <strong>2.</strong> What remains in the structure?</p>
+  <aside class="notes">
+    <p>Exercise 1 gives a stack trace: push 4, 8, 12, print a pop, push 16, print a peek, print a pop. Determine what is printed and what remains in the stack.</p>
+    <p>Exercise 2 gives a queue trace: offer A, B, C, print a poll, offer D, print a poll. Determine what is printed and what remains in the queue.</p>
+    <p>Run these as a two-minute pair exercise. The point is the contrast — the same shape of code, two different ADTs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exercises 3, 4, and 5</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Exercise 3 — Select the Data Structure</h4>
+      <p class="smaller">Choose from:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Stack
+Queue
+Set
+Map
+ArrayList
+</code></pre>
+    </div>
+    <div>
+      <h4>Exercise 4 — Duplicate Detection</h4>
+      <p class="smaller">Write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean containsDuplicate(int[] values)
+</code></pre>
+      <p class="smaller">using a <code>HashSet</code>.</p>
+    </div>
+    <div>
+      <h4>Exercise 5 — Character Frequency</h4>
+      <p class="smaller">Write a method that receives:</p>
+<pre><code class="language-text" data-trim data-noescape>
+"banana"
+</code></pre>
+      <p class="smaller">and produces counts equivalent to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+b -&gt; 1
+a -&gt; 3
+n -&gt; 2
+</code></pre>
+      <p class="smaller">Use:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;Character, Integer&gt;
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-exercises" tabindex="0">In-class exercises, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Exercise 3 asks students to choose from Stack, Queue, Set, Map, and ArrayList for five scenarios: browser pages, print jobs, registered email addresses, product ID to product object, and index-based access to students.</p>
+    <p>Exercise 4 asks for containsDuplicate using a HashSet — the DuplicateDetector from Part V, written from memory.</p>
+    <p>Exercise 5 asks for character frequency on the word banana using a Map of Character to Integer. It is the word-frequency pattern with characters instead of words.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Challenge Problems 1 and 2</h2>
+  <div class="cols">
+    <div>
+      <h4>Challenge 1 — First Non-Repeated Word</h4>
+      <p class="smaller">Given:</p>
+<pre><code class="language-text" data-trim data-noescape>
+cat dog bird cat dog mouse
+</code></pre>
+      <p class="smaller">return:</p>
+<pre><code class="language-text" data-trim data-noescape>
+bird
+</code></pre>
+      <p class="smaller">because <code>"bird"</code> is the first word that appears exactly once.</p>
+    </div>
+    <div>
+      <h4>Challenge 2 — Undo System</h4>
+      <p class="smaller">Create a simple text editor simulation. Commands:</p>
+<pre><code class="language-text" data-trim data-noescape>
+TYPE hello
+TYPE world
+UNDO
+</code></pre>
+      <p class="smaller">Use a stack to store previous text states.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Hint for Challenge 1</summary>
+    <div class="acc-body">
+      <ol>
+        <li>Use a map to calculate frequencies.</li>
+        <li>Scan the words a second time.</li>
+      </ol>
+      <p>The second scan is what makes "first" meaningful — the map alone has no order, so the original word array supplies it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Challenge 1: given cat dog bird cat dog mouse, return bird, because bird is the first word that appears exactly once. The hint is to use a map to calculate frequencies, then scan the words a second time.</p>
+    <p>Challenge 2: create a simple text editor simulation with the commands TYPE hello, TYPE world, and UNDO. Use a stack to store previous text states.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Challenge Problems 3 and 4</h2>
+  <div class="cols">
+    <div>
+      <h4>Challenge 3 — Task Scheduler</h4>
+      <p class="smaller">Create a simple queue of tasks. Each task should be represented by a class:</p>
+<pre><code class="language-java" data-trim data-noescape>
+class Task {
+    private String description;
+}
+</code></pre>
+      <p class="smaller">Allow users to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+ADD
+PROCESS
+SHOW NEXT
+</code></pre>
+      <p class="smaller">The earliest task should be processed first.</p>
+    </div>
+    <div>
+      <h4>Challenge 4 — Inventory</h4>
+      <p class="smaller">Create:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;String, Integer&gt;
+</code></pre>
+      <p class="smaller">where the key is a product name and the value is the quantity in stock. Support:</p>
+<pre><code class="language-text" data-trim data-noescape>
+ADD
+SELL
+LOOKUP
+</code></pre>
+      <p class="smaller">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Laptop -&gt; 12
+Keyboard -&gt; 35
+Mouse -&gt; 20
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-challenges" tabindex="0">All four challenge problems</span>
+  </div>
+  <aside class="notes">
+    <p>Challenge 3: create a simple queue of tasks, each represented by a Task class with a description. Allow users to ADD, PROCESS, and SHOW NEXT. The earliest task should be processed first — so SHOW NEXT is a peek and PROCESS is a poll.</p>
+    <p>Challenge 4: create a Map of String to Integer where the key is a product name and the value is the quantity in stock, supporting ADD, SELL, and LOOKUP. For example Laptop 12, Keyboard 35, Mouse 20.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Concept Checks 1–4</h2>
+  <div class="cols">
+    <div>
+      <p class="smaller"><strong>Check 1.</strong> What principle describes a stack?</p>
+<pre><code class="language-text" data-trim data-noescape>
+Last In, First Out
+</code></pre>
+      <p class="smaller"><strong>Check 2.</strong> What principle describes a queue?</p>
+<pre><code class="language-text" data-trim data-noescape>
+First In, First Out
+</code></pre>
+    </div>
+    <div>
+      <p class="smaller"><strong>Check 3.</strong> Which data structure is most appropriate for determining whether a value has already been observed?</p>
+<pre><code class="language-text" data-trim data-noescape>
+Set
+</code></pre>
+      <p class="smaller"><strong>Check 4.</strong> Which data structure represents relationships such as <code>employee ID -&gt; Employee</code>?</p>
+<pre><code class="language-text" data-trim data-noescape>
+employee ID -&gt; Employee
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+Map
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Check 1: what principle describes a stack? Last In, First Out. Check 2: what principle describes a queue? First In, First Out.</p>
+    <p>Check 3: which data structure is most appropriate for determining whether a value has already been observed? A set. Check 4: which data structure represents relationships such as employee ID mapping to Employee? A map.</p>
+    <p>Use these as a cold-call round rather than a written quiz. All four should be instant.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Concept Checks 5–7</h2>
+  <div class="cols-3">
+    <div>
+      <p class="smaller"><strong>Check 5.</strong> What is the expected complexity of lookup in a <code>HashMap</code>?</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(1)
+</code></pre>
+      <p class="smaller">on average.</p>
+    </div>
+    <div>
+      <p class="smaller"><strong>Check 6.</strong> Does a <code>HashSet</code> store duplicate elements?</p>
+      <p class="smaller"><strong>Answer:</strong> No.</p>
+    </div>
+    <div>
+      <p class="smaller"><strong>Check 7.</strong> Does a <code>HashMap</code> guarantee that keys appear in insertion order?</p>
+      <p class="smaller"><strong>Answer:</strong> No.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Note</span>Checks 6 and 7 are the two properties students most often assume without checking — one is guaranteed, the other is guaranteed <em>not</em> to be.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-checks" tabindex="0">All seven concept checks</span>
+  </div>
+  <aside class="notes">
+    <p>Check 5: what is the expected complexity of lookup in a HashMap? O of 1 on average. Check 6: does a HashSet store duplicate elements? No. Check 7: does a HashMap guarantee that keys appear in insertion order? No.</p>
+    <p>Note the asymmetry in checks 6 and 7. Uniqueness is part of the set contract; ordering is explicitly not part of the HashMap contract.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Summary: Stack and Queue</h2>
+  <div class="cols">
+    <div>
+      <h4>Stack</h4>
+      <p class="smaller">A stack follows:</p>
+<pre><code class="language-text" data-trim data-noescape>
+LIFO
+</code></pre>
+      <p class="smaller">Typical operations:</p>
+<pre><code class="language-text" data-trim data-noescape>
+push
+pop
+peek
+</code></pre>
+      <p class="smaller">Common applications include recursion, undo, backtracking, and expression processing.</p>
+    </div>
+    <div>
+      <h4>Queue</h4>
+      <p class="smaller">A queue follows:</p>
+<pre><code class="language-text" data-trim data-noescape>
+FIFO
+</code></pre>
+      <p class="smaller">Typical operations:</p>
+<pre><code class="language-text" data-trim data-noescape>
+offer
+poll
+peek
+</code></pre>
+      <p class="smaller">Common applications include scheduling, request processing, simulations, and breadth-first algorithms.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This week introduced four extremely important abstract data types. A stack follows LIFO, with typical operations push, pop, and peek. Common applications include recursion, undo, backtracking, and expression processing.</p>
+    <p>A queue follows FIFO, with typical operations offer, poll, and peek. Common applications include scheduling, request processing, simulations, and breadth-first algorithms.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Summary: Set and Map</h2>
+  <div class="cols">
+    <div>
+      <h4>Set</h4>
+      <p class="smaller">A set stores unique elements. Typical operations include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+add
+remove
+contains
+</code></pre>
+      <p class="smaller">A <code>HashSet</code> provides expected constant-time membership testing.</p>
+    </div>
+    <div>
+      <h4>Map</h4>
+      <p class="smaller">A map stores:</p>
+<pre><code class="language-text" data-trim data-noescape>
+key -&gt; value
+</code></pre>
+      <p class="smaller">associations. Typical operations include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+put
+get
+containsKey
+remove
+</code></pre>
+      <p class="smaller">A <code>HashMap</code> provides expected constant-time lookup by key.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-summary" tabindex="0">Week 13 summary, in the notes' own words</span>
+  </div>
+  <aside class="notes">
+    <p>A set stores unique elements, with typical operations add, remove, and contains. A HashSet provides expected constant-time membership testing.</p>
+    <p>A map stores key-to-value associations, with typical operations put, get, containsKey, and remove. A HashMap provides expected constant-time lookup by key.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Most Important Idea</h2>
+  <p class="small">The most important idea from this week is <strong>not</strong> memorizing Java collection methods. It is learning to ask:</p>
+  <blockquote class="small">What behavior does my program need from its data?</blockquote>
+  <div class="cols">
+    <div>
+      <div class="cols">
+        <div>
+          <p class="smaller">If you need:</p>
+<pre><code class="language-text" data-trim data-noescape>
+most recent item first
+</code></pre>
+          <p class="smaller">think:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Stack
+</code></pre>
+        </div>
+        <div>
+          <p class="smaller">If you need:</p>
+<pre><code class="language-text" data-trim data-noescape>
+oldest item first
+</code></pre>
+          <p class="smaller">think:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Queue
+</code></pre>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="cols">
+        <div>
+          <p class="smaller">If you need:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Have I seen this before?
+</code></pre>
+          <p class="smaller">think:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Set
+</code></pre>
+        </div>
+        <div>
+          <p class="smaller">If you need:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Given this key, what value is associated with it?
+</code></pre>
+          <p class="smaller">think:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Map
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Choosing the right data structure often turns a complicated program into a simple one.</div>
+  <aside class="notes">
+    <p>The most important idea from this week is not memorizing Java collection methods. It is learning to ask: what behavior does my program need from its data?</p>
+    <p>If you need the most recent item first, think stack. If you need the oldest item first, think queue. If you need to answer "Have I seen this before?", think set. If you need "Given this key, what value is associated with it?", think map.</p>
+    <p>Choosing the right data structure often turns a complicated program into a simple one. That sentence is the exam answer for the whole week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>An <strong>ADT</strong> specifies what is stored, what operations exist, and what they mean — not how they are implemented.</li>
+    <li>A <strong>stack</strong> is LIFO: <code>push</code>, <code>pop</code>, <code>peek</code>, <code>isEmpty</code>. The call stack is one you have used all semester.</li>
+    <li>A <strong>queue</strong> is FIFO: <code>offer</code>, <code>poll</code>, <code>peek</code>. Stacks and queues differ only in removal order.</li>
+    <li>A <strong>set</strong> holds unique elements and answers "have I seen this?" in expected <span class="pill">O(1)</span>.</li>
+    <li>A <strong>map</strong> associates each key with at most one value and answers "what is stored under this key?".</li>
+    <li><strong>Hashing</strong> computes a position from the key itself; collisions are normal and must be handled.</li>
+    <li>Hash-based operations are <strong>expected</strong> constant time — an average, not a guarantee.</li>
+    <li>The real skill is <strong>selection</strong>: identify the behavior the problem needs, then pick the structure.</li>
+  </ul>
+  <aside class="notes">
+    <p>These eight points are the week in miniature. The first is the framing idea, the next four are the four ADTs, and the last three are the machinery and the judgement.</p>
+    <p>If a student remembers only one line, make it the last one: identify the behavior the problem needs, then pick the structure.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Abstract Data Type</td><td>A specification of what is stored, what operations exist, and what they mean.</td></tr>
+        <tr><td>Stack</td><td>A collection in which elements are removed in reverse order of addition.</td></tr>
+        <tr><td>LIFO</td><td>Last In, First Out — the stack rule.</td></tr>
+        <tr><td>Call stack</td><td>Where the JVM stores information about each active method call.</td></tr>
+        <tr><td>Queue</td><td>A collection that stores elements in the order in which they arrive.</td></tr>
+        <tr><td>FIFO</td><td>First In, First Out — the queue rule.</td></tr>
+        <tr><td>Enqueue / dequeue</td><td>Add to the back; remove from the front.</td></tr>
+        <tr><td>Set</td><td>A collection that does not contain duplicate elements.</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Map</td><td>A collection that associates one value with another.</td></tr>
+        <tr><td>Key / value</td><td>The thing you look up by; the thing you get back.</td></tr>
+        <tr><td>Hash function</td><td>A function that converts a key into an integer.</td></tr>
+        <tr><td>Collision</td><td>Two keys mapping to the same table location.</td></tr>
+        <tr><td>Chaining</td><td>One common strategy for resolving collisions.</td></tr>
+        <tr><td>Open addressing</td><td>The other common collision-resolution strategy named this week.</td></tr>
+        <tr><td>Expected O(1)</td><td>Constant time on average, not a guarantee for every operation.</td></tr>
+        <tr><td>Inverted index</td><td>A map from each word to where it occurs.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">
+    <p>Every term here was introduced somewhere in Week 13. Use this table as the vocabulary list for the quiz.</p>
+    <p>Two entries repay extra attention: "expected O(1)", because the qualifier is the point, and "abstract data type", because it is the frame the other fifteen terms hang on.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Suggested Lab: Mini Search Engine Word Index</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Write a Java program that reads several lines of text and builds a word index. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+java is a programming language
+java supports object oriented programming
+programming requires practice
+</code></pre>
+      <p class="small">Then allow the user to enter a word:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Search: programming
+
+"programming" occurs 3 times.
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Your program should create a map resembling:</p>
+<pre><code class="language-text" data-trim data-noescape>
+java        -&gt; 2
+is          -&gt; 1
+a           -&gt; 1
+programming -&gt; 3
+language    -&gt; 1
+supports    -&gt; 1
+object      -&gt; 1
+oriented    -&gt; 1
+requires    -&gt; 1
+practice    -&gt; 1
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Write a Java program that reads several lines of text and builds a word index. Given the three sample lines, the program should create a map in which java maps to 2, programming to 3, and every other word to 1.</p>
+    <p>Then allow the user to enter a word. Searching for programming should report that programming occurs 3 times.</p>
+    <p>This is the getOrDefault counting pattern from Part VI, applied across several lines rather than one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Lab Extension: An Inverted Index</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Maintain:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Map&lt;String, Set&lt;Integer&gt;&gt;
+</code></pre>
+      <p class="small">where the value contains the line numbers where each word occurs. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+java        -&gt; {1, 2}
+programming -&gt; {1, 2, 3}
+practice    -&gt; {3}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This combines two of this week's data structures:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Map + Set
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>It demonstrates a fundamental idea used in search systems: an <strong>inverted index</strong>.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why a <code>Set</code> of line numbers rather than a list</summary>
+    <div class="acc-body">
+      <p>A word can occur twice on the same line. If the value were a list, line 2 would be recorded twice for that word; because it is a <code>Set</code>, the duplicate is absorbed and the value stays a clean list of <em>which lines</em> contain the word.</p>
+      <p>Note also the nested generics: <code>Map&lt;String, Set&lt;Integer&gt;&gt;</code> is a map whose values are themselves collections. This is the first time this semester a type parameter has contained another one.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m13-lab" tabindex="0">The full lab brief</span>
+  </div>
+  <aside class="notes">
+    <p>The extension asks students to maintain a Map of String to Set of Integer, where the value contains the line numbers where each word occurs. For example java occurs on lines 1 and 2, programming on lines 1, 2 and 3, and practice on line 3.</p>
+    <p>This combines two of this week's data structures, Map plus Set, and demonstrates a fundamental idea used in search systems: an inverted index.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Next week we will study <strong>trees</strong>. Trees introduce a different kind of organization. Instead of arranging elements linearly:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A -&gt; B -&gt; C -&gt; D
+</code></pre>
+      <p class="small">we will organize them hierarchically:</p>
+<pre><code class="language-text" data-trim data-noescape>
+        A
+       / \
+      B   C
+     / \
+    D   E
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We will examine:</p>
+      <ul class="smaller">
+        <li>tree terminology,</li>
+        <li>binary trees,</li>
+        <li>binary search trees,</li>
+        <li>recursive tree algorithms,</li>
+        <li>tree traversal,</li>
+        <li>search and insertion,</li>
+        <li>and the relationship between tree structure and algorithm efficiency.</li>
+      </ul>
+      <div class="def"><span class="term">Week 14:</span> Trees and Core Data Structures</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Before next week, make sure you are comfortable with</summary>
+    <div class="acc-body">
+      <ul>
+        <li>references,</li>
+        <li>linked nodes,</li>
+        <li>recursion,</li>
+        <li>Big-O notation,</li>
+        <li>and the distinction between an ADT and an implementation.</li>
+      </ul>
+      <p>The last item is this week's contribution to that list — and the one that makes the tree material feel familiar rather than new.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Next week we will study trees. Trees introduce a different kind of organization. Instead of arranging elements linearly as A to B to C to D, we will organize them hierarchically, with A at the top, B and C beneath it, and D and E beneath B.</p>
+    <p>We will examine tree terminology, binary trees, binary search trees, recursive tree algorithms, tree traversal, search and insertion, and the relationship between tree structure and algorithm efficiency.</p>
+    <p>Before next week, make sure you are comfortable with references, linked nodes, recursion, Big-O notation, and the distinction between an ADT and an implementation.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 13 — Stacks, Queues, Sets, and Maps
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m13-adt-vs-impl"
+          data-kicker="Deep dive" data-title="ADT versus implementation, and why the distinction matters">
+  <h4>What an ADT specifies</h4>
+  <p>An <strong>Abstract Data Type (ADT)</strong> specifies:</p>
+  <ul>
+    <li>what kind of data is stored,</li>
+    <li>what operations are supported,</li>
+    <li>and what those operations mean.</li>
+  </ul>
+  <p>An ADT does <strong>not</strong> necessarily specify how those operations are implemented.</p>
+  <h4>The stack as an example</h4>
+  <p>Consider a stack. A stack supports operations such as:</p>
+<pre><code class="language-text">push
+pop
+peek
+isEmpty</code></pre>
+  <p>This describes the <strong>behavior</strong> of a stack. It does not tell us whether the stack is implemented using:</p>
+  <ul>
+    <li>an array,</li>
+    <li>an <code>ArrayList</code>,</li>
+    <li>a linked list,</li>
+    <li>or some other representation.</li>
+  </ul>
+  <p>That distinction is extremely important.</p>
+  <h4>ADT versus implementation</h4>
+  <p>For example:</p>
+<pre><code class="language-text">Stack ADT
+    |
+    +-- Array implementation
+    |
+    +-- ArrayList implementation
+    |
+    +-- Linked-list implementation</code></pre>
+  <p>All three implementations can behave like stacks. The user of the stack does not necessarily need to know which implementation is being used.</p>
+  <p>This is another example of <strong>abstraction</strong>, a concept we have repeatedly encountered in object-oriented programming.</p>
+  <div class="box key"><span class="box-title">Why it matters</span>The question changes from "How can I store several values?" to "What operations should my collection support, and how efficiently should those operations work?"</div>
+</template>
+
+<template class="csc-modal-tpl" id="m13-stack-ops"
+          data-kicker="Reference" data-title="The four core stack operations, with every example">
+  <h4><code>push</code></h4>
+  <p>Add an item to the top of the stack.</p>
+<pre><code class="language-text">push(x)</code></pre>
+  <p>Example:</p>
+<pre><code class="language-text">Stack before:
+
+B
+A
+
+push(C)
+
+Stack after:
+
+C
+B
+A</code></pre>
+  <h4><code>pop</code></h4>
+  <p>Remove and return the item on top.</p>
+<pre><code class="language-text">pop()</code></pre>
+  <p>Example — the stack:</p>
+<pre><code class="language-text">Stack:
+
+C
+B
+A</code></pre>
+  <p>Calling:</p>
+<pre><code class="language-java">pop()</code></pre>
+  <p>returns:</p>
+<pre><code class="language-text">C</code></pre>
+  <p>and leaves:</p>
+<pre><code class="language-text">B
+A</code></pre>
+  <h4><code>peek</code></h4>
+  <p>Return the top item without removing it.</p>
+<pre><code class="language-java">peek()</code></pre>
+  <p>If the stack contains:</p>
+<pre><code class="language-text">C
+B
+A</code></pre>
+  <p>then:</p>
+<pre><code class="language-java">peek()</code></pre>
+  <p>returns:</p>
+<pre><code class="language-text">C</code></pre>
+  <p>but the stack remains unchanged.</p>
+  <h4><code>isEmpty</code></h4>
+  <p>Determines whether the stack contains any elements.</p>
+<pre><code class="language-java">isEmpty()</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-stack-trace"
+          data-kicker="Worked example" data-title="Tracing a stack, step by step">
+  <p>Suppose we perform the following operations:</p>
+<pre><code class="language-text">push(10)
+push(20)
+push(30)
+pop()
+push(40)</code></pre>
+  <p>Trace the stack. Initially:</p>
+<pre><code class="language-text">empty</code></pre>
+  <p>After:</p>
+<pre><code class="language-text">push(10)</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">10</code></pre>
+  <p>After:</p>
+<pre><code class="language-text">push(20)</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">20
+10</code></pre>
+  <p>After:</p>
+<pre><code class="language-text">push(30)</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">30
+20
+10</code></pre>
+  <p>Then:</p>
+<pre><code class="language-text">pop()</code></pre>
+  <p>returns <code>30</code>. The stack becomes:</p>
+<pre><code class="language-text">20
+10</code></pre>
+  <p>Finally:</p>
+<pre><code class="language-text">push(40)</code></pre>
+  <p>produces:</p>
+<pre><code class="language-text">40
+20
+10</code></pre>
+  <div class="box key"><span class="box-title">The rule in one line</span>The last item inserted is the first item removed.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m13-call-stack"
+          data-kicker="Deep dive" data-title="The call stack, frame by frame">
+  <p>You have already been using stacks throughout this course. Whenever Java calls a method, information about that method call is stored on the <strong>call stack</strong>.</p>
+  <p>Consider:</p>
+<pre><code class="language-java">public static void main(String[] args) {
+    methodA();
+}
+
+public static void methodA() {
+    methodB();
+}
+
+public static void methodB() {
+    System.out.println("Hello");
+}</code></pre>
+  <p>The call stack evolves approximately as follows. First:</p>
+<pre><code class="language-text">main</code></pre>
+  <p>Then <code>main</code> calls <code>methodA</code>:</p>
+<pre><code class="language-text">methodA
+main</code></pre>
+  <p>Then <code>methodA</code> calls <code>methodB</code>:</p>
+<pre><code class="language-text">methodB
+methodA
+main</code></pre>
+  <p>When <code>methodB</code> finishes:</p>
+<pre><code class="language-text">methodA
+main</code></pre>
+  <p>Then <code>methodA</code> finishes:</p>
+<pre><code class="language-text">main</code></pre>
+  <p>Finally <code>main</code> finishes.</p>
+  <h4>Why this explains recursion</h4>
+  <p>This is why recursion naturally works using a stack. Each recursive call creates another stack frame.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m13-reverse-string"
+          data-kicker="Full program" data-title="Reversing a string with a stack">
+  <p>A stack naturally reverses order. Suppose we want to reverse:</p>
+<pre><code class="language-text">computer</code></pre>
+  <p>Push every character:</p>
+<pre><code class="language-text">c
+o
+m
+p
+u
+t
+e
+r</code></pre>
+  <p>Because the last character pushed is removed first, popping all characters produces:</p>
+<pre><code class="language-text">retupmoc</code></pre>
+  <h4>Java implementation</h4>
+<pre><code class="language-java">import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class ReverseString {
+
+    public static String reverse(String text) {
+
+        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+
+        for (char c : text.toCharArray()) {
+            stack.push(c);
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        while (!stack.isEmpty()) {
+            result.append(stack.pop());
+        }
+
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverse("computer"));
+    }
+}</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">retupmoc</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-brackets"
+          data-kicker="Worked example" data-title="Matching parentheses with a stack">
+  <p>Stacks are useful for determining whether brackets are correctly nested. Consider:</p>
+<pre><code class="language-text">((a + b) * c)</code></pre>
+  <p>This is valid. But:</p>
+<pre><code class="language-text">((a + b) * c</code></pre>
+  <p>is not. Consider something more complicated:</p>
+<pre><code class="language-text">{ [ (a + b) * c ] + d }</code></pre>
+  <h4>To check the expression</h4>
+  <ol>
+    <li>When we encounter an opening symbol, push it.</li>
+    <li>When we encounter a closing symbol, pop the corresponding opening symbol.</li>
+    <li>If the symbols do not match, the expression is invalid.</li>
+    <li>At the end, the stack should be empty.</li>
+  </ol>
+  <h4>A full trace</h4>
+  <p>For example:</p>
+<pre><code class="language-text">Input:
+
+{ [ ( ) ] }</code></pre>
+  <p>Trace:</p>
+<pre><code class="language-text">Read {    stack: {
+
+Read [    stack: [
+                   {
+
+Read (    stack: (
+                   [
+                   {
+
+Read )    pop (
+
+Read ]    pop [
+
+Read }    pop {
+
+stack is empty</code></pre>
+  <p>Therefore the brackets are balanced.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m13-queue-trace"
+          data-kicker="Worked example" data-title="Tracing a queue, step by step">
+  <p>Suppose the following operations occur:</p>
+<pre><code class="language-text">enqueue(10)
+enqueue(20)
+enqueue(30)
+dequeue()
+enqueue(40)</code></pre>
+  <p>Initially:</p>
+<pre><code class="language-text">empty</code></pre>
+  <p>After:</p>
+<pre><code class="language-text">enqueue(10)</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">Front
+10</code></pre>
+  <p>After:</p>
+<pre><code class="language-text">enqueue(20)</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">Front       Back
+10    20</code></pre>
+  <p>After:</p>
+<pre><code class="language-text">enqueue(30)</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">Front             Back
+10    20    30</code></pre>
+  <p>Then:</p>
+<pre><code class="language-text">dequeue()</code></pre>
+  <p>returns:</p>
+<pre><code class="language-text">10</code></pre>
+  <p>and leaves:</p>
+<pre><code class="language-text">Front       Back
+20    30</code></pre>
+  <p>After:</p>
+<pre><code class="language-text">enqueue(40)</code></pre>
+  <p>we have:</p>
+<pre><code class="language-text">Front             Back
+20    30    40</code></pre>
+  <div class="box key"><span class="box-title">Compare</span>The same five operations on a stack returned <code>30</code> from the removal, not <code>10</code>.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m13-stack-vs-queue"
+          data-kicker="Comparison" data-title="Stack versus queue, side by side">
+  <p>Stacks and queues differ only in the order in which elements are removed.</p>
+  <table>
+    <thead><tr><th>Property</th><th>Stack</th><th>Queue</th></tr></thead>
+    <tbody>
+      <tr><td>Rule</td><td>LIFO</td><td>FIFO</td></tr>
+      <tr><td>Add operation</td><td>push</td><td>enqueue / offer</td></tr>
+      <tr><td>Remove operation</td><td>pop</td><td>dequeue / poll</td></tr>
+      <tr><td>Inspect next item</td><td>peek</td><td>peek</td></tr>
+      <tr><td>Typical example</td><td>Undo history</td><td>Waiting line</td></tr>
+    </tbody>
+  </table>
+  <p>Suppose we insert:</p>
+<pre><code class="language-text">A
+B
+C</code></pre>
+  <p>A stack removes:</p>
+<pre><code class="language-text">C
+B
+A</code></pre>
+  <p>A queue removes:</p>
+<pre><code class="language-text">A
+B
+C</code></pre>
+  <p>That small difference leads to very different algorithms.</p>
+  <h4>Where you have already seen both</h4>
+  <p>The Java Collections Framework provides the <code>Queue</code> interface, and a common implementation is <code>ArrayDeque</code> — the same class we used for the stack. What differs is the interface you declare and the methods you call.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m13-word-frequency"
+          data-kicker="Full program" data-title="Counting word frequency with a map">
+  <p>Suppose we have:</p>
+<pre><code class="language-text">the cat chased the dog</code></pre>
+  <p>We want:</p>
+<pre><code class="language-text">the     -&gt; 2
+cat     -&gt; 1
+chased  -&gt; 1
+dog     -&gt; 1</code></pre>
+  <p>A map is ideal.</p>
+<pre><code class="language-java">import java.util.HashMap;
+import java.util.Map;
+
+public class WordFrequency {
+
+    public static void main(String[] args) {
+
+        String text = "the cat chased the dog";
+
+        String[] words = text.split(" ");
+
+        Map&lt;String, Integer&gt; counts = new HashMap&lt;&gt;();
+
+        for (String word : words) {
+
+            if (counts.containsKey(word)) {
+                counts.put(word, counts.get(word) + 1);
+            } else {
+                counts.put(word, 1);
+            }
+        }
+
+        System.out.println(counts);
+    }
+}</code></pre>
+  <h4>A shorter version</h4>
+  <p>We can simplify this using:</p>
+<pre><code class="language-java">getOrDefault()</code></pre>
+<pre><code class="language-java">for (String word : words) {
+    counts.put(word, counts.getOrDefault(word, 0) + 1);
+}</code></pre>
+  <p>This pattern is extremely common.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m13-hashing"
+          data-kicker="Deep dive" data-title="Hashing, end to end">
+  <h4>The lookup problem</h4>
+  <p>Suppose we have 1,000,000 usernames. We want to determine:</p>
+<pre><code class="language-text">Does "alice42" exist?</code></pre>
+  <p>If we store usernames in an ordinary list, we may have to search through many elements. Linear search requires:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>time. Can we do better? Hash-based data structures attempt to make lookup approximately:</p>
+<pre><code class="language-text">O(1)</code></pre>
+  <p>on average.</p>
+  <h4>The basic idea</h4>
+  <p>A <strong>hash function</strong> converts a key into an integer. Conceptually:</p>
+<pre><code class="language-text">key
+ |
+ v
+hash function
+ |
+ v
+integer
+ |
+ v
+array location</code></pre>
+  <p>For example:</p>
+<pre><code class="language-text">"Alice"
+    |
+    v
+ hash(...)
+    |
+    v
+  29384</code></pre>
+  <p>That hash value can help determine where the item should be stored.</p>
+  <h4>A simplified hash table</h4>
+  <p>Imagine an array with ten locations:</p>
+<pre><code class="language-text">0
+1
+2
+3
+4
+5
+6
+7
+8
+9</code></pre>
+  <p>Suppose we compute:</p>
+<pre><code class="language-text">hash("Alice") = 173</code></pre>
+  <p>We might calculate:</p>
+<pre><code class="language-text">173 % 10</code></pre>
+  <p>which gives:</p>
+<pre><code class="language-text">3</code></pre>
+  <p>So <code>"Alice"</code> could be placed at index <code>3</code>.</p>
+<pre><code class="language-text">0
+1
+2
+3  Alice
+4
+5
+6
+7
+8
+9</code></pre>
+  <p>To search for Alice later:</p>
+  <ol>
+    <li>Compute Alice's hash.</li>
+    <li>Calculate the corresponding position.</li>
+    <li>Check that location.</li>
+  </ol>
+  <p>We do not necessarily search the entire table.</p>
+  <h4>Collisions</h4>
+  <p>A complication occurs when two keys map to the same location. Suppose:</p>
+<pre><code class="language-text">hash("Alice") % 10 = 3</code></pre>
+  <p>and:</p>
+<pre><code class="language-text">hash("David") % 10 = 3</code></pre>
+  <p>Both want position <code>3</code>. This is called a <strong>collision</strong>. Hash tables therefore need a strategy for resolving collisions. Common approaches include chaining and open addressing.</p>
+  <p>We will not implement a full production-quality hash table in this course, but you should understand that collisions are normal and must be handled correctly.</p>
+  <h4>Expected complexity</h4>
+  <p>For a well-designed hash table, operations such as:</p>
+<pre><code class="language-text">put
+get
+contains
+remove</code></pre>
+  <p>are typically expected to take:</p>
+<pre><code class="language-text">O(1)</code></pre>
+  <p>time on average. However, this is not a guarantee that every operation always requires constant time. In pathological situations involving many collisions, operations may become slower.</p>
+  <p>For CSC500, remember:</p>
+<pre><code class="language-text">HashSet membership: expected O(1)
+
+HashMap lookup: expected O(1)</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-selection"
+          data-kicker="Reference" data-title="Five selection scenarios, in full">
+  <p>An important programming skill is deciding which structure best fits a problem. Do not simply choose whichever structure you remember first. Ask: <em>What operations matter most?</em></p>
+  <h4>Scenario 1</h4>
+  <p>You need an undo system. The most recent action should be undone first. Use:</p>
+<pre><code class="language-text">Stack</code></pre>
+  <p>because the behavior is LIFO.</p>
+  <h4>Scenario 2</h4>
+  <p>Customers should be served in arrival order. Use:</p>
+<pre><code class="language-text">Queue</code></pre>
+  <p>because the behavior is FIFO.</p>
+  <h4>Scenario 3</h4>
+  <p>You want to know whether a username has already appeared. Use:</p>
+<pre><code class="language-text">Set</code></pre>
+  <p>because you care about membership and uniqueness.</p>
+  <h4>Scenario 4</h4>
+  <p>You want to look up a student's GPA using their student ID. Use:</p>
+<pre><code class="language-text">Map</code></pre>
+  <p>because you want:</p>
+<pre><code class="language-text">student ID -&gt; GPA</code></pre>
+  <h4>Scenario 5</h4>
+  <p>You need elements in index order and frequently access:</p>
+<pre><code class="language-java">values.get(i)</code></pre>
+  <p>Use:</p>
+<pre><code class="language-text">ArrayList</code></pre>
+  <p>rather than a set, queue, or stack.</p>
+  <div class="box key"><span class="box-title">The habit</span>The correct structure depends on the problem — read the requirement for the phrase that names an ordering or a lookup, and let that phrase choose.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m13-balanced-brackets"
+          data-kicker="Full program" data-title="Valid parentheses: the complete solution">
+  <p>Given a string containing:</p>
+<pre><code class="language-text">(
+)
+[
+]
+{
+}</code></pre>
+  <p>determine whether the brackets are correctly balanced. Examples:</p>
+<pre><code class="language-text">([]{})</code></pre>
+  <p>is valid.</p>
+<pre><code class="language-text">([)]</code></pre>
+  <p>is not valid.</p>
+  <h4>Solution strategy</h4>
+  <p>Use a stack. Whenever we see:</p>
+<pre><code class="language-text">(
+[
+{</code></pre>
+  <p>push it. Whenever we see:</p>
+<pre><code class="language-text">)
+]
+}</code></pre>
+  <p>check whether the top of the stack contains the matching opening symbol.</p>
+  <h4>Java solution</h4>
+<pre><code class="language-java">import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class BalancedBrackets {
+
+    public static boolean isBalanced(String text) {
+
+        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+
+        for (char c : text.toCharArray()) {
+
+            if (c == '(' || c == '[' || c == '{') {
+
+                stack.push(c);
+
+            } else if (c == ')' || c == ']' || c == '}') {
+
+                if (stack.isEmpty()) {
+                    return false;
+                }
+
+                char opening = stack.pop();
+
+                if (c == ')' &amp;&amp; opening != '(') {
+                    return false;
+                }
+
+                if (c == ']' &amp;&amp; opening != '[') {
+                    return false;
+                }
+
+                if (c == '}' &amp;&amp; opening != '{') {
+                    return false;
+                }
+            }
+        }
+
+        return stack.isEmpty();
+    }
+}</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-help-desk"
+          data-kicker="Full program" data-title="The customer service queue">
+  <p>Suppose customers arrive at a help desk. Each customer should be served in arrival order.</p>
+<pre><code class="language-java">import java.util.ArrayDeque;
+import java.util.Queue;
+
+public class HelpDesk {
+
+    public static void main(String[] args) {
+
+        Queue&lt;String&gt; customers = new ArrayDeque&lt;&gt;();
+
+        customers.offer("Alice");
+        customers.offer("Bob");
+        customers.offer("Carol");
+
+        while (!customers.isEmpty()) {
+
+            String customer = customers.poll();
+
+            System.out.println(
+                "Helping " + customer
+            );
+        }
+    }
+}</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">Helping Alice
+Helping Bob
+Helping Carol</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-most-frequent"
+          data-kicker="Worked example" data-title="Finding the most frequent word">
+  <p>Suppose:</p>
+<pre><code class="language-text">cat dog cat bird dog cat</code></pre>
+  <p>We want:</p>
+<pre><code class="language-text">cat -&gt; 3
+dog -&gt; 2
+bird -&gt; 1</code></pre>
+  <p>Use a map:</p>
+<pre><code class="language-java">Map&lt;String, Integer&gt; counts = new HashMap&lt;&gt;();
+
+for (String word : words) {
+
+    counts.put(
+        word,
+        counts.getOrDefault(word, 0) + 1
+    );
+}</code></pre>
+  <p>Then find the key with the largest value.</p>
+<pre><code class="language-java">String mostFrequent = null;
+int largestCount = 0;
+
+for (Map.Entry&lt;String, Integer&gt; entry :
+        counts.entrySet()) {
+
+    if (entry.getValue() &gt; largestCount) {
+
+        largestCount = entry.getValue();
+
+        mostFrequent = entry.getKey();
+    }
+}</code></pre>
+  <h4>Related: unique words</h4>
+  <p>Given a sentence, determine how many unique words it contains.</p>
+<pre><code class="language-java">String text =
+    "to be or not to be";</code></pre>
+  <p>The unique words are:</p>
+<pre><code class="language-text">to
+be
+or
+not</code></pre>
+  <p>There are:</p>
+<pre><code class="language-text">4</code></pre>
+  <p>unique words. Implementation:</p>
+<pre><code class="language-java">import java.util.HashSet;
+import java.util.Set;
+
+public class UniqueWords {
+
+    public static void main(String[] args) {
+
+        String text = "to be or not to be";
+
+        String[] words = text.split(" ");
+
+        Set&lt;String&gt; unique = new HashSet&lt;&gt;();
+
+        for (String word : words) {
+            unique.add(word);
+        }
+
+        System.out.println(unique.size());
+    }
+}</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-exercises"
+          data-kicker="Practice" data-title="In-class exercises, in full">
+  <h4>Exercise 1 — Stack Trace</h4>
+  <p>Given:</p>
+<pre><code class="language-java">Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+
+stack.push(4);
+stack.push(8);
+stack.push(12);
+
+System.out.println(stack.pop());
+
+stack.push(16);
+
+System.out.println(stack.peek());
+System.out.println(stack.pop());</code></pre>
+  <p>Determine: 1. What is printed? 2. What remains in the stack?</p>
+  <h4>Exercise 2 — Queue Trace</h4>
+  <p>Given:</p>
+<pre><code class="language-java">Queue&lt;String&gt; q = new ArrayDeque&lt;&gt;();
+
+q.offer("A");
+q.offer("B");
+q.offer("C");
+
+System.out.println(q.poll());
+
+q.offer("D");
+
+System.out.println(q.poll());</code></pre>
+  <p>Determine: 1. What is printed? 2. What remains in the queue?</p>
+  <h4>Exercise 3 — Select the Data Structure</h4>
+  <p>Choose from:</p>
+<pre><code class="language-text">Stack
+Queue
+Set
+Map
+ArrayList</code></pre>
+  <ol>
+    <li><strong>A.</strong> Store browser pages so the user can return to the most recently visited previous page.</li>
+    <li><strong>B.</strong> Process print jobs in the order they were submitted.</li>
+    <li><strong>C.</strong> Determine whether an email address has already registered.</li>
+    <li><strong>D.</strong> Associate a product ID with a product object.</li>
+    <li><strong>E.</strong> Store students in a sequence where index-based access matters.</li>
+  </ol>
+  <h4>Exercise 4 — Duplicate Detection</h4>
+  <p>Write:</p>
+<pre><code class="language-java">public static boolean containsDuplicate(int[] values)</code></pre>
+  <p>using a <code>HashSet</code>.</p>
+  <h4>Exercise 5 — Character Frequency</h4>
+  <p>Write a method that receives:</p>
+<pre><code class="language-text">"banana"</code></pre>
+  <p>and produces counts equivalent to:</p>
+<pre><code class="language-text">b -&gt; 1
+a -&gt; 3
+n -&gt; 2</code></pre>
+  <p>Use:</p>
+<pre><code class="language-java">Map&lt;Character, Integer&gt;</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-challenges"
+          data-kicker="Practice" data-title="The four challenge problems">
+  <h4>Challenge 1 — First Non-Repeated Word</h4>
+  <p>Given:</p>
+<pre><code class="language-text">cat dog bird cat dog mouse</code></pre>
+  <p>return:</p>
+<pre><code class="language-text">bird</code></pre>
+  <p>because <code>"bird"</code> is the first word that appears exactly once. Hint:</p>
+  <ol>
+    <li>Use a map to calculate frequencies.</li>
+    <li>Scan the words a second time.</li>
+  </ol>
+  <h4>Challenge 2 — Undo System</h4>
+  <p>Create a simple text editor simulation. Commands:</p>
+<pre><code class="language-text">TYPE hello
+TYPE world
+UNDO</code></pre>
+  <p>Use a stack to store previous text states.</p>
+  <h4>Challenge 3 — Task Scheduler</h4>
+  <p>Create a simple queue of tasks. Each task should be represented by a class:</p>
+<pre><code class="language-java">class Task {
+    private String description;
+}</code></pre>
+  <p>Allow users to:</p>
+<pre><code class="language-text">ADD
+PROCESS
+SHOW NEXT</code></pre>
+  <p>The earliest task should be processed first.</p>
+  <h4>Challenge 4 — Inventory</h4>
+  <p>Create:</p>
+<pre><code class="language-java">Map&lt;String, Integer&gt;</code></pre>
+  <p>where the key is a product name and the value is the quantity in stock. Support:</p>
+<pre><code class="language-text">ADD
+SELL
+LOOKUP</code></pre>
+  <p>Example:</p>
+<pre><code class="language-text">Laptop -&gt; 12
+Keyboard -&gt; 35
+Mouse -&gt; 20</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m13-checks"
+          data-kicker="Revision" data-title="All seven concept checks">
+  <h4>Check 1</h4>
+  <p>What principle describes a stack? <strong>Answer:</strong></p>
+<pre><code class="language-text">Last In, First Out</code></pre>
+  <h4>Check 2</h4>
+  <p>What principle describes a queue? <strong>Answer:</strong></p>
+<pre><code class="language-text">First In, First Out</code></pre>
+  <h4>Check 3</h4>
+  <p>Which data structure is most appropriate for determining whether a value has already been observed? <strong>Answer:</strong></p>
+<pre><code class="language-text">Set</code></pre>
+  <h4>Check 4</h4>
+  <p>Which data structure represents relationships such as:</p>
+<pre><code class="language-text">employee ID -&gt; Employee</code></pre>
+  <p><strong>Answer:</strong></p>
+<pre><code class="language-text">Map</code></pre>
+  <h4>Check 5</h4>
+  <p>What is the expected complexity of lookup in a <code>HashMap</code>? <strong>Answer:</strong></p>
+<pre><code class="language-text">O(1)</code></pre>
+  <p>on average.</p>
+  <h4>Check 6</h4>
+  <p>Does a <code>HashSet</code> store duplicate elements? <strong>Answer:</strong> No.</p>
+  <h4>Check 7</h4>
+  <p>Does a <code>HashMap</code> guarantee that keys appear in insertion order? <strong>Answer:</strong> No.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m13-summary"
+          data-kicker="Revision" data-title="Week 13 summary, in the notes' own words">
+  <p>This week introduced four extremely important abstract data types.</p>
+  <h4>Stack</h4>
+  <p>A stack follows:</p>
+<pre><code class="language-text">LIFO</code></pre>
+  <p>Typical operations:</p>
+<pre><code class="language-text">push
+pop
+peek</code></pre>
+  <p>Common applications include recursion, undo, backtracking, and expression processing.</p>
+  <h4>Queue</h4>
+  <p>A queue follows:</p>
+<pre><code class="language-text">FIFO</code></pre>
+  <p>Typical operations:</p>
+<pre><code class="language-text">offer
+poll
+peek</code></pre>
+  <p>Common applications include scheduling, request processing, simulations, and breadth-first algorithms.</p>
+  <h4>Set</h4>
+  <p>A set stores unique elements. Typical operations include:</p>
+<pre><code class="language-text">add
+remove
+contains</code></pre>
+  <p>A <code>HashSet</code> provides expected constant-time membership testing.</p>
+  <h4>Map</h4>
+  <p>A map stores:</p>
+<pre><code class="language-text">key -&gt; value</code></pre>
+  <p>associations. Typical operations include:</p>
+<pre><code class="language-text">put
+get
+containsKey
+remove</code></pre>
+  <p>A <code>HashMap</code> provides expected constant-time lookup by key.</p>
+  <h4>The most important idea</h4>
+  <p>The most important idea from this week is not memorizing Java collection methods. It is learning to ask: <em>What behavior does my program need from its data?</em></p>
+  <p>If you need:</p>
+<pre><code class="language-text">most recent item first</code></pre>
+  <p>think:</p>
+<pre><code class="language-text">Stack</code></pre>
+  <p>If you need:</p>
+<pre><code class="language-text">oldest item first</code></pre>
+  <p>think:</p>
+<pre><code class="language-text">Queue</code></pre>
+  <p>If you need:</p>
+<pre><code class="language-text">Have I seen this before?</code></pre>
+  <p>think:</p>
+<pre><code class="language-text">Set</code></pre>
+  <p>If you need:</p>
+<pre><code class="language-text">Given this key, what value is associated with it?</code></pre>
+  <p>think:</p>
+<pre><code class="language-text">Map</code></pre>
+  <p>Choosing the right data structure often turns a complicated program into a simple one.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m13-lab"
+          data-kicker="Lab" data-title="Mini search engine word index">
+  <p>Write a Java program that reads several lines of text and builds a word index. For example:</p>
+<pre><code class="language-text">java is a programming language
+java supports object oriented programming
+programming requires practice</code></pre>
+  <p>Your program should create a map resembling:</p>
+<pre><code class="language-text">java        -&gt; 2
+is          -&gt; 1
+a           -&gt; 1
+programming -&gt; 3
+language    -&gt; 1
+supports    -&gt; 1
+object      -&gt; 1
+oriented    -&gt; 1
+requires    -&gt; 1
+practice    -&gt; 1</code></pre>
+  <p>Then allow the user to enter a word. Example:</p>
+<pre><code class="language-text">Search: programming
+
+"programming" occurs 3 times.</code></pre>
+  <h4>Extension</h4>
+  <p>Maintain:</p>
+<pre><code class="language-java">Map&lt;String, Set&lt;Integer&gt;&gt;</code></pre>
+  <p>where the value contains the line numbers where each word occurs. For example:</p>
+<pre><code class="language-text">java        -&gt; {1, 2}
+programming -&gt; {1, 2, 3}
+practice    -&gt; {3}</code></pre>
+  <p>This combines two of this week's data structures:</p>
+<pre><code class="language-text">Map + Set</code></pre>
+  <p>and demonstrates a fundamental idea used in search systems: an <strong>inverted index</strong>.</p>
+  <h4>Preparation for Week 14</h4>
+  <p>Next week we will study <strong>trees</strong>. Instead of arranging elements linearly:</p>
+<pre><code class="language-text">A -&gt; B -&gt; C -&gt; D</code></pre>
+  <p>we will organize them hierarchically:</p>
+<pre><code class="language-text">        A
+       / \
+      B   C
+     / \
+    D   E</code></pre>
+  <p>Before next week, make sure you are comfortable with references, linked nodes, recursion, Big-O notation, and the distinction between an ADT and an implementation.</p>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

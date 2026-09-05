@@ -1,0 +1,4690 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 14: Trees and Core Data Structures</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Trees and Core Data Structures</h1>
+  <p class="subtitle">Week 14 — when data stops being a line and becomes a hierarchy</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">After completing Week 14, you should be able to:</p>
+  <ul>
+    <li>Explain what a tree data structure represents.</li>
+    <li>Identify roots, parents, children, siblings, leaves, depth, and height.</li>
+    <li>Explain the difference between a binary tree and a binary search tree.</li>
+    <li>Represent binary-tree nodes using Java objects and references.</li>
+    <li>Trace BST insertion and search.</li>
+    <li>Implement basic BST insertion and search.</li>
+    <li>Perform preorder, inorder, and postorder traversals.</li>
+  </ul>
+  <aside class="notes">
+    <p>These fourteen objectives are what Week 14 is accountable for. The first block is descriptive — what a tree is, and the names for its parts. Students who cannot say the words root, parent, child, sibling, leaf, depth and height precisely will not be able to read the rest of the week.</p>
+    <p>The middle block is mechanical: represent nodes with Java objects, trace insertion and search by hand, and then implement them. Notice that tracing comes before implementing. That order is deliberate.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul>
+    <li>Write simple recursive algorithms on trees.</li>
+    <li>Explain why a balanced BST can support <span class="pill">O(log n)</span> search.</li>
+    <li>Explain why an unbalanced BST can degrade to <span class="pill">O(n)</span>.</li>
+    <li>Explain the basic purpose of a heap.</li>
+    <li>Use Java's <code>PriorityQueue</code>.</li>
+    <li>Compare trees with lists, hash tables, stacks, and queues.</li>
+    <li>Select a reasonable data structure based on required operations.</li>
+  </ul>
+  <div class="box key"><span class="box-title">The last one is the real one</span>Everything above it is a skill. The last objective — choosing a structure from the operations your program performs most frequently — is the judgement this whole sequence of weeks has been building toward.</div>
+  <aside class="notes">
+    <p>The second half turns from mechanism to judgement. Why does a balanced tree give logarithmic search, and why does an unbalanced one degrade to linear? What problem does a heap solve that a BST does not?</p>
+    <p>The final objective — select a reasonable data structure based on required operations — is the one that carries into Week 15 and beyond. The key question is not which data structure is best; it is which data structure best supports the operations my program performs most frequently.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap</h2>
+  <div class="cols small">
+    <ol>
+      <li>Why Study Trees?</li>
+      <li>The Vocabulary of Trees</li>
+      <li>Binary Trees in Java</li>
+      <li>Binary Search Trees</li>
+      <li>Insertion, Shape, and Cost</li>
+      <li>Tree Traversals</li>
+    </ol>
+    <ol start="7">
+      <li>Recursive Tree Algorithms</li>
+      <li>Trees in the Java Collections</li>
+      <li>Heaps and Priority Queues</li>
+      <li>Choosing a Data Structure</li>
+      <li>Practice, Lab, and Key Ideas</li>
+    </ol>
+  </div>
+  <p class="small dim">Topics: hierarchical data · tree terminology · binary trees · binary search trees · recursive tree algorithms · tree traversals · searching and insertion in binary search trees · time complexity of tree operations · balanced versus unbalanced trees · introduction to heaps and priority queues · choosing between lists, maps, sets, and trees.</p>
+  <aside class="notes">
+    <p>The week has three movements. Parts I through III build the object: what a hierarchy is, the words for its parts, and how to hold one in Java memory with a node class that carries two references instead of one.</p>
+    <p>Parts IV through VII are the algorithmic core — the ordering property that makes a binary search tree searchable, insertion, the three classic traversals, and the recursive pattern that generates almost every tree algorithm you will write.</p>
+    <p>Parts VIII through XI widen out: Java's own tree-backed collections, heaps and priority queues as a different tree with a different rule, and finally the comparison table that lets you choose between everything we have studied this semester.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Why Study Trees?</h2>
+  <p class="part-sub">Many real-world problems are not naturally linear. A tree represents hierarchical relationships.</p>
+</section>
+
+<section>
+  <h2>Everything So Far Has Been Linear</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Until now, most of the data structures we have studied have been <strong>linear</strong>. Examples include:</p>
+      <ul class="small">
+        <li>Arrays</li>
+        <li>ArrayLists</li>
+        <li>Linked lists</li>
+        <li>Stacks</li>
+        <li>Queues</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">These structures organize data in a sequence. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 → 20 → 30 → 40
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Each item has a clear position before or after another item. That single-file ordering is exactly what we are about to give up.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Until now, most of the data structures we have studied have been linear. Examples include arrays, ArrayLists, linked lists, stacks, and queues. These structures organize data in a sequence — ten, then twenty, then thirty, then forty.</p>
+    <p>Each item has a clear position before or after another item. That is the defining feature of a linear structure, and it is what makes indexing, iteration and the front-and-back discipline of stacks and queues possible.</p>
+    <p>Many real-world problems, however, are not naturally linear. That is the observation this whole week rests on.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Hierarchical Data Is Everywhere</h2>
+  <p class="small">Many real-world problems are not naturally linear. Consider:</p>
+  <div class="cols">
+    <ul class="small">
+      <li>A computer file system</li>
+      <li>An organizational chart</li>
+      <li>A family tree</li>
+    </ul>
+    <ul class="small">
+      <li>A university course prerequisite structure</li>
+      <li>The HTML elements in a web page</li>
+      <li>Categories and subcategories in an online store</li>
+    </ul>
+  </div>
+  <div class="def"><span class="term">Tree:</span> a data structure designed to represent hierarchical relationships.</div>
+  <details class="acc">
+    <summary>What these six examples have in common</summary>
+    <div class="acc-body">
+      <p>In each case an item can have several items <em>underneath</em> it, but only one item <em>above</em> it. A folder holds many files but sits in exactly one parent folder. A manager has many reports but one boss. A category has many subcategories but one parent category.</p>
+      <p>These structures are naturally <strong>hierarchical</strong>. A list cannot express that shape without inventing bookkeeping of its own; a tree expresses it directly.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider a computer file system, an organizational chart, a family tree, a university course prerequisite structure, the HTML elements in a web page, and categories and subcategories in an online store.</p>
+    <p>These structures are naturally hierarchical. A tree is a data structure designed to represent hierarchical relationships.</p>
+    <p>Every one of these examples returns later in the week: the file system in Part X as a directory listing, HTML as the browser's Document Object Model, and the prerequisite structure as the kind of thing a tree search is for.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A First Example of a Tree</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider the following structure:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          50
+        /    \
+      30      70
+     /  \    /  \
+   20   40  60   80
+</code></pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>This structure contains seven values.</li>
+        <li>Unlike a linked list, one element may connect to <strong>multiple</strong> elements.</li>
+        <li>The value <code>50</code> is at the top.</li>
+        <li>Below it are <code>30</code> and <code>70</code>.</li>
+        <li>Below <code>30</code> are <code>20</code> and <code>40</code>.</li>
+        <li>Below <code>70</code> are <code>60</code> and <code>80</code>.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>This particular tree is called a <strong>binary tree</strong> because each node has at most two children.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This structure contains seven values. Unlike a linked list, one element may connect to multiple elements. The value 50 is at the top; below it are 30 and 70; below 30 are 20 and 40; below 70 are 60 and 80.</p>
+    <p>This particular tree is called a binary tree because each node has at most two children. Keep this exact tree in mind — it is the running example for insertion, for search, and for all three traversals later in the week.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>The Vocabulary of Trees</h2>
+  <p class="part-sub">Trees have their own vocabulary. Nine words, and every algorithm this week is stated in them.</p>
+</section>
+
+<section>
+  <h2>The Reference Tree, and Nodes</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Trees have their own vocabulary. Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          A
+        /   \
+       B     C
+      / \     \
+     D   E     F
+</code></pre>
+    </div>
+    <div>
+      <div class="def"><span class="term">Node:</span> each element in the tree.</div>
+      <p class="small">The nodes above are:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A, B, C, D, E, F
+</code></pre>
+      <p class="small">A node usually stores:</p>
+      <ol class="small">
+        <li>Some data</li>
+        <li>References to other nodes</li>
+      </ol>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-terminology" tabindex="0">The complete terminology reference</span>
+  </div>
+  <aside class="notes">
+    <p>Trees have their own vocabulary, and the next several slides define it against this one six-node example. Each element in the tree is called a node; here the nodes are A, B, C, D, E and F.</p>
+    <p>A node usually stores two things: some data, and references to other nodes. That is exactly the shape of the Java class we write in Part III — a value field, plus two reference fields.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Edges and the Root</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Edge:</span> a connection between two nodes.</div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A → B
+A → C
+B → D
+B → E
+C → F
+</code></pre>
+    </div>
+    <div>
+      <div class="def"><span class="term">Root:</span> the top node.</div>
+      <p class="small">In this tree:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A
+</code></pre>
+      <p class="small">is the root.</p>
+      <div class="box key"><span class="box-title">Key idea</span>A tree has exactly <strong>one</strong> root.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A connection between two nodes is called an edge. In the reference tree the edges are A to B, A to C, B to D, B to E, and C to F — five edges for six nodes, which is not a coincidence.</p>
+    <p>The top node is called the root. In this tree, A is the root. A tree has exactly one root. Every algorithm we write starts from that single reference, and losing it loses the entire structure.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Parent, Child, Siblings</h2>
+  <div class="cols-3">
+    <div>
+      <div class="def"><span class="term">Parent</span></div>
+      <p class="small">If one node directly connects downward to another node, the first node is the parent. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+B
+</code></pre>
+      <p class="small">is the parent of:</p>
+<pre><code class="language-text" data-trim data-noescape>
+D and E
+</code></pre>
+    </div>
+    <div>
+      <div class="def"><span class="term">Child</span></div>
+      <p class="small">A node directly below another node is called a child. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+B and C
+</code></pre>
+      <p class="small">are children of <code>A</code>.</p>
+    </div>
+    <div>
+      <div class="def"><span class="term">Siblings</span></div>
+      <p class="small">Nodes with the same parent are called siblings. For example <code>B</code> and <code>C</code> are siblings. Similarly:</p>
+<pre><code class="language-text" data-trim data-noescape>
+D and E
+</code></pre>
+      <p class="small">are siblings.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>If one node directly connects downward to another node, the first node is the parent. B is the parent of D and E. A node directly below another node is called a child, so B and C are children of A.</p>
+    <p>Nodes with the same parent are called siblings. B and C are siblings; D and E are siblings. Note that D and F are not siblings even though they sit at the same level — sibling means same parent, not same depth.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Leaves and Internal Nodes</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Leaf node:</span> a node with no children.</div>
+      <p class="small">In our example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+D
+E
+F
+</code></pre>
+      <p class="small">are leaves.</p>
+    </div>
+    <div>
+      <div class="def"><span class="term">Internal node:</span> a node that has at least one child.</div>
+      <p class="small">In our example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A
+B
+C
+</code></pre>
+      <p class="small">are internal nodes.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why leaves get their own name</summary>
+    <div class="acc-body">
+      <p>Leaves are where every recursive tree algorithm bottoms out. In Part VII, <code>countLeaves</code> tests for exactly this condition — a node whose <code>left</code> and <code>right</code> are both <code>null</code> — and returns 1 without recursing further.</p>
+      <p>They are also the easiest deletion case: removing a leaf from a BST just means removing the reference to it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A node with no children is called a leaf node. In our example D, E and F are leaves. A node that has at least one child is sometimes called an internal node — here, A, B and C.</p>
+    <p>Note that C has only one child, F, and is still internal. "Internal" does not mean "has two children"; it means "has at least one".</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Subtrees</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Every node in a tree can itself be considered the root of a smaller tree. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          A
+        /   \
+       B     C
+      / \
+     D   E
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The tree rooted at <code>B</code> is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+      B
+     / \
+    D   E
+</code></pre>
+      <p class="small">This is called a <strong>subtree</strong> of the original tree.</p>
+      <div class="box key"><span class="box-title">Key idea</span>This idea is extremely important.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Every node in a tree can itself be considered the root of a smaller tree. The tree rooted at B — B with children D and E — is called a subtree of the original tree.</p>
+    <p>This idea is extremely important, and it is the hinge the whole week turns on. Once you see that a subtree is just a tree, every algorithm that works on trees works unchanged on the pieces.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Tree Is Naturally Recursive</h2>
+  <blockquote>A tree consists of a node whose children are themselves trees.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">This is why recursion is so commonly used when working with trees.</p>
+      <div class="chain">
+        <span>Tree</span><span class="sep">=</span>
+        <span>Node</span><span class="sep">+</span>
+        <span>Left subtree</span><span class="sep">+</span>
+        <span>Right subtree</span>
+      </div>
+    </div>
+    <div>
+      <div class="box note"><span class="box-title">Note</span>Tree algorithms are frequently written recursively because the recursive structure of the code matches the recursive structure of the tree.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What a recursive definition buys you</summary>
+    <div class="acc-body">
+      <p>A definition that refers to itself gives you a proof strategy and an implementation strategy at the same time. If a tree is a node plus two smaller trees, then a method that handles one node and calls itself on the two smaller trees has handled the whole tree.</p>
+      <p>That is exactly the general pattern in Part VII: check for the empty tree, solve the left subtree, solve the right subtree, combine.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A tree is naturally recursive: a tree consists of a node whose children are themselves trees. This is why recursion is so commonly used when working with trees.</p>
+    <p>Recall Week 10. Recursion needs a base case and a recursive case that moves toward it. For trees the base case is almost always the null node, and "moving toward it" is automatic — each recursive call gets a strictly smaller subtree.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Depth</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Depth:</span> the number of edges between the root and that node.</div>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          A
+        /   \
+       B     C
+      /
+     D
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The depths are:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A: depth 0
+B: depth 1
+C: depth 1
+D: depth 2
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The root always has depth 0.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The depth of a node is the number of edges between the root and that node. In this four-node example A has depth 0, B and C have depth 1, and D has depth 2.</p>
+    <p>The root always has depth 0. Depth is a property of a node — every node has its own depth. Height, on the next slide, is a property of the whole tree.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Height</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Height:</span> the length of the longest path from the root to a leaf.</div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          A
+        /   \
+       B     C
+      /
+     D
+    /
+   E
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The longest root-to-leaf path is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+A → B → D → E
+</code></pre>
+      <p class="small">There are three edges. Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+height = 3
+</code></pre>
+      <div class="box key"><span class="box-title">Why we care</span>Height matters because the performance of many tree algorithms depends on it.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Depth and height are two different measurements</summary>
+    <div class="acc-body">
+      <p><strong>Depth</strong> belongs to a node: the number of edges between the root and <em>that node</em>. Every node has its own depth, and the root's is always 0.</p>
+      <p><strong>Height</strong> belongs to the tree: the length of the <em>longest</em> path from the root to a leaf. In the example above the deepest node is E at depth 3, and the height of the tree is 3 — the height of a tree is the largest depth in it.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The height of a tree is the length of the longest path from the root to a leaf. In this example the longest root-to-leaf path is A to B to D to E. There are three edges, therefore the height is 3.</p>
+    <p>Height matters because the performance of many tree algorithms depends on it. That sentence is the seed of Parts V and IX: a search walks down one root-to-leaf path, so the height is the worst-case number of comparisons.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Binary Trees in Java</h2>
+  <p class="part-sub">A node with two references instead of one — and the difference between a binary tree and a binary search tree.</p>
+</section>
+
+<section>
+  <h2>Binary Trees</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Binary tree:</span> a tree in which every node has at most two children.</div>
+      <p class="small">The children are usually called:</p>
+      <ul class="small">
+        <li>left child</li>
+        <li>right child</li>
+      </ul>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+        10
+       /  \
+      5    20
+</code></pre>
+    </div>
+    <div>
+      <p class="small">A node might have:</p>
+      <ul class="small">
+        <li>zero children</li>
+        <li>one child</li>
+        <li>two children</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>All are valid in a binary tree. "At most two" is a ceiling, not a requirement.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A binary tree is a tree in which every node has at most two children. The children are usually called left child and right child.</p>
+    <p>A node might have zero children, one child, or two children. All are valid in a binary tree. Students often assume a binary tree must be "full" — it need not be, and the unbalanced trees later in the week are the extreme case where every node has exactly one child.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Representing a Binary Tree in Java</h2>
+  <p class="small">A binary tree can be represented using objects. A simple node class might look like this:</p>
+  <div class="cols-53">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+class TreeNode {
+    int value;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Each <code>TreeNode</code> contains:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int value;
+</code></pre>
+      <p class="small">which stores the data. It also contains:</p>
+<pre><code class="language-java" data-trim data-noescape>
+TreeNode left;
+TreeNode right;
+</code></pre>
+      <p class="small">which are references to other nodes.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A binary tree can be represented using objects. A simple node class holds an int value and two TreeNode references, left and right, with a constructor that takes the value and sets both references to null.</p>
+    <p>Each TreeNode contains an int value, which stores the data, and TreeNode left and TreeNode right, which are references to other nodes. This is the same self-referential class idea we used for linked lists in Week 12 — a class with a field of its own type.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Creating a Tree Manually</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Consider the tree:</p>
+<pre><code class="language-text" data-trim data-noescape>
+        50
+       /  \
+     30    70
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We could create it like this:</p>
+<pre><code class="language-java" data-trim data-noescape>
+TreeNode root = new TreeNode(50);
+
+root.left = new TreeNode(30);
+root.right = new TreeNode(70);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The references now look approximately like:</p>
+<pre><code class="language-text" data-trim data-noescape>
+root
+ |
+ v
+50
+/ \
+30 70
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>This is similar to the linked structures we studied previously. The important difference is that each node can contain <strong>two references</strong> instead of one.</div>
+  <aside class="notes">
+    <p>Consider the three-node tree with 50 on top and 30 and 70 below it. We could create it by constructing the root and then assigning root.left and root.right to two new nodes.</p>
+    <p>The references now look approximately like a variable named root pointing at 50, which points down to 30 and 70. This is similar to the linked structures we studied previously. The important difference is that each node can contain two references instead of one — and that single change is what turns a line into a hierarchy.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Binary Tree vs. Binary Search Tree</h2>
+  <p class="small">These terms are related but not equivalent. A <strong>binary tree</strong> only requires:</p>
+  <blockquote>Each node has at most two children.</blockquote>
+  <div class="cols">
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+       50
+      /  \
+    100   12
+</code></pre>
+    </div>
+    <div>
+      <span class="tag neutral">Valid binary tree</span>
+      <p class="small">This is a valid binary tree.</p>
+      <div class="box pitfall"><span class="box-title">Common error</span>However, it is <strong>not</strong> a binary search tree. 100 sits to the left of 50, and 12 sits to the right of it.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What a binary tree requires, and what a BST adds</summary>
+    <div class="acc-body">
+      <p>A binary tree only requires that each node has at most two children. Nothing about the <em>values</em> is constrained at all — any arrangement of numbers in that shape is a legitimate binary tree.</p>
+      <p>A binary search tree adds an ordering property on top of that requirement, which we state precisely in Part IV. Every BST is a binary tree; most binary trees are not BSTs.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>These terms are related but not equivalent. A binary tree only requires that each node has at most two children. The tree with 50 on top, 100 on the left and 12 on the right satisfies that, so it is a valid binary tree.</p>
+    <p>However, it is not a binary search tree. This exact confusion comes back in Part X as one of the four common misconceptions — "every binary tree is a BST" is false, and the counterexample there is the same shape with different numbers.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Binary Search Trees</h2>
+  <p class="part-sub">One extra ordering rule, and suddenly whole subtrees can be eliminated without looking at them.</p>
+</section>
+
+<section>
+  <h2>The BST Ordering Property</h2>
+  <div class="cols">
+    <div>
+      <div class="def"><span class="term">Binary search tree (BST):</span> a binary tree with an additional ordering property.</div>
+      <p class="small">For every node:</p>
+<pre><code class="language-text" data-trim data-noescape>
+values in left subtree &lt; node value
+values in right subtree &gt; node value
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+      <p class="small">This is a binary search tree.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A binary search tree, or BST, is a binary tree with an additional ordering property. For every node, the values in the left subtree are less than the node value and the values in the right subtree are greater than the node value.</p>
+    <p>Emphasise "for every node". Checking the root is not enough — the property is recursive, and a tree that satisfies it at the root but violates it three levels down is not a BST.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Checking the Property</h2>
+  <div class="cols-38">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For the root <code>50</code>:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20, 30, 40 &lt; 50
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-text" data-trim data-noescape>
+60, 70, 80 &gt; 50
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The same property is true recursively for <strong>every</strong> node.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Check it at 30 and at 70 too</summary>
+    <div class="acc-body">
+      <p>At node <code>30</code>: its left subtree holds 20, and 20 is less than 30. Its right subtree holds 40, and 40 is greater than 30.</p>
+      <p>At node <code>70</code>: its left subtree holds 60, less than 70; its right subtree holds 80, greater than 70.</p>
+      <p>Every node passes, so the tree is a BST. That is what "the same property is true recursively for every node" means in practice — you check it node by node, not once at the top.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>For the root 50, the values 20, 30 and 40 are all less than 50, and the values 60, 70 and 80 are all greater than 50. The same property is true recursively for every node.</p>
+    <p>Have students verify it at 30 and at 70 as well. The habit of checking every node, not just the root, is what protects them from the misconception slide in Part X.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why the BST Property Is Useful</h2>
+  <div class="cols-38">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+      <p class="small">Suppose we want to find <code>60</code>.</p>
+    </div>
+    <div>
+      <p class="small">Start at:</p>
+<pre><code class="language-text" data-trim data-noescape>
+50
+</code></pre>
+      <p class="small">Compare:</p>
+<pre><code class="language-text" data-trim data-noescape>
+60 &gt; 50
+</code></pre>
+      <p class="small">Therefore, we know that <code>60</code>, if it exists, must be in the <strong>right subtree</strong>. Move to:</p>
+<pre><code class="language-text" data-trim data-noescape>
+70
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want to find 60. Start at 50. Compare: 60 is greater than 50. Therefore we know that 60, if it exists, must be in the right subtree. Move to 70.</p>
+    <p>Stress the phrase "if it exists". The comparison does not tell us the value is present; it tells us where it would have to be. That is enough to discard half the tree.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Eliminating Whole Subtrees</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Now:</p>
+<pre><code class="language-text" data-trim data-noescape>
+60 &lt; 70
+</code></pre>
+      <p class="small">Therefore move left. We reach:</p>
+<pre><code class="language-text" data-trim data-noescape>
+60
+</code></pre>
+      <p class="small">The value has been found.</p>
+    </div>
+    <div>
+      <p class="small">Notice that we did not examine:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+30
+40
+80
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The ordering of the tree allowed us to eliminate entire portions of the data. This is similar to the idea behind binary search on a sorted array.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-search-trace" tabindex="0">Both search traces in full</span>
+  </div>
+  <aside class="notes">
+    <p>Now 60 is less than 70, therefore move left. We reach 60 — the value has been found. Notice that we did not examine 20, 30, 40 or 80.</p>
+    <p>The ordering of the tree allowed us to eliminate entire portions of the data. This is similar to the idea behind binary search on a sorted array from Week 11: each comparison halves the search space, which is where the logarithm comes from.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Searching a Binary Search Tree</h2>
+  <p class="small">A recursive search method can be written as:</p>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="1|3-5|7-9|11-15">
+public static boolean contains(TreeNode node, int target) {
+
+    if (node == null) {
+        return false;
+    }
+
+    if (target == node.value) {
+        return true;
+    }
+
+    if (target &lt; node.value) {
+        return contains(node.left, target);
+    } else {
+        return contains(node.right, target);
+    }
+}
+</code></pre>
+  <p class="small">There are three main cases.</p>
+  <details class="acc">
+    <summary>Why the last comparison needs no third branch</summary>
+    <div class="acc-body">
+      <p>By the time execution reaches the final <code>if</code>, we already know the target is not equal to the node value — Case 2 would have returned. So only two possibilities remain: less than, or greater than.</p>
+      <p>That is why <code>else</code> is enough. The method searches only one subtree, and every path through it either returns a value or recurses exactly once.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A recursive search method can be written in about a dozen lines. There are three main cases, and the next slide names them.</p>
+    <p>Walk the line-number clicks: the signature takes the node to search and the target; the null test is the base case; the equality test is the success case; and the final comparison decides which single subtree to recurse into.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Three Cases of <code>contains</code></h2>
+  <div class="cols-3">
+    <div>
+      <h4>Case 1: node is null</h4>
+<pre><code class="language-java" data-trim data-noescape>
+if (node == null) {
+    return false;
+}
+</code></pre>
+      <p class="small">This means we reached an empty part of the tree. The target does not exist.</p>
+    </div>
+    <div>
+      <h4>Case 2: found the target</h4>
+<pre><code class="language-java" data-trim data-noescape>
+if (target == node.value) {
+    return true;
+}
+</code></pre>
+      <p class="small">Search is complete.</p>
+    </div>
+    <div>
+      <h4>Case 3: pick a subtree</h4>
+<pre><code class="language-java" data-trim data-noescape>
+if (target &lt; node.value) {
+    return contains(node.left, target);
+}
+</code></pre>
+      <p class="small">Otherwise:</p>
+<pre><code class="language-java" data-trim data-noescape>
+return contains(node.right, target);
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>We search only <strong>one</strong> subtree.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-contains-cases" tabindex="0">The three cases, and the iterative version</span>
+  </div>
+  <aside class="notes">
+    <p>Case 1: the node is null. This means we reached an empty part of the tree, so the target does not exist. Case 2: we found the target, and search is complete.</p>
+    <p>Case 3: decide which subtree to search. If the target is less than the node value, recurse left; otherwise recurse right. We search only one subtree — that is the whole source of the efficiency.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing BST Search</h2>
+  <div class="cols-38">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+      <p class="small">Search for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+40
+</code></pre>
+    </div>
+    <div>
+      <div class="cols-3 small">
+        <div>
+          <h4>Step 1</h4>
+<pre><code class="language-text" data-trim data-noescape>
+40 &lt; 50
+</code></pre>
+          <p class="small">Go left.</p>
+        </div>
+        <div>
+          <h4>Step 2</h4>
+<pre><code class="language-text" data-trim data-noescape>
+40 &gt; 30
+</code></pre>
+          <p class="small">Go right.</p>
+        </div>
+        <div>
+          <h4>Step 3</h4>
+<pre><code class="language-text" data-trim data-noescape>
+40 == 40
+</code></pre>
+          <p class="small">Found.</p>
+        </div>
+      </div>
+      <div class="box key"><span class="box-title">Key idea</span>Only three nodes were examined — out of seven.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Compare with the search for 60 two slides ago</summary>
+    <div class="acc-body">
+      <p>Searching for 60 went right at the root, then left; searching for 40 goes left at the root, then right. Both took three comparisons, and both discarded four of the seven values without ever looking at them.</p>
+      <p>That is not luck — it is the height. In this tree every value sits at depth 0, 1 or 2, so no search can take more than three comparisons.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Search for 40 in the seven-node tree. Step 1: 40 is less than 50, go left. Step 2: 40 is greater than 30, go right. Step 3: 40 equals 40, found.</p>
+    <p>Only three nodes were examined. Ask the class how many a linear scan of seven values would have needed on average, and how the gap grows when the seven becomes a million.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Iterative Search</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Search can also be implemented without recursion.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean contains(TreeNode root, int target) {
+
+    TreeNode current = root;
+
+    while (current != null) {
+
+        if (target == current.value) {
+            return true;
+        }
+
+        if (target &lt; current.value) {
+            current = current.left;
+        } else {
+            current = current.right;
+        }
+    }
+
+    return false;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Both recursive and iterative implementations are reasonable.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Tree algorithms are frequently written recursively because the recursive structure of the code matches the recursive structure of the tree.</div>
+      <details class="acc">
+        <summary>Why the loop works here but not for traversals</summary>
+        <div class="acc-body">
+          <p>Search follows a single path down the tree — at each node it discards one side entirely and never comes back. A single moving reference, <code>current</code>, is enough to remember where you are.</p>
+          <p>A traversal has to visit both subtrees, so it must remember where to return to. That is what the call stack does for free in the recursive versions in Part VI.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Search can also be implemented without recursion, using a while loop and a moving current reference. When current becomes null the loop ends and we return false.</p>
+    <p>Both recursive and iterative implementations are reasonable. Tree algorithms are frequently written recursively because the recursive structure of the code matches the recursive structure of the tree — and for traversals, as we will see, the recursive version is dramatically shorter.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Insertion, Shape, and Cost</h2>
+  <p class="part-sub">Insertion order decides the shape of the tree, and the shape decides the cost of everything else.</p>
+</section>
+
+<section>
+  <h2>Inserting into a Binary Search Tree</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Suppose we have:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          50
+        /    \
+      30      70
+</code></pre>
+      <p class="small">We want to insert:</p>
+<pre><code class="language-text" data-trim data-noescape>
+40
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Compare <code>40</code> with <code>50</code>.</p>
+<pre><code class="language-text" data-trim data-noescape>
+40 &lt; 50
+</code></pre>
+      <p class="small">Go left. Now compare with <code>30</code>.</p>
+<pre><code class="language-text" data-trim data-noescape>
+40 &gt; 30
+</code></pre>
+      <p class="small">Go right. The right child is empty. Therefore insert <code>40</code> there.</p>
+    </div>
+    <div>
+      <p class="small">Result:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          50
+        /    \
+      30      70
+        \
+         40
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we have the three-node tree and we want to insert 40. Compare 40 with 50: 40 is less than 50, so go left. Now compare with 30: 40 is greater than 30, so go right.</p>
+    <p>The right child is empty, therefore insert 40 there. Notice that insertion is search — you follow exactly the path that search would follow, and you stop where search would have failed.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursive BST Insertion</h2>
+  <div class="cols">
+    <div>
+      <p class="small">One implementation is:</p>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="3-5|7-11|13">
+public static TreeNode insert(TreeNode node, int value) {
+
+    if (node == null) {
+        return new TreeNode(value);
+    }
+
+    if (value &lt; node.value) {
+        node.left = insert(node.left, value);
+    } else if (value &gt; node.value) {
+        node.right = insert(node.right, value);
+    }
+
+    return node;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Notice the base case:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (node == null)
+</code></pre>
+      <p class="small">We have found the location where the new value belongs.</p>
+      <details class="acc">
+        <summary>Why the method returns a node</summary>
+        <div class="acc-body">
+          <p>The pattern <code>node.left = insert(node.left, value)</code> lets the recursive call decide what the child reference should become. If the child was <code>null</code>, the call returns a brand-new node and the assignment attaches it. If the child already existed, the call returns that same node unchanged and the assignment is harmless.</p>
+          <p>That is why the method ends with <code>return node;</code> — every level hands its own node back up so the parent's link stays correct.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>One implementation of recursive insertion is a method that returns a TreeNode. Notice the base case: if node is null, we have found the location where the new value belongs, so we return a new node.</p>
+    <p>If the value is less than the node value, insert into the left subtree and reassign node.left; if greater, do the same on the right. If the value equals the node value, neither branch runs and nothing is inserted — a basic BST like this one quietly ignores duplicates.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Building a Binary Search Tree</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Suppose we insert:</p>
+<pre><code class="language-text" data-trim data-noescape>
+50
+30
+70
+20
+40
+60
+80
+</code></pre>
+      <p class="small">in that order.</p>
+    </div>
+    <div>
+      <p class="small">The resulting tree is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>Insert the middle value first, then the middles of each half.</div>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Insertion order matters.</div>
+      <p class="small">The same seven values in a different order produce a completely different shape — as the next slide shows.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we insert 50, 30, 70, 20, 40, 60 and 80 in that order. The resulting tree is the balanced seven-node tree we have been using all week.</p>
+    <p>Insertion order matters. This is worth pausing on: the set of values does not determine the tree. The sequence does.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>When Insertion Order Goes Wrong</h2>
+  <div class="cols">
+    <div>
+      <p class="small">For example, consider inserting:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+30
+40
+50
+60
+70
+80
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The tree becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+  \
+   30
+     \
+      40
+        \
+         50
+           \
+            60
+              \
+               70
+                 \
+                  80
+</code></pre>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>This is technically still a binary search tree. But it behaves almost like a linked list.</div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-insertion-order" tabindex="0">Insertion order, shape, and balance</span>
+  </div>
+  <aside class="notes">
+    <p>Consider inserting 20, 30, 40, 50, 60, 70, 80 — that is, already-sorted data. Every new value is larger than everything already in the tree, so it always goes right. The tree becomes a diagonal chain.</p>
+    <p>This is technically still a binary search tree; every node satisfies the ordering property. But it behaves almost like a linked list, and the search that took three comparisons now takes seven. Sorted input is the worst case for a naive BST, and that is not a rare situation in practice.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Balanced and Unbalanced Trees</h2>
+  <div class="cols">
+    <div>
+      <span class="tag ok">Balanced</span>
+      <p class="small">Consider this BST:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+      <p class="small">Its height is small relative to the number of nodes. We informally call such a tree <strong>balanced</strong>.</p>
+    </div>
+    <div>
+      <span class="tag no">Unbalanced</span>
+      <p class="small">Compare that with:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+  \
+   30
+     \
+      40
+        \
+         50
+           \
+            60
+</code></pre>
+      <p class="small">This tree is highly <strong>unbalanced</strong>.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Why does this matter?</span>Because tree height determines how many nodes we may need to visit.</div>
+  <aside class="notes">
+    <p>The seven-node tree has height 2 for seven nodes; its height is small relative to the number of nodes, and we informally call such a tree balanced. The five-node chain has height 4 for five nodes and is highly unbalanced.</p>
+    <p>Why does this matter? Because tree height determines how many nodes we may need to visit. A search walks one root-to-leaf path, so the height is the worst case.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Time Complexity of BST Search</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose a balanced BST contains approximately one million elements. A well-balanced search tree might require only around:</p>
+<pre><code class="language-text" data-trim data-noescape>
+log₂(1,000,000) ≈ 20
+</code></pre>
+      <p class="small">comparisons.</p>
+    </div>
+    <div>
+      <p class="small">Thus, search is approximately:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(log n)
+</code></pre>
+      <p class="small">when the tree is balanced.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Twenty comparisons to find one item among a million. Each comparison throws away half of what is left.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where the logarithm comes from</summary>
+    <div class="acc-body">
+      <p>Each comparison sends the search into one subtree and discards the other. In a well-balanced tree the two subtrees are about the same size, so each step roughly halves the number of candidates remaining.</p>
+      <p>The number of halvings needed to reduce one million to one is log base 2 of one million, which is about 20. That is the same reasoning behind binary search on a sorted array in Week 11.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose a balanced BST contains approximately one million elements. A well-balanced search tree might require only around log base 2 of one million, which is about 20, comparisons.</p>
+    <p>Thus search is approximately O(log n) when the tree is balanced. Compare that with a linear scan of a million items, and with binary search on a sorted array from Week 11, which gives the same 20 — the tree buys you that behaviour while still supporting cheap insertion.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worst-Case BST Performance</h2>
+  <div class="cols">
+    <div>
+      <p class="small">If a BST becomes completely unbalanced:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+  \
+   20
+     \
+      30
+        \
+         40
+</code></pre>
+      <p class="small">searching could require visiting every node. Worst-case complexity becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Therefore:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Balanced BST:
+search ≈ O(log n)
+
+Highly unbalanced BST:
+search ≈ O(n)
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>The same general idea applies to insertion.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-complexity-bst" tabindex="0">BST complexity, best and worst case</span>
+  </div>
+  <aside class="notes">
+    <p>If a BST becomes completely unbalanced — a chain of four nodes, each hanging off the right of the last — searching could require visiting every node, so worst-case complexity becomes O(n).</p>
+    <p>Therefore: balanced BST search is approximately O(log n); highly unbalanced BST search is approximately O(n). The same general idea applies to insertion, because insertion follows the same downward path that search does.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Tree Traversals</h2>
+  <p class="part-sub">Three ways to visit every node, distinguished by one question: when do we process the current node?</p>
+</section>
+
+<section>
+  <h2>What Traversal Means</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Sometimes we do not want to search for one value. Instead, we want to visit <strong>every node</strong>.</p>
+      <div class="def"><span class="term">Tree traversal:</span> visiting every node in a tree.</div>
+      <p class="small">Several traversal orders are common.</p>
+    </div>
+    <div>
+      <p class="small">For binary trees, the three classic depth-first traversals are:</p>
+      <ol class="small">
+        <li>Preorder</li>
+        <li>Inorder</li>
+        <li>Postorder</li>
+      </ol>
+      <div class="box note"><span class="box-title">Note</span>All three visit exactly the same nodes. They differ only in <em>when</em> the current node is processed relative to its subtrees.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What "depth-first" means here</summary>
+    <div class="acc-body">
+      <p>All three of these traversals follow one subtree all the way down before starting the other. That is what makes them depth-first: the recursion descends as far as it can before backing up.</p>
+      <p>Because every node must be reached, a complete traversal is <span class="pill">O(n)</span> regardless of whether the tree is balanced — balance changes the cost of finding one value, not the cost of visiting all of them.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Sometimes we do not want to search for one value. Instead we want to visit every node. Visiting every node in a tree is called tree traversal, and several traversal orders are common.</p>
+    <p>For binary trees, the three classic depth-first traversals are preorder, inorder and postorder. Because all three must reach every node, all three are O(n) — the choice between them is about order, not cost.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Inorder Traversal</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">The inorder traversal visits nodes in this order:</p>
+<pre><code class="language-text" data-trim data-noescape>
+LEFT
+NODE
+RIGHT
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The inorder traversal is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20 30 40 50 60 70 80
+</code></pre>
+    </div>
+  </div>
+  <blockquote>Inorder traversal of a binary search tree visits values in sorted order.</blockquote>
+  <aside class="notes">
+    <p>The inorder traversal visits nodes in the order left, node, right. For our seven-node tree the inorder traversal is 20, 30, 40, 50, 60, 70, 80.</p>
+    <p>Notice something important: inorder traversal of a binary search tree visits values in sorted order. That is not a coincidence — it falls straight out of the BST ordering property, since everything to the left of a node is smaller and everything to its right is larger.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Recursive Inorder Traversal</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="3-5|7|9|11">
+public static void inorder(TreeNode node) {
+
+    if (node == null) {
+        return;
+    }
+
+    inorder(node.left);
+
+    System.out.println(node.value);
+
+    inorder(node.right);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This code is remarkably short.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The recursive structure of the algorithm mirrors the structure of the tree.</div>
+      <details class="acc">
+        <summary>Read the three statements as the definition</summary>
+        <div class="acc-body">
+          <p>The body of the method is literally the traversal rule written as Java: <code>inorder(node.left)</code> is LEFT, the <code>println</code> is NODE, and <code>inorder(node.right)</code> is RIGHT.</p>
+          <p>Move the <code>println</code> above both calls and you have preorder. Move it below both and you have postorder. That is the whole difference between the three traversals.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The recursive inorder traversal is four statements: return if the node is null, recurse left, print the value, recurse right. This code is remarkably short.</p>
+    <p>The recursive structure of the algorithm mirrors the structure of the tree. This is the clearest example of that claim all week — the method body is the traversal rule, transcribed.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Understanding the Recursive Call</h2>
+  <div class="cols-3">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+      30
+     /  \
+   20    40
+</code></pre>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+inorder(node);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">where <code>node</code> contains <code>30</code> causes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+inorder(20)
+print 30
+inorder(40)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The result is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+30
+40
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What happens inside <code>inorder(20)</code></summary>
+    <div class="acc-body">
+      <p>Node 20 is a leaf. The call recurses into its left child, which is <code>null</code>, and returns immediately. It prints 20. It recurses into its right child, also <code>null</code>, and returns immediately.</p>
+      <p>So the entire call contributes exactly one line of output. The two null calls do no work but are what make the code correct without a special leaf test.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider the three-node tree with 30 on top. Calling inorder on the node containing 30 causes inorder of 20, then print 30, then inorder of 40. The result is 20, 30, 40.</p>
+    <p>This is the smallest complete example of the traversal. Have students expand it by hand for the seven-node tree — the output is exactly the sorted sequence from the previous slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Preorder Traversal</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Preorder traversal visits:</p>
+<pre><code class="language-text" data-trim data-noescape>
+NODE
+LEFT
+RIGHT
+</code></pre>
+      <p class="small">For:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+      <p class="small">the result is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+50 30 20 40 70 60 80
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Implementation:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void preorder(TreeNode node) {
+
+    if (node == null) {
+        return;
+    }
+
+    System.out.println(node.value);
+
+    preorder(node.left);
+    preorder(node.right);
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Preorder traversal visits node, left, right. For the seven-node tree the result is 50, 30, 20, 40, 70, 60, 80 — the root comes out first, then the whole left subtree, then the whole right subtree.</p>
+    <p>The implementation is the inorder method with the println moved to the top. Notice that the preorder output is exactly the insertion order that would rebuild this tree, which is why preorder is used for copying and serializing tree structure.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Postorder Traversal</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Postorder traversal visits:</p>
+<pre><code class="language-text" data-trim data-noescape>
+LEFT
+RIGHT
+NODE
+</code></pre>
+      <p class="small">For the same tree:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80
+</code></pre>
+      <p class="small">the result is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20 40 30 60 80 70 50
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Implementation:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void postorder(TreeNode node) {
+
+    if (node == null) {
+        return;
+    }
+
+    postorder(node.left);
+    postorder(node.right);
+
+    System.out.println(node.value);
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-traversal-reference" tabindex="0">All three traversals, side by side</span>
+  </div>
+  <aside class="notes">
+    <p>Postorder traversal visits left, right, node. For the same tree the result is 20, 40, 30, 60, 80, 70, 50 — the root comes out last.</p>
+    <p>The implementation is again the same method with the println moved, this time to the bottom. Because a node is emitted only after both of its children, postorder is the safe order for deleting a tree: you never free a parent whose children still need it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Comparing the Three Traversals</h2>
+  <p class="small">A useful way to remember the three traversals is to ask:</p>
+  <blockquote>When do we process the current node?</blockquote>
+  <div class="cols-3">
+    <div>
+      <h4>Preorder</h4>
+<pre><code class="language-text" data-trim data-noescape>
+NODE
+left
+right
+</code></pre>
+      <p class="small">The node is processed <strong>before</strong> its subtrees.</p>
+    </div>
+    <div>
+      <h4>Inorder</h4>
+<pre><code class="language-text" data-trim data-noescape>
+left
+NODE
+right
+</code></pre>
+      <p class="small">The node is processed <strong>between</strong> its subtrees.</p>
+    </div>
+    <div>
+      <h4>Postorder</h4>
+<pre><code class="language-text" data-trim data-noescape>
+left
+right
+NODE
+</code></pre>
+      <p class="small">The node is processed <strong>after</strong> its subtrees.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A useful way to remember the three traversals is to ask: when do we process the current node? Preorder processes the node before its subtrees; inorder between them; postorder after them.</p>
+    <p>The prefixes are literal. Pre means before, in means between, post means after — and in all three cases "left before right" never changes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Different Traversals Exist</h2>
+  <p class="small">Different traversal orders are useful for different problems.</p>
+  <div class="cols-3">
+    <div>
+      <h4>Inorder</h4>
+      <p class="small">Useful for:</p>
+      <ul class="small">
+        <li>printing BST values in sorted order</li>
+        <li>processing values according to BST ordering</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Preorder</h4>
+      <p class="small">Useful for:</p>
+      <ul class="small">
+        <li>copying tree structure</li>
+        <li>serializing certain tree representations</li>
+        <li>processing a parent before its children</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Postorder</h4>
+      <p class="small">Useful for:</p>
+      <ul class="small">
+        <li>deleting a tree</li>
+        <li>computing properties from child nodes</li>
+        <li>processing children before their parent</li>
+      </ul>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>"Computing properties from child nodes" is the whole of Part VII</summary>
+    <div class="acc-body">
+      <p>Counting nodes, counting leaves, summing values and computing height all need their children's answers before they can produce their own. That makes every one of them a postorder computation, whether or not it prints anything.</p>
+      <p>The general recursive pattern on the next slide is postorder with the printing replaced by a combine step.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Different traversal orders are useful for different problems. Inorder is for printing BST values in sorted order and processing values according to BST ordering.</p>
+    <p>Preorder is for copying tree structure, serializing certain tree representations, and processing a parent before its children. Postorder is for deleting a tree, computing properties from child nodes, and processing children before their parent.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Recursive Tree Algorithms</h2>
+  <p class="part-sub">One pattern — base case, solve left, solve right, combine — generates almost every tree algorithm you will write.</p>
+</section>
+
+<section>
+  <h2>The General Recursive Tree Pattern</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Many useful tree algorithms follow the same general pattern:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static ReturnType solve(TreeNode node) {
+
+    if (node == null) {
+        return baseValue;
+    }
+
+    ReturnType leftResult = solve(node.left);
+    ReturnType rightResult = solve(node.right);
+
+    return combine(node, leftResult, rightResult);
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>This pattern appears repeatedly in computer science.</div>
+      <p class="small">The next four slides are the same three lines with different answers to two questions:</p>
+      <ul class="small">
+        <li>What is the base value for an empty tree?</li>
+        <li>How do I combine a node with its two subtree results?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-recursive-pattern" tabindex="0">Every recursive tree algorithm this week</span>
+  </div>
+  <aside class="notes">
+    <p>Many useful tree algorithms follow the same general pattern: a base case for the null node returning some base value, a recursive call on the left subtree, a recursive call on the right subtree, and a combine step that produces this node's answer from those two.</p>
+    <p>This pattern appears repeatedly in computer science. Once students see it, counting, summing and height stop being three separate algorithms and become three fillings-in of one template.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting Nodes</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we want to count the number of nodes in a tree. Conceptually:</p>
+<pre><code class="language-text" data-trim data-noescape>
+number of nodes =
+1
++ number of nodes in left subtree
++ number of nodes in right subtree
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Implementation:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int countNodes(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return 1
+        + countNodes(node.left)
+        + countNodes(node.right);
+}
+</code></pre>
+      <details class="acc">
+        <summary>Fill in the general pattern</summary>
+        <div class="acc-body">
+          <p>Match it against <code>solve</code> from the previous slide. <code>ReturnType</code> is <code>int</code>. The <code>baseValue</code> for an empty tree is <code>0</code>. The <code>combine</code> step is <code>1 + leftResult + rightResult</code>.</p>
+          <p>Every algorithm on the next three slides fills in the same three blanks with different answers.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Conceptually, the number of nodes in a tree is one, plus the number of nodes in the left subtree, plus the number of nodes in the right subtree. The implementation is that sentence in Java.</p>
+    <p>The base value is 0 — an empty tree has no nodes. The combine step is addition with a plus one for the node itself. This is the mystery method students meet again in the Part XI reasoning exercise.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Counting Leaves</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A leaf has:</p>
+<pre><code class="language-java" data-trim data-noescape>
+node.left == null
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-java" data-trim data-noescape>
+node.right == null
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>This algorithm needs a <em>second</em> base case, because a leaf is not an empty tree.</div>
+    </div>
+    <div>
+      <p class="small">Implementation:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int countLeaves(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    if (node.left == null &amp;&amp; node.right == null) {
+        return 1;
+    }
+
+    return countLeaves(node.left)
+        + countLeaves(node.right);
+}
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A leaf has node.left equal to null and node.right equal to null. The implementation checks the null node first, then checks for a leaf and returns 1, and only then recurses into both subtrees.</p>
+    <p>Note the difference from countNodes: there is no plus one on the final return, because an internal node is not itself a leaf and contributes nothing of its own.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Finding the Sum of All Values</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sum(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return node.value
+        + sum(node.left)
+        + sum(node.right);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Again:</p>
+<pre><code class="language-text" data-trim data-noescape>
+sum of tree =
+root value
++ sum of left subtree
++ sum of right subtree
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The only change from <code>countNodes</code> is <code>1</code> becoming <code>node.value</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The sum method is countNodes with the literal 1 replaced by node.value. Again: the sum of a tree is the root value, plus the sum of the left subtree, plus the sum of the right subtree.</p>
+    <p>Put the two methods side by side on the board. The identical shape is the point — students who see it stop memorising individual tree algorithms.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Finding the Height</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can define the height recursively. One common definition is:</p>
+<pre><code class="language-java" data-trim data-noescape data-line-numbers="3-5|7-8|10">
+public static int height(TreeNode node) {
+
+    if (node == null) {
+        return -1;
+    }
+
+    int leftHeight = height(node.left);
+    int rightHeight = height(node.right);
+
+    return 1 + Math.max(leftHeight, rightHeight);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Why <code>-1</code> for an empty tree? Because then a leaf has height:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1 + max(-1, -1)
+= 0
+</code></pre>
+      <p class="small">which matches the definition that a leaf has height zero.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>Some textbooks use slightly different height conventions. The important thing is to be consistent.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We can define the height recursively. The base case returns minus one for an empty tree; otherwise take the height of each subtree and return one plus the larger of the two.</p>
+    <p>Why minus one for an empty tree? Because then a leaf has height one plus the max of minus one and minus one, which is zero — matching the definition that a leaf has height zero. Some textbooks use slightly different height conventions; the important thing is to be consistent.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Minimum and Maximum in a BST</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Because of the BST ordering property:</p>
+      <blockquote class="small">The smallest value is the leftmost node.</blockquote>
+      <p class="small">For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+           50
+         /    \
+       30      70
+      /
+    20
+</code></pre>
+      <p class="small">Minimum:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Implementation:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int findMin(TreeNode root) {
+
+    if (root == null) {
+        throw new IllegalArgumentException("Tree is empty");
+    }
+
+    TreeNode current = root;
+
+    while (current.left != null) {
+        current = current.left;
+    }
+
+    return current.value;
+}
+</code></pre>
+      <p class="small">Similarly:</p>
+      <blockquote class="small">The maximum value is the rightmost node.</blockquote>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Because of the BST ordering property, the smallest value is the leftmost node. The implementation throws an IllegalArgumentException for an empty tree, then walks left as far as it can and returns the value it lands on.</p>
+    <p>Similarly, the maximum value is the rightmost node. Note that this method does not traverse the tree at all — it follows one path, so it costs the height, not n. That is exactly what the lab asks students to exploit in Part 3.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Removing Values from a BST</h2>
+  <p class="small">Deletion from a BST is more complicated than insertion. There are three cases. Suppose we want to remove a node.</p>
+  <div class="cols-3">
+    <div>
+      <h4>Case 1: the node is a leaf</h4>
+<pre><code class="language-text" data-trim data-noescape>
+    30
+   /
+ 20
+</code></pre>
+      <p class="small">Removing <code>20</code> is easy. Simply remove the reference.</p>
+    </div>
+    <div>
+      <h4>Case 2: the node has one child</h4>
+<pre><code class="language-text" data-trim data-noescape>
+    30
+      \
+       40
+</code></pre>
+      <p class="small">If we remove <code>30</code>, its child <code>40</code> can take its place.</p>
+    </div>
+    <div>
+      <h4>Case 3: the node has two children</h4>
+<pre><code class="language-text" data-trim data-noescape>
+      30
+     /  \
+   20    40
+</code></pre>
+      <p class="small">This is more complicated.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Deletion from a BST is more complicated than insertion. There are three cases. Case one, the node is a leaf: removing 20 is easy, simply remove the reference. Case two, the node has one child: if we remove 30, its child 40 can take its place.</p>
+    <p>Case three, the node has two children. This is more complicated, because neither child can simply be promoted — doing so would break the ordering property for the other one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Deletion: the Two-Child Case</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We typically replace the node with either:</p>
+      <ul class="small">
+        <li>the largest value in its left subtree, or</li>
+        <li>the smallest value in its right subtree</li>
+      </ul>
+      <p class="small">These are called the:</p>
+<pre><code class="language-text" data-trim data-noescape>
+inorder predecessor
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-text" data-trim data-noescape>
+inorder successor
+</code></pre>
+      <p class="small">respectively.</p>
+    </div>
+    <div>
+      <div class="box note"><span class="box-title">Note</span>For CSC500, understanding the three cases is more important than memorizing the full deletion implementation.</div>
+      <details class="acc">
+        <summary>Why those two values, and no others</summary>
+        <div class="acc-body">
+          <p>The replacement has to be greater than everything in the left subtree and less than everything in the right subtree — that is the only way the ordering property survives.</p>
+          <p>Exactly two values in the tree satisfy that: the largest on the left and the smallest on the right. They are the values immediately before and after the removed one in the inorder sequence, which is why they are named the inorder predecessor and successor. And each is easy to reach — <code>findMin</code> and its mirror find them by following one path.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-deletion" tabindex="0">The three deletion cases in full</span>
+  </div>
+  <aside class="notes">
+    <p>We typically replace the node with either the largest value in its left subtree or the smallest value in its right subtree. These are called the inorder predecessor and the inorder successor respectively.</p>
+    <p>For CSC500, understanding the three cases is more important than memorizing the full deletion implementation. Students should be able to say what happens in each case and why the two-child case needs a replacement at all.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A More Complete BST Class</h2>
+  <p class="small">Instead of exposing raw <code>TreeNode</code> objects to users of our code, we can create a class representing the entire data structure.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public class BinarySearchTree {
+
+    private TreeNode root;
+
+    public BinarySearchTree() {
+        root = null;
+    }
+
+    public void add(int value) {
+        root = insert(root, value);
+    }
+
+    private TreeNode insert(TreeNode node, int value) {
+
+        if (node == null) {
+            return new TreeNode(value);
+        }
+
+        if (value &lt; node.value) {
+            node.left = insert(node.left, value);
+        } else if (value &gt; node.value) {
+            node.right = insert(node.right, value);
+        }
+
+        return node;
+    }
+</code></pre>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+    public boolean contains(int value) {
+        return contains(root, value);
+    }
+
+    private boolean contains(TreeNode node, int value) {
+
+        if (node == null) {
+            return false;
+        }
+
+        if (value == node.value) {
+            return true;
+        }
+
+        if (value &lt; node.value) {
+            return contains(node.left, value);
+        }
+
+        return contains(node.right, value);
+    }
+}
+</code></pre>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m14-bst-class" tabindex="0">The class in one piece</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Instead of exposing raw TreeNode objects to users of our code, we can create a class representing the entire data structure. The class keeps a private root, and each public method is a one-line wrapper around a private recursive helper.</p>
+    <p>Note the pairs: public add calls private insert; public contains calls private contains. The public method takes only what the caller cares about — a value. The private one takes the node, which is the caller's business only inside the class.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Hiding the Implementation</h2>
+  <div class="cols">
+    <div>
+      <p class="small">This demonstrates an important object-oriented design principle:</p>
+      <blockquote>Hide implementation details behind a public interface.</blockquote>
+      <p class="small">Users of <code>BinarySearchTree</code> do not need to manipulate nodes directly. They simply call:</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+BinarySearchTree tree = new BinarySearchTree();
+
+tree.add(50);
+tree.add(30);
+tree.add(70);
+
+System.out.println(tree.contains(30));
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>The word <code>TreeNode</code> does not appear anywhere in this calling code.</div>
+      <details class="acc">
+        <summary>Public wrapper, private recursion</summary>
+        <div class="acc-body">
+          <p>Each public method takes only what the caller knows about — a value — and hands the work to a private method that also takes a node. The recursion needs the node; the caller does not have one and should not need one.</p>
+          <p>That pairing is why the caller never writes <code>TreeNode</code>, and it is the mechanism behind the principle: hide implementation details behind a public interface.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This demonstrates an important object-oriented design principle: hide implementation details behind a public interface. Users of BinarySearchTree do not need to manipulate nodes directly.</p>
+    <p>They simply construct a tree, call add three times, and call contains. The encapsulation lesson from Week 6 pays off here — because the root is private, the class can later be re-implemented as a self-balancing tree without any caller changing a line.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Trees in the Java Collections</h2>
+  <p class="part-sub">You will rarely write a BST at work. You will constantly choose between one and a hash table.</p>
+</section>
+
+<section>
+  <h2>Abstract Data Types Revisited</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Recall the distinction between an <strong>abstract data type</strong> and an implementation.</p>
+      <p class="small">An abstract data type describes:</p>
+      <blockquote class="small">What operations are available?</blockquote>
+      <p class="small">An implementation describes:</p>
+      <blockquote class="small">How are those operations carried out?</blockquote>
+    </div>
+    <div>
+      <p class="small">For example, a Set might provide:</p>
+<pre><code class="language-text" data-trim data-noescape>
+add
+remove
+contains
+size
+</code></pre>
+      <p class="small">A set could potentially be implemented using:</p>
+      <ul class="small">
+        <li>a list</li>
+        <li>a hash table</li>
+        <li>a binary search tree</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The user does not necessarily need to know which implementation is being used.</div>
+  <details class="acc">
+    <summary>Three implementations of one Set</summary>
+    <div class="acc-body">
+      <p>Backed by a <strong>list</strong>, <code>contains</code> has to scan. Backed by a <strong>hash table</strong>, it computes a hash and looks in one place. Backed by a <strong>binary search tree</strong>, it walks one root-to-leaf path.</p>
+      <p>All three offer add, remove, contains and size — the same abstract data type, with three very different cost profiles and only one of which keeps elements in sorted order.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Recall the distinction between an abstract data type and an implementation. An abstract data type describes what operations are available; an implementation describes how those operations are carried out.</p>
+    <p>A Set might provide add, remove, contains and size. A set could potentially be implemented using a list, a hash table, or a binary search tree. The user does not necessarily need to know which implementation is being used — though, as the next few slides show, the choice is visible in the performance and in whether iteration comes out sorted.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Java's Tree-Based Collections</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java contains tree-based collection implementations. One example is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+TreeSet
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.TreeSet;
+
+TreeSet&lt;Integer&gt; numbers = new TreeSet&lt;&gt;();
+
+numbers.add(50);
+numbers.add(20);
+numbers.add(70);
+numbers.add(30);
+
+System.out.println(numbers);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+[20, 30, 50, 70]
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>A <code>TreeSet</code> maintains elements in sorted order.</div>
+      <p class="small">Java also provides:</p>
+<pre><code class="language-java" data-trim data-noescape>
+TreeMap
+</code></pre>
+      <p class="small">which stores key-value pairs while maintaining keys in sorted order.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java contains tree-based collection implementations. One example is TreeSet. We add 50, 20, 70 and 30 in that order, print the set, and get the values back as 20, 30, 50, 70.</p>
+    <p>A TreeSet maintains elements in sorted order. That printed output is an inorder traversal — the same idea from Part VI, done for you. Java also provides TreeMap, which stores key-value pairs while maintaining keys in sorted order.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>TreeSet</code> vs. <code>HashSet</code></h2>
+  <p class="small">We previously encountered <code>HashSet</code>. Now consider <code>TreeSet</code>. Both implement the general Set abstraction. But they make different tradeoffs.</p>
+  <div class="cols">
+    <div>
+      <h4>HashSet</h4>
+      <p class="small">Typical:</p>
+<pre><code class="language-text" data-trim data-noescape>
+add:      O(1)
+contains: O(1)
+remove:   O(1)
+</code></pre>
+      <p class="small">Elements are <strong>not</strong> maintained in sorted order.</p>
+    </div>
+    <div>
+      <h4>TreeSet</h4>
+      <p class="small">Typical:</p>
+<pre><code class="language-text" data-trim data-noescape>
+add:      O(log n)
+contains: O(log n)
+remove:   O(log n)
+</code></pre>
+      <p class="small">Elements <strong>are</strong> maintained in sorted order.</p>
+    </div>
+  </div>
+  <blockquote>There is rarely one "best" data structure.</blockquote>
+  <p class="small">The correct structure depends on what operations the program needs.</p>
+  <aside class="notes">
+    <p>We previously encountered HashSet. Now consider TreeSet. Both implement the general Set abstraction, but they make different tradeoffs. HashSet gives typical O(1) add, contains and remove, and does not maintain sorted order. TreeSet gives O(log n) for the same three, and does maintain sorted order.</p>
+    <p>Therefore: there is rarely one best data structure. The correct structure depends on what operations the program needs. Sorted order is not free — you pay a logarithmic factor on every operation for it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>TreeMap</code> vs. <code>HashMap</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">A similar comparison exists between <code>HashMap</code> and <code>TreeMap</code>.</p>
+      <ul class="small">
+        <li>A <code>HashMap</code> is usually chosen when fast key lookup is the priority.</li>
+        <li>A <code>TreeMap</code> is useful when keys must remain sorted.</li>
+      </ul>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+TreeMap&lt;String, Integer&gt; scores = new TreeMap&lt;&gt;();
+
+scores.put("Charlie", 85);
+scores.put("Alice", 92);
+scores.put("Bob", 88);
+
+System.out.println(scores);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The keys appear in sorted order:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Alice
+Bob
+Charlie
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>The keys were inserted Charlie, Alice, Bob. The map prints them alphabetically because the tree keeps them that way.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-treeset-treemap" tabindex="0">Java's tree collections, in full</span>
+  </div>
+  <aside class="notes">
+    <p>A similar comparison exists between HashMap and TreeMap. A HashMap is usually chosen when fast key lookup is the priority; a TreeMap is useful when keys must remain sorted.</p>
+    <p>In the example we put Charlie, then Alice, then Bob, and the keys appear in sorted order: Alice, Bob, Charlie. Note that TreeMap sorts by key, never by value — a point students consistently get wrong on the exam.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Heaps and Priority Queues</h2>
+  <p class="part-sub">Another binary tree with a different rule — and a different problem to solve.</p>
+</section>
+
+<section>
+  <h2>Another Important Tree: The Heap</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A <strong>heap</strong> is another type of binary tree. However, it follows a different rule than a binary search tree.</p>
+      <p class="small">A common type is a <strong>min-heap</strong>. In a min-heap:</p>
+      <blockquote class="small">Every parent is less than or equal to its children.</blockquote>
+      <p class="small">Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          10
+        /    \
+      20      15
+     /  \    /
+   40   30  25
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Notice:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 &lt; 20
+10 &lt; 15
+
+20 &lt; 40
+20 &lt; 30
+
+15 &lt; 25
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A heap is another type of binary tree. However, it follows a different rule than a binary search tree. A common type is a min-heap, in which every parent is less than or equal to its children.</p>
+    <p>Check the example: 10 is less than both 20 and 15; 20 is less than both 40 and 30; 15 is less than 25. The rule is entirely local — parent versus child — and says nothing about the relationship between siblings or cousins.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Heap Is Not a BST</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+          10
+        /    \
+      20      15
+     /  \    /
+   40   30  25
+</code></pre>
+    </div>
+    <div>
+      <div class="box pitfall"><span class="box-title">Common error</span>This is <strong>not</strong> a BST.</div>
+      <p class="small">For example, <code>15</code> appears on the right of <code>10</code>, which is fine, but the entire tree does not follow BST ordering between arbitrary subtrees.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where the BST property fails here</summary>
+    <div class="acc-body">
+      <p>Look at the left subtree of the root. It contains 20, 40 and 30 — all of them <em>greater</em> than the root value 10. A BST requires everything in the left subtree to be smaller.</p>
+      <p>The heap rule and the BST rule are simply different constraints. The heap orders each parent against its own children only; the BST orders each node against every value in each of its subtrees.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>However, this is not a BST. For example, 15 appears on the right of 10, which is fine, but the entire tree does not follow BST ordering between arbitrary subtrees.</p>
+    <p>This is the distinction to hammer. Both structures are binary trees; both impose an ordering rule; the rules are different and buy different things. The BST rule buys search; the heap rule buys instant access to the extreme.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Min-Heaps and Max-Heaps</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A min-heap provides very quick access to the smallest element. The smallest element is always at the root.</p>
+<pre><code class="language-text" data-trim data-noescape>
+          5
+        /   \
+      10     8
+     / \
+   20   15
+</code></pre>
+      <p class="small">Minimum:</p>
+<pre><code class="language-text" data-trim data-noescape>
+5
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>A <strong>max-heap</strong> works in the opposite direction. The largest value appears at the root.</div>
+      <details class="acc">
+        <summary>Why the root must hold the minimum</summary>
+        <div class="acc-body">
+          <p>Every parent is less than or equal to its children, so following any path downward from the root gives a non-decreasing sequence of values. No value anywhere in the tree can therefore be smaller than the root.</p>
+          <p>That is why "find the minimum" costs <span class="pill">O(1)</span> in a heap — you do not search for it, you read it off the top.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A min-heap provides very quick access to the smallest element, because the smallest element is always at the root. In the five-node example the minimum is 5.</p>
+    <p>A max-heap works in the opposite direction — the largest value appears at the root. Everything else about the structure is the same; only the comparison flips.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Priority Queues</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A heap is commonly used to implement a <strong>priority queue</strong>. A normal queue follows:</p>
+<pre><code class="language-text" data-trim data-noescape>
+first in, first out
+</code></pre>
+      <p class="small">A priority queue instead removes the element with the highest priority.</p>
+    </div>
+    <div>
+      <p class="small">Example: suppose an emergency room contains patients with priorities:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Patient A: priority 4
+Patient B: priority 1
+Patient C: priority 3
+Patient D: priority 2
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The patients would not necessarily be processed according to arrival order. They would be processed according to priority.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Order of arrival versus order of treatment</summary>
+    <div class="acc-body">
+      <p>A first-in-first-out queue would treat A, then B, then C, then D — the order they walked in. That is exactly the wrong policy for an emergency room.</p>
+      <p>A priority queue removes by priority instead. Patient B, with priority 1, is seen first despite arriving second. Same interface, different removal rule, and the heap is what makes the rule cheap.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>A heap is commonly used to implement a priority queue. A normal queue follows first in, first out. A priority queue instead removes the element with the highest priority.</p>
+    <p>Suppose an emergency room contains patients with priorities four, one, three and two. The patients would not necessarily be processed according to arrival order; they would be processed according to priority. Contrast this directly with the queue from Week 13 — same interface, completely different removal rule.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Java's <code>PriorityQueue</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java provides <code>PriorityQueue</code>. Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+import java.util.PriorityQueue;
+
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+
+pq.add(40);
+pq.add(10);
+pq.add(30);
+pq.add(20);
+
+System.out.println(pq.remove());
+System.out.println(pq.remove());
+System.out.println(pq.remove());
+System.out.println(pq.remove());
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+20
+30
+40
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>By default, Java's <code>PriorityQueue</code> behaves like a min-priority queue.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The values were added 40, 10, 30, 20</summary>
+    <div class="acc-body">
+      <p>They come out 10, 20, 30, 40 — smallest first, regardless of the order they went in. The queue never sorted the whole collection; each <code>remove</code> simply took the root of the heap and restored the heap property.</p>
+      <p>This is the practical payoff of the whole part: you get repeated minimum-extraction without ever sorting, and without ever writing a heap yourself.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Java provides PriorityQueue. We add 40, 10, 30 and 20, then remove four times, and the output is 10, 20, 30, 40.</p>
+    <p>By default, Java's PriorityQueue behaves like a min-priority queue. Students who want largest-first must supply a comparator — the default is smallest-first, and assuming otherwise is a common bug.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Priority Queue Complexity</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A typical heap-based priority queue provides:</p>
+<pre><code class="language-text" data-trim data-noescape>
+peek minimum: O(1)
+
+insert:       O(log n)
+
+remove min:   O(log n)
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>This makes heaps particularly useful when we repeatedly need to determine the smallest or largest item.</div>
+      <p class="small">Note the asymmetry: <em>looking</em> at the minimum is free; <em>removing</em> it costs a logarithm, because the heap has to be repaired afterwards.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A typical heap-based priority queue provides peek minimum in O(1), insert in O(log n), and remove min in O(log n).</p>
+    <p>This makes heaps particularly useful when we repeatedly need to determine the smallest or largest item — job scheduling, event simulation, and the shortest-path algorithms students will meet in a later course.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>BST vs. Heap</h2>
+  <p class="small">Students sometimes confuse BSTs and heaps because both can be represented as binary trees. They solve different problems.</p>
+  <div class="cols">
+    <div>
+      <h4>Binary Search Tree</h4>
+      <p class="small">Designed primarily for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+searching for arbitrary values
+maintaining sorted ordering
+</code></pre>
+      <p class="small">Typical balanced complexity:</p>
+<pre><code class="language-text" data-trim data-noescape>
+search: O(log n)
+insert: O(log n)
+</code></pre>
+    </div>
+    <div>
+      <h4>Heap</h4>
+      <p class="small">Designed primarily for:</p>
+<pre><code class="language-text" data-trim data-noescape>
+quickly finding the smallest or largest element
+</code></pre>
+      <p class="small">Typical:</p>
+<pre><code class="language-text" data-trim data-noescape>
+find min: O(1)
+insert: O(log n)
+remove min: O(log n)
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>Searching a heap for an arbitrary value is generally <strong>not</strong> efficient.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-heaps" tabindex="0">Heaps, priority queues, and BST vs. heap</span>
+  </div>
+  <aside class="notes">
+    <p>Students sometimes confuse BSTs and heaps because both can be represented as binary trees. They solve different problems. A BST is designed primarily for searching for arbitrary values and maintaining sorted ordering, with balanced search and insert both O(log n).</p>
+    <p>A heap is designed primarily for quickly finding the smallest or largest element: find min in O(1), insert and remove min in O(log n). Searching a heap for an arbitrary value is generally not efficient — the heap rule gives you no way to eliminate a subtree.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Choosing a Data Structure</h2>
+  <p class="part-sub">The key question is not which structure is best, but which one supports the operations you perform most.</p>
+</section>
+
+<section>
+  <h2>A Broader Data-Structure Comparison</h2>
+  <p class="small">We have now studied several important structures.</p>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Data Structure</th><th>Main Strength</th></tr></thead>
+      <tbody>
+        <tr><td>Array</td><td>Fast indexing</td></tr>
+        <tr><td>ArrayList</td><td>Flexible indexed sequence</td></tr>
+        <tr><td>Linked List</td><td>Dynamic linked structure</td></tr>
+        <tr><td>Stack</td><td>Last-in-first-out processing</td></tr>
+        <tr><td>Queue</td><td>First-in-first-out processing</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Data Structure</th><th>Main Strength</th></tr></thead>
+      <tbody>
+        <tr><td>HashSet</td><td>Fast membership testing</td></tr>
+        <tr><td>HashMap</td><td>Fast key-value lookup</td></tr>
+        <tr><td>BST</td><td>Ordered searching</td></tr>
+        <tr><td>Heap</td><td>Fast access to min/max</td></tr>
+        <tr><td>PriorityQueue</td><td>Priority-based processing</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">The key question is not: <em>Which data structure is best?</em> Instead ask:</p>
+  <blockquote>Which data structure best supports the operations my program performs most frequently?</blockquote>
+  <aside class="notes">
+    <p>We have now studied several important structures: array for fast indexing, ArrayList for a flexible indexed sequence, linked list for a dynamic linked structure, stack for last-in-first-out processing, queue for first-in-first-out, HashSet for fast membership testing, HashMap for fast key-value lookup, BST for ordered searching, heap for fast access to min or max, and PriorityQueue for priority-based processing.</p>
+    <p>The key question is not which data structure is best. Instead ask: which data structure best supports the operations my program performs most frequently? This table is worth putting on the exam sheet.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Choosing a Data Structure</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose you need to store one million user IDs and repeatedly ask:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Does this ID exist?
+</code></pre>
+      <p class="small">A good choice might be:</p>
+<pre><code class="language-java" data-trim data-noescape>
+HashSet
+</code></pre>
+      <p class="small">Suppose you need the IDs maintained in sorted order. A good choice might be:</p>
+<pre><code class="language-java" data-trim data-noescape>
+TreeSet
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Suppose you repeatedly need to process jobs according to priority. A good choice might be:</p>
+<pre><code class="language-java" data-trim data-noescape>
+PriorityQueue
+</code></pre>
+      <p class="small">Suppose you need frequent access by numerical index:</p>
+<pre><code class="language-java" data-trim data-noescape>
+items.get(i)
+</code></pre>
+      <p class="small">A good choice might be:</p>
+<pre><code class="language-java" data-trim data-noescape>
+ArrayList
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-choosing" tabindex="0">Four scenarios, and the operations checklist</span>
+  </div>
+  <aside class="notes">
+    <p>Four scenarios, four answers. A million user IDs with repeated existence questions: HashSet. The same IDs but maintained in sorted order: TreeSet. Repeatedly processing jobs according to priority: PriorityQueue. Frequent access by numerical index: ArrayList.</p>
+    <p>Notice that each answer is driven by one dominant operation. That is the method — find the operation your program does most, and pick the structure that makes it cheap.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Importance of Operations</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When selecting a data structure, identify which operations matter. Possible operations include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+insert
+delete
+search
+access by index
+find minimum
+find maximum
+iterate in sorted order
+process oldest item
+process newest item
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Different data structures optimize different operations. This idea is fundamental to computer science.</div>
+      <details class="acc">
+        <summary>Map each operation to the structure that makes it cheap</summary>
+        <div class="acc-body">
+          <p>Access by index points at an array or ArrayList. Search with no ordering requirement points at a HashSet or HashMap. Iterate in sorted order points at a TreeSet or TreeMap. Find minimum or maximum repeatedly points at a heap or PriorityQueue.</p>
+          <p>Process oldest item is a queue; process newest item is a stack. Nine operations, and the comparison table two slides back answers every one of them.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>When selecting a data structure, identify which operations matter. Possible operations include insert, delete, search, access by index, find minimum, find maximum, iterate in sorted order, process oldest item, and process newest item.</p>
+    <p>Different data structures optimize different operations. This idea is fundamental to computer science, and it is the single most transferable thing in this week's material.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Misconception: Trees Are Always Faster</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Trees are not automatically faster than arrays or lists. For example, suppose you have only five values. The difference between:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(log n)
+</code></pre>
+      <p class="small">may be irrelevant.</p>
+    </div>
+    <div>
+      <p class="small">Tree structures also involve:</p>
+      <ul class="small">
+        <li>extra object references</li>
+        <li>more complex code</li>
+        <li>additional memory</li>
+        <li>potentially poor cache behavior</li>
+      </ul>
+      <div class="box key"><span class="box-title">Key idea</span>Data structures involve tradeoffs.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Big-O describes growth, not absolute speed</summary>
+    <div class="acc-body">
+      <p>At five values, scanning a list touches five items and walking a tree touches two or three — plus a pointer dereference for every step, plus the cost of having built all those node objects in the first place.</p>
+      <p>The asymptotic advantage is real, but it only starts to pay once n is large. Choosing a tree for a handful of values buys complexity and memory in exchange for nothing.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Trees are not automatically faster than arrays or lists. Suppose you have only five values — the difference between O(n) and O(log n) may be irrelevant.</p>
+    <p>Tree structures also involve extra object references, more complex code, additional memory, and potentially poor cache behavior. Data structures involve tradeoffs. Big-O describes growth, not absolute speed, and at small n the constants win.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Misconception: Every Binary Tree Is a BST</h2>
+  <div class="cols">
+    <div>
+      <p class="small">False. This is a binary tree:</p>
+<pre><code class="language-text" data-trim data-noescape>
+      10
+     /  \
+   100   3
+</code></pre>
+    </div>
+    <div>
+      <span class="tag no">Not a BST</span>
+      <p class="small">But it is not a binary search tree. A BST must satisfy the ordering property.</p>
+      <div class="box pitfall"><span class="box-title">Common error</span>100 is on the left of 10 and 3 is on the right — both backwards. Every node has at most two children, so it is a legitimate binary tree; it simply is not a <em>search</em> tree.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>False. The tree with 10 on top, 100 on the left and 3 on the right is a binary tree, but it is not a binary search tree. A BST must satisfy the ordering property.</p>
+    <p>This is the same counterexample shape as the one in Part III with 50, 100 and 12. If a student cannot articulate why neither is a BST, they will not be able to reason about search at all.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Two More Misconceptions</h2>
+  <div class="cols">
+    <div>
+      <h4>A BST is always O(log n)</h4>
+      <p class="small">False. A balanced BST gives approximately <code>O(log n)</code> search. But an unbalanced tree can become <code>O(n)</code>. Example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+ \
+  20
+    \
+     30
+       \
+        40
+</code></pre>
+    </div>
+    <div>
+      <h4>Tree traversals are sorting algorithms</h4>
+      <p class="small">Inorder traversal of a BST produces values in sorted order. However, the traversal itself did not sort the values.</p>
+      <div class="box key"><span class="box-title">Key idea</span>The ordering was already established when the BST was constructed. The traversal simply visits nodes according to that ordering.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-misconceptions" tabindex="0">All four misconceptions</span>
+  </div>
+  <aside class="notes">
+    <p>Is a BST always O(log n)? False. A balanced BST gives approximately O(log n) search, but an unbalanced tree can become O(n) — the four-node right-leaning chain is the standard example.</p>
+    <p>Are tree traversals sorting algorithms? Inorder traversal of a BST produces values in sorted order. However, the traversal itself did not sort the values. The ordering was already established when the BST was constructed; the traversal simply visits nodes according to that ordering. The sorting work was paid for at insertion time, a little at a time.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>From Concrete Structures to General CS Thinking</h2>
+  <p class="small">Trees demonstrate several important ideas that extend far beyond this course.</p>
+  <div class="cols">
+    <div>
+      <h4>Recursion</h4>
+      <p class="small">Large problems are solved by applying the same logic to smaller subproblems.</p>
+      <h4>Abstraction</h4>
+      <p class="small">Users interact with operations such as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+add
+contains
+remove
+</code></pre>
+      <p class="small">without needing to understand every implementation detail.</p>
+    </div>
+    <div>
+      <h4>Algorithm analysis</h4>
+      <p class="small">The shape of a data structure affects performance.</p>
+      <h4>Representation matters</h4>
+      <p class="small">The way data is organized can dramatically change the efficiency of algorithms.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Four ideas, and not one of them is about Java.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Trees demonstrate several important ideas that extend far beyond this course. Recursion: large problems are solved by applying the same logic to smaller subproblems. Abstraction: users interact with operations such as add, contains and remove without needing to understand every implementation detail.</p>
+    <p>Algorithm analysis: the shape of a data structure affects performance. Representation matters: the way data is organized can dramatically change the efficiency of algorithms. These four sentences are what survives after the Java syntax is forgotten.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Preview of More Advanced Trees</h2>
+  <div class="cols">
+    <div>
+      <p class="small">There are many tree structures beyond what we cover in CSC500. Examples include:</p>
+<pre><code class="language-text" data-trim data-noescape>
+AVL trees
+Red-black trees
+B-trees
+B+ trees
+tries
+expression trees
+syntax trees
+decision trees
+heaps
+</code></pre>
+    </div>
+    <div>
+      <p class="small">You do not need to implement these structures in this course. However, you should understand why they exist:</p>
+      <blockquote class="small">Different tree structures enforce different properties in order to support particular operations efficiently.</blockquote>
+      <div class="box note"><span class="box-title">Note</span>For example, Java's <code>TreeMap</code> and <code>TreeSet</code> use a self-balancing tree internally rather than a simple unbalanced BST.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>There are many tree structures beyond what we cover in CSC500: AVL trees, red-black trees, B-trees, B+ trees, tries, expression trees, syntax trees, decision trees, and heaps.</p>
+    <p>You do not need to implement these structures in this course. However, you should understand why they exist: different tree structures enforce different properties in order to support particular operations efficiently. For example, Java's TreeMap and TreeSet use a self-balancing tree internally rather than a simple unbalanced BST — which is why their O(log n) guarantee holds even for sorted input.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Where Trees Appear: Compilers and File Systems</h2>
+  <div class="cols">
+    <div>
+      <h4>Compilers</h4>
+      <p class="small">Programming expressions are represented using <strong>syntax trees</strong>. For example:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3 + 4 * 5
+</code></pre>
+      <p class="small">can be represented conceptually as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+        +
+       / \
+      3   *
+         / \
+        4   5
+</code></pre>
+    </div>
+    <div>
+      <h4>File Systems</h4>
+      <p class="small">Directories form a hierarchical structure:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Documents
+├── CSC500
+│   ├── assignments
+│   └── lectures
+└── Personal
+    ├── photos
+    └── taxes
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Trees appear throughout computing. In compilers, programming expressions are represented using syntax trees: 3 plus 4 times 5 becomes a plus node whose left child is 3 and whose right child is a times node over 4 and 5.</p>
+    <p>Notice that the tree encodes precedence without any parentheses — the multiplication is deeper, so it is evaluated first. In file systems, directories form a hierarchical structure, which is the very first example we gave in Part I.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Where Trees Appear: Four More Places</h2>
+  <div class="cols">
+    <div>
+      <h4>Databases</h4>
+      <p class="small">Many database indexes use tree structures such as B-trees.</p>
+      <h4>Artificial Intelligence</h4>
+      <p class="small">Trees appear in:</p>
+<pre><code class="language-text" data-trim data-noescape>
+decision trees
+game search
+planning
+</code></pre>
+    </div>
+    <div>
+      <h4>Networking</h4>
+      <p class="small">Trees can represent routing and hierarchical naming.</p>
+      <h4>Web Browsers</h4>
+      <p class="small">HTML is represented internally as a tree called the Document Object Model, or DOM.</p>
+      <div class="box key"><span class="box-title">Key idea</span>Six domains, one structure. That is why trees get a whole week.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-where-trees-appear" tabindex="0">Where trees appear, in full</span>
+  </div>
+  <aside class="notes">
+    <p>Many database indexes use tree structures such as B-trees. In artificial intelligence, trees appear in decision trees, game search, and planning. In networking, trees can represent routing and hierarchical naming.</p>
+    <p>In web browsers, HTML is represented internally as a tree called the Document Object Model, or DOM. That closes the loop with Part I, where the HTML elements in a web page were one of the six examples of naturally hierarchical data.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART XI / BACK MATTER ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part XI</p>
+  <h2>Practice, Lab, and Key Ideas</h2>
+  <p class="part-sub">Trace it by hand first. Then implement it. Then decide when to reach for it.</p>
+</section>
+
+<section>
+  <h2>Example: Building and Traversing a BST</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we insert:</p>
+<pre><code class="language-text" data-trim data-noescape>
+45
+20
+60
+10
+30
+50
+70
+25
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The tree becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+             45
+           /    \
+         20      60
+        /  \    /  \
+      10   30  50   70
+           /
+          25
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>The 25 arrives last. It is less than 45, greater than 20, and less than 30 — so it hangs off the left of 30.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why this tree is nearly balanced</summary>
+    <div class="acc-body">
+      <p>45 is close to the middle of the eight values, and 20 and 60 are close to the middles of the two halves. Inserting the middles first is exactly what keeps the height small relative to the number of nodes.</p>
+      <p>Seven of the eight nodes sit at depth 0, 1 or 2; only 25 reaches depth 3. Compare that with the sorted-input chain in Part V, where eight values produced a height of 7.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Suppose we insert 45, 20, 60, 10, 30, 50, 70 and 25 in that order. The tree becomes a nearly balanced eight-node tree with 45 at the root, 20 and 60 below it, and 25 hanging off the left of 30.</p>
+    <p>Walk the insertion of 25 aloud: 25 is less than 45 so go left; 25 is greater than 20 so go right; 25 is less than 30 so go left; that spot is empty, so 25 lands there. This is the only node in the example at depth 3.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Three Traversals of That Tree</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Inorder</h4>
+<pre><code class="language-text" data-trim data-noescape>
+10 20 25 30 45 50 60 70
+</code></pre>
+      <p class="small">Sorted, as always for a BST.</p>
+    </div>
+    <div>
+      <h4>Preorder</h4>
+<pre><code class="language-text" data-trim data-noescape>
+45 20 10 30 25 60 50 70
+</code></pre>
+      <p class="small">Root first.</p>
+    </div>
+    <div>
+      <h4>Postorder</h4>
+<pre><code class="language-text" data-trim data-noescape>
+10 25 30 20 50 70 60 45
+</code></pre>
+      <p class="small">Root last.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Check yourself against the preorder</summary>
+    <div class="acc-body">
+      <p>The preorder output is 45, 20, 10, 30, 25, 60, 50, 70 — which is <em>not</em> the order the values were inserted, even though preorder emits the root first. The insertion order was 45, 20, 60, 10, 30, 50, 70, 25.</p>
+      <p>Both orders would rebuild this same tree. That is worth noticing: many insertion orders produce one tree, and preorder gives you one of them.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-worked-example" tabindex="0">The worked example in full</span>
+  </div>
+  <aside class="notes">
+    <p>The inorder traversal is 10, 20, 25, 30, 45, 50, 60, 70 — sorted, as the BST property guarantees. The preorder is 45, 20, 10, 30, 25, 60, 50, 70. The postorder is 10, 25, 30, 20, 50, 70, 60, 45.</p>
+    <p>Have the class produce all three by hand before revealing them. The most common error is forgetting that 25 is visited between 20 and 30 in inorder, because it sits below 30 rather than beside it.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Trace Exercise (1 of 2)</h2>
+  <div class="cols-38">
+    <div>
+      <p class="small">Given:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          40
+        /    \
+      20      60
+     /  \    /  \
+   10   30  50   70
+</code></pre>
+    </div>
+    <div>
+      <div class="cols-3 small">
+        <div>
+          <h4>Q1 — root?</h4>
+<pre><code class="language-text" data-trim data-noescape>
+40
+</code></pre>
+        </div>
+        <div>
+          <h4>Q2 — leaves?</h4>
+<pre><code class="language-text" data-trim data-noescape>
+10, 30, 50, 70
+</code></pre>
+        </div>
+        <div>
+          <h4>Q3 — height?</h4>
+<pre><code class="language-text" data-trim data-noescape>
+2
+</code></pre>
+          <p class="small">using the edge-based definition.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-trace-exercise" tabindex="0">All six questions, plus both insertion exercises</span>
+  </div>
+  <aside class="notes">
+    <p>Given the seven-node tree rooted at 40, answer the following. Question 1: what is the root? Answer: 40. Question 2: what are the leaves? Answer: 10, 30, 50 and 70.</p>
+    <p>Question 3: what is the height? Answer: 2, using the edge-based definition. Insist on the qualifier — the same tree has height 3 under the node-counting convention, and Part VII already warned that textbooks differ.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Trace Exercise (2 of 2)</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Q4 — inorder traversal?</h4>
+<pre><code class="language-text" data-trim data-noescape>
+10 20 30 40 50 60 70
+</code></pre>
+    </div>
+    <div>
+      <h4>Q5 — preorder traversal?</h4>
+<pre><code class="language-text" data-trim data-noescape>
+40 20 10 30 60 50 70
+</code></pre>
+    </div>
+    <div>
+      <h4>Q6 — postorder traversal?</h4>
+<pre><code class="language-text" data-trim data-noescape>
+10 30 20 50 70 60 40
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Same seven nodes, three orders. Only the inorder one is sorted — and only because the tree is a BST.</div>
+  <aside class="notes">
+    <p>Question 4: the inorder traversal is 10, 20, 30, 40, 50, 60, 70. Question 5: the preorder traversal is 40, 20, 10, 30, 60, 50, 70. Question 6: the postorder traversal is 10, 30, 20, 50, 70, 60, 40.</p>
+    <p>Point out the symmetry with the earlier seven-node tree rooted at 50: identical shape, values shifted by ten, identical traversal patterns. Shape determines traversal order, not the particular values.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Two Insertion Exercises</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Start with:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          50
+        /    \
+      25      75
+</code></pre>
+      <p class="small">Insert <code>60</code>. Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+60 &gt; 50
+</code></pre>
+      <p class="small">move right. Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+60 &lt; 75
+</code></pre>
+      <p class="small">move left. Result:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          50
+        /    \
+      25      75
+             /
+            60
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Starting with the same tree, insert:</p>
+<pre><code class="language-text" data-trim data-noescape>
+90
+</code></pre>
+      <p class="small">Since:</p>
+<pre><code class="language-text" data-trim data-noescape>
+90 &gt; 50
+</code></pre>
+      <p class="small">move right. Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+90 &gt; 75
+</code></pre>
+      <p class="small">move right. Result:</p>
+<pre><code class="language-text" data-trim data-noescape>
+          50
+        /    \
+      25      75
+             / \
+            60  90
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Start with 50 at the root, 25 on the left and 75 on the right, and insert 60. Since 60 is greater than 50, move right. Since 60 is less than 75, move left. The left child of 75 is empty, so 60 goes there.</p>
+    <p>Starting with the same tree, insert 90. Since 90 is greater than 50, move right; then 90 is greater than 75, so move right again, and 90 lands as the right child of 75. Doing both insertions on the same starting tree shows how a single comparison at the second level sends a value to opposite sides.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Two Recursive Reasoning Exercises</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int mystery(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return 1 + mystery(node.left)
+             + mystery(node.right);
+}
+</code></pre>
+      <p class="small">What does this method compute? The answer is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+the number of nodes in the tree
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int mystery(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return node.value
+         + mystery(node.left)
+         + mystery(node.right);
+}
+</code></pre>
+      <p class="small">This computes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+the sum of all values in the tree
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why the first one counts</summary>
+    <div class="acc-body">
+      <p>Each non-null node contributes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1
+</code></pre>
+      <p>plus the number of nodes in each subtree. Null contributes nothing. Add those contributions over the whole tree and you have counted every node exactly once.</p>
+      <p>The second method is the same code with the literal <code>1</code> replaced by <code>node.value</code> — so instead of counting nodes it adds them up.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The first mystery method returns 1 plus the recursive results from both subtrees, so it computes the number of nodes in the tree. Each non-null node contributes 1, plus the number of nodes in each subtree.</p>
+    <p>The second returns node.value plus the two recursive results, so it computes the sum of all values in the tree. These are exactly countNodes and sum from Part VII, with the names stripped off — which is the point of the exercise.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Week 14 Programming Example</h2>
+  <p class="small">Below is a small complete BST implementation. The node class is now <strong>nested and private</strong>:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public class BinarySearchTree {
+
+    private static class TreeNode {
+
+        int value;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int value) {
+            this.value = value;
+        }
+    }
+
+    private TreeNode root;
+</code></pre>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+    public void add(int value) {
+        root = add(root, value);
+    }
+
+    private TreeNode add(TreeNode node, int value) {
+
+        if (node == null) {
+            return new TreeNode(value);
+        }
+
+        if (value &lt; node.value) {
+            node.left = add(node.left, value);
+        } else if (value &gt; node.value) {
+            node.right = add(node.right, value);
+        }
+
+        return node;
+    }
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>The class also defines <code>contains</code> and <code>printInOrder</code>, each a public wrapper over a private recursive helper — open the modal for the whole file.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-full-program" tabindex="0">The complete program</span>
+  </div>
+  <aside class="notes">
+    <p>This is the class the lab asks students to build. Note the difference from the version in Part VII: TreeNode is now a private static nested class, so the node type is invisible outside BinarySearchTree entirely.</p>
+    <p>Note too that its constructor sets only the value. The left and right fields are left at their default of null, which Java guarantees for reference fields — the earlier version set them explicitly, and both are correct.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Running the Program</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Example usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public class Main {
+
+    public static void main(String[] args) {
+
+        BinarySearchTree tree =
+            new BinarySearchTree();
+
+        tree.add(50);
+        tree.add(30);
+        tree.add(70);
+        tree.add(20);
+        tree.add(40);
+        tree.add(60);
+        tree.add(80);
+
+        System.out.println(
+            tree.contains(60)
+        );
+
+        tree.printInOrder();
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+true
+
+20
+30
+40
+50
+60
+70
+80
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The values went in as 50, 30, 70, 20, 40, 60, 80 and came out sorted. Nothing sorted them — the inorder walk read them off in the order the tree already held.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-full-program" tabindex="0">The complete program</span>
+  </div>
+  <aside class="notes">
+    <p>Main builds the tree with the familiar seven insertions, prints tree.contains of 60, and then calls printInOrder. The output is true, followed by 20 through 80 on separate lines.</p>
+    <p>This one program exercises everything from Parts IV through VII: encapsulation, recursive insertion, recursive search, and an inorder traversal. It is the reference implementation for the lab.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Complexity Summary</h2>
+  <p class="small">You should know the following approximate complexities.</p>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Structure / Operation</th><th>Typical Complexity</th></tr></thead>
+      <tbody>
+        <tr><td>ArrayList access by index</td><td>O(1)</td></tr>
+        <tr><td>ArrayList search</td><td>O(n)</td></tr>
+        <tr><td>HashMap lookup</td><td>O(1) average</td></tr>
+        <tr><td>HashSet membership</td><td>O(1) average</td></tr>
+        <tr><td>Balanced BST search</td><td>O(log n)</td></tr>
+        <tr><td>Balanced BST insertion</td><td>O(log n)</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Structure / Operation</th><th>Typical Complexity</th></tr></thead>
+      <tbody>
+        <tr><td>Unbalanced BST search</td><td>O(n) worst case</td></tr>
+        <tr><td>Heap find minimum</td><td>O(1)</td></tr>
+        <tr><td>Heap insertion</td><td>O(log n)</td></tr>
+        <tr><td>Heap remove minimum</td><td>O(log n)</td></tr>
+        <tr><td>Tree traversal</td><td>O(n)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">A complete traversal must visit every node, so traversal is <code>O(n)</code> regardless of whether the tree is balanced.</p>
+  <details class="acc">
+    <summary>Why balance cannot help a traversal</summary>
+    <div class="acc-body">
+      <p>Balance helps by letting you <em>skip</em> nodes — a search discards a whole subtree at every comparison. A traversal is defined as visiting every node, so there is nothing to skip.</p>
+      <p>The table above is worth reading as two groups: the O(1) and O(log n) rows are all "find one thing", and the O(n) rows are all "look at everything, or look in the wrong structure".</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-complexity-summary" tabindex="0">The full complexity table</span>
+  </div>
+  <aside class="notes">
+    <p>You should know these approximate complexities: ArrayList access by index O(1) and search O(n); HashMap lookup and HashSet membership O(1) average; balanced BST search and insertion O(log n); unbalanced BST search O(n) worst case; heap find minimum O(1), insertion and remove minimum O(log n); tree traversal O(n).</p>
+    <p>A complete traversal must visit every node, so traversal is O(n) regardless of whether the tree is balanced. Balance affects the cost of finding one thing; it cannot help when you need everything.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways (1 of 2)</h2>
+  <ul>
+    <li><strong>Trees represent hierarchical data.</strong> Unlike lists, trees are not linear.</li>
+    <li><strong>Binary trees have at most two children per node.</strong> The children are conventionally called left and right.</li>
+    <li><strong>Binary search trees add an ordering rule</strong> — and this rule enables efficient searching.</li>
+    <li><strong>Recursive algorithms are natural for trees.</strong> A tree contains smaller trees inside itself.</li>
+  </ul>
+<pre><code class="language-text" data-trim data-noescape>
+left &lt; node &lt; right
+</code></pre>
+  <aside class="notes">
+    <p>Trees represent hierarchical data; unlike lists, trees are not linear. Binary trees have at most two children per node, conventionally called left and right.</p>
+    <p>Binary search trees add an ordering rule — left less than node less than right — and this rule enables efficient searching. Recursive algorithms are natural for trees because a tree contains smaller trees inside itself.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Takeaways (2 of 2)</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><strong>Traversals visit all nodes systematically.</strong> Know preorder, inorder, and postorder.</li>
+        <li><strong>Inorder traversal of a BST produces sorted values.</strong> This follows from the BST ordering property.</li>
+        <li><strong>Tree performance depends on tree height.</strong></li>
+        <li><strong>Heaps solve a different problem from BSTs</strong> — they are particularly useful for priority queues.</li>
+        <li><strong>Data structures are about tradeoffs.</strong> The best structure depends on the operations your program needs.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="small">Know:</p>
+<pre><code class="language-text" data-trim data-noescape>
+preorder
+inorder
+postorder
+</code></pre>
+      <p class="small">Balanced:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(log n)
+</code></pre>
+      <p class="small">Potentially unbalanced:</p>
+<pre><code class="language-text" data-trim data-noescape>
+O(n)
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Traversals visit all nodes systematically: know preorder, inorder and postorder. Inorder traversal of a BST produces sorted values, which follows from the BST ordering property.</p>
+    <p>Tree performance depends on tree height: balanced gives O(log n), potentially unbalanced gives O(n). Heaps solve a different problem from BSTs and are particularly useful for priority queues. Data structures are about tradeoffs — the best structure depends on the operations your program needs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols">
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Tree</td><td>A data structure designed to represent hierarchical relationships.</td></tr>
+        <tr><td>Node</td><td>Each element in the tree; stores data and references to other nodes.</td></tr>
+        <tr><td>Edge</td><td>A connection between two nodes.</td></tr>
+        <tr><td>Root</td><td>The top node; a tree has exactly one.</td></tr>
+        <tr><td>Parent</td><td>A node that directly connects downward to another node.</td></tr>
+        <tr><td>Child</td><td>A node directly below another node.</td></tr>
+        <tr><td>Siblings</td><td>Nodes with the same parent.</td></tr>
+        <tr><td>Leaf node</td><td>A node with no children.</td></tr>
+        <tr><td>Internal node</td><td>A node that has at least one child.</td></tr>
+        <tr><td>Subtree</td><td>The tree rooted at any node of a larger tree.</td></tr>
+      </tbody>
+    </table>
+    <table class="smaller">
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Depth</td><td>The number of edges between the root and a node.</td></tr>
+        <tr><td>Height</td><td>The length of the longest path from the root to a leaf.</td></tr>
+        <tr><td>Binary tree</td><td>A tree in which every node has at most two children.</td></tr>
+        <tr><td>Binary search tree</td><td>A binary tree with an additional ordering property.</td></tr>
+        <tr><td>Balanced</td><td>A tree whose height is small relative to its number of nodes.</td></tr>
+        <tr><td>Tree traversal</td><td>Visiting every node in a tree.</td></tr>
+        <tr><td>Inorder predecessor</td><td>The largest value in a node's left subtree.</td></tr>
+        <tr><td>Inorder successor</td><td>The smallest value in a node's right subtree.</td></tr>
+        <tr><td>Heap</td><td>A binary tree in which every parent is ordered against its children.</td></tr>
+        <tr><td>Priority queue</td><td>A queue that removes the element with the highest priority.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">
+    <p>Every term here was introduced somewhere in Week 14. Use this table as the vocabulary list for the quiz. Terms one through ten come from Parts I and II; terms eleven through twenty span Parts III, VI, VII and IX.</p>
+    <p>Note that abstract data type, min-heap and max-heap are also fair game — they appear in Parts VIII and IX and are defined in the notes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Week 14 Lab Activity</h2>
+  <div class="cols">
+    <div>
+      <h4>Part 1 — Build a BST</h4>
+      <p class="small">Implement a <code>BinarySearchTree</code> storing integers. Your class should support:</p>
+<pre><code class="language-java" data-trim data-noescape>
+void add(int value)
+
+boolean contains(int value)
+
+void printInOrder()
+</code></pre>
+      <h4>Part 2 — Add recursive operations</h4>
+      <p class="small">Add methods:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int size()
+
+int sum()
+
+int height()
+
+int countLeaves()
+</code></pre>
+    </div>
+    <div>
+      <h4>Part 3 — Minimum and maximum</h4>
+      <p class="small">Implement:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int minimum()
+
+int maximum()
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>Do not traverse the entire tree. Use the BST ordering property.</div>
+      <h4>Part 4 — Compare tree shapes</h4>
+      <p class="small">Insert these values and measure the height:</p>
+<pre><code class="language-text" data-trim data-noescape>
+50 30 70 20 40 60 80
+</code></pre>
+      <p class="small">Then build another tree using:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10 20 30 40 50 60 70
+</code></pre>
+      <p class="small">Measure the height. Discuss why the heights differ.</p>
+      <details class="acc">
+        <summary>What Part 4 is really testing</summary>
+        <div class="acc-body">
+          <p>The first sequence inserts the middle value first and produces a balanced tree. The second is already sorted, so every value goes right and the tree degenerates into a chain.</p>
+          <p>Both are valid binary search trees holding seven values. The <code>height()</code> method from Part 2 is what makes the difference measurable rather than merely asserted.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-lab" tabindex="0">Full lab brief, challenge, and discussion question</span>
+  </div>
+  <aside class="notes">
+    <p>Part 1 asks students to implement a BinarySearchTree storing integers, supporting add, contains and printInOrder. Part 2 adds size, sum, height and countLeaves — all four of which follow the general recursive pattern from Part VII.</p>
+    <p>Part 3 implements minimum and maximum, with the instruction not to traverse the entire tree but to use the BST ordering property. Part 4 builds two trees from the same seven values in different orders and asks students to measure and explain the difference in height. That is the lab's real lesson.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Challenge and Discussion</h2>
+  <div class="cols">
+    <div>
+      <h4>Challenge exercise</h4>
+      <p class="small">Implement:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public int countGreaterThan(int value)
+</code></pre>
+      <p class="small">which returns the number of values in the tree greater than a given number. If the tree contains:</p>
+<pre><code class="language-text" data-trim data-noescape>
+20 30 40 50 60 70 80
+</code></pre>
+      <p class="small">then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+countGreaterThan(50)
+</code></pre>
+      <p class="small">should return:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+</code></pre>
+    </div>
+    <div>
+      <h4>Discussion question</h4>
+      <p class="small">Suppose you need to store student records indexed by student ID. Which would you choose?</p>
+<pre><code class="language-text" data-trim data-noescape>
+ArrayList
+HashMap
+TreeMap
+</code></pre>
+      <p class="small">There is not necessarily one universally correct answer. Ask:</p>
+      <ul class="smaller">
+        <li>Do we need access by position?</li>
+        <li>Do we frequently search by ID?</li>
+        <li>Do the IDs need to remain sorted?</li>
+        <li>Do we need to find ranges of IDs?</li>
+        <li>How much data will we store?</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The challenge asks for countGreaterThan, returning the number of values greater than a given number. For a tree holding 20 through 80, countGreaterThan of 50 should return 3, because 60, 70 and 80 are greater than 50. Try to use the BST property to avoid unnecessary work.</p>
+    <p>The discussion question asks which structure to use for student records indexed by ID: ArrayList, HashMap or TreeMap. There is not necessarily one universally correct answer — the five follow-up questions are the method, and the operations determine the appropriate data structure.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>End-of-Lecture Check</h2>
+  <p class="small">Without looking at the notes, answer the following.</p>
+  <div class="cols smaller">
+    <ol>
+      <li>What property distinguishes a BST from an ordinary binary tree?</li>
+      <li>What traversal visits a BST in sorted order?</li>
+      <li>What is the typical search complexity of a balanced BST?</li>
+      <li>What is the worst-case search complexity of an unbalanced BST?</li>
+      <li>Why is recursion particularly natural for tree algorithms?</li>
+    </ol>
+    <ol start="6">
+      <li>What is the primary purpose of a heap?</li>
+      <li>Which Java structure would you likely use if you repeatedly need to remove the smallest element?</li>
+      <li>Which would you choose if you need extremely fast membership tests but do not care about sorted ordering?</li>
+      <li>Which would you choose if you want set elements maintained in sorted order?</li>
+      <li>Why can the order in which values are inserted into a basic BST matter?</li>
+    </ol>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m14-check" tabindex="0">All ten answers</span>
+  </div>
+  <aside class="notes">
+    <p>Ten questions, to be answered without looking at the notes. The first four are recall: the ordering property, inorder traversal, O(log n), O(n). Question five asks for the reason recursion fits — because each subtree is itself a tree.</p>
+    <p>Questions six through nine are the structure-choice questions: heap for efficient access to the extreme, PriorityQueue for repeated smallest-removal, HashSet for fast membership without ordering, TreeSet for sorted set elements. Question ten is the insertion-order question from Part V, and it is the one students most often cannot articulate.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">In the next part of CSC500, we will move from learning individual programming constructs and data structures toward integrating them into larger software systems.</p>
+      <p class="small">The important question will increasingly become:</p>
+      <blockquote class="small">Given a new problem, how do I choose the right abstractions, classes, algorithms, and data structures to build a clear and efficient solution?</blockquote>
+    </div>
+    <div>
+      <div class="def"><span class="term">Week 15:</span> Putting It Together — Software Design</div>
+      <div class="box key"><span class="box-title">Key idea</span>That ability — rather than memorizing any particular Java method — is one of the main skills needed for success in graduate computer science.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>In the next part of CSC500, we will move from learning individual programming constructs and data structures toward integrating them into larger software systems.</p>
+    <p>The important question will increasingly become: given a new problem, how do I choose the right abstractions, classes, algorithms, and data structures to build a clear and efficient solution? That ability — rather than memorizing any particular Java method — is one of the main skills needed for success in graduate computer science.</p>
+    <p>Week 14 is the last new data structure of the course. Everything from here is about assembling what you already have.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 14 — Trees and Core Data Structures
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m14-terminology"
+          data-kicker="Reference" data-title="The complete tree vocabulary, with depth and height">
+  <h4>The example tree</h4>
+  <p>Trees have their own vocabulary. Consider:</p>
+<pre><code class="language-text">          A
+        /   \
+       B     C
+      / \     \
+     D   E     F</code></pre>
+  <h4>Node</h4>
+  <p>Each element in the tree is called a <strong>node</strong>. The nodes above are:</p>
+<pre><code class="language-text">A, B, C, D, E, F</code></pre>
+  <p>A node usually stores:</p>
+  <ol>
+    <li>Some data</li>
+    <li>References to other nodes</li>
+  </ol>
+  <h4>Edge</h4>
+  <p>A connection between two nodes is called an <strong>edge</strong>. For example:</p>
+<pre><code class="language-text">A → B
+A → C
+B → D
+B → E
+C → F</code></pre>
+  <h4>Root</h4>
+  <p>The top node is called the <strong>root</strong>. In this tree:</p>
+<pre><code class="language-text">A</code></pre>
+  <p>is the root. A tree has exactly one root.</p>
+  <h4>Parent</h4>
+  <p>If one node directly connects downward to another node, the first node is the <strong>parent</strong>. For example:</p>
+<pre><code class="language-text">B</code></pre>
+  <p>is the parent of:</p>
+<pre><code class="language-text">D and E</code></pre>
+  <h4>Child</h4>
+  <p>A node directly below another node is called a <strong>child</strong>. For example:</p>
+<pre><code class="language-text">B and C</code></pre>
+  <p>are children of <code>A</code>.</p>
+  <h4>Siblings</h4>
+  <p>Nodes with the same parent are called <strong>siblings</strong>. For example <code>B</code> and <code>C</code> are siblings. Similarly <code>D</code> and <code>E</code> are siblings.</p>
+  <h4>Leaf</h4>
+  <p>A node with no children is called a <strong>leaf node</strong>. In our example:</p>
+<pre><code class="language-text">D
+E
+F</code></pre>
+  <p>are leaves.</p>
+  <h4>Internal node</h4>
+  <p>A node that has at least one child is sometimes called an <strong>internal node</strong>. In our example:</p>
+<pre><code class="language-text">A
+B
+C</code></pre>
+  <p>are internal nodes.</p>
+  <h4>Subtree</h4>
+  <p>Every node in a tree can itself be considered the root of a smaller tree. For example:</p>
+<pre><code class="language-text">          A
+        /   \
+       B     C
+      / \
+     D   E</code></pre>
+  <p>The tree rooted at <code>B</code> is:</p>
+<pre><code class="language-text">      B
+     / \
+    D   E</code></pre>
+  <p>This is called a <strong>subtree</strong> of the original tree. This idea is extremely important. A tree is naturally recursive:</p>
+  <blockquote>A tree consists of a node whose children are themselves trees.</blockquote>
+  <p>This is why recursion is so commonly used when working with trees.</p>
+  <h4>Depth</h4>
+  <p>The <strong>depth</strong> of a node is the number of edges between the root and that node. Example:</p>
+<pre><code class="language-text">          A
+        /   \
+       B     C
+      /
+     D</code></pre>
+  <p>The depths are:</p>
+<pre><code class="language-text">A: depth 0
+B: depth 1
+C: depth 1
+D: depth 2</code></pre>
+  <p>The root always has depth 0.</p>
+  <h4>Height</h4>
+  <p>The <strong>height</strong> of a tree is the length of the longest path from the root to a leaf. For example:</p>
+<pre><code class="language-text">          A
+        /   \
+       B     C
+      /
+     D
+    /
+   E</code></pre>
+  <p>The longest root-to-leaf path is:</p>
+<pre><code class="language-text">A → B → D → E</code></pre>
+  <p>There are three edges. Therefore:</p>
+<pre><code class="language-text">height = 3</code></pre>
+  <p>Height matters because the performance of many tree algorithms depends on it.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-search-trace"
+          data-kicker="Worked example" data-title="Two BST searches, traced step by step">
+  <h4>Why the BST property is useful</h4>
+  <p>Suppose we want to find <code>60</code> in:</p>
+<pre><code class="language-text">           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre>
+  <p>Start at:</p>
+<pre><code class="language-text">50</code></pre>
+  <p>Compare:</p>
+<pre><code class="language-text">60 &gt; 50</code></pre>
+  <p>Therefore, we know that <code>60</code>, if it exists, must be in the <strong>right subtree</strong>. Move to:</p>
+<pre><code class="language-text">70</code></pre>
+  <p>Now:</p>
+<pre><code class="language-text">60 &lt; 70</code></pre>
+  <p>Therefore move left. We reach:</p>
+<pre><code class="language-text">60</code></pre>
+  <p>The value has been found. Notice that we did not examine:</p>
+<pre><code class="language-text">20
+30
+40
+80</code></pre>
+  <p>The ordering of the tree allowed us to eliminate entire portions of the data. This is similar to the idea behind binary search on a sorted array.</p>
+  <h4>Tracing a second search</h4>
+  <p>Consider the same tree and search for:</p>
+<pre><code class="language-text">40</code></pre>
+  <p>Step 1:</p>
+<pre><code class="language-text">40 &lt; 50</code></pre>
+  <p>Go left. Step 2:</p>
+<pre><code class="language-text">40 &gt; 30</code></pre>
+  <p>Go right. Step 3:</p>
+<pre><code class="language-text">40 == 40</code></pre>
+  <p>Found. Only three nodes were examined.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-contains-cases"
+          data-kicker="Deep dive" data-title="Searching a BST: the three cases, and the iterative form">
+  <h4>The recursive method</h4>
+  <p>A recursive search method can be written as:</p>
+<pre><code class="language-java">public static boolean contains(TreeNode node, int target) {
+
+    if (node == null) {
+        return false;
+    }
+
+    if (target == node.value) {
+        return true;
+    }
+
+    if (target &lt; node.value) {
+        return contains(node.left, target);
+    } else {
+        return contains(node.right, target);
+    }
+}</code></pre>
+  <p>There are three main cases.</p>
+  <h4>Case 1: the node is null</h4>
+<pre><code class="language-java">if (node == null) {
+    return false;
+}</code></pre>
+  <p>This means we reached an empty part of the tree. The target does not exist.</p>
+  <h4>Case 2: we found the target</h4>
+<pre><code class="language-java">if (target == node.value) {
+    return true;
+}</code></pre>
+  <p>Search is complete.</p>
+  <h4>Case 3: decide which subtree to search</h4>
+<pre><code class="language-java">if (target &lt; node.value) {
+    return contains(node.left, target);
+}</code></pre>
+  <p>Otherwise:</p>
+<pre><code class="language-java">return contains(node.right, target);</code></pre>
+  <p>We search only one subtree.</p>
+  <h4>Iterative search</h4>
+  <p>Search can also be implemented without recursion.</p>
+<pre><code class="language-java">public static boolean contains(TreeNode root, int target) {
+
+    TreeNode current = root;
+
+    while (current != null) {
+
+        if (target == current.value) {
+            return true;
+        }
+
+        if (target &lt; current.value) {
+            current = current.left;
+        } else {
+            current = current.right;
+        }
+    }
+
+    return false;
+}</code></pre>
+  <p>Both recursive and iterative implementations are reasonable. Tree algorithms are frequently written recursively because the recursive structure of the code matches the recursive structure of the tree.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-insertion-order"
+          data-kicker="Deep dive" data-title="Insertion, insertion order, and balance">
+  <h4>Inserting into a binary search tree</h4>
+  <p>Suppose we have:</p>
+<pre><code class="language-text">          50
+        /    \
+      30      70</code></pre>
+  <p>We want to insert:</p>
+<pre><code class="language-text">40</code></pre>
+  <p>Compare <code>40</code> with <code>50</code>:</p>
+<pre><code class="language-text">40 &lt; 50</code></pre>
+  <p>Go left. Now compare with <code>30</code>:</p>
+<pre><code class="language-text">40 &gt; 30</code></pre>
+  <p>Go right. The right child is empty. Therefore insert <code>40</code> there. Result:</p>
+<pre><code class="language-text">          50
+        /    \
+      30      70
+        \
+         40</code></pre>
+  <h4>Recursive BST insertion</h4>
+<pre><code class="language-java">public static TreeNode insert(TreeNode node, int value) {
+
+    if (node == null) {
+        return new TreeNode(value);
+    }
+
+    if (value &lt; node.value) {
+        node.left = insert(node.left, value);
+    } else if (value &gt; node.value) {
+        node.right = insert(node.right, value);
+    }
+
+    return node;
+}</code></pre>
+  <p>Notice the base case:</p>
+<pre><code class="language-java">if (node == null)</code></pre>
+  <p>We have found the location where the new value belongs.</p>
+  <h4>Building a binary search tree</h4>
+  <p>Suppose we insert:</p>
+<pre><code class="language-text">50
+30
+70
+20
+40
+60
+80</code></pre>
+  <p>in that order. The resulting tree is:</p>
+<pre><code class="language-text">           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre>
+  <p>Insertion order matters. For example, consider inserting:</p>
+<pre><code class="language-text">20
+30
+40
+50
+60
+70
+80</code></pre>
+  <p>The tree becomes:</p>
+<pre><code class="language-text">20
+  \
+   30
+     \
+      40
+        \
+         50
+           \
+            60
+              \
+               70
+                 \
+                  80</code></pre>
+  <p>This is technically still a binary search tree. But it behaves almost like a linked list.</p>
+  <h4>Balanced trees</h4>
+  <p>The seven-node tree above has a height that is small relative to the number of nodes. We informally call such a tree <strong>balanced</strong>. Compare that with:</p>
+<pre><code class="language-text">20
+  \
+   30
+     \
+      40
+        \
+         50
+           \
+            60</code></pre>
+  <p>This tree is highly <strong>unbalanced</strong>. Why does this matter? Because tree height determines how many nodes we may need to visit.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-complexity-bst"
+          data-kicker="Analysis" data-title="BST complexity: best case, worst case, and why">
+  <h4>Time complexity of BST search</h4>
+  <p>Suppose a balanced BST contains approximately one million elements. A well-balanced search tree might require only around:</p>
+<pre><code class="language-text">log₂(1,000,000) ≈ 20</code></pre>
+  <p>comparisons. Thus, search is approximately:</p>
+<pre><code class="language-text">O(log n)</code></pre>
+  <p>when the tree is balanced.</p>
+  <h4>Worst-case BST performance</h4>
+  <p>If a BST becomes completely unbalanced:</p>
+<pre><code class="language-text">10
+  \
+   20
+     \
+      30
+        \
+         40</code></pre>
+  <p>searching could require visiting every node. Worst-case complexity becomes:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>Therefore:</p>
+<pre><code class="language-text">Balanced BST:
+search ≈ O(log n)
+
+Highly unbalanced BST:
+search ≈ O(n)</code></pre>
+  <p>The same general idea applies to insertion.</p>
+  <div class="box key"><span class="box-title">Key idea</span>Both bounds come from the same fact: search follows one root-to-leaf path, so the cost is the height. Balance is what keeps the height near log n instead of n.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m14-traversal-reference"
+          data-kicker="Reference" data-title="Preorder, inorder, and postorder, side by side">
+  <h4>What traversal is</h4>
+  <p>Sometimes we do not want to search for one value. Instead, we want to visit <strong>every node</strong>. Visiting every node in a tree is called <strong>tree traversal</strong>. For binary trees, the three classic depth-first traversals are preorder, inorder and postorder.</p>
+  <h4>The tree used throughout</h4>
+<pre><code class="language-text">           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre>
+  <h4>Inorder</h4>
+  <p>The inorder traversal visits nodes in this order:</p>
+<pre><code class="language-text">LEFT
+NODE
+RIGHT</code></pre>
+  <p>The inorder traversal is:</p>
+<pre><code class="language-text">20 30 40 50 60 70 80</code></pre>
+  <blockquote>Inorder traversal of a binary search tree visits values in sorted order.</blockquote>
+<pre><code class="language-java">public static void inorder(TreeNode node) {
+
+    if (node == null) {
+        return;
+    }
+
+    inorder(node.left);
+
+    System.out.println(node.value);
+
+    inorder(node.right);
+}</code></pre>
+  <p>This code is remarkably short. The recursive structure of the algorithm mirrors the structure of the tree.</p>
+  <h4>Understanding the recursive call</h4>
+  <p>Consider:</p>
+<pre><code class="language-text">      30
+     /  \
+   20    40</code></pre>
+  <p>Calling:</p>
+<pre><code class="language-java">inorder(node);</code></pre>
+  <p>where <code>node</code> contains <code>30</code> causes:</p>
+<pre><code class="language-text">inorder(20)
+print 30
+inorder(40)</code></pre>
+  <p>The result is:</p>
+<pre><code class="language-text">20
+30
+40</code></pre>
+  <h4>Preorder</h4>
+  <p>Preorder traversal visits:</p>
+<pre><code class="language-text">NODE
+LEFT
+RIGHT</code></pre>
+  <p>For the seven-node tree the result is:</p>
+<pre><code class="language-text">50 30 20 40 70 60 80</code></pre>
+<pre><code class="language-java">public static void preorder(TreeNode node) {
+
+    if (node == null) {
+        return;
+    }
+
+    System.out.println(node.value);
+
+    preorder(node.left);
+    preorder(node.right);
+}</code></pre>
+  <h4>Postorder</h4>
+  <p>Postorder traversal visits:</p>
+<pre><code class="language-text">LEFT
+RIGHT
+NODE</code></pre>
+  <p>For the same tree the result is:</p>
+<pre><code class="language-text">20 40 30 60 80 70 50</code></pre>
+<pre><code class="language-java">public static void postorder(TreeNode node) {
+
+    if (node == null) {
+        return;
+    }
+
+    postorder(node.left);
+    postorder(node.right);
+
+    System.out.println(node.value);
+}</code></pre>
+  <h4>Comparing traversals</h4>
+  <p>A useful way to remember the three traversals is to ask:</p>
+  <blockquote>When do we process the current node?</blockquote>
+  <p>Preorder:</p>
+<pre><code class="language-text">NODE
+left
+right</code></pre>
+  <p>The node is processed <strong>before</strong> its subtrees. Inorder:</p>
+<pre><code class="language-text">left
+NODE
+right</code></pre>
+  <p>The node is processed <strong>between</strong> its subtrees. Postorder:</p>
+<pre><code class="language-text">left
+right
+NODE</code></pre>
+  <p>The node is processed <strong>after</strong> its subtrees.</p>
+  <h4>Why different traversals exist</h4>
+  <p>Different traversal orders are useful for different problems.</p>
+  <p><strong>Inorder</strong> is useful for printing BST values in sorted order, and processing values according to BST ordering.</p>
+  <p><strong>Preorder</strong> is useful for copying tree structure, serializing certain tree representations, and processing a parent before its children.</p>
+  <p><strong>Postorder</strong> is useful for deleting a tree, computing properties from child nodes, and processing children before their parent.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-recursive-pattern"
+          data-kicker="Reference" data-title="Every recursive tree algorithm in Week 14">
+  <h4>The general pattern</h4>
+  <p>Many useful tree algorithms follow the same general pattern:</p>
+<pre><code class="language-java">public static ReturnType solve(TreeNode node) {
+
+    if (node == null) {
+        return baseValue;
+    }
+
+    ReturnType leftResult = solve(node.left);
+    ReturnType rightResult = solve(node.right);
+
+    return combine(node, leftResult, rightResult);
+}</code></pre>
+  <p>This pattern appears repeatedly in computer science.</p>
+  <h4>Counting nodes</h4>
+  <p>Conceptually:</p>
+<pre><code class="language-text">number of nodes =
+1
++ number of nodes in left subtree
++ number of nodes in right subtree</code></pre>
+<pre><code class="language-java">public static int countNodes(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return 1
+        + countNodes(node.left)
+        + countNodes(node.right);
+}</code></pre>
+  <h4>Counting leaves</h4>
+  <p>A leaf has:</p>
+<pre><code class="language-java">node.left == null</code></pre>
+  <p>and:</p>
+<pre><code class="language-java">node.right == null</code></pre>
+<pre><code class="language-java">public static int countLeaves(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    if (node.left == null &amp;&amp; node.right == null) {
+        return 1;
+    }
+
+    return countLeaves(node.left)
+        + countLeaves(node.right);
+}</code></pre>
+  <h4>Finding the sum of all values</h4>
+<pre><code class="language-java">public static int sum(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return node.value
+        + sum(node.left)
+        + sum(node.right);
+}</code></pre>
+  <p>Again:</p>
+<pre><code class="language-text">sum of tree =
+root value
++ sum of left subtree
++ sum of right subtree</code></pre>
+  <h4>Finding the height</h4>
+  <p>We can define the height recursively. One common definition is:</p>
+<pre><code class="language-java">public static int height(TreeNode node) {
+
+    if (node == null) {
+        return -1;
+    }
+
+    int leftHeight = height(node.left);
+    int rightHeight = height(node.right);
+
+    return 1 + Math.max(leftHeight, rightHeight);
+}</code></pre>
+  <p>Why <code>-1</code> for an empty tree? Because then a leaf has height:</p>
+<pre><code class="language-text">1 + max(-1, -1)
+= 0</code></pre>
+  <p>which matches the definition that a leaf has height zero. Some textbooks use slightly different height conventions. The important thing is to be consistent.</p>
+  <h4>Finding minimum and maximum in a BST</h4>
+  <p>Because of the BST ordering property:</p>
+  <blockquote>The smallest value is the leftmost node.</blockquote>
+  <p>For example:</p>
+<pre><code class="language-text">           50
+         /    \
+       30      70
+      /
+    20</code></pre>
+  <p>Minimum:</p>
+<pre><code class="language-text">20</code></pre>
+<pre><code class="language-java">public static int findMin(TreeNode root) {
+
+    if (root == null) {
+        throw new IllegalArgumentException("Tree is empty");
+    }
+
+    TreeNode current = root;
+
+    while (current.left != null) {
+        current = current.left;
+    }
+
+    return current.value;
+}</code></pre>
+  <p>Similarly:</p>
+  <blockquote>The maximum value is the rightmost node.</blockquote>
+</template>
+
+<template class="csc-modal-tpl" id="m14-deletion"
+          data-kicker="Deep dive" data-title="Removing values from a BST: the three cases">
+  <p>Deletion from a BST is more complicated than insertion. There are three cases. Suppose we want to remove a node.</p>
+  <h4>Case 1: the node is a leaf</h4>
+  <p>Example:</p>
+<pre><code class="language-text">    30
+   /
+ 20</code></pre>
+  <p>Removing <code>20</code> is easy. Simply remove the reference.</p>
+  <h4>Case 2: the node has one child</h4>
+  <p>Example:</p>
+<pre><code class="language-text">    30
+      \
+       40</code></pre>
+  <p>If we remove <code>30</code>, its child <code>40</code> can take its place.</p>
+  <h4>Case 3: the node has two children</h4>
+  <p>Example:</p>
+<pre><code class="language-text">      30
+     /  \
+   20    40</code></pre>
+  <p>This is more complicated. We typically replace the node with either:</p>
+  <ul>
+    <li>the largest value in its left subtree, or</li>
+    <li>the smallest value in its right subtree</li>
+  </ul>
+  <p>These are called the:</p>
+<pre><code class="language-text">inorder predecessor</code></pre>
+  <p>and:</p>
+<pre><code class="language-text">inorder successor</code></pre>
+  <p>respectively.</p>
+  <div class="box note"><span class="box-title">Note</span>For CSC500, understanding the three cases is more important than memorizing the full deletion implementation.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m14-bst-class"
+          data-kicker="Design" data-title="A more complete BST class, and why it hides TreeNode">
+  <p>Instead of exposing raw <code>TreeNode</code> objects to users of our code, we can create a class representing the entire data structure.</p>
+<pre><code class="language-java">public class BinarySearchTree {
+
+    private TreeNode root;
+
+    public BinarySearchTree() {
+        root = null;
+    }
+
+    public void add(int value) {
+        root = insert(root, value);
+    }
+
+    private TreeNode insert(TreeNode node, int value) {
+
+        if (node == null) {
+            return new TreeNode(value);
+        }
+
+        if (value &lt; node.value) {
+            node.left = insert(node.left, value);
+        } else if (value &gt; node.value) {
+            node.right = insert(node.right, value);
+        }
+
+        return node;
+    }
+
+    public boolean contains(int value) {
+        return contains(root, value);
+    }
+
+    private boolean contains(TreeNode node, int value) {
+
+        if (node == null) {
+            return false;
+        }
+
+        if (value == node.value) {
+            return true;
+        }
+
+        if (value &lt; node.value) {
+            return contains(node.left, value);
+        }
+
+        return contains(node.right, value);
+    }
+}</code></pre>
+  <h4>The design principle</h4>
+  <p>This demonstrates an important object-oriented design principle:</p>
+  <blockquote>Hide implementation details behind a public interface.</blockquote>
+  <p>Users of <code>BinarySearchTree</code> do not need to manipulate nodes directly. They simply call:</p>
+<pre><code class="language-java">BinarySearchTree tree = new BinarySearchTree();
+
+tree.add(50);
+tree.add(30);
+tree.add(70);
+
+System.out.println(tree.contains(30));</code></pre>
+  <h4>Abstract data types revisited</h4>
+  <p>Recall the distinction between an <strong>abstract data type</strong> and an implementation. An abstract data type describes:</p>
+  <blockquote>What operations are available?</blockquote>
+  <p>An implementation describes:</p>
+  <blockquote>How are those operations carried out?</blockquote>
+  <p>For example, a Set might provide:</p>
+<pre><code class="language-text">add
+remove
+contains
+size</code></pre>
+  <p>A set could potentially be implemented using a list, a hash table, or a binary search tree. The user does not necessarily need to know which implementation is being used.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-treeset-treemap"
+          data-kicker="Java" data-title="TreeSet, TreeMap, and their hash-based rivals">
+  <h4>Java's tree-based collections</h4>
+  <p>Java contains tree-based collection implementations. One example is:</p>
+<pre><code class="language-java">TreeSet</code></pre>
+  <p>Example:</p>
+<pre><code class="language-java">import java.util.TreeSet;
+
+TreeSet&lt;Integer&gt; numbers = new TreeSet&lt;&gt;();
+
+numbers.add(50);
+numbers.add(20);
+numbers.add(70);
+numbers.add(30);
+
+System.out.println(numbers);</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">[20, 30, 50, 70]</code></pre>
+  <p>A <code>TreeSet</code> maintains elements in sorted order. Java also provides:</p>
+<pre><code class="language-java">TreeMap</code></pre>
+  <p>which stores key-value pairs while maintaining keys in sorted order.</p>
+  <h4>TreeSet vs. HashSet</h4>
+  <p>We previously encountered:</p>
+<pre><code class="language-java">HashSet</code></pre>
+  <p>Now consider:</p>
+<pre><code class="language-java">TreeSet</code></pre>
+  <p>Both implement the general Set abstraction. But they make different tradeoffs.</p>
+  <p><strong>HashSet</strong> — typical:</p>
+<pre><code class="language-text">add:      O(1)
+contains: O(1)
+remove:   O(1)</code></pre>
+  <p>Elements are not maintained in sorted order.</p>
+  <p><strong>TreeSet</strong> — typical:</p>
+<pre><code class="language-text">add:      O(log n)
+contains: O(log n)
+remove:   O(log n)</code></pre>
+  <p>Elements are maintained in sorted order. Therefore:</p>
+  <blockquote>There is rarely one "best" data structure.</blockquote>
+  <p>The correct structure depends on what operations the program needs.</p>
+  <h4>TreeMap vs. HashMap</h4>
+  <p>A similar comparison exists between:</p>
+<pre><code class="language-java">HashMap</code></pre>
+  <p>and:</p>
+<pre><code class="language-java">TreeMap</code></pre>
+  <p>A <code>HashMap</code> is usually chosen when fast key lookup is the priority. A <code>TreeMap</code> is useful when keys must remain sorted. Example:</p>
+<pre><code class="language-java">TreeMap&lt;String, Integer&gt; scores = new TreeMap&lt;&gt;();
+
+scores.put("Charlie", 85);
+scores.put("Alice", 92);
+scores.put("Bob", 88);
+
+System.out.println(scores);</code></pre>
+  <p>The keys appear in sorted order:</p>
+<pre><code class="language-text">Alice
+Bob
+Charlie</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m14-heaps"
+          data-kicker="Deep dive" data-title="Heaps, priority queues, and how a heap differs from a BST">
+  <h4>Another important tree: the heap</h4>
+  <p>A <strong>heap</strong> is another type of binary tree. However, it follows a different rule than a binary search tree. A common type is a <strong>min-heap</strong>. In a min-heap:</p>
+  <blockquote>Every parent is less than or equal to its children.</blockquote>
+  <p>Example:</p>
+<pre><code class="language-text">          10
+        /    \
+      20      15
+     /  \    /
+   40   30  25</code></pre>
+  <p>Notice:</p>
+<pre><code class="language-text">10 &lt; 20
+10 &lt; 15
+
+20 &lt; 40
+20 &lt; 30
+
+15 &lt; 25</code></pre>
+  <p>However, this is <strong>not</strong> a BST. For example, <code>15</code> appears on the right of <code>10</code>, which is fine, but the entire tree does not follow BST ordering between arbitrary subtrees.</p>
+  <h4>Min-heaps and max-heaps</h4>
+  <p>A min-heap provides very quick access to the smallest element. The smallest element is always at the root.</p>
+<pre><code class="language-text">          5
+        /   \
+      10     8
+     / \
+   20   15</code></pre>
+  <p>Minimum:</p>
+<pre><code class="language-text">5</code></pre>
+  <p>A <strong>max-heap</strong> works in the opposite direction. The largest value appears at the root.</p>
+  <h4>Priority queues</h4>
+  <p>A heap is commonly used to implement a <strong>priority queue</strong>. A normal queue follows:</p>
+<pre><code class="language-text">first in, first out</code></pre>
+  <p>A priority queue instead removes the element with the highest priority. Suppose an emergency room contains patients with priorities:</p>
+<pre><code class="language-text">Patient A: priority 4
+Patient B: priority 1
+Patient C: priority 3
+Patient D: priority 2</code></pre>
+  <p>The patients would not necessarily be processed according to arrival order. They would be processed according to priority.</p>
+  <h4>Java PriorityQueue</h4>
+  <p>Java provides:</p>
+<pre><code class="language-java">PriorityQueue</code></pre>
+  <p>Example:</p>
+<pre><code class="language-java">import java.util.PriorityQueue;
+
+PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;&gt;();
+
+pq.add(40);
+pq.add(10);
+pq.add(30);
+pq.add(20);
+
+System.out.println(pq.remove());
+System.out.println(pq.remove());
+System.out.println(pq.remove());
+System.out.println(pq.remove());</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">10
+20
+30
+40</code></pre>
+  <p>By default, Java's <code>PriorityQueue</code> behaves like a min-priority queue.</p>
+  <h4>Priority queue complexity</h4>
+  <p>A typical heap-based priority queue provides:</p>
+<pre><code class="language-text">peek minimum: O(1)
+
+insert:       O(log n)
+
+remove min:   O(log n)</code></pre>
+  <p>This makes heaps particularly useful when we repeatedly need to determine the smallest or largest item.</p>
+  <h4>BST vs. heap</h4>
+  <p>Students sometimes confuse BSTs and heaps because both can be represented as binary trees. They solve different problems.</p>
+  <p><strong>Binary search tree</strong> — designed primarily for:</p>
+<pre><code class="language-text">searching for arbitrary values
+maintaining sorted ordering</code></pre>
+  <p>Typical balanced complexity:</p>
+<pre><code class="language-text">search: O(log n)
+insert: O(log n)</code></pre>
+  <p><strong>Heap</strong> — designed primarily for:</p>
+<pre><code class="language-text">quickly finding the smallest or largest element</code></pre>
+  <p>Typical:</p>
+<pre><code class="language-text">find min: O(1)
+insert: O(log n)
+remove min: O(log n)</code></pre>
+  <p>Searching a heap for an arbitrary value is generally not efficient.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-choosing"
+          data-kicker="Method" data-title="Choosing a data structure from the operations">
+  <h4>A broader comparison</h4>
+  <p>We have now studied several important structures.</p>
+  <table>
+    <thead><tr><th>Data Structure</th><th>Main Strength</th></tr></thead>
+    <tbody>
+      <tr><td>Array</td><td>Fast indexing</td></tr>
+      <tr><td>ArrayList</td><td>Flexible indexed sequence</td></tr>
+      <tr><td>Linked List</td><td>Dynamic linked structure</td></tr>
+      <tr><td>Stack</td><td>Last-in-first-out processing</td></tr>
+      <tr><td>Queue</td><td>First-in-first-out processing</td></tr>
+      <tr><td>HashSet</td><td>Fast membership testing</td></tr>
+      <tr><td>HashMap</td><td>Fast key-value lookup</td></tr>
+      <tr><td>BST</td><td>Ordered searching</td></tr>
+      <tr><td>Heap</td><td>Fast access to min/max</td></tr>
+      <tr><td>PriorityQueue</td><td>Priority-based processing</td></tr>
+    </tbody>
+  </table>
+  <p>The key question is not:</p>
+  <blockquote>Which data structure is best?</blockquote>
+  <p>Instead ask:</p>
+  <blockquote>Which data structure best supports the operations my program performs most frequently?</blockquote>
+  <h4>Four scenarios</h4>
+  <p>Suppose you need to store one million user IDs and repeatedly ask:</p>
+<pre><code class="language-text">Does this ID exist?</code></pre>
+  <p>A good choice might be:</p>
+<pre><code class="language-java">HashSet</code></pre>
+  <p>Suppose you need the IDs maintained in sorted order. A good choice might be:</p>
+<pre><code class="language-java">TreeSet</code></pre>
+  <p>Suppose you repeatedly need to process jobs according to priority. A good choice might be:</p>
+<pre><code class="language-java">PriorityQueue</code></pre>
+  <p>Suppose you need frequent access by numerical index:</p>
+<pre><code class="language-java">items.get(i)</code></pre>
+  <p>A good choice might be:</p>
+<pre><code class="language-java">ArrayList</code></pre>
+  <h4>The importance of operations</h4>
+  <p>When selecting a data structure, identify which operations matter. Possible operations include:</p>
+<pre><code class="language-text">insert
+delete
+search
+access by index
+find minimum
+find maximum
+iterate in sorted order
+process oldest item
+process newest item</code></pre>
+  <p>Different data structures optimize different operations. This idea is fundamental to computer science.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-misconceptions"
+          data-kicker="Checklist" data-title="Four common misconceptions about trees">
+  <h4>1. Trees are always faster</h4>
+  <p>Trees are not automatically faster than arrays or lists. For example, suppose you have only five values. The difference between:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>and:</p>
+<pre><code class="language-text">O(log n)</code></pre>
+  <p>may be irrelevant. Tree structures also involve:</p>
+  <ul>
+    <li>extra object references</li>
+    <li>more complex code</li>
+    <li>additional memory</li>
+    <li>potentially poor cache behavior</li>
+  </ul>
+  <p>Data structures involve tradeoffs.</p>
+  <h4>2. Every binary tree is a BST</h4>
+  <p>False. This is a binary tree:</p>
+<pre><code class="language-text">      10
+     /  \
+   100   3</code></pre>
+  <p>But it is not a binary search tree. A BST must satisfy the ordering property.</p>
+  <h4>3. A BST is always O(log n)</h4>
+  <p>False. A balanced BST gives approximately:</p>
+<pre><code class="language-text">O(log n)</code></pre>
+  <p>search. But an unbalanced tree can become:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>Example:</p>
+<pre><code class="language-text">10
+ \
+  20
+    \
+     30
+       \
+        40</code></pre>
+  <h4>4. Tree traversals are sorting algorithms</h4>
+  <p>Inorder traversal of a BST produces values in sorted order. However, the traversal itself did not sort the values. The ordering was already established when the BST was constructed. The traversal simply visits nodes according to that ordering.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-worked-example"
+          data-kicker="Worked example" data-title="Building and traversing a BST from eight values">
+  <p>Suppose we insert:</p>
+<pre><code class="language-text">45
+20
+60
+10
+30
+50
+70
+25</code></pre>
+  <p>The tree becomes:</p>
+<pre><code class="language-text">             45
+           /    \
+         20      60
+        /  \    /  \
+      10   30  50   70
+           /
+          25</code></pre>
+  <h4>Inorder</h4>
+<pre><code class="language-text">10 20 25 30 45 50 60 70</code></pre>
+  <h4>Preorder</h4>
+<pre><code class="language-text">45 20 10 30 25 60 50 70</code></pre>
+  <h4>Postorder</h4>
+<pre><code class="language-text">10 25 30 20 50 70 60 45</code></pre>
+  <div class="box key"><span class="box-title">Key idea</span>All three traversals visit the same eight nodes. Only the inorder result is sorted, and only because the tree satisfies the BST ordering property.</div>
+</template>
+
+<template class="csc-modal-tpl" id="m14-trace-exercise"
+          data-kicker="Practice" data-title="Trace exercise and two insertion exercises">
+  <h4>Trace exercise</h4>
+  <p>Given:</p>
+<pre><code class="language-text">          40
+        /    \
+      20      60
+     /  \    /  \
+   10   30  50   70</code></pre>
+  <p>Answer the following.</p>
+  <p><strong>Question 1.</strong> What is the root? Answer:</p>
+<pre><code class="language-text">40</code></pre>
+  <p><strong>Question 2.</strong> What are the leaves? Answer:</p>
+<pre><code class="language-text">10, 30, 50, 70</code></pre>
+  <p><strong>Question 3.</strong> What is the height? Answer:</p>
+<pre><code class="language-text">2</code></pre>
+  <p>using the edge-based definition.</p>
+  <p><strong>Question 4.</strong> What is the inorder traversal? Answer:</p>
+<pre><code class="language-text">10 20 30 40 50 60 70</code></pre>
+  <p><strong>Question 5.</strong> What is the preorder traversal? Answer:</p>
+<pre><code class="language-text">40 20 10 30 60 50 70</code></pre>
+  <p><strong>Question 6.</strong> What is the postorder traversal? Answer:</p>
+<pre><code class="language-text">10 30 20 50 70 60 40</code></pre>
+  <h4>Insertion exercise</h4>
+  <p>Start with:</p>
+<pre><code class="language-text">          50
+        /    \
+      25      75</code></pre>
+  <p>Insert:</p>
+<pre><code class="language-text">60</code></pre>
+  <p>Since:</p>
+<pre><code class="language-text">60 &gt; 50</code></pre>
+  <p>move right. Since:</p>
+<pre><code class="language-text">60 &lt; 75</code></pre>
+  <p>move left. Result:</p>
+<pre><code class="language-text">          50
+        /    \
+      25      75
+             /
+            60</code></pre>
+  <h4>Another insertion exercise</h4>
+  <p>Starting with the same tree, insert:</p>
+<pre><code class="language-text">90</code></pre>
+  <p>Since:</p>
+<pre><code class="language-text">90 &gt; 50</code></pre>
+  <p>move right. Then:</p>
+<pre><code class="language-text">90 &gt; 75</code></pre>
+  <p>move right. Result:</p>
+<pre><code class="language-text">          50
+        /    \
+      25      75
+             / \
+            60  90</code></pre>
+  <h4>Recursive reasoning</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">public static int mystery(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return 1 + mystery(node.left)
+             + mystery(node.right);
+}</code></pre>
+  <p>What does this method compute? The answer is:</p>
+<pre><code class="language-text">the number of nodes in the tree</code></pre>
+  <p>Each non-null node contributes:</p>
+<pre><code class="language-text">1</code></pre>
+  <p>plus the number of nodes in each subtree.</p>
+  <p>Now consider:</p>
+<pre><code class="language-java">public static int mystery(TreeNode node) {
+
+    if (node == null) {
+        return 0;
+    }
+
+    return node.value
+         + mystery(node.left)
+         + mystery(node.right);
+}</code></pre>
+  <p>This computes:</p>
+<pre><code class="language-text">the sum of all values in the tree</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m14-full-program"
+          data-kicker="Program" data-title="Week 14 programming example: a complete BST">
+  <p>Below is a small complete BST implementation.</p>
+<pre><code class="language-java">public class BinarySearchTree {
+
+    private static class TreeNode {
+
+        int value;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int value) {
+            this.value = value;
+        }
+    }
+
+    private TreeNode root;
+
+    public void add(int value) {
+        root = add(root, value);
+    }
+
+    private TreeNode add(TreeNode node, int value) {
+
+        if (node == null) {
+            return new TreeNode(value);
+        }
+
+        if (value &lt; node.value) {
+            node.left = add(node.left, value);
+        } else if (value &gt; node.value) {
+            node.right = add(node.right, value);
+        }
+
+        return node;
+    }
+
+    public boolean contains(int value) {
+        return contains(root, value);
+    }
+
+    private boolean contains(TreeNode node, int value) {
+
+        if (node == null) {
+            return false;
+        }
+
+        if (value == node.value) {
+            return true;
+        }
+
+        if (value &lt; node.value) {
+            return contains(node.left, value);
+        }
+
+        return contains(node.right, value);
+    }
+
+    public void printInOrder() {
+        printInOrder(root);
+    }
+
+    private void printInOrder(TreeNode node) {
+
+        if (node == null) {
+            return;
+        }
+
+        printInOrder(node.left);
+
+        System.out.println(node.value);
+
+        printInOrder(node.right);
+    }
+}</code></pre>
+  <h4>Example usage</h4>
+<pre><code class="language-java">public class Main {
+
+    public static void main(String[] args) {
+
+        BinarySearchTree tree =
+            new BinarySearchTree();
+
+        tree.add(50);
+        tree.add(30);
+        tree.add(70);
+        tree.add(20);
+        tree.add(40);
+        tree.add(60);
+        tree.add(80);
+
+        System.out.println(
+            tree.contains(60)
+        );
+
+        tree.printInOrder();
+    }
+}</code></pre>
+  <h4>Output</h4>
+<pre><code class="language-text">true
+
+20
+30
+40
+50
+60
+70
+80</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m14-lab"
+          data-kicker="Lab" data-title="Week 14 lab activity, challenge, and discussion">
+  <h4>Part 1 — Build a BST</h4>
+  <p>Implement a <code>BinarySearchTree</code> storing integers. Your class should support:</p>
+<pre><code class="language-java">void add(int value)
+
+boolean contains(int value)
+
+void printInOrder()</code></pre>
+  <h4>Part 2 — Add recursive operations</h4>
+  <p>Add methods:</p>
+<pre><code class="language-java">int size()
+
+int sum()
+
+int height()
+
+int countLeaves()</code></pre>
+  <p>For example:</p>
+<pre><code class="language-java">System.out.println(tree.size());
+System.out.println(tree.height());</code></pre>
+  <h4>Part 3 — Add minimum and maximum</h4>
+  <p>Implement:</p>
+<pre><code class="language-java">int minimum()
+
+int maximum()</code></pre>
+  <p>Do not traverse the entire tree. Use the BST ordering property.</p>
+  <h4>Part 4 — Compare tree shapes</h4>
+  <p>Insert these values:</p>
+<pre><code class="language-text">50 30 70 20 40 60 80</code></pre>
+  <p>Measure the tree height. Then build another tree using:</p>
+<pre><code class="language-text">10 20 30 40 50 60 70</code></pre>
+  <p>Measure the height. Discuss why the heights differ.</p>
+  <h4>Challenge exercise</h4>
+  <p>Implement:</p>
+<pre><code class="language-java">public int countGreaterThan(int value)</code></pre>
+  <p>which returns the number of values in the tree greater than a given number. For example, if the tree contains:</p>
+<pre><code class="language-text">20 30 40 50 60 70 80</code></pre>
+  <p>then:</p>
+<pre><code class="language-java">countGreaterThan(50)</code></pre>
+  <p>should return:</p>
+<pre><code class="language-text">3</code></pre>
+  <p>because:</p>
+<pre><code class="language-text">60
+70
+80</code></pre>
+  <p>are greater than 50. Try to use the BST property to avoid unnecessary work.</p>
+  <h4>Discussion question</h4>
+  <p>Suppose you need to store student records indexed by student ID. Which would you choose?</p>
+<pre><code class="language-text">ArrayList
+HashMap
+TreeMap</code></pre>
+  <p>There is not necessarily one universally correct answer. Ask:</p>
+  <ul>
+    <li>Do we need access by position?</li>
+    <li>Do we frequently search by ID?</li>
+    <li>Do the IDs need to remain sorted?</li>
+    <li>Do we need to find ranges of IDs?</li>
+    <li>How much data will we store?</li>
+  </ul>
+  <p>The operations determine the appropriate data structure.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-complexity-summary"
+          data-kicker="Reference" data-title="Complexity summary you should know">
+  <p>You should know the following approximate complexities.</p>
+  <table>
+    <thead><tr><th>Structure / Operation</th><th>Typical Complexity</th></tr></thead>
+    <tbody>
+      <tr><td>ArrayList access by index</td><td>O(1)</td></tr>
+      <tr><td>ArrayList search</td><td>O(n)</td></tr>
+      <tr><td>HashMap lookup</td><td>O(1) average</td></tr>
+      <tr><td>HashSet membership</td><td>O(1) average</td></tr>
+      <tr><td>Balanced BST search</td><td>O(log n)</td></tr>
+      <tr><td>Balanced BST insertion</td><td>O(log n)</td></tr>
+      <tr><td>Unbalanced BST search</td><td>O(n) worst case</td></tr>
+      <tr><td>Heap find minimum</td><td>O(1)</td></tr>
+      <tr><td>Heap insertion</td><td>O(log n)</td></tr>
+      <tr><td>Heap remove minimum</td><td>O(log n)</td></tr>
+      <tr><td>Tree traversal</td><td>O(n)</td></tr>
+    </tbody>
+  </table>
+  <p>A complete traversal must visit every node, so traversal is:</p>
+<pre><code class="language-text">O(n)</code></pre>
+  <p>regardless of whether the tree is balanced.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-check"
+          data-kicker="Review" data-title="End-of-lecture check: ten questions and their answers">
+  <p>Without looking at the notes, answer the following.</p>
+  <h4>1. What property distinguishes a BST from an ordinary binary tree?</h4>
+  <p>A BST requires the ordering property:</p>
+<pre><code class="language-text">left values &lt; node value &lt; right values</code></pre>
+  <h4>2. What traversal visits a BST in sorted order?</h4>
+<pre><code class="language-text">Inorder traversal</code></pre>
+  <h4>3. What is the typical search complexity of a balanced BST?</h4>
+<pre><code class="language-text">O(log n)</code></pre>
+  <h4>4. What is the worst-case search complexity of an unbalanced BST?</h4>
+<pre><code class="language-text">O(n)</code></pre>
+  <h4>5. Why is recursion particularly natural for tree algorithms?</h4>
+  <p>Because each subtree is itself a tree, so the same algorithm can naturally be applied recursively to smaller subtrees.</p>
+  <h4>6. What is the primary purpose of a heap?</h4>
+  <p>To provide efficient access to the minimum or maximum-priority element.</p>
+  <h4>7. Which Java structure would you likely use if you repeatedly need to remove the smallest element?</h4>
+<pre><code class="language-java">PriorityQueue</code></pre>
+  <h4>8. Which would you choose if you need extremely fast membership tests but do not care about sorted ordering?</h4>
+<pre><code class="language-java">HashSet</code></pre>
+  <h4>9. Which would you choose if you want set elements maintained in sorted order?</h4>
+<pre><code class="language-java">TreeSet</code></pre>
+  <h4>10. Why can the order in which values are inserted into a basic BST matter?</h4>
+  <p>Insertion order determines the shape of a basic BST. A poor insertion order can create a highly unbalanced tree, causing operations that would normally be approximately O(log n) to degrade toward O(n).</p>
+</template>
+
+<template class="csc-modal-tpl" id="m14-where-trees-appear"
+          data-kicker="Context" data-title="Advanced trees, and where trees appear in computing">
+  <h4>Preview of more advanced trees</h4>
+  <p>There are many tree structures beyond what we cover in CSC500. Examples include:</p>
+<pre><code class="language-text">AVL trees
+Red-black trees
+B-trees
+B+ trees
+tries
+expression trees
+syntax trees
+decision trees
+heaps</code></pre>
+  <p>You do not need to implement these structures in this course. However, you should understand why they exist:</p>
+  <blockquote>Different tree structures enforce different properties in order to support particular operations efficiently.</blockquote>
+  <p>For example, Java's <code>TreeMap</code> and <code>TreeSet</code> use a self-balancing tree internally rather than a simple unbalanced BST.</p>
+  <h4>Compilers</h4>
+  <p>Programming expressions are represented using <strong>syntax trees</strong>. For example:</p>
+<pre><code class="language-text">3 + 4 * 5</code></pre>
+  <p>can be represented conceptually as:</p>
+<pre><code class="language-text">        +
+       / \
+      3   *
+         / \
+        4   5</code></pre>
+  <h4>File systems</h4>
+  <p>Directories form a hierarchical structure:</p>
+<pre><code class="language-text">Documents
+├── CSC500
+│   ├── assignments
+│   └── lectures
+└── Personal
+    ├── photos
+    └── taxes</code></pre>
+  <h4>Databases</h4>
+  <p>Many database indexes use tree structures such as B-trees.</p>
+  <h4>Artificial intelligence</h4>
+  <p>Trees appear in:</p>
+<pre><code class="language-text">decision trees
+game search
+planning</code></pre>
+  <h4>Networking</h4>
+  <p>Trees can represent routing and hierarchical naming.</p>
+  <h4>Web browsers</h4>
+  <p>HTML is represented internally as a tree called the Document Object Model, or DOM.</p>
+  <h4>From concrete structures to general CS thinking</h4>
+  <p>Trees demonstrate several important ideas that extend far beyond this course.</p>
+  <p><strong>Recursion.</strong> Large problems are solved by applying the same logic to smaller subproblems.</p>
+  <p><strong>Abstraction.</strong> Users interact with operations such as:</p>
+<pre><code class="language-text">add
+contains
+remove</code></pre>
+  <p>without needing to understand every implementation detail.</p>
+  <p><strong>Algorithm analysis.</strong> The shape of a data structure affects performance.</p>
+  <p><strong>Representation matters.</strong> The way data is organized can dramatically change the efficiency of algorithms.</p>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>

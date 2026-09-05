@@ -1,0 +1,608 @@
+/* ==========================================================================
+   CSC500 — Programming Fundamentals
+   Shared slide theme for all week decks.
+   Edit this one file to restyle every deck at once.
+   Built on reveal.js 5 (replaces reveal's own theme file).
+   ========================================================================== */
+
+/* ---------- 1. Design tokens ---------------------------------------------- */
+:root {
+  /* Palette — deep slate ground, NKU-leaning gold accent */
+  --c-bg:            #10151d;
+  --c-bg-soft:       #172030;
+  --c-panel:         #1b2534;
+  --c-panel-2:       #212d3f;
+  --c-border:        #2f3c50;
+  --c-border-soft:   #26303f;
+
+  --c-text:          #e8edf4;
+  --c-text-dim:      #a9b6c6;
+  --c-text-faint:    #7d8b9c;
+
+  --c-accent:        #f5c451;   /* gold — headings, rules, active state */
+  --c-accent-2:      #6fb6ff;   /* blue — links, secondary emphasis */
+  --c-good:          #6fd59a;   /* correct / do this */
+  --c-bad:           #ff8a80;   /* wrong / avoid this */
+  --c-warn:          #ffb861;   /* caution */
+
+  --c-code-bg:       #0d1117;   /* matches github-dark hljs theme */
+
+  /* Typography */
+  --r-main-font: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --r-heading-font: var(--r-main-font);
+  --r-code-font: "JetBrains Mono", "Cascadia Code", "Fira Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+
+  --r-background-color: var(--c-bg);
+  --r-main-color: var(--c-text);
+  --r-heading-color: #ffffff;
+  --r-link-color: var(--c-accent-2);
+  --r-link-color-hover: #a8d5ff;
+  --r-selection-background-color: rgba(245, 196, 81, .35);
+  --r-selection-color: #fff;
+
+  --r-main-font-size: 30px;
+  --r-heading1-size: 2.1em;
+  --r-heading2-size: 1.5em;
+  --r-heading3-size: 1.15em;
+  --r-heading4-size: 1em;
+  --r-heading-line-height: 1.18;
+  --r-heading-letter-spacing: -0.015em;
+  --r-heading-text-transform: none;
+  --r-heading-font-weight: 700;
+  --r-block-margin: 18px;
+
+  --radius: 10px;
+}
+
+/* ---------- 2. Base ------------------------------------------------------- */
+.reveal-viewport {
+  background: var(--c-bg);
+  background-image:
+    radial-gradient(1100px 620px at 12% -12%, #1d2a3d 0%, rgba(29, 42, 61, 0) 62%),
+    radial-gradient(900px 520px at 108% 112%, #1a2536 0%, rgba(26, 37, 54, 0) 60%);
+}
+
+.reveal {
+  font-family: var(--r-main-font);
+  font-size: var(--r-main-font-size);
+  font-weight: 400;
+  color: var(--r-main-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+.reveal ::selection { color: var(--r-selection-color); background: var(--r-selection-background-color); text-shadow: none; }
+
+.reveal .slides { text-align: left; }
+.reveal .slides section { line-height: 1.42; }
+
+/* A slide never spills off the deck: if opening an accordion makes it taller
+   than the 1280x800 stage, the slide itself scrolls. */
+.reveal .slides > section:not(.stack) {
+  max-height: 800px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-border) transparent;
+}
+.reveal .slides > section::-webkit-scrollbar { width: 9px; }
+.reveal .slides > section::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 5px; }
+.reveal .slides > section::-webkit-scrollbar-track { background: transparent; }
+
+/* Slides that are purely a statement sit centred on the stage.
+   Scoped to .present so we never override reveal's display:none on the
+   slides that are currently hidden. */
+.reveal .slides > section.part-divider.present,
+.reveal .slides > section.title-slide.present,
+.reveal .slides > section.v-center.present {
+  min-height: 745px;
+  display: flex !important;   /* beats reveal's inline display:block */
+  flex-direction: column;
+  justify-content: center;
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  margin: 0 0 var(--r-block-margin) 0;
+  color: var(--r-heading-color);
+  font-family: var(--r-heading-font);
+  font-weight: var(--r-heading-font-weight);
+  line-height: var(--r-heading-line-height);
+  letter-spacing: var(--r-heading-letter-spacing);
+  text-transform: none;
+  text-shadow: none;
+  word-wrap: break-word;
+}
+.reveal h1 { font-size: var(--r-heading1-size); }
+.reveal h2 { font-size: var(--r-heading2-size); }
+.reveal h3 { font-size: var(--r-heading3-size); color: var(--c-accent); }
+.reveal h4 { font-size: var(--r-heading4-size); color: var(--c-text-dim); text-transform: uppercase; letter-spacing: .09em; font-weight: 700; }
+
+/* Rule under a slide's main heading */
+.reveal .slides section > h2:first-child,
+.reveal .slides section > h1:first-child {
+  padding-bottom: .28em;
+  border-bottom: 3px solid var(--c-accent);
+  margin-bottom: .6em;
+}
+
+.reveal p { margin: 0 0 var(--r-block-margin) 0; }
+.reveal strong, .reveal b { color: #fff; font-weight: 700; }
+.reveal em { color: var(--c-text); font-style: italic; }
+.reveal a { color: var(--r-link-color); text-decoration: none; border-bottom: 1px solid rgba(111,182,255,.4); }
+.reveal a:hover { color: var(--r-link-color-hover); border-bottom-color: currentColor; }
+
+.reveal ul, .reveal ol { display: block; margin: 0 0 var(--r-block-margin) 0; padding-left: 1.15em; }
+.reveal ul { list-style: none; padding-left: 0; }
+.reveal ul > li {
+  position: relative; padding-left: 1.15em; margin-bottom: .42em;
+}
+.reveal ul > li::before {
+  content: ""; position: absolute; left: .18em; top: .62em;
+  width: .38em; height: .38em; border-radius: 50%;
+  background: var(--c-accent); opacity: .85;
+}
+.reveal ul ul > li::before { background: var(--c-text-faint); }
+.reveal ol > li { margin-bottom: .42em; }
+.reveal ol > li::marker { color: var(--c-accent); font-weight: 700; }
+.reveal li > ul, .reveal li > ol { margin-top: .38em; margin-bottom: .2em; font-size: .92em; color: var(--c-text-dim); }
+
+.reveal blockquote {
+  display: block; width: 100%; margin: var(--r-block-margin) 0;
+  padding: .7em 1em; background: var(--c-panel);
+  border-left: 4px solid var(--c-accent-2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  box-shadow: none; font-style: normal; color: var(--c-text-dim);
+}
+.reveal blockquote p:last-child { margin-bottom: 0; }
+
+.reveal hr { border: none; border-top: 1px solid var(--c-border); margin: 1em 0; }
+
+/* ---------- 3. Code ------------------------------------------------------- */
+.reveal code {
+  font-family: var(--r-code-font);
+  font-size: .88em;
+  background: rgba(255,255,255,.075);
+  border: 1px solid var(--c-border-soft);
+  border-radius: 5px;
+  padding: .08em .34em;
+  color: #ffe3a3;
+  white-space: nowrap;
+}
+
+.reveal pre {
+  display: block; position: relative; width: 100%;
+  margin: var(--r-block-margin) 0;
+  font-size: .55em; line-height: 1.42;
+  box-shadow: 0 6px 22px rgba(0,0,0,.38);
+  border-radius: var(--radius);
+  overflow: visible;
+}
+.reveal pre code {
+  display: block; padding: 16px 18px;
+  background: var(--c-code-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  color: #e6edf3;
+  font-size: 1em;
+  white-space: pre;
+  overflow: auto;
+  max-height: 620px;
+  word-wrap: normal;
+  tab-size: 4;
+}
+/* Language chip on code blocks */
+.reveal pre[data-lang]::after {
+  content: attr(data-lang);
+  position: absolute; top: 6px; right: 10px;
+  font-family: var(--r-main-font); font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--c-text-faint); pointer-events: none;
+}
+/* Highlighted-line emphasis (reveal's data-line-numbers) */
+.reveal .hljs-ln .hljs-ln-numbers { color: #4a5568; }
+.reveal pre code.hljs { padding: 16px 18px; }
+.reveal .hljs.has-highlights tr:not(.highlight-line) { opacity: .38; }
+
+/* Console / output blocks (```text) get a terminal look */
+.reveal pre.output code, .reveal pre code.language-text, .reveal pre code.language-plaintext {
+  background: #0b0f14;
+  color: #c8d4e0;
+  border-color: #223044;
+}
+
+/* ---------- 4. Tables ----------------------------------------------------- */
+.reveal table {
+  width: 100%; margin: var(--r-block-margin) 0;
+  border-collapse: separate; border-spacing: 0;
+  font-size: .78em;
+  border: 1px solid var(--c-border); border-radius: var(--radius);
+  overflow: hidden;
+}
+.reveal table th {
+  background: var(--c-panel-2); color: #fff; font-weight: 700;
+  text-align: left; padding: .5em .7em; border-bottom: 2px solid var(--c-accent);
+}
+.reveal table td { padding: .45em .7em; border-bottom: 1px solid var(--c-border-soft); color: var(--c-text-dim); vertical-align: top; }
+.reveal table tr:last-child td { border-bottom: none; }
+.reveal table tr:nth-child(even) td { background: rgba(255,255,255,.022); }
+.reveal table code { white-space: nowrap; }
+
+/* ---------- 5. Layout helpers -------------------------------------------- */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: start; }
+.cols-38 { display: grid; grid-template-columns: 3fr 5fr; gap: 22px; align-items: start; }
+.cols-53 { display: grid; grid-template-columns: 5fr 3fr; gap: 22px; align-items: start; }
+.cols > *, .cols-3 > *, .cols-38 > *, .cols-53 > * { min-width: 0; }
+.cols pre, .cols-3 pre { margin-top: 0; }
+.center { text-align: center; }
+.small { font-size: .82em; }
+.smaller { font-size: .68em; }
+.dim { color: var(--c-text-dim); }
+.tight > * { margin-bottom: .4em; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+
+/* ---------- 6. Callout boxes --------------------------------------------- */
+.box {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-accent);
+  border-radius: var(--radius);
+  padding: .7em .95em;
+  margin: var(--r-block-margin) 0;
+  font-size: .9em;
+}
+.box > *:last-child { margin-bottom: 0; }
+.box .box-title {
+  display: block; font-weight: 700; color: #fff;
+  font-size: .82em; letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: .35em;
+}
+.box.key      { border-left-color: var(--c-accent); }
+.box.note     { border-left-color: var(--c-accent-2); }
+.box.warn     { border-left-color: var(--c-warn); }
+.box.pitfall  { border-left-color: var(--c-bad); }
+.box.good     { border-left-color: var(--c-good); }
+.box.key .box-title     { color: var(--c-accent); }
+.box.note .box-title    { color: var(--c-accent-2); }
+.box.warn .box-title    { color: var(--c-warn); }
+.box.pitfall .box-title { color: var(--c-bad); }
+.box.good .box-title    { color: var(--c-good); }
+
+/* Definition slab — for "X is ..." statements */
+.def {
+  background: linear-gradient(180deg, rgba(245,196,81,.12), rgba(245,196,81,.045));
+  border: 1px solid rgba(245,196,81,.34);
+  border-radius: var(--radius);
+  padding: .8em 1em; margin: var(--r-block-margin) 0;
+}
+.def .term { color: var(--c-accent); font-weight: 700; }
+.def > *:last-child { margin-bottom: 0; }
+
+/* Correct / incorrect labels above code */
+.tag {
+  display: inline-block; font-size: .62em; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: .18em .55em; border-radius: 4px; margin-bottom: .3em;
+}
+.tag.ok  { background: rgba(111,213,154,.16); color: var(--c-good);  border: 1px solid rgba(111,213,154,.4); }
+.tag.no  { background: rgba(255,138,128,.16); color: var(--c-bad);   border: 1px solid rgba(255,138,128,.4); }
+.tag.neutral { background: rgba(255,255,255,.07); color: var(--c-text-dim); border: 1px solid var(--c-border); }
+
+/* Inline pill (e.g. Big-O) */
+.pill {
+  display: inline-block; padding: .1em .5em; border-radius: 999px;
+  background: rgba(111,182,255,.14); border: 1px solid rgba(111,182,255,.35);
+  color: #bfe0ff; font-size: .8em; font-weight: 600; white-space: nowrap;
+}
+
+/* Simple math rendering (no KaTeX needed) */
+.math {
+  font-family: "Cambria Math", Cambria, Georgia, serif;
+  font-style: italic; font-size: 1.15em; color: #fff;
+  display: block; text-align: center; margin: .6em 0;
+}
+.math .op { font-style: normal; color: var(--c-accent); padding: 0 .2em; }
+
+/* Process arrow chain: Problem → Algorithm → Program */
+.chain { display: flex; flex-wrap: wrap; align-items: center; gap: .5em; justify-content: center; margin: var(--r-block-margin) 0; }
+.chain > span {
+  background: var(--c-panel-2); border: 1px solid var(--c-border);
+  border-radius: 999px; padding: .3em .9em; font-size: .8em; font-weight: 600; color: #fff;
+}
+.chain > span.sep { background: none; border: none; color: var(--c-accent); font-size: 1.1em; padding: 0; }
+
+/* ---------- 7. Accordion (inline "expand for detail") --------------------- */
+.acc {
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-panel);
+  margin: 12px 0;
+  overflow: hidden;
+}
+.acc + .acc { margin-top: 8px; }
+.acc > summary {
+  list-style: none; cursor: pointer; user-select: none;
+  padding: .55em .9em .55em 2.1em;
+  position: relative;
+  font-size: .82em; font-weight: 600; color: var(--c-accent);
+  background: var(--c-panel-2);
+  transition: background .15s ease, color .15s ease;
+}
+.acc > summary::-webkit-details-marker { display: none; }
+.acc > summary::before {
+  content: "▸";
+  position: absolute; left: .95em; top: 50%; transform: translateY(-50%);
+  color: var(--c-accent); font-size: .95em;
+  transition: transform .18s ease;
+}
+.acc[open] > summary::before { transform: translateY(-50%) rotate(90deg); }
+.acc > summary:hover { background: #273347; color: #ffd980; }
+.acc[open] > summary { border-bottom: 1px solid var(--c-border); }
+.acc .acc-body {
+  padding: .8em .95em;
+  font-size: .82em;
+  color: var(--c-text-dim);
+  max-height: 460px;
+  overflow-y: auto;
+  animation: accIn .18s ease;
+}
+.acc .acc-body > *:last-child { margin-bottom: 0; }
+.acc .acc-body pre { font-size: .62em; }
+.acc .acc-body h4 { margin-bottom: .4em; }
+@keyframes accIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* Accordion group label */
+.acc-label {
+  font-size: .68em; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--c-text-faint); font-weight: 700; margin: .8em 0 .3em;
+}
+
+/* ---------- 8. Modal (concept deep-dive) ---------------------------------- */
+.mlink {
+  display: inline-block;
+  cursor: pointer;
+  color: var(--c-accent-2);
+  border-bottom: 1px dashed rgba(111,182,255,.55);
+  font-weight: 600;
+}
+.mlink:hover { color: #a8d5ff; border-bottom-style: solid; }
+.mlink::after {
+  content: "⌄";
+  font-size: .75em; margin-left: .25em; opacity: .8;
+  display: inline-block; transform: rotate(-90deg) translateX(1px);
+}
+
+/* Button-style modal trigger */
+.mbtn {
+  display: inline-flex; align-items: center; gap: .45em;
+  cursor: pointer; user-select: none;
+  background: var(--c-panel-2); border: 1px solid var(--c-border);
+  border-radius: 999px; padding: .32em .95em;
+  font-size: .72em; font-weight: 600; color: var(--c-accent-2);
+  transition: border-color .15s ease, background .15s ease, transform .1s ease;
+  margin: .2em .3em .2em 0;
+}
+.mbtn:hover { background: #273347; border-color: var(--c-accent-2); color: #bfe0ff; }
+.mbtn:active { transform: translateY(1px); }
+.mbtn::before { content: "＋"; font-size: .95em; opacity: .85; }
+
+.mbtn-row { display: flex; flex-wrap: wrap; gap: .35em; margin: var(--r-block-margin) 0 0; }
+
+/* Overlay lives outside .reveal so it is never clipped/scaled */
+.csc-modal-overlay {
+  position: fixed; inset: 0; z-index: 3000;
+  display: none;
+  align-items: center; justify-content: center;
+  background: rgba(6, 9, 14, .74);
+  backdrop-filter: blur(3px);
+  padding: 4vh 4vw;
+}
+.csc-modal-overlay.open { display: flex; animation: fadeIn .16s ease; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+
+.csc-modal {
+  background: var(--c-bg-soft);
+  border: 1px solid var(--c-border);
+  border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.6);
+  width: min(980px, 100%);
+  max-height: 92vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  animation: modalIn .2s cubic-bezier(.2,.8,.3,1);
+  font-family: var(--r-main-font);
+  color: var(--c-text);
+}
+@keyframes modalIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+
+.csc-modal header {
+  display: flex; align-items: center; justify-content: space-between; gap: 1em;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-panel-2);
+}
+.csc-modal header h3 { margin: 0; font-size: 20px; color: #fff; font-weight: 700; letter-spacing: -.01em; }
+.csc-modal header .kicker { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--c-accent); font-weight: 700; margin-bottom: 3px; }
+.csc-modal .close {
+  border: 1px solid var(--c-border); background: transparent; color: var(--c-text-dim);
+  width: 34px; height: 34px; border-radius: 8px; font-size: 19px; line-height: 1;
+  cursor: pointer; flex: none; transition: all .15s ease;
+}
+.csc-modal .close:hover { background: #2c3a4f; color: #fff; border-color: var(--c-accent); }
+
+.csc-modal .csc-modal-body {
+  padding: 20px 22px 26px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.csc-modal .csc-modal-body > *:last-child { margin-bottom: 0; }
+.csc-modal .csc-modal-body h4 {
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--c-accent); font-weight: 700; margin: 1.3em 0 .5em;
+}
+.csc-modal .csc-modal-body h4:first-child { margin-top: 0; }
+.csc-modal .csc-modal-body p { margin: 0 0 .85em; }
+.csc-modal .csc-modal-body ul { margin: 0 0 .9em; padding-left: 0; list-style: none; }
+.csc-modal .csc-modal-body ol { margin: 0 0 .9em; padding-left: 1.3em; }
+.csc-modal .csc-modal-body li { position: relative; padding-left: 1.1em; margin-bottom: .35em; }
+.csc-modal .csc-modal-body ol > li { padding-left: 0; }
+.csc-modal .csc-modal-body ul > li::before {
+  content: ""; position: absolute; left: .2em; top: .62em;
+  width: .34em; height: .34em; border-radius: 50%; background: var(--c-accent); opacity: .85;
+}
+.csc-modal .csc-modal-body code {
+  font-family: var(--r-code-font); font-size: .88em;
+  background: rgba(255,255,255,.075); border: 1px solid var(--c-border-soft);
+  border-radius: 5px; padding: .08em .34em; color: #ffe3a3;
+}
+.csc-modal .csc-modal-body pre {
+  background: var(--c-code-bg); border: 1px solid var(--c-border);
+  border-radius: var(--radius); padding: 0; margin: 0 0 1em; overflow: hidden;
+}
+.csc-modal .csc-modal-body pre code {
+  display: block; padding: 14px 16px; background: none; border: none;
+  color: #e6edf3; font-size: 13.5px; line-height: 1.55; white-space: pre;
+  overflow-x: auto; border-radius: 0;
+}
+.csc-modal .csc-modal-body table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; border: 1px solid var(--c-border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1em; }
+.csc-modal .csc-modal-body th { background: var(--c-panel-2); color: #fff; text-align: left; padding: .5em .7em; border-bottom: 2px solid var(--c-accent); }
+.csc-modal .csc-modal-body td { padding: .45em .7em; border-bottom: 1px solid var(--c-border-soft); color: var(--c-text-dim); vertical-align: top; }
+.csc-modal .csc-modal-body .box { font-size: 15px; }
+
+/* ---------- 9. Title slide ------------------------------------------------ */
+.title-slide { text-align: left; }
+.title-slide .course-tag {
+  display: inline-block; font-size: .5em; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--c-accent);
+  border: 1px solid rgba(245,196,81,.4); border-radius: 999px;
+  padding: .3em 1em; margin-bottom: .8em;
+}
+.title-slide h1 { font-size: 1.85em; margin-bottom: .25em; }
+.title-slide .subtitle { font-size: .9em; color: var(--c-text-dim); margin-bottom: 1em; }
+.title-slide .meta { font-size: .58em; color: var(--c-text-faint); border-top: 1px solid var(--c-border); padding-top: .9em; }
+.title-slide .meta strong { color: var(--c-text-dim); font-weight: 600; }
+
+/* Part divider slides */
+.part-divider { text-align: center; }
+.part-divider .part-num {
+  font-size: .55em; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--c-accent); font-weight: 700; margin-bottom: .5em;
+}
+.part-divider h2 {
+  font-size: 1.9em; border: none !important; padding-bottom: 0 !important;
+  margin-bottom: .4em !important;
+}
+.part-divider .part-sub { color: var(--c-text-dim); font-size: .8em; max-width: 22em; margin: 0 auto; }
+/* Scoped to the <section>: reveal copies a slide's classes onto its
+   .slide-background element, which would otherwise draw a second rule. */
+.reveal .slides > section.part-divider::after {
+  content: ""; display: block; width: 90px; height: 3px;
+  background: var(--c-accent); margin: 1.1em auto 0; border-radius: 2px;
+}
+
+/* ---------- 10. Chrome: progress, footer, controls ------------------------ */
+.reveal .progress { height: 4px; color: var(--c-accent); background: rgba(255,255,255,.08); }
+.reveal .controls { color: var(--c-accent); }
+.reveal .slide-number {
+  background: rgba(13,17,23,.72); color: var(--c-text-dim);
+  font-family: var(--r-main-font); font-size: 13px; padding: 4px 9px; border-radius: 6px;
+}
+
+.deck-footer {
+  position: fixed; bottom: 12px; left: 18px; z-index: 40;
+  font-family: var(--r-main-font); font-size: 12px; letter-spacing: .05em;
+  color: var(--c-text-faint); pointer-events: none;
+}
+.deck-footer .sep { color: var(--c-border); padding: 0 .5em; }
+.deck-footer strong { color: var(--c-accent); font-weight: 700; }
+
+
+/* ---------- 11. Overview + print ----------------------------------------- */
+.reveal.overview .slides section { border-radius: 8px; }
+
+@media print {
+  .deck-footer, .csc-modal-overlay { display: none !important; }
+  /* Accordions print expanded so the PDF keeps every detail */
+  .acc[open] > summary::before, .acc > summary::before { content: "▾"; transform: none !important; }
+}
+/* In PDF export, force every accordion open */
+.print-pdf .acc .acc-body { display: block !important; }
+
+/* ---------- 12. Small-screen fallback ------------------------------------ */
+@media screen and (max-width: 860px) {
+  .cols, .cols-3, .cols-38, .cols-53 { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   13. Course index page (index.html)
+   Same tokens as the decks, so the whole set reads as one system.
+   ========================================================================== */
+body.idx {
+  background: var(--c-bg);
+  background-image:
+    radial-gradient(1100px 620px at 10% -14%, #1d2a3d 0%, rgba(29,42,61,0) 62%),
+    radial-gradient(900px 520px at 106% 110%, #1a2536 0%, rgba(26,37,54,0) 60%);
+  background-attachment: fixed;
+  color: var(--c-text);
+  font-family: var(--r-main-font);
+  font-size: 16px;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0 24px 72px;
+  -webkit-font-smoothing: antialiased;
+}
+.idx-wrap { max-width: 1120px; margin: 0 auto; }
+
+.idx-head { padding: 64px 0 34px; border-bottom: 1px solid var(--c-border); margin-bottom: 34px; }
+.idx-head .course-tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--c-accent);
+  border: 1px solid rgba(245,196,81,.4); border-radius: 999px;
+  padding: .35em 1.1em; margin-bottom: 18px;
+}
+.idx-head h1 { font-size: 40px; margin: 0 0 10px; color: #fff; letter-spacing: -.02em; font-weight: 700; }
+.idx-head p { margin: 0; color: var(--c-text-dim); font-size: 17px; max-width: 62ch; }
+
+.idx-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+
+a.idx-card {
+  display: block; text-decoration: none; border: none;
+  background: var(--c-panel); border: 1px solid var(--c-border);
+  border-radius: var(--radius); padding: 18px 20px 20px;
+  transition: border-color .16s ease, background .16s ease, transform .12s ease;
+}
+a.idx-card:hover {
+  background: var(--c-panel-2); border-color: var(--c-accent);
+  transform: translateY(-2px); color: inherit;
+}
+.idx-card .wk {
+  font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--c-accent); margin-bottom: 7px;
+}
+.idx-card h2 { font-size: 19px; margin: 0 0 9px; color: #fff; font-weight: 700; line-height: 1.3; }
+.idx-card p { margin: 0; font-size: 13.5px; color: var(--c-text-dim); line-height: 1.5; }
+.idx-card .lab {
+  display: block; margin-top: 11px; padding-top: 10px;
+  border-top: 1px solid var(--c-border-soft);
+  font-size: 12px; color: var(--c-text-faint);
+}
+.idx-card .lab b { color: var(--c-text-dim); font-weight: 600; }
+
+.idx-note {
+  margin-top: 40px; background: var(--c-panel); border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-accent-2); border-radius: var(--radius); padding: 20px 22px;
+}
+.idx-note h3 { margin: 0 0 12px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--c-accent-2); font-weight: 700; }
+.idx-note ul { margin: 0; padding-left: 0; list-style: none; }
+.idx-note li { position: relative; padding-left: 1.15em; margin-bottom: .4em; font-size: 14.5px; color: var(--c-text-dim); }
+.idx-note li:last-child { margin-bottom: 0; }
+.idx-note li::before {
+  content: ""; position: absolute; left: .2em; top: .62em;
+  width: .34em; height: .34em; border-radius: 50%; background: var(--c-accent-2); opacity: .85;
+}
+.idx-note kbd {
+  font-family: var(--r-code-font); font-size: .85em;
+  background: rgba(255,255,255,.08); border: 1px solid var(--c-border);
+  border-bottom-width: 2px; border-radius: 4px; padding: .1em .4em; color: #ffe3a3;
+}
+.idx-foot { margin-top: 34px; font-size: 12.5px; color: var(--c-text-faint); }

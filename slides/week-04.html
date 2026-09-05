@@ -1,0 +1,4256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSC500 — Week 4: Methods and Program Decomposition</title>
+
+  <link rel="stylesheet" href="assets/reveal/reset.css">
+  <link rel="stylesheet" href="assets/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/hljs-github-dark.css">
+  <link rel="stylesheet" href="assets/csc500.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+<!-- ==================== FRONT MATTER ==================== -->
+
+<section class="title-slide" data-state="title">
+  <span class="course-tag">CSC500 · Programming Fundamentals</span>
+  <h1>Methods and Program Decomposition</h1>
+  <p class="subtitle">Week 4 — breaking a large problem into smaller, manageable pieces</p>
+  <p class="meta"><strong>Northern Kentucky University</strong> &nbsp;·&nbsp; Lecture slides &nbsp;·&nbsp; Press <code>S</code> for speaker notes, <code>O</code> for overview, <code>F</code> for fullscreen</p>
+</section>
+
+<section>
+  <h2>Learning Objectives (1 of 2)</h2>
+  <p class="dim small">Week 4 covers:</p>
+  <ul>
+    <li>Why methods are useful</li>
+    <li>Defining and calling methods</li>
+    <li>Parameters and arguments</li>
+    <li>Return values</li>
+    <li><code>void</code> methods</li>
+    <li>Variable scope</li>
+  </ul>
+  <aside class="notes">
+    <p>These twelve topics are what Week 4 is accountable for. The first six are the mechanics of a method: what one is, how to define it, how to call it, how information goes in as parameters and comes back out as a return value, and where the variables inside a method live.</p>
+    <p>Read the list aloud at the start of the lecture and again at the end. It is the checklist students should revise against.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Learning Objectives (2 of 2)</h2>
+  <ul>
+    <li>Local variables</li>
+    <li>Method call execution</li>
+    <li>The call stack</li>
+    <li>Program decomposition</li>
+    <li>Designing programs using methods</li>
+    <li>Common mistakes involving methods</li>
+  </ul>
+  <div class="box key"><span class="box-title">The real objective</span>Do not think of a program as one long sequence of statements. Think of a program as a collection of smaller operations that cooperate to solve a larger problem.</div>
+  <aside class="notes">
+    <p>The second half of the list is about what happens when methods are put together: how execution moves between them, how Java remembers where to return, and how a large problem is divided into smaller responsibilities.</p>
+    <p>The box states the habit this week is really trying to install. Everything else on the list is a skill; that is a way of thinking, and it carries directly into classes and objects in Week 6.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Roadmap — Parts I to X</h2>
+  <div class="cols smaller">
+    <ol>
+      <li>Why Methods?</li>
+      <li>Parameters and Arguments</li>
+      <li>Return Values</li>
+      <li>Program Decomposition</li>
+      <li>Scope and Local Variables</li>
+    </ol>
+    <ol start="6">
+      <li>Execution Flow and the Call Stack</li>
+      <li>Designing Good Methods</li>
+      <li>Common Errors with Methods</li>
+      <li>Worked Examples and Design in Practice</li>
+      <li>Practice, Style, and Review</li>
+    </ol>
+  </div>
+  <div class="chain">
+    <span>Problem</span><span class="sep">→</span>
+    <span>Responsibilities</span><span class="sep">→</span>
+    <span>Methods</span><span class="sep">→</span>
+    <span><code>main</code> coordinates</span>
+  </div>
+  <aside class="notes">
+    <p>Parts I through III build the machinery: what a method is, how to pass information in, and how to get a result back. Part IV is the payoff — decomposing a whole program into methods.</p>
+    <p>Parts V and VI explain what the machine is actually doing: scope, local variables, and the call stack. Parts VII through X are about judgment — designing good methods, recognising the classic errors, and practising on worked examples.</p>
+    <p>The source notes present this as seventy-five short sections. They have been grouped into ten teaching parts here; the order of presentation is unchanged.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART I ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part I</p>
+  <h2>Why Methods?</h2>
+  <p class="part-sub">Programming relies heavily on decomposition — and in Java, our primary tool for it is the method.</p>
+</section>
+
+<section>
+  <h2>Programs Are Getting Bigger</h2>
+  <div class="cols">
+    <div>
+      <p class="small">During the first few weeks of the course, most of our programs were relatively small. A typical program might:</p>
+      <ol class="small">
+        <li>read some input,</li>
+        <li>perform some calculations,</li>
+        <li>use a loop or conditional,</li>
+        <li>print a result.</li>
+      </ol>
+      <p class="small">That program works. But imagine that the program grows to 500, 5,000, or 50,000 lines.</p>
+    </div>
+    <div>
+      <p class="small">Putting all of the logic inside <code>main</code> quickly becomes difficult to:</p>
+      <ul class="small">
+        <li>read,</li>
+        <li>understand,</li>
+        <li>debug,</li>
+        <li>test,</li>
+        <li>modify,</li>
+        <li>and reuse.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="def"><span class="term">Program decomposition:</span> the process of breaking a large problem into smaller, manageable pieces.</div>
+  <details class="acc">
+    <summary>What a typical early-course program looks like</summary>
+    <div class="acc-body">
+      <p>During the first few weeks of the course, most of our programs were relatively small. A typical program might:</p>
+      <ol>
+        <li>read some input,</li>
+        <li>perform some calculations,</li>
+        <li>use a loop or conditional,</li>
+        <li>print a result.</li>
+      </ol>
+      <p>The <code>GradeCalculator</code> behind the button is exactly that shape, and it works. Part IV rewrites the same problem as four methods plus a <code>main</code> that coordinates them.</p>
+    </div>
+  </details>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-grade-calculator-monolith" tabindex="0">The whole program inside <code>main</code></span>
+  </div>
+  <aside class="notes">
+    <p>During the first few weeks of the course, most of our programs were relatively small. A typical program might read some input, perform some calculations, use a loop or conditional, and print a result. The GradeCalculator in the modal is exactly that shape — and it works.</p>
+    <p>But imagine that the program grows to 500, 5,000, or 50,000 lines. Putting all of the logic inside main quickly becomes difficult to read, understand, debug, test, modify, and reuse.</p>
+    <p>Programming therefore relies heavily on decomposition: the process of breaking a large problem into smaller, manageable pieces. In Java, one of our primary tools for decomposition is the method.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>What Is a Method?</h2>
+  <div class="def"><span class="term">Method:</span> a named block of code that performs a particular task.</div>
+  <p class="small">You have already used methods. For example:</p>
+  <div class="cols-3">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("Hello");
+</code></pre>
+      <p class="small"><code>println</code> is a method.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+Math.sqrt(25);
+</code></pre>
+      <p class="small"><code>sqrt</code> is a method.</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+input.nextInt();
+</code></pre>
+      <p class="small"><code>nextInt</code> is a method.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Until now, we have mostly been <strong>calling methods written by other programmers</strong>. This week, we begin writing our own.</div>
+  <aside class="notes">
+    <p>A method is a named block of code that performs a particular task. Students have already used methods every week of this course without naming them as such.</p>
+    <p>System.out.println is a method. Math.sqrt is a method. input.nextInt is a method. Until now we have mostly been calling methods written by other programmers. This week, we begin writing our own.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Simple Method</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public class GreetingExample {
+
+    public static void printGreeting() {
+        System.out.println("Welcome to CSC500!");
+        System.out.println("Let's learn Java.");
+    }
+
+    public static void main(String[] args) {
+        printGreeting();
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The method is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printGreeting() {
+    System.out.println("Welcome to CSC500!");
+    System.out.println("Let's learn Java.");
+}
+</code></pre>
+      <p class="small">The method is called using:</p>
+<pre><code class="language-java" data-trim data-noescape>
+printGreeting();
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-greeting-example" tabindex="0">Definition, call, and what happens between them</span>
+  </div>
+  <aside class="notes">
+    <p>Consider this program. There are two methods in the class: printGreeting, which we wrote, and main, which Java calls to start the program.</p>
+    <p>Point at the two halves. The definition says what printGreeting does. The call — one line, a name and a pair of parentheses and a semicolon — says do it now.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Call and Return</h2>
+  <p class="small">When Java encounters the method call, it temporarily transfers execution to the method.</p>
+  <p class="small">After the method finishes, execution returns to the point <strong>immediately following</strong> the method call.</p>
+  <div class="chain">
+    <span><code>main</code></span><span class="sep">→</span>
+    <span>call</span><span class="sep">→</span>
+    <span><code>printGreeting</code></span><span class="sep">→</span>
+    <span>return</span><span class="sep">→</span>
+    <span><code>main</code>, next statement</span>
+  </div>
+  <details class="acc">
+    <summary>Where does the name come from?</summary>
+    <div class="acc-body">
+      <p>The method name identifies the method:</p>
+<pre><code class="language-java" data-trim data-noescape>
+printGreeting
+</code></pre>
+      <p>Calling it is a matter of writing that name followed by parentheses. Nothing else in the program needs to know what is inside the method — only its name.</p>
+    </div>
+  </details>
+  <div class="box note"><span class="box-title">Note</span>This is the whole mechanism. Every method call in the rest of the course — and the entire call stack in Part VI — is built on transfer-and-return.</div>
+  <aside class="notes">
+    <p>When Java encounters the method call, it temporarily transfers execution to the method. After the method finishes, execution returns to the point immediately following the method call.</p>
+    <p>Say "temporarily" slowly. The transfer is not a jump that forgets where it came from — Java remembers the return point, which is exactly what the call stack in Part VI is for.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Anatomy of a Method</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printGreeting() {
+    System.out.println("Hello!");
+}
+</code></pre>
+      <p class="small">The structure is:</p>
+<pre><code class="language-text" data-trim data-noescape>
+public static void methodName(parameters) {
+    statements
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">For now, we will concentrate on four pieces:</p>
+      <ul class="small">
+        <li>the <strong>method name</strong> — Part I,</li>
+        <li>the <strong>parameters</strong> — Part II,</li>
+        <li>the <strong>return type</strong> — Part III,</li>
+        <li>the <strong>statements</strong> in the body.</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>Treat <code>public static</code> as a required pattern for now, exactly as we did with <code>main</code> in Week 1.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Consider printGreeting again. The general structure is public static void methodName open paren parameters close paren, then a body of statements in braces.</p>
+    <p>For now, we will concentrate on four pieces: the name, the parameters, the return type, and the body. The words public and static are the same pattern students already copy for main; they get their real explanation when we reach classes and objects.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Method Names</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Java method names conventionally use <strong>camelCase</strong>. Examples:</p>
+<pre><code class="language-java" data-trim data-noescape>
+calculateAverage
+printMenu
+findMaximum
+convertTemperature
+isValidPassword
+</code></pre>
+      <p class="small">Good method names describe what the method does.</p>
+    </div>
+    <div>
+      <p class="small">Avoid vague names such as:</p>
+<pre><code class="language-java" data-trim data-noescape>
+doStuff
+thing
+process
+method1
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>A name that does not describe the task is a decomposition that has not really happened. If you cannot name it, you have not identified the responsibility.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Naming comes back twice more this week</summary>
+    <div class="acc-body">
+      <p>Part III adds the boolean convention — methods returning <code>boolean</code> often have names beginning with <code>is</code>, <code>has</code>, <code>can</code>, <code>contains</code>, or <code>should</code>. Part X adds the general rule that method names should generally be verbs or verb phrases, and the reason behind all of it:</p>
+      <blockquote>Code is read much more often than it is written. Names matter.</blockquote>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The method name identifies the method. Java method names conventionally use camelCase: calculateAverage, printMenu, findMaximum, convertTemperature, isValidPassword.</p>
+    <p>Good method names describe what the method does. Avoid vague names such as doStuff, thing, process, method1. We return to naming in detail in Part X.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>void</code> Methods</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Some methods perform an action but do not produce a value. These are called <strong>void methods</strong>.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printSeparator() {
+    System.out.println("--------------------");
+}
+</code></pre>
+      <p class="small">The word:</p>
+<pre><code class="language-java" data-trim data-noescape>
+void
+</code></pre>
+      <p class="small">means that the method does not return a value.</p>
+    </div>
+    <div>
+      <p class="small">We can call it several times:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args) {
+    printSeparator();
+    System.out.println("CSC500");
+    printSeparator();
+}
+</code></pre>
+      <p class="small">Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+--------------------
+CSC500
+--------------------
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Methods allow us to avoid repeating code.</div>
+  <aside class="notes">
+    <p>Some methods perform an action but do not produce a value. These are called void methods. The word void means that the method does not return a value.</p>
+    <p>Once printSeparator exists we can call it several times. The separator line is written once and used twice, and if the style of the separator ever changes there is exactly one place to edit. Methods allow us to avoid repeating code.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Methods Matter: Readability and Reuse</h2>
+  <h4>Readability — compare</h4>
+  <div class="cols">
+    <div>
+      <span class="tag neutral">Without methods</span>
+<pre><code class="language-java" data-trim data-noescape>
+double subtotal = price * quantity;
+double tax = subtotal * 0.06;
+double total = subtotal + tax;
+System.out.printf("%.2f%n", total);
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">With methods</span>
+<pre><code class="language-java" data-trim data-noescape>
+double total = calculateTotal(price, quantity);
+printTotal(total);
+</code></pre>
+      <p class="small">The second version expresses the <strong>intention</strong> of the program more clearly.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Reuse — write the calculation once</summary>
+    <div class="acc-body">
+      <p>Instead of writing the same calculation several times, we can write it once.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateTax(double amount) {
+    return amount * 0.06;
+}
+</code></pre>
+      <p>Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double tax1 = calculateTax(100);
+double tax2 = calculateTax(250);
+double tax3 = calculateTax(37.50);
+</code></pre>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Methods provide several important benefits. The first is readability. Compare four lines of arithmetic and formatting with two lines that name what is happening. The second version expresses the intention of the program more clearly.</p>
+    <p>The second benefit is reuse. Instead of writing the same calculation several times, we can write calculateTax once and call it with 100, 250, and 37.50. If the tax rate changes, it changes in one place.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Why Methods Matter: Testing and Debugging</h2>
+  <div class="cols">
+    <div>
+      <h4>Testing</h4>
+      <p class="small">It is easier to test a small method independently than to test an entire large program.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int number) {
+    return number * number;
+}
+</code></pre>
+      <p class="small">We can test:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(square(3));   // should be 9
+System.out.println(square(0));   // should be 0
+System.out.println(square(-4));  // should be 16
+</code></pre>
+    </div>
+    <div>
+      <h4>Debugging</h4>
+      <p class="small">If a program consists of well-designed methods, we can often identify which method contains an error.</p>
+      <p class="small">Instead of asking:</p>
+      <blockquote class="small">"Where is the bug in these 500 lines?"</blockquote>
+      <p class="small">we can ask:</p>
+      <blockquote class="small">"Is the bug in <code>readInput</code>, <code>calculateAverage</code>, or <code>determineGrade</code>?"</blockquote>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-why-methods" tabindex="0">All four benefits, in full</span>
+  </div>
+  <aside class="notes">
+    <p>The third benefit is testing. It is easier to test a small method independently than to test an entire large program. Three println calls with known answers are a complete test of square.</p>
+    <p>The fourth is debugging. If a program consists of well-designed methods, we can often identify which method contains an error. The question changes from "where is the bug in these 500 lines" to "is the bug in readInput, calculateAverage, or determineGrade" — a question with three candidate answers instead of five hundred.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART II ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part II</p>
+  <h2>Parameters and Arguments</h2>
+  <p class="part-sub">The same method can operate on different data.</p>
+</section>
+
+<section>
+  <h2>Parameters</h2>
+  <p class="small">Methods often need information from the caller. That information is passed using <strong>parameters</strong>.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void greet(String name) {
+    System.out.println("Hello, " + name + "!");
+}
+</code></pre>
+      <p class="small">Here:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String name
+</code></pre>
+      <p class="small">is a parameter.</p>
+    </div>
+    <div>
+      <p class="small">We can call the method:</p>
+<pre><code class="language-java" data-trim data-noescape>
+greet("Maria");
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+Hello, Maria!
+</code></pre>
+      <p class="small">Or:</p>
+<pre><code class="language-java" data-trim data-noescape>
+greet("James");
+</code></pre>
+<pre><code class="language-text" data-trim data-noescape>
+Hello, James!
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The same method can operate on different data.</div>
+  <details class="acc">
+    <summary>Where the parameter lives</summary>
+    <div class="acc-body">
+      <p>Parameters behave like local variables. The parameter <code>name</code> exists only during that invocation of <code>greet</code>; when the method finishes it is gone, and the next call creates a fresh one. Part V works this out in full with <code>square(5)</code> followed by <code>square(10)</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Methods often need information from the caller. That information is passed using parameters. In greet, String name is a parameter — a variable declared in the parentheses of the method definition.</p>
+    <p>Calling greet with "Maria" prints Hello, Maria! and calling it with "James" prints Hello, James!. One definition, two behaviours. The same method can operate on different data — which is what makes it worth naming in the first place.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Parameters vs. Arguments</h2>
+  <p class="small">The words <strong>parameter</strong> and <strong>argument</strong> are closely related but have different meanings.</p>
+  <div class="cols">
+    <div>
+      <h4>In the method definition</h4>
+<pre><code class="language-java" data-trim data-noescape>
+public static void greet(String name)
+</code></pre>
+      <p class="small"><code>name</code> is a <strong>parameter</strong>.</p>
+    </div>
+    <div>
+      <h4>In the method call</h4>
+<pre><code class="language-java" data-trim data-noescape>
+greet("Maria");
+</code></pre>
+      <p class="small"><code>"Maria"</code> is an <strong>argument</strong>.</p>
+    </div>
+  </div>
+  <blockquote>A parameter is a variable in the method definition.<br>
+  An argument is the value supplied when the method is called.</blockquote>
+  <aside class="notes">
+    <p>The words parameter and argument are closely related but have different meanings, and exam questions rely on the distinction.</p>
+    <p>A parameter is a variable in the method definition. An argument is the value supplied when the method is called. Definition side: parameter. Call side: argument. We return to this pair in the Key Distinctions slide in Part X.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Multiple Parameters</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Methods may have multiple parameters.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printRectangle(int width, int height) {
+    System.out.println("Width: " + width);
+    System.out.println("Height: " + height);
+}
+</code></pre>
+      <p class="small">Call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+printRectangle(10, 5);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The values correspond by position.</p>
+<pre><code class="language-text" data-trim data-noescape>
+width  receives 10
+height receives 5
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Order matters. Arguments are matched to parameters left to right, by position — not by name and not by intent.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Methods may have multiple parameters, separated by commas, each with its own type. printRectangle takes an int width and an int height.</p>
+    <p>When we call printRectangle with 10 and 5, the values correspond by position: width receives 10, height receives 5. Java does not read your mind and it does not read the parameter names at the call site. Order matters.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Order and Type Must Match</h2>
+  <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printPerson(String name, int age) {
+    System.out.println(name + " is " + age + " years old.");
+}
+</code></pre>
+  <div class="cols">
+    <div>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+printPerson("Aisha", 28);
+</code></pre>
+    </div>
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+printPerson(28, "Aisha");
+</code></pre>
+    </div>
+  </div>
+  <div class="box pitfall"><span class="box-title">Common error</span>The types and positions must match the method definition. Swapping the arguments here is a compile-time error, not a runtime surprise.</div>
+  <details class="acc">
+    <summary>Why the compiler catches this</summary>
+    <div class="acc-body">
+      <p>Java checks parameter types at compile time. This is one benefit of a statically typed language: passing an <code>int</code> where a <code>String</code> is declared is rejected before the program ever runs. We meet this again in Part VIII as the incorrect-argument-types error.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>printPerson declares a String followed by an int. Calling printPerson with "Aisha" then 28 is correct. Calling it with 28 then "Aisha" is incorrect.</p>
+    <p>The types and positions must match the method definition. Because Java is statically typed, the compiler rejects the second call — a benefit we return to in Part VIII.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART III ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part III</p>
+  <h2>Return Values</h2>
+  <p class="part-sub">Many methods calculate something and return the result.</p>
+</section>
+
+<section>
+  <h2>Methods That Return Values</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int number) {
+    return number * number;
+}
+</code></pre>
+      <p class="small">The method's return type is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int
+</code></pre>
+      <p class="small">That means the method <strong>promises</strong> to produce an integer.</p>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+square(5)
+</code></pre>
+      <p class="small">produces the value:</p>
+<pre><code class="language-text" data-trim data-noescape>
+25
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>Notice there is no <code>void</code> here. The return type replaces it, and the compiler will hold the method to that promise.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Many methods calculate something and return the result. The square method takes an int and returns an int.</p>
+    <p>The method's return type is int. That means the method promises to produce an integer. Calling square with 5 produces the value 25 — the call itself becomes a value in the expression where it appears.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Using a Returned Value</h2>
+  <div class="cols-3">
+    <div>
+      <h4>Store it</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int result = square(5);
+</code></pre>
+    </div>
+    <div>
+      <h4>Print it</h4>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(square(5));
+</code></pre>
+    </div>
+    <div>
+      <h4>Use it in an expression</h4>
+<pre><code class="language-java" data-trim data-noescape>
+int total = square(3) + square(4);
+</code></pre>
+    </div>
+  </div>
+  <p class="small">That last expression becomes:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+9 + 16
+</code></pre>
+    </div>
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+25
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>A call to a value-returning method <em>is</em> a value. Anywhere a value of that type is legal, the call is legal.</div>
+  <aside class="notes">
+    <p>We can store the returned value in a variable, print it directly, or use it inside a larger expression.</p>
+    <p>int total equals square(3) plus square(4) becomes 9 plus 16, and therefore 25. Java evaluates each call, replaces it with its returned value, and then finishes the arithmetic. That substitution model is the whole trick to tracing nested calls, which we do in Part VI.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Return Types</h2>
+  <p class="small">Every method declares what kind of value it returns.</p>
+  <table>
+    <thead><tr><th>Declaration</th><th>Returns</th></tr></thead>
+    <tbody>
+      <tr><td><code>public static int getAge()</code></td><td>an <code>int</code></td></tr>
+      <tr><td><code>public static double calculateAverage()</code></td><td>a <code>double</code></td></tr>
+      <tr><td><code>public static boolean isValid()</code></td><td>a <code>boolean</code></td></tr>
+      <tr><td><code>public static String getName()</code></td><td>a <code>String</code></td></tr>
+    </tbody>
+  </table>
+  <p class="small">A method that returns nothing uses:</p>
+<pre><code class="language-java" data-trim data-noescape>
+void
+</code></pre>
+  <details class="acc">
+    <summary>The return type is a promise the compiler enforces</summary>
+    <div class="acc-body">
+      <p>Two of the seven common errors in Part VIII are broken promises of exactly this kind: a method declared <code>int</code> that never executes a <code>return</code>, and a method declared <code>int</code> that attempts to return a <code>String</code>. The returned value must be compatible with the declared return type.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Every method declares what kind of value it returns, and the declaration sits immediately before the method name.</p>
+    <p>public static int getAge returns an int. public static double calculateAverage returns a double. public static boolean isValid returns a boolean. public static String getName returns a String. A method that returns nothing uses void.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The <code>return</code> Statement</h2>
+  <p class="small">The <code>return</code> statement ends the method and sends a value back to the caller.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateArea(double radius) {
+    double area = Math.PI * radius * radius;
+    return area;
+}
+</code></pre>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double result = calculateArea(5);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">causes the following sequence:</p>
+<pre><code class="language-text" data-trim data-noescape>
+radius = 5
+area = π × 5 × 5
+return area
+</code></pre>
+      <p class="small">The returned result is assigned to:</p>
+<pre><code class="language-java" data-trim data-noescape>
+result
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Returning an expression directly</summary>
+    <div class="acc-body">
+      <p>A temporary variable is not always necessary. Instead of:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateArea(double radius) {
+    double area = Math.PI * radius * radius;
+    return area;
+}
+</code></pre>
+      <p>we can write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateArea(double radius) {
+    return Math.PI * radius * radius;
+}
+</code></pre>
+      <p>Both are correct. Choose whichever is clearer.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>The return statement ends the method and sends a value back to the caller. Two things happen at once: the method stops, and a value travels back.</p>
+    <p>Calling calculateArea with 5 binds radius to 5, computes area as pi times 5 times 5, and returns area. The returned result is assigned to result in the caller.</p>
+    <p>A temporary variable is not always necessary — the accordion shows the same method written with the expression returned directly. Both are correct; choose whichever is clearer.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Maximum of Two Numbers</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int max(int a, int b) {
+    if (a &gt; b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+</code></pre>
+      <p class="small">Call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int larger = max(12, 7);
+</code></pre>
+      <p class="small">Result:</p>
+<pre><code class="language-text" data-trim data-noescape>
+12
+</code></pre>
+    </div>
+    <div>
+      <p class="small">We can also write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int max(int a, int b) {
+    if (a &gt; b) {
+        return a;
+    }
+
+    return b;
+}
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>Once Java executes a <code>return</code>, the method ends.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The max method returns whichever of its two parameters is larger. Calling max with 12 and 7 gives 12.</p>
+    <p>The second version drops the else. It is correct for the same reason the first one is: once Java executes a return, the method ends. If a is greater than b we never reach the last line at all. This pattern — an early return instead of an else — appears again in min, getLetterGrade, and absoluteValue later in the week.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Boolean Methods</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Methods returning <code>boolean</code> are especially useful.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isEven(int number) {
+    return number % 2 == 0;
+}
+</code></pre>
+      <p class="small">Usage:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (isEven(10)) {
+    System.out.println("The number is even.");
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Boolean methods often have names beginning with words such as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+is
+has
+can
+contains
+should
+</code></pre>
+      <p class="small">Examples:</p>
+<pre><code class="language-java" data-trim data-noescape>
+isValidAge()
+hasPermission()
+canRegister()
+containsValue()
+</code></pre>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>These names help make code read almost like English.</div>
+  <aside class="notes">
+    <p>Methods returning boolean are especially useful, because the call can go straight into an if condition. isEven returns the value of number modulo 2 equals equals 0 — a boolean expression, returned as a boolean.</p>
+    <p>Boolean methods often have names beginning with is, has, can, contains, or should: isValidAge, hasPermission, canRegister, containsValue. These names help make code read almost like English — "if is even of ten" reads as a sentence.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Eligibility Method</h2>
+  <p class="small">Suppose a student may register for a graduate course if the student:</p>
+  <ul class="small">
+    <li>has completed CSC500, and</li>
+    <li>has a GPA of at least 3.0.</li>
+  </ul>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean canRegister(boolean completedCSC500,
+                                  double gpa) {
+    return completedCSC500 &amp;&amp; gpa &gt;= 3.0;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+if (canRegister(true, 3.4)) {
+    System.out.println("Registration permitted.");
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Notice how the method name communicates the meaning of the condition.</div>
+  <aside class="notes">
+    <p>Suppose a student may register for a graduate course if the student has completed CSC500 and has a GPA of at least 3.0. The boolean expression for that rule is short, but it is not self-explanatory when it appears in the middle of a program.</p>
+    <p>canRegister wraps the expression in a name. Notice how the method name communicates the meaning of the condition — the if statement now says what the rule is for, not how it is computed. Part X calls this giving names to ideas.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Methods Calling Other Methods</h2>
+  <div class="cols-53">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateSubtotal(double price, int quantity) {
+    return price * quantity;
+}
+
+public static double calculateTax(double subtotal) {
+    return subtotal * 0.06;
+}
+
+public static double calculateTotal(double price, int quantity) {
+    double subtotal = calculateSubtotal(price, quantity);
+    double tax = calculateTax(subtotal);
+
+    return subtotal + tax;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Methods can call other methods.</p>
+      <div class="box key"><span class="box-title">Key idea</span>This is one of the most important ideas in software development: <strong>complex operations can be constructed from simpler operations</strong>.</div>
+      <details class="acc">
+        <summary>Which of these is the reusable one?</summary>
+        <div class="acc-body">
+          <p><code>calculateTax</code> is the method that already appeared in Part I's reuse example, called three times with 100, 250, and 37.50. Here it is called once, by another method, on a subtotal it did not compute. Neither caller needs to know the rate.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Methods can call other methods. calculateTotal does not compute anything itself — it calls calculateSubtotal, then calculateTax, then adds the two results.</p>
+    <p>This is one of the most important ideas in software development. Complex operations can be constructed from simpler operations. We meet the same idea again as nested method calls in Part IX and as abstraction at the end of that part.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IV ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IV</p>
+  <h2>Program Decomposition</h2>
+  <p class="part-sub">Rather than solving the entire problem at once, identify smaller tasks.</p>
+</section>
+
+<section>
+  <h2>Identifying Smaller Tasks</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose we are asked to write a program that:</p>
+      <ol class="small">
+        <li>reads three exam scores,</li>
+        <li>calculates their average,</li>
+        <li>determines the letter grade,</li>
+        <li>prints the result.</li>
+      </ol>
+      <p class="small">A beginning programmer might put everything inside <code>main</code>. Instead, we can identify smaller tasks.</p>
+    </div>
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+main
+ |
+ +-- readScore
+ |
+ +-- calculateAverage
+ |
+ +-- determineGrade
+ |
+ +-- printResult
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Now each method performs one focused task.</div>
+  <aside class="notes">
+    <p>Suppose we are asked to write a program that reads three exam scores, calculates their average, determines the letter grade, and prints the result. A beginning programmer might put everything inside main — which is exactly the GradeCalculator we opened the week with.</p>
+    <p>Instead, we can identify smaller tasks. The four verbs in the problem statement — read, calculate, determine, print — become four methods. Now each method performs one focused task.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example of Decomposition</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Four focused methods, each named for its responsibility:</p>
+      <ul class="small">
+        <li><code>readScore(Scanner, String)</code> — prompts and reads one score</li>
+        <li><code>calculateAverage(double, double, double)</code> — pure arithmetic</li>
+        <li><code>determineGrade(double)</code> — returns a <code>char</code></li>
+        <li><code>printResult(double, char)</code> — formatting only</li>
+      </ul>
+      <div class="box note"><span class="box-title">Note</span>Only <code>readScore</code> touches the <code>Scanner</code>; only <code>printResult</code> touches the console.</div>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static char determineGrade(double average) {
+    if (average &gt;= 90) {
+        return 'A';
+    } else if (average &gt;= 80) {
+        return 'B';
+    } else if (average &gt;= 70) {
+        return 'C';
+    } else if (average &gt;= 60) {
+        return 'D';
+    } else {
+        return 'F';
+    }
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-grade-program" tabindex="0">The complete <code>GradeProgram</code></span>
+  </div>
+  <aside class="notes">
+    <p>Here is the same grading problem written as four methods plus a main that coordinates them. determineGrade is shown on the slide because it is the piece that carries the actual business rule; the modal has the whole file.</p>
+    <p>Notice the division of labour: only readScore knows about the Scanner, and only printResult knows about printf. calculateAverage and determineGrade are pure calculations, which is why they would be the easiest two methods to test.</p>
+  </aside>
+</section>
+
+<section>
+  <h2><code>main</code> Reads Like the Algorithm</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+double exam1 =
+        readScore(input, "Enter exam 1: ");
+
+double average =
+        calculateAverage(exam1, exam2, exam3);
+
+char grade =
+        determineGrade(average);
+
+printResult(average, grade);
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Notice that <code>main</code> now describes the overall algorithm. It is almost readable as:</p>
+<pre><code class="language-text" data-trim data-noescape>
+read the scores
+calculate the average
+determine the grade
+print the result
+</code></pre>
+      <div class="box good"><span class="box-title">Do this</span>This is good program design.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This is the body of main, lightly abridged. Notice that main now describes the overall algorithm rather than performing it.</p>
+    <p>It is almost readable as English: read the scores, calculate the average, determine the grade, print the result. A reader who wants the summary stops at main; a reader who wants the detail opens one method. This is good program design.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Role of <code>main</code></h2>
+  <div class="cols">
+    <div>
+      <p class="small">At this stage of the course, students often think:</p>
+      <blockquote class="small">Everything happens inside <code>main</code>.</blockquote>
+      <p class="small">A better mental model is:</p>
+      <blockquote class="small"><code>main</code> coordinates the program.</blockquote>
+      <p class="small">Ideally, <code>main</code> should often describe the high-level workflow while other methods perform the details.</p>
+    </div>
+    <div>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args) {
+    displayWelcomeMessage();
+    getUserInput();
+    performCalculations();
+    displayResults();
+}
+</code></pre>
+      <div class="box warn"><span class="box-title">Watch out</span>Large blocks of unrelated logic inside <code>main</code> are usually a sign that decomposition would help.</div>
+      <details class="acc">
+        <summary>"The exact design depends on the application"</summary>
+        <div class="acc-body">
+          <p>This is not a rule that <code>main</code> must be four lines long. Some programs genuinely need a little logic there. The test is the one from Part VII: does each piece have one clear purpose, and could you describe <code>main</code> in a single sentence without using the word "and" five times?</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>At this stage of the course, students often think everything happens inside main. A better mental model is that main coordinates the program.</p>
+    <p>Ideally, main should often describe the high-level workflow while other methods perform the details. The four-line main shown here is an extreme version of that idea, and it is perfectly legitimate.</p>
+    <p>The exact design depends on the application, but large blocks of unrelated logic inside main are usually a sign that decomposition would help.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART V ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part V</p>
+  <h2>Scope and Local Variables</h2>
+  <p class="part-sub">A variable is not necessarily accessible everywhere in a program.</p>
+</section>
+
+<section>
+  <h2>Variable Scope</h2>
+  <div class="def"><span class="term">Scope:</span> the region in which a variable exists.</div>
+  <div class="cols">
+    <div>
+      <span class="tag ok">Fine</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printNumber() {
+    int number = 10;
+
+    System.out.println(number);
+}
+</code></pre>
+      <p class="small">The variable <code>number</code> exists only inside <code>printNumber</code>.</p>
+    </div>
+    <div>
+      <span class="tag no">Would not work</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args) {
+    printNumber();
+
+    System.out.println(number);
+}
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>Java would produce a compilation error because <code>number</code> does not exist inside <code>main</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A variable is not necessarily accessible everywhere in a program. The region in which a variable exists is called its scope.</p>
+    <p>The variable number exists only inside printNumber. Calling printNumber from main runs fine, but the second statement in main does not compile: Java would produce a compilation error because number does not exist inside main.</p>
+    <p>This is not a rule Java invented to be difficult. It is what makes methods independent — Part I's promise that you can debug one method at a time only holds if its variables cannot be disturbed from outside.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Local Variables</h2>
+  <p class="small">Variables declared inside a method are called <strong>local variables</strong>.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateArea(double radius) {
+    double area = Math.PI * radius * radius;
+    return area;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Both:</p>
+<pre><code class="language-java" data-trim data-noescape>
+radius
+</code></pre>
+      <p class="small">and:</p>
+<pre><code class="language-java" data-trim data-noescape>
+area
+</code></pre>
+      <p class="small">are local to this particular invocation of <code>calculateArea</code>.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Other methods cannot directly access them.</div>
+  <aside class="notes">
+    <p>Variables declared inside a method are called local variables. In calculateArea, both radius and area are local to this particular invocation of calculateArea.</p>
+    <p>Stress the phrase "this particular invocation". It is not merely that the variables belong to the method — they belong to one run of the method. That distinction becomes concrete in the next two slides and again when we study recursion.</p>
+    <p>Other methods cannot directly access them. The only channels between methods are parameters going in and a return value coming out.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Different Methods Can Use the Same Variable Name</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Because local variables belong to different scopes, this is legal:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void methodA() {
+    int x = 10;
+    System.out.println(x);
+}
+
+public static void methodB() {
+    int x = 20;
+    System.out.println(x);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+methodA();
+methodB();
+</code></pre>
+      <p class="small">prints:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+20
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The two variables named <code>x</code> are completely separate variables.</div>
+      <details class="acc">
+        <summary>Where the separation actually happens</summary>
+        <div class="acc-body">
+          <p>Each invocation gets its own frame on the call stack, and that frame holds the invocation's local variables. Part VI draws the stack. Tracing Exercise 3 in Part X turns this same fact into a question with a surprising answer.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Because local variables belong to different scopes, two methods may each declare a variable named x, and this is entirely legal.</p>
+    <p>Calling methodA then methodB prints 10 and then 20. The two variables named x are completely separate variables that happen to share a spelling. Neither can see or affect the other.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Parameters Are Local Variables</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Parameters behave like local variables.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int number) {
+    return number * number;
+}
+</code></pre>
+      <p class="small">The parameter:</p>
+<pre><code class="language-java" data-trim data-noescape>
+number
+</code></pre>
+      <p class="small">exists only during that invocation of <code>square</code>.</p>
+    </div>
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+square(5);
+square(10);
+</code></pre>
+      <p class="small">Conceptually, Java creates a different <code>number</code> for each call.</p>
+      <div class="cols">
+        <div>
+          <p class="small">First call:</p>
+<pre><code class="language-text" data-trim data-noescape>
+number = 5
+</code></pre>
+        </div>
+        <div>
+          <p class="small">Second call:</p>
+<pre><code class="language-text" data-trim data-noescape>
+number = 10
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Parameters behave like local variables. The parameter number exists only during that invocation of square.</p>
+    <p>Consider two calls in a row, square of 5 and square of 10. Conceptually, Java creates a different number for each call: in the first call number is 5, in the second call number is 10. The first invocation's number is gone before the second one begins.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Java Passes Primitive Values to Methods</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void changeNumber(int number) {
+    number = 100;
+}
+
+public static void main(String[] args) {
+    int x = 5;
+
+    changeNumber(x);
+
+    System.out.println(x);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">What prints?</p>
+<pre><code class="language-text" data-trim data-noescape>
+5
+</code></pre>
+      <p class="small">Not:</p>
+<pre><code class="language-text" data-trim data-noescape>
+100
+</code></pre>
+      <div class="box key"><span class="box-title">Why</span>The method receives a <strong>copy</strong> of the value stored in <code>x</code>.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-pass-by-value" tabindex="0">The copy, drawn out</span>
+  </div>
+  <aside class="notes">
+    <p>Ask the room before revealing the answer. Most students predict 100, because the method is called changeNumber and it plainly assigns 100.</p>
+    <p>It prints 5, not 100. The method receives a copy of the value stored in x. Assigning to number changes the local variable number; it does not change x.</p>
+    <p>We will revisit Java's parameter passing more deeply when we study objects and references. For now the rule for primitives is simply: the value is copied in, and nothing travels back except the return value.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VI ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VI</p>
+  <h2>Execution Flow and the Call Stack</h2>
+  <p class="part-sub">Java must remember where to return after a method finishes.</p>
+</section>
+
+<section>
+  <h2>Execution Flow</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void methodA() {
+    System.out.println("A1");
+    methodB();
+    System.out.println("A2");
+}
+
+public static void methodB() {
+    System.out.println("B");
+}
+
+public static void main(String[] args) {
+    System.out.println("Start");
+    methodA();
+    System.out.println("End");
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">What is printed?</p>
+      <p class="small">Trace carefully.</p>
+      <div class="box note"><span class="box-title">Note</span>Do not read the methods top to bottom. Read them in <em>execution</em> order, starting at <code>main</code>.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m4-execution-flow" tabindex="0">Step by step</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Three methods: main, methodA, and methodB. main calls methodA, and methodA calls methodB in the middle of its own work.</p>
+    <p>Ask the class what is printed, and insist they trace carefully before answering. The common wrong answer reads the file top to bottom and produces A1, A2, B, Start, End. Source order is not execution order.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing the Output</h2>
+  <div class="cols">
+    <div>
+      <ol class="small">
+        <li>First: <code>Start</code></li>
+        <li>Then <code>methodA</code> begins: <code>A1</code></li>
+        <li>Then <code>methodA</code> calls <code>methodB</code>: <code>B</code></li>
+        <li><code>methodB</code> finishes. Execution returns to <code>methodA</code>: <code>A2</code></li>
+        <li><code>methodA</code> finishes. Execution returns to <code>main</code>: <code>End</code></li>
+      </ol>
+    </div>
+    <div>
+      <p class="small">Complete output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Start
+A1
+B
+A2
+End
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span><code>A2</code> is printed <em>after</em> <code>B</code>, because <code>methodA</code> was suspended, not abandoned, while <code>methodB</code> ran.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>First Start. Then methodA begins and prints A1. Then methodA calls methodB, which prints B. methodB finishes and execution returns to methodA, which prints A2. methodA finishes and execution returns to main, which prints End.</p>
+    <p>The line that teaches the most is A2. It proves methodA was suspended in the middle and resumed exactly where it left off. That resumption point is what the call stack stores.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>The Call Stack</h2>
+  <p class="small">Java must remember where to return after a method finishes. It does this using a structure called the <strong>call stack</strong>.</p>
+  <div class="cols">
+    <div>
+      <p class="small">Consider:</p>
+<pre><code class="language-text" data-trim data-noescape>
+main calls methodA
+methodA calls methodB
+methodB calls methodC
+</code></pre>
+    </div>
+    <div>
+      <p class="small">At the deepest point, we can visualize the stack as:</p>
+<pre><code class="language-text" data-trim data-noescape>
++-----------+
+| methodC   |
++-----------+
+| methodB   |
++-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Java must remember where to return after a method finishes. It does this using a structure called the call stack.</p>
+    <p>Suppose main calls methodA, methodA calls methodB, and methodB calls methodC. At the deepest point the stack holds four frames, with main at the bottom and methodC on top. Each frame also holds that invocation's local variables — which is the mechanism behind "a different number for each call" from Part V.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Unwinding the Stack</h2>
+  <div class="cols-3">
+    <div>
+      <h4>When <code>methodC</code> finishes</h4>
+<pre><code class="language-text" data-trim data-noescape>
++-----------+
+| methodB   |
++-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+
+</code></pre>
+    </div>
+    <div>
+      <h4>Then <code>methodB</code> finishes</h4>
+<pre><code class="language-text" data-trim data-noescape>
++-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+
+</code></pre>
+    </div>
+    <div>
+      <h4>And then</h4>
+      <p class="small">Eventually execution returns to <code>main</code>.</p>
+      <div class="box note"><span class="box-title">Looking ahead</span>The stack becomes especially important when we study <strong>recursion</strong> later in the course.</div>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-call-stack" tabindex="0">The stack, frame by frame</span>
+  </div>
+  <aside class="notes">
+    <p>When methodC finishes, its frame is removed and methodB is on top again. Then methodB finishes and methodA is on top. Eventually execution returns to main.</p>
+    <p>Frames are removed in the opposite order from which they were added — last in, first out. That is what makes it a stack, and it is exactly the structure we formalise in Week 13.</p>
+    <p>The stack becomes especially important when we study recursion later in the course, where the same method appears in many frames at once.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Method Call Tracing Example</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int doubleNumber(int x) {
+    return x * 2;
+}
+
+public static int addFive(int x) {
+    return x + 5;
+}
+
+public static void main(String[] args) {
+    int result = addFive(doubleNumber(4));
+
+    System.out.println(result);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Evaluate from the inside outward. First:</p>
+<pre><code class="language-java" data-trim data-noescape>
+doubleNumber(4)
+</code></pre>
+      <p class="small">returns <code>8</code>. The expression becomes:</p>
+<pre><code class="language-java" data-trim data-noescape>
+addFive(8)
+</code></pre>
+      <p class="small">which returns <code>13</code>. Therefore:</p>
+<pre><code class="language-java" data-trim data-noescape>
+result = 13;
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>The intermediate values, written out</summary>
+    <div class="acc-body">
+      <p>First <code>doubleNumber(4)</code> returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+8
+</code></pre>
+      <p>Then <code>addFive(8)</code> returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+13
+</code></pre>
+      <p>Note that both methods declare a parameter named <code>x</code>, and <code>main</code> never has an <code>x</code> at all. Three separate scopes, no interference — exactly the rule from Part V.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Evaluate from the inside outward. Java cannot call addFive until it knows what to pass it, so doubleNumber(4) runs first and returns 8.</p>
+    <p>The expression becomes addFive of 8, which returns 13. Therefore result equals 13. This inside-out rule is the same one students already use for arithmetic parentheses; a method call is just another sub-expression.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VII</p>
+  <h2>Designing Good Methods</h2>
+  <p class="part-sub">One method, one responsibility.</p>
+</section>
+
+<section>
+  <h2>One Method, One Responsibility</h2>
+  <p class="small">A method should usually perform <strong>one clear conceptual task</strong>.</p>
+  <div class="cols">
+    <div>
+      <span class="tag ok">Good examples</span>
+<pre><code class="language-java" data-trim data-noescape>
+calculateAverage()
+findMaximum()
+printMenu()
+readScore()
+isValidPassword()
+convertMilesToKilometers()
+</code></pre>
+    </div>
+    <div>
+      <span class="tag no">Less desirable</span>
+<pre><code class="language-java" data-trim data-noescape>
+readInputCalculateAverageDetermineGradeAndPrintResult()
+</code></pre>
+      <p class="small">That method is doing too many unrelated tasks.</p>
+    </div>
+  </div>
+  <blockquote>One method, one responsibility.</blockquote>
+  <p class="small dim">This principle becomes increasingly important as programs become larger.</p>
+  <aside class="notes">
+    <p>A method should usually perform one clear conceptual task. The good examples all name a single operation, and each name is short because there is only one thing to say.</p>
+    <p>The long name is not bad because it is long. It is bad because the "And" in the middle is a confession — the method is doing too many unrelated tasks, and the name had to grow to keep up.</p>
+    <p>A useful principle is: one method, one responsibility. This becomes increasingly important as programs become larger.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>How Large Should a Method Be?</h2>
+  <div class="cols">
+    <div>
+      <p class="small">There is no universal maximum number of lines. Instead, ask:</p>
+      <blockquote class="small">Does the method have one clear purpose?</blockquote>
+      <p class="small">If yes, the size may be appropriate. If you find yourself describing the method as:</p>
+      <blockquote class="small">"This method reads data, calculates totals, checks eligibility, prints the results, and saves a file..."</blockquote>
+      <p class="small">the method probably has too many responsibilities.</p>
+    </div>
+    <div>
+      <p class="small">Another useful clue is comments such as:</p>
+<pre><code class="language-java" data-trim data-noescape>
+// read data
+
+...
+
+// calculate totals
+
+...
+
+// determine grade
+
+...
+
+// print result
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Each comment may indicate an opportunity to create a separate method.</div>
+  <aside class="notes">
+    <p>There is no universal maximum number of lines, and any number a textbook gives you is arbitrary. Instead, ask: does the method have one clear purpose? If yes, the size may be appropriate.</p>
+    <p>If you find yourself describing the method as "this method reads data, calculates totals, checks eligibility, prints the results, and saves a file", the method probably has too many responsibilities.</p>
+    <p>Another useful clue is section comments inside the body. Each comment may indicate an opportunity to create a separate method — the comment already supplies the name.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Top-Down Design</h2>
+  <div class="cols-38">
+    <div>
+      <p class="small">One useful design strategy is called <strong>top-down design</strong>. Start with the high-level problem.</p>
+      <p class="small">Suppose we need to create an ATM simulation. At the highest level:</p>
+<pre><code class="language-text" data-trim data-noescape>
+runATM
+</code></pre>
+      <p class="small">Break that into:</p>
+<pre><code class="language-text" data-trim data-noescape>
+displayMenu
+readChoice
+processChoice
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Then <code>processChoice</code> may break into:</p>
+<pre><code class="language-text" data-trim data-noescape>
+deposit
+withdraw
+checkBalance
+</code></pre>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m4-top-down-atm" tabindex="0">The full hierarchy</span>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Rather than solving the entire problem at once, we repeatedly divide it into smaller problems.</div>
+  <details class="acc">
+    <summary>Compare with the grading tree from Part IV</summary>
+    <div class="acc-body">
+      <p>The grading problem produced a flat tree: <code>readScore</code>, <code>calculateAverage</code>, <code>determineGrade</code>, and <code>printResult</code> are all siblings under <code>main</code>. The ATM tree has a second level, because <code>processChoice</code> is itself a problem worth decomposing. Depth appears where a subproblem is still too big to write directly.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>One useful design strategy is called top-down design. Start with the high-level problem, not with code.</p>
+    <p>Suppose we need to create an ATM simulation. At the highest level there is one operation, runATM. Break that into displayMenu, readChoice, and processChoice. Then processChoice may break further into deposit, withdraw, and checkBalance.</p>
+    <p>Rather than solving the entire problem at once, we repeatedly divide it into smaller problems. Each level is a design decision that you can review before writing a single line of Java.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Temperature Conversion</h2>
+  <p class="small">Create a program that converts Fahrenheit temperatures to Celsius. Formula:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+C = (F - 32) × 5/9
+</code></pre>
+      <p class="small">We can separate calculation from user interaction.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double fahrenheitToCelsius(double fahrenheit) {
+    return (fahrenheit - 32) * 5.0 / 9.0;
+}
+</code></pre>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+
+    System.out.print("Enter temperature in Fahrenheit: ");
+    double fahrenheit = input.nextDouble();
+
+    double celsius =
+            fahrenheitToCelsius(fahrenheit);
+
+    System.out.printf("%.2f F = %.2f C%n",
+                      fahrenheit,
+                      celsius);
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-temperature" tabindex="0">Why the separation pays</span>
+  </div>
+  <aside class="notes">
+    <p>The problem is to convert Fahrenheit to Celsius, using the formula C equals F minus 32, times 5 over 9. Note the 5.0 and 9.0 in the Java version — integer division would destroy this calculation, as Week 1 warned.</p>
+    <p>We can separate calculation from user interaction. fahrenheitToCelsius does the arithmetic; main does the prompting, reading, and formatting.</p>
+    <p>This separation provides an important benefit: the conversion method does not know anything about keyboards, scanners, or printing. It simply performs a calculation. That makes the method easier to reuse and test.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Pure Calculation Methods</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When possible, calculation methods should receive the information they need as parameters and return their result.</p>
+      <span class="tag ok">Prefer</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateBMI(double weight,
+                                  double height) {
+    return weight / (height * height);
+}
+</code></pre>
+      <p class="small">instead of having the method directly ask the user for input.</p>
+    </div>
+    <div>
+      <p class="small">Why? Because the first version can be reused in:</p>
+      <ul class="small">
+        <li>a console application,</li>
+        <li>a web application,</li>
+        <li>a mobile application,</li>
+        <li>automated tests,</li>
+        <li>another Java program.</li>
+      </ul>
+      <div class="box good"><span class="box-title">Do this</span>The calculation itself is independent of how input is collected. This separation is an early example of good software design.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>When possible, calculation methods should receive the information they need as parameters and return their result, instead of having the method directly ask the user for input.</p>
+    <p>Why? Because the first version can be reused in a console application, a web application, a mobile application, automated tests, or another Java program. A version that calls nextDouble internally works in exactly one of those five places.</p>
+    <p>The calculation itself is independent of how input is collected. This separation is an early example of good software design, and it is the reason the same calculateBMI method reappears unchanged in the end-of-week program.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example: Input Validation Method</h2>
+  <div class="cols">
+    <div>
+      <p class="small">We can move validation logic into its own method.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isValidScore(double score) {
+    return score &gt;= 0 &amp;&amp; score &lt;= 100;
+}
+</code></pre>
+      <p class="small">Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double score = input.nextDouble();
+
+if (isValidScore(score)) {
+    System.out.println("Valid score.");
+} else {
+    System.out.println("Invalid score.");
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This is more readable than repeatedly writing:</p>
+<pre><code class="language-java" data-trim data-noescape>
+score &gt;= 0 &amp;&amp; score &lt;= 100
+</code></pre>
+      <p class="small">throughout the program.</p>
+      <div class="box key"><span class="box-title">Key idea</span>If the valid range ever changes, there is exactly one line to edit.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>We can move validation logic into its own method. isValidScore returns whether the score is at least 0 and at most 100.</p>
+    <p>The if statement then reads as a question about validity rather than as a compound comparison. This is more readable than repeatedly writing score greater-or-equal 0 and score less-or-equal 100 throughout the program.</p>
+    <p>It is also the reuse benefit from Part I in its smallest possible form: one rule, one place.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Method Signatures</h2>
+  <p class="small">Consider:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateArea(double radius)
+</code></pre>
+  <div class="cols">
+    <div>
+      <p class="small">The method has:</p>
+      <ul class="small">
+        <li>a name: <code>calculateArea</code></li>
+        <li>a parameter list: <code>(double radius)</code></li>
+        <li>a return type: <code>double</code></li>
+      </ul>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Methods are distinguished in part by their names and parameter types.</div>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>What the caller can see</summary>
+    <div class="acc-body">
+      <p>The signature is the part of a method that other code depends on: the name to call, the arguments to supply, and the type of the value that comes back. The body can be rewritten freely as long as the signature and the behaviour hold — which is the point of the method contracts we look at in Part IX.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Consider the declaration line of calculateArea. The method has a name, calculateArea; a parameter list, open paren double radius close paren; and a return type, double.</p>
+    <p>Methods are distinguished in part by their names and parameter types. That fact is what makes the next slide possible.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Method Overloading</h2>
+  <p class="small">For example, Java can support:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int max(int a, int b)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">and:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double max(double a, double b)
+</code></pre>
+    </div>
+  </div>
+  <div class="def"><span class="term">Method overloading:</span> methods may share a name if their parameter lists differ.</div>
+  <p class="small">We will only use it lightly for now, but students should recognize that methods may share a name if their parameter lists differ.</p>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-signatures-overloading" tabindex="0">Signatures and overloading together</span>
+  </div>
+  <aside class="notes">
+    <p>Java can support both an int version and a double version of max in the same class. This concept is called method overloading.</p>
+    <p>Students have already been using it: System.out.println accepts an int, a double, a String, and a boolean, and those are different methods sharing one name.</p>
+    <p>We will only use it lightly for now, but students should recognize that methods may share a name if their parameter lists differ.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART VIII ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part VIII</p>
+  <h2>Common Errors with Methods</h2>
+  <p class="part-sub">Seven mistakes that account for most of the compiler errors this week.</p>
+</section>
+
+<section>
+  <h2>Forgetting to Return a Value</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int number) {
+    int result = number * number;
+}
+</code></pre>
+      <p class="small">Java expects the method to return an <code>int</code>. The method promises:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int
+</code></pre>
+      <p class="small">but never returns one.</p>
+    </div>
+    <div>
+      <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int number) {
+    int result = number * number;
+    return result;
+}
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>Computing the answer is not the same as sending it back. The value must leave the method through <code>return</code>.</div>
+      <details class="acc">
+        <summary>Or return the expression directly</summary>
+        <div class="acc-body">
+          <p>A temporary variable is not always necessary, as Part III showed with <code>calculateArea</code>. Either of these compiles:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int number) {
+    return number * number;
+}
+</code></pre>
+          <p>Both are correct. Choose whichever is clearer.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The incorrect version computes the right number and then throws it away. Java expects the method to return an int; the method promises int but never returns one, so it does not compile.</p>
+    <p>The fix is one line. Emphasise that the error message students will see mentions a missing return statement — the compiler is unusually clear about this one.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Returning the Wrong Type</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static int getAverage(int a, int b) {
+    return "hello";
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">The method promises an:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int
+</code></pre>
+      <p class="small">but attempts to return a:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The returned value must be compatible with the declared return type.</div>
+  <aside class="notes">
+    <p>The method promises an int but attempts to return a String. The returned value must be compatible with the declared return type.</p>
+    <p>In real code this rarely looks as obvious as returning "hello" from an int method. It usually appears as returning a double from an int method, or forgetting that division of two ints produced an int — but the compiler message is the same family.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Using a <code>void</code> Method as a Value</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void printHello() {
+    System.out.println("Hello");
+}
+</code></pre>
+      <p class="small">This is incorrect:</p>
+<pre><code class="language-java" data-trim data-noescape>
+String x = printHello();
+</code></pre>
+    </div>
+    <div>
+      <p class="small"><code>printHello</code> does not produce a value. Its return type is:</p>
+<pre><code class="language-java" data-trim data-noescape>
+void
+</code></pre>
+      <div class="box pitfall"><span class="box-title">Common error</span>Printing something is not the same as producing something. A <code>void</code> method leaves nothing behind for the caller to assign.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>printHello displays text and returns nothing. Assigning its result to a String is incorrect because there is no result to assign.</p>
+    <p>Students confuse "I saw output on the screen" with "the method gave me a value". The screen is a side effect; the return value is the channel back to the caller. That confusion is exactly the subject of the next slide.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Printing Instead of Returning</h2>
+  <p class="small">Beginning programmers frequently confuse <code>System.out.println(...)</code> with <code>return</code>. These are very different operations.</p>
+  <div class="cols">
+    <div>
+      <span class="tag no">Displays, but cannot be used</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void square(int number) {
+    System.out.println(number * number);
+}
+</code></pre>
+      <p class="small">This displays the square, but the caller cannot use the result. For example, we cannot meaningfully write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int result = square(5);
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">Returns, so the caller decides</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int number) {
+    return number * number;
+}
+</code></pre>
+      <p class="small">Now the caller decides what to do with the value.</p>
+<pre><code class="language-java" data-trim data-noescape>
+int result = square(5);
+System.out.println(result);
+</code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Beginning programmers frequently confuse System.out.println with return. These are very different operations: one sends text to the console, the other sends data back to the caller.</p>
+    <p>The void version displays the square, but the caller cannot use the result — we cannot meaningfully write int result equals square of 5.</p>
+    <p>The returning version prints nothing at all, and that is a feature. Now the caller decides what to do with the value: print it, store it, or feed it into another calculation.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Return, Then Decide</h2>
+  <blockquote>If a method computes a value that other code may need, returning the value is usually more flexible than printing it directly.</blockquote>
+  <div class="cols">
+    <div>
+      <h4><code>return</code></h4>
+<pre><code class="language-java" data-trim data-noescape>
+return result;
+</code></pre>
+      <p class="small">sends data back to the caller.</p>
+    </div>
+    <div>
+      <h4><code>println</code></h4>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(result);
+</code></pre>
+      <p class="small">sends text to the console.</p>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Why "usually" and not "always"</summary>
+    <div class="acc-body">
+      <p>Some methods exist precisely in order to print — <code>printMenu</code>, <code>printReceipt</code>, <code>printResult</code>, <code>displayPayment</code>. Their whole responsibility is output, and their names say so. The design principle is about <em>calculation</em> methods: a method that works out an answer should hand the answer back, because only the caller knows whether the answer should be printed, stored, compared, or formatted.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>As a design principle: if a method computes a value that other code may need, returning the value is usually more flexible than printing it directly.</p>
+    <p>return sends data back to the caller. println sends text to the console. These are the two different destinations, and choosing between them is a design decision, not a syntax detail.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Incorrect Argument Count and Types</h2>
+  <div class="cols">
+    <div>
+      <h4>Count</h4>
+<pre><code class="language-java" data-trim data-noescape>
+public static int add(int a, int b) {
+    return a + b;
+}
+</code></pre>
+      <div class="cols">
+        <div>
+          <span class="tag ok">Correct</span>
+<pre><code class="language-java" data-trim data-noescape>
+add(5, 7);
+</code></pre>
+        </div>
+        <div>
+          <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+add(5);
+</code></pre>
+<pre><code class="language-java" data-trim data-noescape>
+add(5, 7, 10);
+</code></pre>
+        </div>
+      </div>
+      <p class="small">The number of arguments must match the parameters.</p>
+    </div>
+    <div>
+      <h4>Types</h4>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateTax(double amount) {
+    return amount * 0.06;
+}
+</code></pre>
+      <div class="cols">
+        <div>
+          <span class="tag ok">Reasonable</span>
+<pre><code class="language-java" data-trim data-noescape>
+calculateTax(100.0);
+</code></pre>
+        </div>
+        <div>
+          <span class="tag no">Not</span>
+<pre><code class="language-java" data-trim data-noescape>
+calculateTax("one hundred");
+</code></pre>
+        </div>
+      </div>
+      <p class="small">Java checks parameter types at compile time. This is one benefit of a statically typed language.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>add declares two parameters, so it must be called with exactly two arguments. Calling it with one or with three is an error — the number of arguments must match the parameters.</p>
+    <p>calculateTax declares a double. Passing 100.0 is reasonable; passing the String "one hundred" is not. Java checks parameter types at compile time, and this is one benefit of a statically typed language: the mistake is caught before the program ever runs.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Scope Confusion</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Incorrect</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void calculate() {
+    int result = 25;
+}
+
+public static void main(String[] args) {
+    calculate();
+
+    System.out.println(result);
+}
+</code></pre>
+      <p class="small"><code>result</code> belongs to <code>calculate</code>, not to <code>main</code>.</p>
+    </div>
+    <div>
+      <span class="tag ok">One solution is to return the value</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static int calculate() {
+    return 25;
+}
+
+public static void main(String[] args) {
+    int result = calculate();
+
+    System.out.println(result);
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-error-catalogue" tabindex="0">All seven errors, side by side</span>
+  </div>
+  <aside class="notes">
+    <p>This is Part V's scope rule showing up as a compiler error. result belongs to calculate, not to main, so main cannot print it.</p>
+    <p>One solution is to return the value. Notice what changed: calculate stopped being void and became an int method, and main declared its own local result to receive the returned value. Two variables named result, in two scopes, connected by a return.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART IX ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part IX</p>
+  <h2>Worked Examples and Design in Practice</h2>
+  <p class="part-sub">Complex operations, constructed from simpler operations.</p>
+</section>
+
+<section>
+  <h2>Worked Example: Loan Payment</h2>
+  <p class="small">Suppose we want to calculate a simple monthly payment. For this example, assume:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-text" data-trim data-noescape>
+monthly payment = loan amount / number of months
+</code></pre>
+      <p class="small">We could write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateMonthlyPayment(
+        double loanAmount,
+        int months) {
+
+    return loanAmount / months;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Then:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static void displayPayment(double payment) {
+    System.out.printf("Monthly payment: $%.2f%n",
+                      payment);
+}
+</code></pre>
+      <div class="box note"><span class="box-title">Note</span>One method calculates and returns. The other formats and prints. Neither does both.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Suppose we want to calculate a simple monthly payment. For this example, assume monthly payment equals loan amount divided by number of months — a deliberate simplification; real amortisation comes later.</p>
+    <p>calculateMonthlyPayment takes a double and an int and returns a double. displayPayment takes the payment and prints it with two decimal places. The split between them is the Part VII principle applied again.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Input, Calculation, Output</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void main(String[] args) {
+
+    Scanner input = new Scanner(System.in);
+
+    System.out.print("Loan amount: ");
+    double amount = input.nextDouble();
+
+    System.out.print("Number of months: ");
+    int months = input.nextInt();
+
+    double payment =
+            calculateMonthlyPayment(amount, months);
+
+    displayPayment(payment);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Notice the separation between:</p>
+<pre><code class="language-text" data-trim data-noescape>
+input
+calculation
+output
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>This pattern appears constantly in software.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m4-loan-payment" tabindex="0">The complete example</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>main reads the two values, calls the calculation, and hands the result to the display method. Read it aloud in three phrases: input, calculation, output.</p>
+    <p>This pattern appears constantly in software. Week 1 introduced it as INPUT, PROCESSING, OUTPUT for a single program; with methods, each stage now has a name and a boundary you can test across.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Worked Example: Number Analysis</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Suppose a program reads an integer and reports whether it is:</p>
+      <ul class="small">
+        <li>positive, negative, or zero,</li>
+        <li>and even or odd.</li>
+      </ul>
+      <p class="small">We could create:</p>
+    </div>
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isPositive(int number) {
+    return number &gt; 0;
+}
+
+public static boolean isNegative(int number) {
+    return number &lt; 0;
+}
+
+public static boolean isEven(int number) {
+    return number % 2 == 0;
+}
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Three one-line methods, three named ideas. Each returns a <code>boolean</code>, so each can be dropped straight into an <code>if</code>.</div>
+  <aside class="notes">
+    <p>Suppose a program reads an integer and reports whether it is positive, negative, or zero, and whether it is even or odd.</p>
+    <p>We could create three boolean methods: isPositive, isNegative, and isEven. Each is a single expression. A student may object that number greater than zero is already readable — the payoff is on the next slide, where three of these appear in one method and the reader never has to decode a comparison.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Small Methods Communicate Clearly</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void describeNumber(int number) {
+
+    if (isPositive(number)) {
+        System.out.println("Positive");
+    } else if (isNegative(number)) {
+        System.out.println("Negative");
+    } else {
+        System.out.println("Zero");
+    }
+
+    if (isEven(number)) {
+        System.out.println("Even");
+    } else {
+        System.out.println("Odd");
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This example demonstrates that small methods can communicate concepts clearly.</p>
+      <div class="box good"><span class="box-title">Do this</span>Every condition in <code>describeNumber</code> reads as a question in English. Nothing here has to be decoded.</div>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m4-number-analysis" tabindex="0">All four methods together</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>describeNumber uses the three helpers and contains no comparison operators of its own. The first if-chain covers positive, negative, and zero; the second covers even and odd.</p>
+    <p>This example demonstrates that small methods can communicate concepts clearly. Note also that "zero" needs no method: it is the case left over when a number is neither positive nor negative, and the else branch says so.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Methods and Loops</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Methods can contain loops.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sumFromOneTo(int n) {
+
+    int sum = 0;
+
+    for (int i = 1; i &lt;= n; i++) {
+        sum += i;
+    }
+
+    return sum;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int result = sumFromOneTo(5);
+</code></pre>
+      <p class="small">The method computes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1 + 2 + 3 + 4 + 5
+</code></pre>
+      <p class="small">and returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+15
+</code></pre>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>Where the local variables live</summary>
+    <div class="acc-body">
+      <p>Both <code>sum</code> and the loop counter <code>i</code> are local to this invocation. The caller never sees them; it sees only the returned total. That is the Part V rule again — a whole loop, hidden behind one name and one <code>int</code>.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Methods can contain loops. sumFromOneTo declares an accumulator, runs a for loop from 1 to n, and returns the total.</p>
+    <p>Calling it with 5 computes 1 plus 2 plus 3 plus 4 plus 5 and returns 15. The caller writes one line and gets a number; the five additions are an implementation detail.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Methods and Conditionals</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Methods can contain conditionals.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double absoluteValue(double number) {
+
+    if (number &lt; 0) {
+        return -number;
+    }
+
+    return number;
+}
+</code></pre>
+    </div>
+    <div>
+      <div class="box key"><span class="box-title">Key idea</span>Methods do not replace loops or conditionals. Instead, methods allow us to <strong>organize</strong> programs containing those structures.</div>
+      <p class="small">Note the early-return shape from Part III: if the first <code>return</code> runs, the last line is never reached.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Methods can contain conditionals. absoluteValue returns the negation of a negative number and the number itself otherwise.</p>
+    <p>Methods do not replace loops or conditionals. Instead, methods allow us to organize programs containing those structures. Week 2 gave us conditionals, Week 3 gave us loops; Week 4 gives us somewhere to put them.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Nested Method Calls</h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int x) {
+    return x * x;
+}
+
+public static int sumOfSquares(int a, int b) {
+    return square(a) + square(b);
+}
+</code></pre>
+      <p class="small">Calling:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumOfSquares(3, 4)
+</code></pre>
+    </div>
+    <div>
+      <p class="small">becomes:</p>
+<pre><code class="language-text" data-trim data-noescape>
+square(3) + square(4)
+</code></pre>
+      <p class="small">then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+9 + 16
+</code></pre>
+      <p class="small">then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+25
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>This idea—building larger abstractions from smaller ones—is fundamental to computer science.</div>
+  <aside class="notes">
+    <p>sumOfSquares calls square twice inside one expression. Calling sumOfSquares with 3 and 4 becomes square of 3 plus square of 4, then 9 plus 16, then 25.</p>
+    <p>Trace it the same way as addFive of doubleNumber in Part VI: replace each call with its returned value and finish the arithmetic. Note that square is called twice — two separate invocations, two separate values of x.</p>
+    <p>This idea, building larger abstractions from smaller ones, is fundamental to computer science.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Abstraction</h2>
+  <div class="cols">
+    <div>
+      <p class="small">When we call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+Math.sqrt(25)
+</code></pre>
+      <p class="small">we do not need to understand exactly how Java computes the square root. We only need to know:</p>
+<pre><code class="language-text" data-trim data-noescape>
+input: a number
+output: its square root
+</code></pre>
+    </div>
+    <div>
+      <div class="def"><span class="term">Abstraction:</span> a method allows a programmer to hide implementation details behind a meaningful name.</div>
+      <p class="small">For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+double tax = calculateTax(amount);
+</code></pre>
+      <p class="small">The caller does not need to know the exact formula used inside <code>calculateTax</code>.</p>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Looking ahead</span>This principle becomes central when we study objects and classes.</div>
+  <details class="acc">
+    <summary>You have been relying on abstraction since Week 1</summary>
+    <div class="acc-body">
+      <p>Nobody in this course has read the source of <code>System.out.println</code>, <code>Math.sqrt</code>, or <code>input.nextInt</code>, and nobody has needed to. Part X puts the point another way: Java provides <code>Math.sqrt</code>, <code>System.out.println</code>, and <code>String.length</code>; we create <code>calculateAverage</code>, <code>isValidScore</code>, and <code>determineGrade</code>. The two lists differ only in who wrote them.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>When we call Math.sqrt of 25, we do not need to understand exactly how Java computes the square root. We only need to know the input is a number and the output is its square root.</p>
+    <p>This is an example of abstraction. A method allows a programmer to hide implementation details behind a meaningful name. The caller of calculateTax does not need to know the exact formula.</p>
+    <p>The method provides a useful abstraction. This principle becomes central when we study objects and classes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Method Contracts</h2>
+  <p class="small">It is helpful to think of a method as having a <strong>contract</strong>. For example:</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateArea(double radius)
+</code></pre>
+      <p class="small">The caller provides:</p>
+<pre><code class="language-text" data-trim data-noescape>
+a radius
+</code></pre>
+      <p class="small">The method provides:</p>
+<pre><code class="language-text" data-trim data-noescape>
+an area
+</code></pre>
+    </div>
+    <div>
+      <table>
+        <tbody>
+          <tr><th>Input</th><td><code>radius: double</code></td></tr>
+          <tr><th>Output</th><td><code>area: double</code></td></tr>
+          <tr><th>Assumption</th><td><code>radius &gt;= 0</code></td></tr>
+          <tr><th>Behavior</th><td>returns π × radius²</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-contracts" tabindex="0">The contract, written out formally</span>
+  </div>
+  <aside class="notes">
+    <p>It is helpful to think of a method as having a contract. The caller provides a radius; the method provides an area.</p>
+    <p>We can describe this formally: the input is radius, a double; the output is area, a double; the assumption is that radius is at least zero; and the behaviour is that it returns pi times radius squared.</p>
+    <p>Notice the assumption line. Nothing in the Java signature enforces radius greater or equal zero — it is a promise the caller makes. Thinking about methods this way will become important later when designing larger software systems.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Choosing Parameters</h2>
+  <div class="cols">
+    <div>
+      <p class="small">A method should receive the information necessary to perform its task. Suppose:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateTotal(
+        double price,
+        int quantity,
+        double taxRate)
+</code></pre>
+      <p class="small">This is flexible because the required information is explicit. Compare that with relying on hidden values elsewhere in the program.</p>
+    </div>
+    <div>
+      <p class="small">Explicit parameters often make a method easier to:</p>
+      <ul class="small">
+        <li>understand,</li>
+        <li>test,</li>
+        <li>reuse,</li>
+        <li>and modify.</li>
+      </ul>
+      <details class="acc">
+        <summary>But do not pass what the method does not need</summary>
+        <div class="acc-body">
+          <p>Suppose a method only calculates area:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double calculateRectangleArea(
+        double width,
+        double height) {
+
+    return width * height;
+}
+</code></pre>
+          <p>There is no reason to also pass:</p>
+<pre><code class="language-text" data-trim data-noescape>
+userName
+programVersion
+menuChoice
+</code></pre>
+          <p>A clean method interface contains only relevant information.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>A method should receive the information necessary to perform its task. calculateTotal taking price, quantity, and tax rate is flexible because the required information is explicit — you can read the signature and know everything the method depends on.</p>
+    <p>Compare that with relying on hidden values elsewhere in the program. Explicit parameters often make a method easier to understand, test, reuse, and modify.</p>
+    <p>The opposite failure is in the accordion: do not pass information the method does not need. A method that only calculates area has no business receiving userName, programVersion, or menuChoice. A clean method interface contains only relevant information.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Example of Poor Decomposition</h2>
+  <div class="cols">
+    <div>
+      <span class="tag no">Several responsibilities in one method</span>
+<pre><code class="language-java" data-trim data-noescape>
+public static void doEverything() {
+    Scanner input = new Scanner(System.in);
+
+    System.out.print("Enter price: ");
+    double price = input.nextDouble();
+
+    System.out.print("Enter quantity: ");
+    int quantity = input.nextInt();
+
+    double subtotal = price * quantity;
+    double tax = subtotal * 0.06;
+    double total = subtotal + tax;
+
+    if (total &gt; 100) {
+        total *= 0.95;
+    }
+
+    System.out.println(total);
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This works, but several responsibilities have been combined. Possible decomposition:</p>
+<pre><code class="language-text" data-trim data-noescape>
+readPrice
+readQuantity
+calculateSubtotal
+calculateTax
+applyDiscount
+printReceipt
+</code></pre>
+      <div class="box key"><span class="box-title">Key idea</span>The point is not to create methods mechanically. The goal is to identify meaningful responsibilities.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>doEverything reads two values, computes a subtotal, computes tax, applies a discount rule, and prints. The name is honest, at least. This works, but several responsibilities have been combined.</p>
+    <p>A possible decomposition names six of them: readPrice, readQuantity, calculateSubtotal, calculateTax, applyDiscount, printReceipt.</p>
+    <p>The point is not to create methods mechanically. The goal is to identify meaningful responsibilities — which is precisely why the next slide warns about going too far.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Too Many Tiny Methods</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Decomposition can also go too far. For example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int addOne(int x) {
+    return x + 1;
+}
+
+public static int addTwo(int x) {
+    return addOne(addOne(x));
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This may be useful in a particular context, but creating a separate method for every trivial operation can make code harder rather than easier to understand.</p>
+      <p class="small">Good decomposition requires judgment. Ask:</p>
+      <blockquote class="small">Does naming this operation make the program easier to understand, test, or reuse?</blockquote>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Decomposition can also go too far. addOne and addTwo are perfectly correct Java and almost certainly a mistake — the reader now has to look up two methods to learn that we added two.</p>
+    <p>This may be useful in a particular context, but creating a separate method for every trivial operation can make code harder rather than easier to understand.</p>
+    <p>Good decomposition requires judgment. Ask: does naming this operation make the program easier to understand, test, or reuse? If the answer is no to all three, leave the expression where it is.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Incremental Development</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Methods work well with <strong>incremental development</strong>. Instead of writing an entire program and testing at the end:</p>
+      <ol class="small">
+        <li>write one method,</li>
+        <li>test it,</li>
+        <li>verify that it works,</li>
+        <li>write another method,</li>
+        <li>test again,</li>
+        <li>gradually assemble the complete program.</li>
+      </ol>
+    </div>
+    <div>
+      <p class="small">For example, if implementing:</p>
+<pre><code class="language-text" data-trim data-noescape>
+calculateAverage
+determineGrade
+printResult
+</code></pre>
+      <p class="small">first verify:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(calculateAverage(90, 80, 70));
+</code></pre>
+      <p class="small">Then test:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println(determineGrade(95));
+System.out.println(determineGrade(85));
+System.out.println(determineGrade(75));
+</code></pre>
+    </div>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>Only after those methods work should we integrate them into the complete application. This greatly reduces debugging difficulty.</div>
+  <aside class="notes">
+    <p>Methods work well with incremental development. Instead of writing an entire program and testing at the end: write one method, test it, verify that it works, write another method, test again, and gradually assemble the complete program.</p>
+    <p>The test calls shown here are throwaway lines in main. Three calls to determineGrade with 95, 85, and 75 check three branches of the if-chain in about ten seconds.</p>
+    <p>Only after those methods work should we integrate them into the complete application. This greatly reduces debugging difficulty, because a bug found now belongs to the one method you just wrote.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Debugging Method-Based Programs</h2>
+  <p class="small">When debugging, ask:</p>
+  <div class="cols">
+    <div>
+      <h4>Did the method receive the correct inputs?</h4>
+      <p class="small">Print temporary diagnostic information if necessary:</p>
+<pre><code class="language-java" data-trim data-noescape>
+System.out.println("DEBUG: score = " + score);
+</code></pre>
+    </div>
+    <div>
+      <h4>Did the method return the expected result?</h4>
+<pre><code class="language-java" data-trim data-noescape>
+double average = calculateAverage(70, 80, 90);
+System.out.println("DEBUG average = " + average);
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Is the error inside the method or in the caller?</span>Test methods independently.</div>
+  <aside class="notes">
+    <p>When debugging a program made of methods, ask three questions in order. First: did the method receive the correct inputs? Print temporary diagnostic information if necessary.</p>
+    <p>Second: did the method return the expected result? A DEBUG line printing a known call with known arguments answers this immediately.</p>
+    <p>Third: is the error inside the method or in the caller? Those two questions are answered by different fixes, and confusing them wastes most of a debugging session. Test methods independently.</p>
+  </aside>
+</section>
+
+<!-- ==================== PART X ==================== -->
+
+<section class="part-divider">
+  <p class="part-num">Part X</p>
+  <h2>Practice, Style, and Review</h2>
+  <p class="part-sub">Trace it by hand first. Then write it, name it well, and test it.</p>
+</section>
+
+<section>
+  <h2>Tracing Exercise 1</h2>
+  <p class="small">What does this program print?</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int mystery(int x) {
+    return x + 3;
+}
+
+public static void main(String[] args) {
+    int a = 5;
+
+    int b = mystery(a);
+
+    System.out.println(a);
+    System.out.println(b);
+}
+</code></pre>
+    </div>
+    <div>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+<pre><code class="language-text" data-trim data-noescape>
+5
+8
+</code></pre>
+          <p><code>a</code> remains unchanged. The returned value is stored in <code>b</code>.</p>
+        </div>
+      </details>
+      <div class="box note"><span class="box-title">Note</span>The method is called <code>mystery</code> on purpose. With a bad name, the only way to know what it does is to read the body.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Give the class thirty seconds before opening the answer. The program prints 5 and then 8.</p>
+    <p>a remains unchanged — mystery received a copy of its value, exactly as in Part V. The returned value is stored in b. Nothing the method did could have altered a.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing Exercise 2</h2>
+  <p class="small">What is printed?</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int multiply(int a, int b) {
+    return a * b;
+}
+
+public static int add(int a, int b) {
+    return a + b;
+}
+
+public static void main(String[] args) {
+
+    int result =
+            add(multiply(2, 3), multiply(4, 5));
+
+    System.out.println(result);
+}
+</code></pre>
+    </div>
+    <div>
+      <details class="acc">
+        <summary>Work it inside out</summary>
+        <div class="acc-body">
+          <p>First:</p>
+<pre><code class="language-text" data-trim data-noescape>
+multiply(2, 3) = 6
+</code></pre>
+          <p>Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+multiply(4, 5) = 20
+</code></pre>
+          <p>Then:</p>
+<pre><code class="language-text" data-trim data-noescape>
+add(6, 20) = 26
+</code></pre>
+          <p>Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+26
+</code></pre>
+        </div>
+      </details>
+      <div class="box key"><span class="box-title">Key idea</span>Both arguments must be evaluated before <code>add</code> can start. Three invocations, in a definite order.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>First multiply of 2 and 3 gives 6. Then multiply of 4 and 5 gives 20. Then add of 6 and 20 gives 26, and the output is 26.</p>
+    <p>Note that multiply and add both declare parameters named a and b, and the two invocations of multiply do not interfere with each other. Different invocations, different local variables.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Tracing Exercise 3</h2>
+  <p class="small">What is printed?</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static void change(int x) {
+    x = x + 10;
+    System.out.println(x);
+}
+
+public static void main(String[] args) {
+
+    int x = 5;
+
+    change(x);
+
+    System.out.println(x);
+}
+</code></pre>
+    </div>
+    <div>
+      <details class="acc">
+        <summary>Answer</summary>
+        <div class="acc-body">
+          <p>Output:</p>
+<pre><code class="language-text" data-trim data-noescape>
+15
+5
+</code></pre>
+          <p>The <code>x</code> inside <code>change</code> is separate from the <code>x</code> inside <code>main</code>.</p>
+        </div>
+      </details>
+      <div class="box pitfall"><span class="box-title">Common error</span>Same spelling, same starting value, two different variables. Students who expect <code>15 15</code> are reading one <code>x</code> where there are two.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The output is 15 then 5. change prints its own x after adding ten; main then prints its own x, which never changed.</p>
+    <p>The x inside change is separate from the x inside main. This is the pass-by-value example from Part V and the same-name example from Part V combined into one trap — which is why it is worth doing slowly at the board.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Exercises: <code>isOdd</code> and <code>min</code></h2>
+  <div class="cols">
+    <div>
+      <h4>Write <code>isOdd</code></h4>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isOdd(int number)
+</code></pre>
+      <p class="small">that returns <code>true</code> if the number is odd.</p>
+      <details class="acc">
+        <summary>Solution</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isOdd(int number) {
+    return number % 2 != 0;
+}
+</code></pre>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Find the smaller number</h4>
+      <p class="small">Write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int min(int a, int b)
+</code></pre>
+      <details class="acc">
+        <summary>Solution</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+public static int min(int a, int b) {
+
+    if (a &lt; b) {
+        return a;
+    }
+
+    return b;
+}
+</code></pre>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Two short exercises to do at the keyboard. isOdd returns number modulo 2 not equal to 0 — note that it is the negation of isEven, and either could be written in terms of the other.</p>
+    <p>min uses the early-return shape from Part III's max. Ask students to also write it with an else, and to say which they find clearer; both are acceptable.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Exercises: Conversion and Validation</h2>
+  <div class="cols">
+    <div>
+      <h4>Celsius conversion</h4>
+      <p class="small">Write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static double celsiusToFahrenheit(double celsius)
+</code></pre>
+      <p class="small">using:</p>
+<pre><code class="language-text" data-trim data-noescape>
+F = C × 9/5 + 32
+</code></pre>
+      <details class="acc">
+        <summary>Solution</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+public static double celsiusToFahrenheit(
+        double celsius) {
+
+    return celsius * 9.0 / 5.0 + 32;
+}
+</code></pre>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h4>Valid month</h4>
+      <p class="small">Write a method that returns whether an integer represents a valid month. Valid months are 1 through 12.</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isValidMonth(int month)
+</code></pre>
+      <details class="acc">
+        <summary>Solution</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+public static boolean isValidMonth(int month) {
+    return month &gt;= 1 &amp;&amp; month &lt;= 12;
+}
+</code></pre>
+        </div>
+      </details>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>celsiusToFahrenheit is the inverse of the Part VII example. Watch for 9 slash 5 written with integer literals — that is 1 in Java, and the method would return celsius plus 32. The 9.0 and 5.0 are not decoration.</p>
+    <p>isValidMonth is isValidScore with different bounds. Point that out: students have now written the same shape three times, which is exactly what makes it a pattern worth naming.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Exercise: Letter Grade</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static char getLetterGrade(double score)
+</code></pre>
+      <p class="small">Assume:</p>
+<pre><code class="language-text" data-trim data-noescape>
+90–100 A
+80–89  B
+70–79  C
+60–69  D
+below 60 F
+</code></pre>
+    </div>
+    <div>
+      <details class="acc">
+        <summary>Solution</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+public static char getLetterGrade(double score) {
+
+    if (score &gt;= 90) {
+        return 'A';
+    } else if (score &gt;= 80) {
+        return 'B';
+    } else if (score &gt;= 70) {
+        return 'C';
+    } else if (score &gt;= 60) {
+        return 'D';
+    }
+
+    return 'F';
+}
+</code></pre>
+        </div>
+      </details>
+      <div class="box note"><span class="box-title">Note</span>The return type is <code>char</code>, so the returned literals use single quotes: <code>'A'</code>, not <code>"A"</code>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>This is determineGrade from Part IV, rewritten by the students. The order of the comparisons matters for the same reason it did in Week 2: a score of 95 satisfies every test in the chain, so the highest threshold must be checked first.</p>
+    <p>The final F is reached by falling out of the chain, using the early-return style rather than a closing else. Both work.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>In-Class Exercise: Sum of Integers</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Write:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int sumTo(int n)
+</code></pre>
+      <p class="small">that returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+1 + 2 + ... + n
+</code></pre>
+      <p class="small">Example:</p>
+<pre><code class="language-java" data-trim data-noescape>
+sumTo(4)
+</code></pre>
+      <p class="small">returns:</p>
+<pre><code class="language-text" data-trim data-noescape>
+10
+</code></pre>
+    </div>
+    <div>
+      <details class="acc">
+        <summary>Solution</summary>
+        <div class="acc-body">
+<pre><code class="language-java" data-trim data-noescape>
+public static int sumTo(int n) {
+
+    int sum = 0;
+
+    for (int i = 1; i &lt;= n; i++) {
+        sum += i;
+    }
+
+    return sum;
+}
+</code></pre>
+        </div>
+      </details>
+      <div class="box note"><span class="box-title">Note</span>This is <code>sumFromOneTo</code> from Part IX under a shorter name — a loop, an accumulator, and one returned value.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>sumTo of 4 returns 10. The solution is the same loop-and-accumulator method seen earlier in the week, which is worth saying aloud: students who recognised it should feel that recognition is the point.</p>
+    <p>Ask where sum and i live and when they disappear. The answer — in this invocation's stack frame, until the return — ties Parts V and VI back to something they just wrote.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Larger Decomposition Exercise</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Design a program that calculates the cost of movie tickets. Rules:</p>
+<pre><code class="language-text" data-trim data-noescape>
+Child ticket:   $8
+Adult ticket:   $12
+Senior ticket:  $9
+</code></pre>
+      <p class="small">Additionally, purchases of five or more tickets receive a 10% discount.</p>
+      <div class="box warn"><span class="box-title">Watch out</span>Do not begin by writing code. First identify possible methods.</div>
+    </div>
+    <div>
+      <p class="small">Possible design:</p>
+<pre><code class="language-text" data-trim data-noescape>
+getTicketPrice
+calculateSubtotal
+applyDiscount
+printReceipt
+</code></pre>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m4-movie-tickets" tabindex="0">Two of the methods, written out</span>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>The important skill is not merely coding the methods. The important skill is recognizing how a large problem can be divided into smaller responsibilities.</div>
+  <aside class="notes">
+    <p>Design a program that calculates the cost of movie tickets: child eight dollars, adult twelve, senior nine, with a ten percent discount on five or more tickets.</p>
+    <p>Do not begin by writing code. First identify possible methods. A possible design names four: getTicketPrice, calculateSubtotal, applyDiscount, printReceipt.</p>
+    <p>The important skill is not merely coding the methods. The important skill is recognizing how a large problem can be divided into smaller responsibilities — so spend the class time on the four names, not on the arithmetic.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Method Documentation</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Methods should be understandable from their names, but documentation can provide additional information.</p>
+<pre><code class="language-java" data-trim data-noescape>
+/**
+ * Calculates the area of a circle.
+ *
+ * @param radius the radius of the circle
+ * @return the area of the circle
+ */
+public static double calculateCircleArea(double radius) {
+    return Math.PI * radius * radius;
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">This style is called <strong>Javadoc</strong>.</p>
+      <div class="box note"><span class="box-title">Note</span>You do not need extensive documentation for every trivial method, but public methods in larger programs should have understandable contracts.</div>
+      <p class="small">Compare the <code>@param</code> and <code>@return</code> lines with the input/output rows of the method contract in Part IX — they are the same information, written where the compiler's tools can find it.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Methods should be understandable from their names, but documentation can provide additional information. The comment block opens with slash star star and uses at-param and at-return tags.</p>
+    <p>This style is called Javadoc. Tools generate browsable documentation from it, which is why the format is worth following exactly.</p>
+    <p>You do not need extensive documentation for every trivial method, but public methods in larger programs should have understandable contracts.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Naming Conventions</h2>
+  <div class="cols-3">
+    <div>
+      <span class="tag ok">Good — verbs or verb phrases</span>
+<pre><code class="language-java" data-trim data-noescape>
+calculateAverage
+findMaximum
+printMenu
+readInput
+validateScore
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">Boolean — questions</span>
+<pre><code class="language-java" data-trim data-noescape>
+isEven
+isValid
+hasPermission
+canRegister
+</code></pre>
+    </div>
+    <div>
+      <span class="tag no">Avoid</span>
+<pre><code class="language-java" data-trim data-noescape>
+stuff
+abc
+function1
+work
+data
+</code></pre>
+    </div>
+  </div>
+  <blockquote>Code is read much more often than it is written. Names matter.</blockquote>
+  <details class="acc">
+    <summary>The vague names, collected</summary>
+    <div class="acc-body">
+      <p>Part I already warned against <code>doStuff</code>, <code>thing</code>, <code>process</code>, and <code>method1</code>; this slide adds <code>stuff</code>, <code>abc</code>, <code>function1</code>, <code>work</code>, and <code>data</code>. What they share is that none of them survives being read six months later by someone who did not write the method — including you.</p>
+      <p>The opposite failure is the one from Part VII: <code>readInputCalculateAverageDetermineGradeAndPrintResult()</code>. A name that long is not a naming problem, it is a decomposition problem.</p>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Method names should generally be verbs or verb phrases: calculateAverage, findMaximum, printMenu, readInput, validateScore. A method does something, so its name should say what.</p>
+    <p>Boolean methods often work well as questions: isEven, isValid, hasPermission, canRegister. Avoid names like stuff, abc, function1, work, and data — none of them survive contact with a second reader.</p>
+    <p>Code is read much more often than it is written. Names matter.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>A Useful Design Question</h2>
+  <p class="small">Whenever you encounter a piece of code, ask:</p>
+  <blockquote>What does this code mean conceptually?</blockquote>
+  <div class="cols">
+    <div>
+      <span class="tag neutral">For example</span>
+<pre><code class="language-java" data-trim data-noescape>
+if (age &gt;= 18 &amp;&amp; hasID &amp;&amp; !accountSuspended)
+</code></pre>
+    </div>
+    <div>
+      <span class="tag ok">could become</span>
+<pre><code class="language-java" data-trim data-noescape>
+if (canAccessAccount(age, hasID, accountSuspended))
+</code></pre>
+    </div>
+  </div>
+  <div class="box key"><span class="box-title">Key idea</span>Methods can give <strong>names to ideas</strong>. That is one of their greatest benefits.</div>
+  <aside class="notes">
+    <p>Whenever you encounter a piece of code, ask: what does this code mean conceptually? Not what does it compute — what does it mean.</p>
+    <p>The three-part condition computes something perfectly well, but the meaning is buried. Wrapped in canAccessAccount, the if statement states the policy and the method states the rule.</p>
+    <p>Methods can give names to ideas. That is one of their greatest benefits, and it is the same move as canRegister in Part III and isValidScore in Part VII.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Methods as Building Blocks</h2>
+  <p class="small">Think of programming as constructing increasingly powerful building blocks.</p>
+  <div class="cols">
+    <div>
+      <h4>Java provides</h4>
+<pre><code class="language-java" data-trim data-noescape>
+Math.sqrt
+System.out.println
+String.length
+</code></pre>
+    </div>
+    <div>
+      <h4>We create</h4>
+<pre><code class="language-java" data-trim data-noescape>
+calculateAverage
+isValidScore
+determineGrade
+</code></pre>
+    </div>
+  </div>
+  <div class="box note"><span class="box-title">Looking ahead</span>Later, we will construct entire <strong>classes and objects</strong> that group related data and methods together. Methods are therefore an important bridge from basic programming toward object-oriented programming.</div>
+  <aside class="notes">
+    <p>Think of programming as constructing increasingly powerful building blocks. Java provides Math.sqrt, System.out.println, and String.length. We create calculateAverage, isValidScore, and determineGrade.</p>
+    <p>There is no difference in kind between the two columns — only in who wrote them. That realisation is worth pausing on.</p>
+    <p>Later, we will construct entire classes and objects that group related data and methods together. Methods are therefore an important bridge from basic programming toward object-oriented programming.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Key Distinctions</h2>
+  <p class="small">Make sure you understand these pairs.</p>
+  <details class="acc">
+    <summary>Method definition vs. method call</summary>
+    <div class="acc-body">
+      <p>Definition:</p>
+<pre><code class="language-java" data-trim data-noescape>
+public static int square(int x) {
+    return x * x;
+}
+</code></pre>
+      <p>Call:</p>
+<pre><code class="language-java" data-trim data-noescape>
+square(5);
+</code></pre>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Parameter vs. argument</summary>
+    <div class="acc-body">
+      <p>Parameter:</p>
+<pre><code class="language-java" data-trim data-noescape>
+int x
+</code></pre>
+      <p>Argument:</p>
+<pre><code class="language-java" data-trim data-noescape>
+5
+</code></pre>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Local variable vs. variable in another method &nbsp;·&nbsp; calculation vs. user interaction</summary>
+    <div class="acc-body">
+      <p>Variables inside different methods belong to different scopes.</p>
+      <p>Whenever practical, separate:</p>
+<pre><code class="language-text" data-trim data-noescape>
+reading input
+performing calculations
+printing output
+</code></pre>
+    </div>
+  </details>
+  <aside class="notes">
+    <p>Five pairs to have straight before the quiz. Definition versus call: one says what square does, the other does it.</p>
+    <p>Parameter versus argument: int x in the definition, 5 at the call site. Return versus println, covered in Part VIII: one sends data back to the caller, the other sends text to the console.</p>
+    <p>Local variable versus variable in another method: variables inside different methods belong to different scopes. And calculation versus user interaction: whenever practical, separate reading input, performing calculations, and printing output.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Week 4 Programming Style Guidelines</h2>
+  <div class="cols smaller">
+    <ol>
+      <li>Avoid placing the entire program in <code>main</code>.</li>
+      <li>Use methods for meaningful subtasks.</li>
+      <li>Give methods descriptive names.</li>
+      <li>Prefer calculation methods that return values.</li>
+      <li>Keep input/output separate from calculations when reasonable.</li>
+    </ol>
+    <ol start="6">
+      <li>Avoid unnecessary global state.</li>
+      <li>Keep variables in the smallest reasonable scope.</li>
+      <li>Test methods independently.</li>
+      <li>Do not duplicate code that can reasonably be placed in a method.</li>
+      <li>Make <code>main</code> communicate the overall structure of the program.</li>
+    </ol>
+  </div>
+  <div class="box good"><span class="box-title">Do this</span>These apply to CSC500 programs from this point forward — not just to this week's lab.</div>
+  <aside class="notes">
+    <p>Ten guidelines for CSC500 programs from this point forward. Read them as a checklist to run over a finished program before submitting it.</p>
+    <p>Guidelines one, two, and ten are about structure; three is about naming; four and five are about the return-versus-print decision; six and seven are about scope; eight and nine are about testing and duplication.</p>
+    <p>Every one of them has appeared somewhere in this week's material, which is the point — the list is a summary, not new content.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>End-of-Week Example: <code>FitnessCalculator</code></h2>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static String classifyBMI(double bmi) {
+
+    if (bmi &lt; 18.5) {
+        return "Underweight";
+    } else if (bmi &lt; 25) {
+        return "Normal";
+    } else if (bmi &lt; 30) {
+        return "Overweight";
+    } else {
+        return "Obese";
+    }
+}
+</code></pre>
+    </div>
+    <div>
+      <p class="small">Notice how the program has three conceptual operations:</p>
+<pre><code class="language-text" data-trim data-noescape>
+calculate BMI
+classify BMI
+display result
+</code></pre>
+      <p class="small">Each operation is represented by a method. <code>main</code> coordinates those operations.</p>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m4-fitness-calculator" tabindex="0">The complete program</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Here is a complete program demonstrating several concepts from this week. classifyBMI is shown on the slide because it is the one method that returns a String rather than a number.</p>
+    <p>The program has three conceptual operations: calculate BMI, classify BMI, display result. Each operation is represented by a method, and main coordinates those operations.</p>
+    <p>Walk the modal version and name the ideas as they go past: pure calculation method, method returning a value, void display method, and a main that reads as the algorithm.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Exit Ticket</h2>
+  <p class="small">Without running the program, determine its output.</p>
+  <div class="cols">
+    <div>
+<pre><code class="language-java" data-trim data-noescape>
+public static int f(int x) {
+    return x * 2;
+}
+
+public static int g(int x) {
+    return f(x) + 1;
+}
+
+public static void main(String[] args) {
+
+    int a = 3;
+    int b = g(a);
+
+    System.out.println(a);
+    System.out.println(b);
+}
+</code></pre>
+    </div>
+    <div>
+      <details class="acc">
+        <summary>Answer and reasoning</summary>
+        <div class="acc-body">
+          <p>Answer:</p>
+<pre><code class="language-text" data-trim data-noescape>
+3
+7
+</code></pre>
+          <p>Reasoning:</p>
+<pre><code class="language-text" data-trim data-noescape>
+g(3)
+→ f(3) + 1
+→ 6 + 1
+→ 7
+</code></pre>
+          <p>The variable <code>a</code> remains <code>3</code>.</p>
+        </div>
+      </details>
+      <div class="mbtn-row">
+        <span class="mbtn" data-modal="m4-concept-check" tabindex="0">Concept check — ten questions</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Collect this at the door. g of 3 calls f of 3, which returns 6, then adds 1, giving 7. The program prints 3 and then 7.</p>
+    <p>The variable a remains 3 — the fourth time this week that point has been made, and it still catches people.</p>
+    <p>The concept-check modal has the ten questions students should be able to answer by the end of the week; use them as a revision sheet or a warm-up next lecture.</p>
+  </aside>
+</section>
+
+<!-- ==================== BACK MATTER ==================== -->
+
+<section>
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li><strong>Program decomposition</strong> is breaking a large problem into smaller, manageable pieces; in Java, the method is our primary tool for it.</li>
+    <li>A <strong>method</strong> is a named block of code that performs a particular task — a named computation.</li>
+    <li><strong>Parameters</strong> are information going into a method; a <strong>return value</strong> is information coming out.</li>
+    <li><strong>Scope</strong> is where a variable exists. Local variables and parameters belong to one invocation of one method.</li>
+    <li>A method call transfers execution and then returns; the <strong>call stack</strong> is how Java remembers where.</li>
+    <li>One method, one responsibility — and prefer returning a value to printing one.</li>
+    <li>Do not think of a program as one long sequence of statements. Think of it as a collection of smaller operations that cooperate.</li>
+  </ul>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-week-summary" tabindex="0">Week 4 summary, in full</span>
+  </div>
+  <aside class="notes">
+    <p>This week introduced one of the most important transitions in programming. Until now, we mainly focused on individual statements: variables, conditionals, loops. Methods allow us to organize those statements into larger conceptual units.</p>
+    <p>The central ideas are: method equals named computation; parameters equal information going into a method; return value equals information coming out of a method; scope equals where a variable exists; decomposition equals dividing a large problem into smaller problems.</p>
+    <p>The most important habit to develop is this: do not think of a program as one long sequence of statements. Instead, think of a program as a collection of smaller operations that cooperate to solve a larger problem.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Vocabulary</h2>
+  <div class="cols smaller">
+    <table>
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Method</td><td>A named block of code that performs a particular task.</td></tr>
+        <tr><td>Program decomposition</td><td>Breaking a large problem into smaller, manageable pieces.</td></tr>
+        <tr><td>Parameter</td><td>A variable in the method definition.</td></tr>
+        <tr><td>Argument</td><td>The value supplied when the method is called.</td></tr>
+        <tr><td>Return type</td><td>The kind of value a method promises to produce.</td></tr>
+        <tr><td><code>void</code></td><td>The method does not return a value.</td></tr>
+        <tr><td><code>return</code></td><td>Ends the method and sends a value back to the caller.</td></tr>
+        <tr><td>Scope</td><td>The region in which a variable exists.</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Local variable</td><td>A variable declared inside a method.</td></tr>
+        <tr><td>Call stack</td><td>The structure Java uses to remember where to return.</td></tr>
+        <tr><td>Method signature</td><td>Name, parameter list, and return type.</td></tr>
+        <tr><td>Method overloading</td><td>Methods sharing a name but differing in parameter lists.</td></tr>
+        <tr><td>Top-down design</td><td>Repeatedly dividing a high-level problem into smaller problems.</td></tr>
+        <tr><td>Abstraction</td><td>Hiding implementation details behind a meaningful name.</td></tr>
+        <tr><td>Method contract</td><td>The input, output, assumptions, and behavior of a method.</td></tr>
+        <tr><td>Incremental development</td><td>Write a method, test it, then write the next one.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">
+    <p>Sixteen terms, all of them introduced this week. Ask students to define parameter and argument without looking — that pair accounts for more confusion than the rest combined.</p>
+    <p>Method contract and abstraction are the two that reach furthest forward; both are re-used almost verbatim when we design classes.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Lab / Practice — Week 4</h2>
+  <div class="cols">
+    <div>
+      <h4>Part A — Short exercises</h4>
+      <p class="small">Write methods for each of the following:</p>
+      <ol class="smaller">
+        <li><code>cube(int n)</code> — returns the cube of <code>n</code>.</li>
+        <li><code>isPositive(double n)</code> — returns whether <code>n</code> is positive.</li>
+        <li><code>larger(double a, double b)</code> — returns the larger value.</li>
+        <li><code>calculateTip(double bill, double percentage)</code> — returns the tip.</li>
+        <li><code>countDown(int n)</code> — prints from <code>n</code> down to 1.</li>
+        <li><code>isLeapYear(int year)</code> — determines whether a year is a leap year.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Part B — Program decomposition</h4>
+      <p class="small">Create a program that calculates a student's final course grade, using:</p>
+<pre><code class="language-java" data-trim data-noescape>
+calculateFinalAverage(...)
+determineLetterGrade(...)
+hasPassed(...)
+printReport(...)
+</code></pre>
+      <h4>Part C — Code tracing</h4>
+      <p class="small">Given several programs containing nested method calls, determine the order of execution, parameter values, and final output.</p>
+    </div>
+  </div>
+  <div class="mbtn-row">
+    <span class="mbtn" data-modal="m4-homework" tabindex="0">Full homework brief</span>
+    <span class="mbtn" data-modal="m4-exercise-solutions" tabindex="0">In-class exercise solutions</span>
+  </div>
+  <aside class="notes">
+    <p>Part A is six short methods. Each one is a single expression or a very short body, and each maps onto something done in class: cube is square with one more factor, isPositive and isLeapYear are boolean methods, countDown is a method containing a loop.</p>
+    <p>Part B is the real work: read homework, midterm, and final-exam scores, calculate a weighted average, determine a letter grade, determine whether the student passed, and print a formatted report. Students should decide the appropriate parameter types, return types, variables, and method calls — that decision is the assignment.</p>
+    <p>Part C is tracing by hand. Insist on the phrase from the brief: do the tracing by hand before using Java to verify the answers.</p>
+  </aside>
+</section>
+
+<section>
+  <h2>Looking Ahead</h2>
+  <div class="cols">
+    <div>
+      <p class="small">Methods allow us to organize statements into larger conceptual units. The next step is to group <em>related data and methods</em> together.</p>
+      <div class="box note"><span class="box-title">Next major topic</span>Later, we will construct entire <strong>classes and objects</strong> that group related data and methods together.</div>
+      <p class="small">Methods are therefore an important bridge from basic programming toward object-oriented programming.</p>
+    </div>
+    <div>
+      <p class="small">Two threads from this week reappear almost immediately:</p>
+      <ul class="small">
+        <li>Java's <strong>parameter passing</strong> — revisited more deeply when we study objects and references.</li>
+        <li>The <strong>call stack</strong> — especially important when we study recursion later in the course.</li>
+      </ul>
+      <div class="box good"><span class="box-title">Do this</span>From this point forward, every CSC500 program is expected to follow the Week 4 style guidelines.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>That way of thinking prepares us for the next major topic in Java: classes and objects. A class groups related data and methods together, and every method we write from now on is practice for writing methods inside a class.</p>
+    <p>Two loose ends were explicitly deferred this week. Java's parameter passing gets a deeper treatment when we study objects and references — the copy rule for primitives is not the whole story. And the call stack becomes especially important when we study recursion.</p>
+    <p>Close by restating the expectation: from this point forward, programs in this course should not put everything in main.</p>
+  </aside>
+</section>
+
+  </div>
+</div>
+
+<div class="deck-footer">
+  <strong>CSC500</strong><span class="sep">|</span>Week 4 — Methods and Program Decomposition
+</div>
+
+<!-- ==================== MODAL TEMPLATES ==================== -->
+
+<template class="csc-modal-tpl" id="m4-grade-calculator-monolith"
+          data-kicker="Motivation" data-title="GradeCalculator — everything inside main">
+  <h4>The program</h4>
+  <p>A typical early-course program: read some input, perform some calculations, use a loop or conditional, print a result.</p>
+<pre><code class="language-java">import java.util.Scanner;
+
+public class GradeCalculator {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter exam 1 score: ");
+        double exam1 = input.nextDouble();
+
+        System.out.print("Enter exam 2 score: ");
+        double exam2 = input.nextDouble();
+
+        System.out.print("Enter final exam score: ");
+        double finalExam = input.nextDouble();
+
+        double average =
+                exam1 * 0.30 +
+                exam2 * 0.30 +
+                finalExam * 0.40;
+
+        if (average &gt;= 90) {
+            System.out.println("Grade: A");
+        } else if (average &gt;= 80) {
+            System.out.println("Grade: B");
+        } else if (average &gt;= 70) {
+            System.out.println("Grade: C");
+        } else if (average &gt;= 60) {
+            System.out.println("Grade: D");
+        } else {
+            System.out.println("Grade: F");
+        }
+    }
+}</code></pre>
+  <h4>This program works</h4>
+  <p>Nothing here is wrong. It compiles, it runs, and it produces the right grade. That is worth saying, because the argument for methods is not that this code is broken.</p>
+  <h4>But imagine it grows</h4>
+  <p>Imagine that the program grows to 500, 5,000, or 50,000 lines. Putting all of the logic inside <code>main</code> quickly becomes difficult to:</p>
+  <ul>
+    <li>read,</li>
+    <li>understand,</li>
+    <li>debug,</li>
+    <li>test,</li>
+    <li>modify,</li>
+    <li>and reuse.</li>
+  </ul>
+  <p>Programming therefore relies heavily on <strong>decomposition</strong>: the process of breaking a large problem into smaller, manageable pieces. In Java, one of our primary tools for decomposition is the method.</p>
+  <h4>The same problem, decomposed</h4>
+  <p>Part IV of this deck rewrites exactly this problem as <code>GradeProgram</code>, with <code>readScore</code>, <code>calculateAverage</code>, <code>determineGrade</code>, and <code>printResult</code>. Compare the two files side by side and count how many lines you must read before you know what the program does.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-greeting-example"
+          data-kicker="Worked example" data-title="GreetingExample: definition, call, and what happens between them">
+  <h4>The complete program</h4>
+<pre><code class="language-java">public class GreetingExample {
+
+    public static void printGreeting() {
+        System.out.println("Welcome to CSC500!");
+        System.out.println("Let's learn Java.");
+    }
+
+    public static void main(String[] args) {
+        printGreeting();
+    }
+}</code></pre>
+  <h4>The definition</h4>
+<pre><code class="language-java">public static void printGreeting() {
+    System.out.println("Welcome to CSC500!");
+    System.out.println("Let's learn Java.");
+}</code></pre>
+  <p>This says what <code>printGreeting</code> does. On its own it does nothing at all — a definition is not an instruction to run.</p>
+  <h4>The call</h4>
+<pre><code class="language-java">printGreeting();</code></pre>
+  <p>This is the instruction to run it: the method name, parentheses, semicolon.</p>
+  <h4>What happens between them</h4>
+  <p>When Java encounters the method call, it temporarily transfers execution to the method. After the method finishes, execution returns to the point immediately following the method call.</p>
+  <p>In this program the point immediately following the call is the end of <code>main</code>, so the program ends. In a longer <code>main</code> execution would carry on with the next statement — which is what makes the ordering in Part VI's execution-flow example come out the way it does.</p>
+  <h4>The method name</h4>
+<pre><code class="language-java">printGreeting</code></pre>
+  <p>The method name identifies the method. Java method names conventionally use camelCase, and good method names describe what the method does.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-why-methods"
+          data-kicker="Reference" data-title="Why methods matter: readability, reuse, testing, debugging">
+  <h4>Readability</h4>
+  <p>Compare:</p>
+<pre><code class="language-java">double subtotal = price * quantity;
+double tax = subtotal * 0.06;
+double total = subtotal + tax;
+System.out.printf("%.2f%n", total);</code></pre>
+  <p>with:</p>
+<pre><code class="language-java">double total = calculateTotal(price, quantity);
+printTotal(total);</code></pre>
+  <p>The second version expresses the intention of the program more clearly.</p>
+  <h4>Reuse</h4>
+  <p>Instead of writing the same calculation several times, we can write it once.</p>
+<pre><code class="language-java">public static double calculateTax(double amount) {
+    return amount * 0.06;
+}</code></pre>
+  <p>Then:</p>
+<pre><code class="language-java">double tax1 = calculateTax(100);
+double tax2 = calculateTax(250);
+double tax3 = calculateTax(37.50);</code></pre>
+  <h4>Testing</h4>
+  <p>It is easier to test a small method independently than to test an entire large program. For example:</p>
+<pre><code class="language-java">public static int square(int number) {
+    return number * number;
+}</code></pre>
+  <p>We can test:</p>
+<pre><code class="language-java">System.out.println(square(3));   // should be 9
+System.out.println(square(0));   // should be 0
+System.out.println(square(-4));  // should be 16</code></pre>
+  <h4>Debugging</h4>
+  <p>If a program consists of well-designed methods, we can often identify which method contains an error. Instead of asking:</p>
+  <blockquote>"Where is the bug in these 500 lines?"</blockquote>
+  <p>we can ask:</p>
+  <blockquote>"Is the bug in <code>readInput</code>, <code>calculateAverage</code>, or <code>determineGrade</code>?"</blockquote>
+</template>
+
+<template class="csc-modal-tpl" id="m4-grade-program"
+          data-kicker="Worked example" data-title="GradeProgram — the same problem, decomposed">
+  <h4>The complete program</h4>
+<pre><code class="language-java">import java.util.Scanner;
+
+public class GradeProgram {
+
+    public static double readScore(Scanner input,
+                                   String prompt) {
+        System.out.print(prompt);
+        return input.nextDouble();
+    }
+
+    public static double calculateAverage(
+            double score1,
+            double score2,
+            double score3) {
+
+        return (score1 + score2 + score3) / 3.0;
+    }
+
+    public static char determineGrade(double average) {
+        if (average &gt;= 90) {
+            return 'A';
+        } else if (average &gt;= 80) {
+            return 'B';
+        } else if (average &gt;= 70) {
+            return 'C';
+        } else if (average &gt;= 60) {
+            return 'D';
+        } else {
+            return 'F';
+        }
+    }
+
+    public static void printResult(double average,
+                                   char grade) {
+        System.out.printf("Average: %.2f%n", average);
+        System.out.println("Grade: " + grade);
+    }
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        double exam1 =
+                readScore(input, "Enter exam 1: ");
+
+        double exam2 =
+                readScore(input, "Enter exam 2: ");
+
+        double exam3 =
+                readScore(input, "Enter exam 3: ");
+
+        double average =
+                calculateAverage(exam1, exam2, exam3);
+
+        char grade =
+                determineGrade(average);
+
+        printResult(average, grade);
+    }
+}</code></pre>
+  <h4>What <code>main</code> now says</h4>
+  <p>Notice that <code>main</code> now describes the overall algorithm. It is almost readable as:</p>
+<pre><code class="language-text">read the scores
+calculate the average
+determine the grade
+print the result</code></pre>
+  <p>This is good program design.</p>
+  <h4>Four responsibilities, four methods</h4>
+  <p>The problem statement was: read three exam scores, calculate their average, determine the letter grade, print the result. Each clause became one method:</p>
+<pre><code class="language-text">main
+ |
+ +-- readScore
+ |
+ +-- calculateAverage
+ |
+ +-- determineGrade
+ |
+ +-- printResult</code></pre>
+  <p>Now each method performs one focused task. Note also that <code>readScore</code> takes the <code>Scanner</code> and the prompt as parameters rather than creating its own <code>Scanner</code> — the explicit-parameters principle from Part IX.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-pass-by-value"
+          data-kicker="Deep dive" data-title="Java passes primitive values to methods">
+  <h4>The program</h4>
+<pre><code class="language-java">public static void changeNumber(int number) {
+    number = 100;
+}</code></pre>
+  <p>Now:</p>
+<pre><code class="language-java">public static void main(String[] args) {
+    int x = 5;
+
+    changeNumber(x);
+
+    System.out.println(x);
+}</code></pre>
+  <h4>What prints?</h4>
+<pre><code class="language-text">5</code></pre>
+  <p>Not:</p>
+<pre><code class="language-text">100</code></pre>
+  <h4>Why</h4>
+  <p>The method receives a copy of the value stored in <code>x</code>. Conceptually:</p>
+<pre><code class="language-text">main:
+
+x = 5
+
+          copy
+           |
+           v
+
+changeNumber:
+
+number = 5</code></pre>
+  <p>Then:</p>
+<pre><code class="language-java">number = 100;</code></pre>
+  <p>changes the local variable <code>number</code>. It does not change <code>x</code>.</p>
+  <h4>The general rule</h4>
+  <p>Parameters behave like local variables. The parameter exists only during that invocation, and assigning to it rewrites the copy, not the caller's variable. The only value that travels back to the caller is the one sent by <code>return</code>.</p>
+  <p>We will revisit Java's parameter passing more deeply when we study objects and references.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-execution-flow"
+          data-kicker="Trace" data-title="Execution flow, step by step">
+  <h4>The program</h4>
+<pre><code class="language-java">public static void methodA() {
+    System.out.println("A1");
+    methodB();
+    System.out.println("A2");
+}
+
+public static void methodB() {
+    System.out.println("B");
+}
+
+public static void main(String[] args) {
+    System.out.println("Start");
+    methodA();
+    System.out.println("End");
+}</code></pre>
+  <h4>Trace carefully</h4>
+  <p>First:</p>
+<pre><code class="language-text">Start</code></pre>
+  <p>Then <code>methodA</code> begins:</p>
+<pre><code class="language-text">A1</code></pre>
+  <p>Then <code>methodA</code> calls <code>methodB</code>:</p>
+<pre><code class="language-text">B</code></pre>
+  <p><code>methodB</code> finishes. Execution returns to <code>methodA</code>:</p>
+<pre><code class="language-text">A2</code></pre>
+  <p><code>methodA</code> finishes. Execution returns to <code>main</code>:</p>
+<pre><code class="language-text">End</code></pre>
+  <h4>Complete output</h4>
+<pre><code class="language-text">Start
+A1
+B
+A2
+End</code></pre>
+  <h4>The point</h4>
+  <p>Source order is not execution order. Reading the file top to bottom would suggest A1, A2, B, Start, End — which is wrong in every position. Start at <code>main</code> and follow the calls.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-call-stack"
+          data-kicker="Deep dive" data-title="The call stack, frame by frame">
+  <h4>Why a stack</h4>
+  <p>Java must remember where to return after a method finishes. It does this using a structure called the <strong>call stack</strong>.</p>
+  <h4>The calls</h4>
+<pre><code class="language-text">main calls methodA
+methodA calls methodB
+methodB calls methodC</code></pre>
+  <h4>At the deepest point</h4>
+<pre><code class="language-text">+-----------+
+| methodC   |
++-----------+
+| methodB   |
++-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+</code></pre>
+  <h4>When <code>methodC</code> finishes</h4>
+<pre><code class="language-text">+-----------+
+| methodB   |
++-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+</code></pre>
+  <h4>Then <code>methodB</code> finishes</h4>
+<pre><code class="language-text">+-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+</code></pre>
+  <p>Eventually execution returns to <code>main</code>.</p>
+  <h4>What else a frame holds</h4>
+  <p>Each frame holds that invocation's local variables and parameters, which is the mechanism behind two earlier claims: that two methods may each have a variable named <code>x</code> without interfering, and that Java "creates a different <code>number</code> for each call" of <code>square</code>.</p>
+  <h4>Looking ahead</h4>
+  <p>The stack becomes especially important when we study <strong>recursion</strong> later in the course, where many frames on the stack belong to the same method.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-top-down-atm"
+          data-kicker="Design" data-title="Top-down design: the ATM hierarchy">
+  <h4>Start with the high-level problem</h4>
+  <p>Suppose we need to create an ATM simulation. At the highest level:</p>
+<pre><code class="language-text">runATM</code></pre>
+  <p>Break that into:</p>
+<pre><code class="language-text">displayMenu
+readChoice
+processChoice</code></pre>
+  <p>Then <code>processChoice</code> may break into:</p>
+<pre><code class="language-text">deposit
+withdraw
+checkBalance</code></pre>
+  <h4>The hierarchy</h4>
+<pre><code class="language-text">main
+ |
+ +-- displayMenu
+ |
+ +-- readChoice
+ |
+ +-- processChoice
+       |
+       +-- deposit
+       |
+       +-- withdraw
+       |
+       +-- checkBalance</code></pre>
+  <h4>The strategy</h4>
+  <p>Rather than solving the entire problem at once, we repeatedly divide it into smaller problems. Each level of the tree is a design decision you can inspect, argue about, and change before a single line of Java is written.</p>
+  <p>Compare this with the tree for the grading problem in Part IV. That one was flat, because the four tasks were siblings; this one has depth, because <code>processChoice</code> is itself a problem worth decomposing.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-temperature"
+          data-kicker="Worked example" data-title="Temperature conversion, and why the separation pays">
+  <h4>The problem</h4>
+  <p>Create a program that converts Fahrenheit temperatures to Celsius. Formula:</p>
+<pre><code class="language-text">C = (F - 32) × 5/9</code></pre>
+  <h4>The calculation</h4>
+  <p>We can separate calculation from user interaction.</p>
+<pre><code class="language-java">public static double fahrenheitToCelsius(double fahrenheit) {
+    return (fahrenheit - 32) * 5.0 / 9.0;
+}</code></pre>
+  <h4>The interaction</h4>
+<pre><code class="language-java">public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+
+    System.out.print("Enter temperature in Fahrenheit: ");
+    double fahrenheit = input.nextDouble();
+
+    double celsius =
+            fahrenheitToCelsius(fahrenheit);
+
+    System.out.printf("%.2f F = %.2f C%n",
+                      fahrenheit,
+                      celsius);
+}</code></pre>
+  <h4>The benefit</h4>
+  <p>This separation provides an important benefit: the conversion method does not know anything about keyboards, scanners, or printing. It simply performs a calculation.</p>
+  <p>That makes the method easier to reuse and test. To test it you do not need to type anything at a console — you call it with a known Fahrenheit value and compare the returned number with the one you worked out by hand.</p>
+  <h4>The related exercise</h4>
+  <p>Part X asks for the inverse method, <code>celsiusToFahrenheit</code>, using <code>F = C × 9/5 + 32</code>. The same warning applies to both: write <code>9.0</code> and <code>5.0</code>, not <code>9</code> and <code>5</code>.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-signatures-overloading"
+          data-kicker="Reference" data-title="Method signatures and overloading">
+  <h4>The signature</h4>
+  <p>Consider:</p>
+<pre><code class="language-java">public static double calculateArea(double radius)</code></pre>
+  <p>The method has:</p>
+  <ul>
+    <li>a name: <code>calculateArea</code></li>
+    <li>a parameter list: <code>(double radius)</code></li>
+    <li>a return type: <code>double</code></li>
+  </ul>
+  <h4>Overloading</h4>
+  <p>Methods are distinguished in part by their names and parameter types. For example, Java can support:</p>
+<pre><code class="language-java">public static int max(int a, int b)</code></pre>
+  <p>and:</p>
+<pre><code class="language-java">public static double max(double a, double b)</code></pre>
+  <p>This concept is called <strong>method overloading</strong>.</p>
+  <h4>How much to use it now</h4>
+  <p>We will only use it lightly for now, but students should recognize that methods may share a name if their parameter lists differ.</p>
+  <p>It is also worth noticing that students have been relying on overloading since Week 1 without knowing the word: <code>System.out.println</code> accepts an <code>int</code>, a <code>double</code>, a <code>String</code>, and a <code>boolean</code>, and those are different methods that share one name.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-error-catalogue"
+          data-kicker="Reference" data-title="Seven common errors involving methods">
+  <h4>1. Forgetting to return a value</h4>
+  <p>Incorrect:</p>
+<pre><code class="language-java">public static int square(int number) {
+    int result = number * number;
+}</code></pre>
+  <p>Java expects the method to return an <code>int</code>. The method promises <code>int</code> but never returns one. Correct:</p>
+<pre><code class="language-java">public static int square(int number) {
+    int result = number * number;
+    return result;
+}</code></pre>
+  <h4>2. Returning the wrong type</h4>
+<pre><code class="language-java">public static int getAverage(int a, int b) {
+    return "hello";
+}</code></pre>
+  <p>The method promises an <code>int</code> but attempts to return a <code>String</code>. The returned value must be compatible with the declared return type.</p>
+  <h4>3. Using a <code>void</code> method as a value</h4>
+<pre><code class="language-java">public static void printHello() {
+    System.out.println("Hello");
+}</code></pre>
+  <p>This is incorrect:</p>
+<pre><code class="language-java">String x = printHello();</code></pre>
+  <p><code>printHello</code> does not produce a value. Its return type is <code>void</code>.</p>
+  <h4>4. Printing instead of returning</h4>
+<pre><code class="language-java">public static void square(int number) {
+    System.out.println(number * number);
+}</code></pre>
+  <p>This displays the square, but the caller cannot use the result. We cannot meaningfully write <code>int result = square(5);</code>. Instead:</p>
+<pre><code class="language-java">public static int square(int number) {
+    return number * number;
+}</code></pre>
+  <p>Now the caller decides what to do with the value:</p>
+<pre><code class="language-java">int result = square(5);
+System.out.println(result);</code></pre>
+  <h4>5. Incorrect argument count</h4>
+<pre><code class="language-java">public static int add(int a, int b) {
+    return a + b;
+}</code></pre>
+  <p>Correct: <code>add(5, 7);</code> — incorrect: <code>add(5);</code> and <code>add(5, 7, 10);</code>. The number of arguments must match the parameters.</p>
+  <h4>6. Incorrect argument types</h4>
+<pre><code class="language-java">public static double calculateTax(double amount) {
+    return amount * 0.06;
+}</code></pre>
+  <p>Reasonable: <code>calculateTax(100.0);</code> — not reasonable: <code>calculateTax("one hundred");</code>. Java checks parameter types at compile time. This is one benefit of a statically typed language.</p>
+  <h4>7. Scope confusion</h4>
+<pre><code class="language-java">public static void calculate() {
+    int result = 25;
+}
+
+public static void main(String[] args) {
+    calculate();
+
+    System.out.println(result);
+}</code></pre>
+  <p><code>result</code> belongs to <code>calculate</code>, not to <code>main</code>. One solution is to return the value:</p>
+<pre><code class="language-java">public static int calculate() {
+    return 25;
+}
+
+public static void main(String[] args) {
+    int result = calculate();
+
+    System.out.println(result);
+}</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m4-loan-payment"
+          data-kicker="Worked example" data-title="Loan payment: input, calculation, output">
+  <h4>The assumption</h4>
+  <p>Suppose we want to calculate a simple monthly payment. For this example, assume:</p>
+<pre><code class="language-text">monthly payment = loan amount / number of months</code></pre>
+  <h4>The calculation method</h4>
+<pre><code class="language-java">public static double calculateMonthlyPayment(
+        double loanAmount,
+        int months) {
+
+    return loanAmount / months;
+}</code></pre>
+  <h4>The output method</h4>
+<pre><code class="language-java">public static void displayPayment(double payment) {
+    System.out.printf("Monthly payment: $%.2f%n",
+                      payment);
+}</code></pre>
+  <h4>The coordinator</h4>
+<pre><code class="language-java">public static void main(String[] args) {
+
+    Scanner input = new Scanner(System.in);
+
+    System.out.print("Loan amount: ");
+    double amount = input.nextDouble();
+
+    System.out.print("Number of months: ");
+    int months = input.nextInt();
+
+    double payment =
+            calculateMonthlyPayment(amount, months);
+
+    displayPayment(payment);
+}</code></pre>
+  <h4>The pattern</h4>
+  <p>Notice the separation between:</p>
+<pre><code class="language-text">input
+calculation
+output</code></pre>
+  <p>This pattern appears constantly in software. Each of the three stages can be changed without disturbing the other two: swap the console for a file reader and only the input stage changes.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-number-analysis"
+          data-kicker="Worked example" data-title="Number analysis: four small methods">
+  <h4>The problem</h4>
+  <p>Suppose a program reads an integer and reports whether it is:</p>
+  <ul>
+    <li>positive, negative, or zero,</li>
+    <li>and even or odd.</li>
+  </ul>
+  <h4>The predicates</h4>
+<pre><code class="language-java">public static boolean isPositive(int number) {
+    return number &gt; 0;
+}
+
+public static boolean isNegative(int number) {
+    return number &lt; 0;
+}
+
+public static boolean isEven(int number) {
+    return number % 2 == 0;
+}</code></pre>
+  <h4>The reporting method</h4>
+<pre><code class="language-java">public static void describeNumber(int number) {
+
+    if (isPositive(number)) {
+        System.out.println("Positive");
+    } else if (isNegative(number)) {
+        System.out.println("Negative");
+    } else {
+        System.out.println("Zero");
+    }
+
+    if (isEven(number)) {
+        System.out.println("Even");
+    } else {
+        System.out.println("Odd");
+    }
+}</code></pre>
+  <h4>What it demonstrates</h4>
+  <p>This example demonstrates that small methods can communicate concepts clearly. <code>describeNumber</code> contains no comparison operators at all; every condition is a named question.</p>
+  <p>Note that zero needs no predicate of its own. It is the case that survives when a number is neither positive nor negative, and the <code>else</code> branch says exactly that.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-contracts"
+          data-kicker="Design" data-title="Method contracts, written out">
+  <h4>The idea</h4>
+  <p>It is helpful to think of a method as having a contract. For example:</p>
+<pre><code class="language-java">public static double calculateArea(double radius)</code></pre>
+  <p>The caller provides:</p>
+<pre><code class="language-text">a radius</code></pre>
+  <p>The method provides:</p>
+<pre><code class="language-text">an area</code></pre>
+  <h4>Written formally</h4>
+  <p>Method:</p>
+<pre><code class="language-java">calculateArea</code></pre>
+  <p>Input:</p>
+<pre><code class="language-text">radius: double</code></pre>
+  <p>Output:</p>
+<pre><code class="language-text">area: double</code></pre>
+  <p>Assumption:</p>
+<pre><code class="language-text">radius &gt;= 0</code></pre>
+  <p>Behavior:</p>
+<pre><code class="language-text">returns π × radius²</code></pre>
+  <h4>Why the assumption line matters</h4>
+  <p>Nothing in the Java signature prevents a caller from passing a negative radius; <code>double</code> happily holds one. The assumption is a promise the caller makes, and stating it is the difference between a method that is documented and one that merely compiles.</p>
+  <p>Thinking about methods this way will become important later when designing larger software systems. It is also exactly what the <code>@param</code> and <code>@return</code> lines of a Javadoc comment record.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-movie-tickets"
+          data-kicker="Exercise" data-title="Movie tickets: a larger decomposition">
+  <h4>The problem</h4>
+  <p>Design a program that calculates the cost of movie tickets. Rules:</p>
+<pre><code class="language-text">Child ticket:   $8
+Adult ticket:   $12
+Senior ticket:  $9</code></pre>
+  <p>Additionally, purchases of five or more tickets receive a 10% discount.</p>
+  <h4>Design first</h4>
+  <p>Do not begin by writing code. First identify possible methods. Possible design:</p>
+<pre><code class="language-text">getTicketPrice
+calculateSubtotal
+applyDiscount
+printReceipt</code></pre>
+  <h4>One possible method</h4>
+<pre><code class="language-java">public static double getTicketPrice(int age) {
+
+    if (age &lt; 13) {
+        return 8.0;
+    } else if (age &gt;= 65) {
+        return 9.0;
+    }
+
+    return 12.0;
+}</code></pre>
+  <h4>Another</h4>
+<pre><code class="language-java">public static double applyDiscount(
+        double subtotal,
+        int quantity) {
+
+    if (quantity &gt;= 5) {
+        return subtotal * 0.90;
+    }
+
+    return subtotal;
+}</code></pre>
+  <h4>The point</h4>
+  <p>The important skill is not merely coding the methods. The important skill is recognizing how a large problem can be divided into smaller responsibilities.</p>
+  <p>Both methods above are pure calculations: they take numbers and return numbers, and neither prints or reads anything. That is what makes them trivial to test with a handful of known cases.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-exercise-solutions"
+          data-kicker="Solutions" data-title="In-class exercise solutions">
+  <h4>Write <code>isOdd</code></h4>
+<pre><code class="language-java">public static boolean isOdd(int number)</code></pre>
+  <p>that returns <code>true</code> if the number is odd. Solution:</p>
+<pre><code class="language-java">public static boolean isOdd(int number) {
+    return number % 2 != 0;
+}</code></pre>
+  <h4>Find the smaller number</h4>
+<pre><code class="language-java">public static int min(int a, int b)</code></pre>
+  <p>Solution:</p>
+<pre><code class="language-java">public static int min(int a, int b) {
+
+    if (a &lt; b) {
+        return a;
+    }
+
+    return b;
+}</code></pre>
+  <h4>Celsius conversion</h4>
+<pre><code class="language-java">public static double celsiusToFahrenheit(double celsius)</code></pre>
+  <p>using:</p>
+<pre><code class="language-text">F = C × 9/5 + 32</code></pre>
+  <p>Solution:</p>
+<pre><code class="language-java">public static double celsiusToFahrenheit(
+        double celsius) {
+
+    return celsius * 9.0 / 5.0 + 32;
+}</code></pre>
+  <h4>Valid month</h4>
+  <p>Valid months are 1 through 12.</p>
+<pre><code class="language-java">public static boolean isValidMonth(int month)</code></pre>
+  <p>Solution:</p>
+<pre><code class="language-java">public static boolean isValidMonth(int month) {
+    return month &gt;= 1 &amp;&amp; month &lt;= 12;
+}</code></pre>
+  <h4>Letter grade</h4>
+<pre><code class="language-java">public static char getLetterGrade(double score)</code></pre>
+  <p>Assume:</p>
+<pre><code class="language-text">90–100 A
+80–89  B
+70–79  C
+60–69  D
+below 60 F</code></pre>
+  <p>Solution:</p>
+<pre><code class="language-java">public static char getLetterGrade(double score) {
+
+    if (score &gt;= 90) {
+        return 'A';
+    } else if (score &gt;= 80) {
+        return 'B';
+    } else if (score &gt;= 70) {
+        return 'C';
+    } else if (score &gt;= 60) {
+        return 'D';
+    }
+
+    return 'F';
+}</code></pre>
+  <h4>Sum of integers</h4>
+<pre><code class="language-java">public static int sumTo(int n)</code></pre>
+  <p>that returns:</p>
+<pre><code class="language-text">1 + 2 + ... + n</code></pre>
+  <p>Example: <code>sumTo(4)</code> returns <code>10</code>. Solution:</p>
+<pre><code class="language-java">public static int sumTo(int n) {
+
+    int sum = 0;
+
+    for (int i = 1; i &lt;= n; i++) {
+        sum += i;
+    }
+
+    return sum;
+}</code></pre>
+</template>
+
+<template class="csc-modal-tpl" id="m4-fitness-calculator"
+          data-kicker="Worked example" data-title="FitnessCalculator — the end-of-week program">
+  <h4>The complete program</h4>
+<pre><code class="language-java">import java.util.Scanner;
+
+public class FitnessCalculator {
+
+    public static double calculateBMI(
+            double weightKg,
+            double heightMeters) {
+
+        return weightKg /
+                (heightMeters * heightMeters);
+    }
+
+    public static String classifyBMI(double bmi) {
+
+        if (bmi &lt; 18.5) {
+            return "Underweight";
+        } else if (bmi &lt; 25) {
+            return "Normal";
+        } else if (bmi &lt; 30) {
+            return "Overweight";
+        } else {
+            return "Obese";
+        }
+    }
+
+    public static void displayResult(
+            double bmi,
+            String category) {
+
+        System.out.printf("BMI: %.1f%n", bmi);
+        System.out.println("Category: " + category);
+    }
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Weight in kilograms: ");
+        double weight = input.nextDouble();
+
+        System.out.print("Height in meters: ");
+        double height = input.nextDouble();
+
+        double bmi =
+                calculateBMI(weight, height);
+
+        String category =
+                classifyBMI(bmi);
+
+        displayResult(bmi, category);
+    }
+}</code></pre>
+  <h4>Three conceptual operations</h4>
+  <p>Notice how the program has three conceptual operations:</p>
+<pre><code class="language-text">calculate BMI
+classify BMI
+display result</code></pre>
+  <p>Each operation is represented by a method. <code>main</code> coordinates those operations.</p>
+  <h4>Every idea of the week, in one file</h4>
+  <ul>
+    <li><code>calculateBMI</code> is a pure calculation method — parameters in, value out, no input or output of its own.</li>
+    <li><code>classifyBMI</code> returns a <code>String</code>, showing that return types are not restricted to numbers.</li>
+    <li><code>displayResult</code> is a <code>void</code> method whose entire responsibility is output.</li>
+    <li><code>main</code> reads, calls, and coordinates — it computes nothing itself.</li>
+  </ul>
+</template>
+
+<template class="csc-modal-tpl" id="m4-concept-check"
+          data-kicker="Review" data-title="Concept check — ten questions">
+  <p>Students should be able to answer these questions by the end of the week.</p>
+  <h4>1. What is a method?</h4>
+  <p>A named block of code designed to perform a particular task.</p>
+  <h4>2. Why do programmers use methods?</h4>
+  <p>To improve decomposition, readability, reuse, testing, abstraction, and maintainability.</p>
+  <h4>3. What is a parameter?</h4>
+  <p>A variable declared in a method definition that receives information from the caller.</p>
+  <h4>4. What is an argument?</h4>
+  <p>A value supplied when calling a method.</p>
+  <h4>5. What does <code>void</code> mean?</h4>
+  <p>The method does not return a value.</p>
+  <h4>6. What does <code>return</code> do?</h4>
+  <p>It ends the method and sends a value back to the caller.</p>
+  <h4>7. What is scope?</h4>
+  <p>The part of a program in which a variable can be accessed.</p>
+  <h4>8. What is a local variable?</h4>
+  <p>A variable declared inside a method or block whose scope is limited to that region.</p>
+  <h4>9. What happens when one method calls another?</h4>
+  <p>Execution transfers to the called method. When it finishes, execution returns to the caller.</p>
+  <h4>10. What is program decomposition?</h4>
+  <p>Breaking a complex problem into smaller, manageable subproblems.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-homework"
+          data-kicker="Assignment" data-title="Suggested homework — Parts A, B, and C">
+  <h4>Part A — Short exercises</h4>
+  <p>Write methods for each of the following:</p>
+  <ol>
+    <li><code>cube(int n)</code> — returns the cube of <code>n</code>.</li>
+    <li><code>isPositive(double n)</code> — returns whether <code>n</code> is positive.</li>
+    <li><code>larger(double a, double b)</code> — returns the larger value.</li>
+    <li><code>calculateTip(double bill, double percentage)</code> — returns the tip.</li>
+    <li><code>countDown(int n)</code> — prints from <code>n</code> down to 1.</li>
+    <li><code>isLeapYear(int year)</code> — determines whether a year is a leap year.</li>
+  </ol>
+  <h4>Part B — Program decomposition</h4>
+  <p>Create a program that calculates a student's final course grade. The program should:</p>
+  <ul>
+    <li>read homework, midterm, and final-exam scores,</li>
+    <li>calculate a weighted average,</li>
+    <li>determine a letter grade,</li>
+    <li>determine whether the student passed,</li>
+    <li>and print a formatted report.</li>
+  </ul>
+  <p>Required methods:</p>
+<pre><code class="language-java">calculateFinalAverage(...)
+determineLetterGrade(...)
+hasPassed(...)
+printReport(...)</code></pre>
+  <p>Students should decide the appropriate:</p>
+  <ul>
+    <li>parameter types,</li>
+    <li>return types,</li>
+    <li>variables,</li>
+    <li>and method calls.</li>
+  </ul>
+  <h4>Part C — Code tracing</h4>
+  <p>Given several programs containing nested method calls, determine:</p>
+  <ul>
+    <li>the order in which methods execute,</li>
+    <li>the values of parameters,</li>
+    <li>local-variable values,</li>
+    <li>returned values,</li>
+    <li>and final program output.</li>
+  </ul>
+  <p>Do the tracing by hand before using Java to verify the answers.</p>
+</template>
+
+<template class="csc-modal-tpl" id="m4-week-summary"
+          data-kicker="Review" data-title="Week 4 summary">
+  <h4>The transition</h4>
+  <p>This week introduced one of the most important transitions in programming. Until now, we mainly focused on individual statements:</p>
+<pre><code class="language-text">variables
+conditionals
+loops</code></pre>
+  <p>Methods allow us to organize those statements into larger conceptual units.</p>
+  <h4>The central ideas</h4>
+<pre><code class="language-text">method = named computation
+
+parameters = information going into a method
+
+return value = information coming out of a method
+
+scope = where a variable exists
+
+decomposition = dividing a large problem into smaller problems</code></pre>
+  <h4>The habit</h4>
+  <p>The most important habit to develop is this:</p>
+  <blockquote>Do not think of a program as one long sequence of statements.</blockquote>
+  <p>Instead, think of a program as a collection of smaller operations that cooperate to solve a larger problem.</p>
+  <h4>What it prepares us for</h4>
+  <p>That way of thinking prepares us for the next major topic in Java: <strong>classes and objects.</strong></p>
+</template>
+
+<script src="assets/reveal/reveal.js"></script>
+<script src="assets/reveal/plugin/highlight/highlight.js"></script>
+<script src="assets/reveal/plugin/notes/notes.js"></script>
+<script src="assets/reveal/plugin/zoom/zoom.js"></script>
+<script src="assets/reveal/plugin/search/search.js"></script>
+<script src="assets/csc500.js"></script>
+<script>CSC500.boot();</script>
+</body>
+</html>
