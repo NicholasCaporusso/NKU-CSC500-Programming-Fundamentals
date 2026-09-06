@@ -1,0 +1,1610 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 9: exceptions, file I/O, and testing</h2>
+<h3>Learning objectives</h3>
+<p>By the end of this week, you should be able to:</p>
+<ul><li>Explain the difference between syntax errors, logic errors, and runtime errors.</li><li>Explain what an exception is and why Java uses exceptions.</li><li>Use <code>try</code>, <code>catch</code>, and <code>finally</code>.</li><li>Distinguish between checked and unchecked exceptions.</li><li>Throw exceptions using <code>throw</code>.</li><li>Declare exceptions using <code>throws</code>.</li><li>Decide when an exception should be handled and when it should be propagated.</li><li>Read data from text files.</li><li>Write data to text files.</li><li>Use <code>try-with-resources</code> to safely manage files.</li><li>Validate input and write more robust programs.</li><li>Explain the purpose of software testing.</li><li>Write basic unit tests.</li><li>Identify normal cases, boundary cases, and exceptional cases when testing code.</li></ul>
+<hr>
+<h1>1. Why this week matters</h1>
+<p>So far, most of our programs have assumed that everything goes according to plan.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = scanner.nextInt();</code></pre></div>
+<p>We assume the user enters an integer.</p>
+<p>Or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> result = total / count;</code></pre></div>
+<p>We assume <code>count</code> is not zero.</p>
+<p>Or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> file = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"students.txt"</span>));</code></pre></div>
+<p>We assume the file exists.</p>
+<p>Real programs cannot make these assumptions.</p>
+<p>Users enter invalid input.</p>
+<p>Files disappear.</p>
+<p>Network connections fail.</p>
+<p>Data may be incomplete.</p>
+<p>Programmers make mistakes.</p>
+<p>One of the differences between a small classroom program and production-quality software is how the program behaves when something goes wrong.</p>
+<p>This week focuses on three closely related ideas:</p>
+<ol><li><strong>Detecting and responding to errors</strong></li><li><strong>Working with external data</strong></li><li><strong>Testing programs systematically</strong></li></ol>
+<p>Together, these concepts help us write software that is more reliable.</p>
+<hr>
+<h1>2. Three categories of programming errors</h1>
+<p>Before discussing exceptions, we need to distinguish several kinds of errors.</p>
+<h2>2.1 syntax errors</h2>
+<p>A syntax error means that the program violates Java's grammatical rules.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>
+<span class="type">System</span>.out.println(x);</code></pre></div>
+<p>The semicolon is missing.</p>
+<p>The Java compiler detects this problem.</p>
+<p>Another example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x &gt; <span class="num">5</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Large"</span>);
+}</code></pre></div>
+<p>This code cannot compile.</p>
+<p>Syntax errors are generally discovered before the program runs.</p>
+<hr>
+<h2>2.2 logic errors</h2>
+<p>A logic error occurs when the program runs, but produces the wrong answer.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> average = total / <span class="num">2</span>;</code></pre></div>
+<p>Suppose there are actually 10 values.</p>
+<p>The program may compile.</p>
+<p>It may run.</p>
+<p>It may never crash.</p>
+<p>But the result is incorrect.</p>
+<p>Logic errors can be especially difficult because Java cannot automatically determine what the programmer intended.</p>
+<p>Testing is one of our main tools for detecting logic errors.</p>
+<hr>
+<h2>2.3 runtime errors</h2>
+<p>A runtime error occurs while the program is executing.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] numbers = <span class="kw">new</span> <span class="kw">int</span>[<span class="num">5</span>];
+
+<span class="type">System</span>.out.println(numbers[<span class="num">10</span>]);</code></pre></div>
+<p>This program compiles.</p>
+<p>But when it runs, Java detects that index <code>10</code> is outside the array.</p>
+<p>The result is an exception.</p>
+<hr>
+<h1>3. What is an exception?</h1>
+<p>An <strong>exception</strong> is an object representing an abnormal situation that occurs while a program is running.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+<span class="kw">int</span> y = <span class="num">0</span>;
+
+<span class="kw">int</span> result = x / y;</code></pre></div>
+<p>When Java attempts to divide by zero, it creates an exception object.</p>
+<p>Specifically:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArithmeticException</code></pre></div>
+<p>If the program does not handle the exception, the program terminates.</p>
+<p>A message similar to this appears:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Exception in thread "main" java.lang.ArithmeticException: / by zero</code></pre></div>
+<p>The exception mechanism allows us to separate:</p>
+<ul><li>normal program logic</li><li>error-handling logic</li></ul>
+<hr>
+<h1>4. Exception hierarchy</h1>
+<p>Exceptions are objects.</p>
+<p>Therefore, exception types are organized using inheritance.</p>
+<p>A simplified Java hierarchy looks like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Object
+   |
+Throwable
+   |
+   +-- Error
+   |
+   +-- Exception
+          |
+          +-- RuntimeException</code></pre></div>
+<p>We will mainly work with classes below <code>Exception</code>.</p>
+<p>Some common exception classes include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArithmeticException
+NullPointerException
+ArrayIndexOutOfBoundsException
+NumberFormatException
+IllegalArgumentException
+IOException
+FileNotFoundException</code></pre></div>
+<hr>
+<h1>5. Common runtime exceptions</h1>
+<h2>5.1 arithmeticexception</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span> / <span class="num">0</span>;</code></pre></div>
+<p>Produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArithmeticException</code></pre></div>
+<hr>
+<h2>5.2 arrayindexoutofboundsexception</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] values = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>};
+
+<span class="type">System</span>.out.println(values[<span class="num">5</span>]);</code></pre></div>
+<p>Valid indices are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0
+1
+2</code></pre></div>
+<p>Index <code>5</code> is invalid.</p>
+<hr>
+<h2>5.3 nullpointerexception</h2>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> name = <span class="lit">null</span>;
+
+<span class="type">System</span>.out.println(name.length());</code></pre></div>
+<p>The variable exists.</p>
+<p>But it does not refer to a <code>String</code> object.</p>
+<p>Calling a method through a <code>null</code> reference causes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NullPointerException</code></pre></div>
+<p>This is one of the most common exceptions in Java programs.</p>
+<hr>
+<h2>5.4 numberformatexception</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> value = <span class="str">"hello"</span>;
+
+<span class="kw">int</span> x = <span class="type">Integer</span>.parseInt(value);</code></pre></div>
+<p>Java cannot interpret <code>"hello"</code> as an integer.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NumberFormatException</code></pre></div>
+<hr>
+<h1>6. Handling exceptions with try and catch</h1>
+<p>We handle exceptions using a <code>try-catch</code> statement.</p>
+<p>Basic structure:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="cmt">// code that might throw an exception</span>
+}
+<span class="kw">catch</span> (<span class="type">ExceptionType</span> e) {
+    <span class="cmt">// code that handles the exception</span>
+}</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="kw">int</span> result = <span class="num">10</span> / <span class="num">0</span>;
+    <span class="type">System</span>.out.println(result);
+}
+<span class="kw">catch</span> (<span class="type">ArithmeticException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"Cannot divide by zero."</span>);
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Cannot divide by zero.</code></pre></div>
+<p>The program does not terminate unexpectedly.</p>
+<hr>
+<h1>7. Control flow in try-catch</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+
+    <span class="kw">int</span> x = <span class="num">10</span> / <span class="num">0</span>;
+
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+}
+<span class="kw">catch</span> (<span class="type">ArithmeticException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"C"</span>);
+}
+
+<span class="type">System</span>.out.println(<span class="str">"D"</span>);</code></pre></div>
+<p>What is printed?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+C
+D</code></pre></div>
+<p><code>B</code> is never printed.</p>
+<p>As soon as the exception occurs, Java stops executing the remaining statements in the <code>try</code> block.</p>
+<p>Control immediately transfers to the matching <code>catch</code>.</p>
+<hr>
+<h1>8. The exception object</h1>
+<p>In:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">ArithmeticException</span> e)</code></pre></div>
+<p><code>e</code> is a reference to the exception object.</p>
+<p>We can examine it.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">ArithmeticException</span> e) {
+    <span class="type">System</span>.out.println(e.getMessage());
+}</code></pre></div>
+<p>For division by zero, this may print:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>/ by zero</code></pre></div>
+<p>Another useful method is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>e.printStackTrace();</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    e.printStackTrace();
+}</code></pre></div>
+<p>The stack trace shows where the exception occurred and how the program reached that point.</p>
+<p>Stack traces are extremely useful for debugging.</p>
+<hr>
+<h1>9. Multiple catch blocks</h1>
+<p>A block of code may cause several different exceptions.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="type">String</span> text = <span class="str">"abc"</span>;
+    <span class="kw">int</span> value = <span class="type">Integer</span>.parseInt(text);
+
+    <span class="kw">int</span> result = <span class="num">100</span> / value;
+
+    <span class="type">System</span>.out.println(result);
+}
+<span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"The string is not a valid integer."</span>);
+}
+<span class="kw">catch</span> (<span class="type">ArithmeticException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"Cannot divide by zero."</span>);
+}</code></pre></div>
+<p>Java chooses the first compatible <code>catch</code>.</p>
+<hr>
+<h1>10. Catching general exceptions</h1>
+<p>We could write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"Something went wrong."</span>);
+}</code></pre></div>
+<p>This works because many exception classes inherit from <code>Exception</code>.</p>
+<p>However, catching <code>Exception</code> everywhere is usually poor design.</p>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"Error."</span>);
+}</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"Please enter a valid integer."</span>);
+}</code></pre></div>
+<p>The second provides more meaningful handling.</p>
+<h3>General principle</h3>
+<p>Catch the most specific exception that you can meaningfully handle.</p>
+<hr>
+<h1>11. Catch ordering</h1>
+<p>Because exceptions participate in inheritance, catch order matters.</p>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="cmt">// ...</span>
+}
+<span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    <span class="cmt">// ...</span>
+}
+<span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+    <span class="cmt">// ...</span>
+}</code></pre></div>
+<p>This will not compile.</p>
+<p>Why?</p>
+<p>Because <code>NumberFormatException</code> is already covered by <code>Exception</code>.</p>
+<p>The specific exception should appear first:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="cmt">// ...</span>
+}
+<span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+    <span class="cmt">// ...</span>
+}
+<span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    <span class="cmt">// ...</span>
+}</code></pre></div>
+<hr>
+<h1>12. Finally</h1>
+<p>Java provides an optional <code>finally</code> block.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="cmt">// risky code</span>
+}
+<span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    <span class="cmt">// handle error</span>
+}
+<span class="kw">finally</span> {
+    <span class="cmt">// cleanup</span>
+}</code></pre></div>
+<p>The <code>finally</code> block executes whether or not an exception occurred.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Trying operation..."</span>);
+}
+<span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"Error."</span>);
+}
+<span class="kw">finally</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Finished."</span>);
+}</code></pre></div>
+<p>Historically, <code>finally</code> was commonly used to close files, database connections, and other resources.</p>
+<p>Modern Java usually uses <strong>try-with-resources</strong> for that purpose, which we will see later.</p>
+<hr>
+<h1>13. Checked vs. unchecked exceptions</h1>
+<p>Java distinguishes between two important categories.</p>
+<h2>Unchecked exceptions</h2>
+<p>Unchecked exceptions generally represent programming errors or invalid operations.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NullPointerException
+ArithmeticException
+ArrayIndexOutOfBoundsException
+IllegalArgumentException
+NumberFormatException</code></pre></div>
+<p>These typically inherit from:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">RuntimeException</span></code></pre></div>
+<p>The compiler does not require us to handle them.</p>
+<hr>
+<h2>Checked exceptions</h2>
+<p>Checked exceptions usually represent external conditions that a program may reasonably need to recover from.</p>
+<p>Examples include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>IOException
+FileNotFoundException</code></pre></div>
+<p>Java requires the programmer either to:</p>
+<ul><li>handle the exception</li></ul>
+<p>or</p>
+<ul><li>declare that the method may throw it</li></ul>
+<hr>
+<h1>14. The throws keyword</h1>
+<p>Suppose a method might cause a checked exception.</p>
+<p>We can declare this using <code>throws</code>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> readFile() <span class="kw">throws</span> <span class="type">FileNotFoundException</span> {
+    <span class="type">Scanner</span> file = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"data.txt"</span>));
+}</code></pre></div>
+<p>This means:</p>
+<blockquote>This method may fail with a <code>FileNotFoundException</code>. The caller is responsible for dealing with that possibility.</blockquote>
+<p>Notice the difference:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">throw</span></code></pre></div>
+<p>versus:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">throws</span></code></pre></div>
+<p>They are different keywords.</p>
+<hr>
+<h1>15. The throw keyword</h1>
+<p>We use <code>throw</code> when we intentionally create an exception.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> setAge(<span class="kw">int</span> age) {
+
+    <span class="kw">if</span> (age &lt; <span class="num">0</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(<span class="str">"Age cannot be negative."</span>);
+    }
+}</code></pre></div>
+<p>Usage:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>setAge(-<span class="num">5</span>);</code></pre></div>
+<p>produces an exception.</p>
+<p>This is useful when a method detects that its contract has been violated.</p>
+<hr>
+<h1>16. Defensive programming</h1>
+<p>Defensive programming means anticipating possible errors instead of assuming valid input.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateAverage(<span class="kw">double</span> total, <span class="kw">int</span> count) {
+    <span class="kw">return</span> total / count;
+}</code></pre></div>
+<p>What happens when:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>count == <span class="num">0</span></code></pre></div>
+<p>A safer method would be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateAverage(<span class="kw">double</span> total, <span class="kw">int</span> count) {
+
+    <span class="kw">if</span> (count &lt;= <span class="num">0</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"count must be greater than zero"</span>
+        );
+    }
+
+    <span class="kw">return</span> total / count;
+}</code></pre></div>
+<p>Now the method explicitly defines acceptable input.</p>
+<hr>
+<h1>17. Validate at the boundary</h1>
+<p>A useful software engineering rule is:</p>
+<blockquote>Validate data when it enters your system.</blockquote>
+<p>Suppose a class represents a bank account.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BankAccount</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> balance;
+
+    <span class="kw">public</span> <span class="type">BankAccount</span>(<span class="kw">double</span> initialBalance) {
+
+        <span class="kw">if</span> (initialBalance &lt; <span class="num">0</span>) {
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+                <span class="str">"Initial balance cannot be negative."</span>
+            );
+        }
+
+        balance = initialBalance;
+    }
+}</code></pre></div>
+<p>This prevents the object from entering an invalid state.</p>
+<hr>
+<h1>18. Exception handling is not a substitute for good logic</h1>
+<p>Do not write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="type">System</span>.out.println(array[index]);
+}
+<span class="kw">catch</span> (<span class="type">ArrayIndexOutOfBoundsException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"Bad index."</span>);
+}</code></pre></div>
+<p>when you could simply validate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (index &gt;= <span class="num">0</span> &amp;&amp; index &lt; array.length) {
+    <span class="type">System</span>.out.println(array[index]);
+}
+<span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Bad index."</span>);
+}</code></pre></div>
+<p>Exceptions should normally represent exceptional situations.</p>
+<p>They should not replace ordinary conditional logic.</p>
+<hr>
+<h1>19. File input and output</h1>
+<p>So far, many programs have received input from:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>keyboard</code></pre></div>
+<p>and sent output to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>screen</code></pre></div>
+<p>But useful programs frequently need persistent data.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>students.txt
+grades.csv
+configuration.txt
+transactions.txt</code></pre></div>
+<p>A file allows data to survive after the program terminates.</p>
+<hr>
+<h1>20. Reading text files with Scanner</h1>
+<p>We have already used:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span></code></pre></div>
+<p>for keyboard input.</p>
+<p>We can also use <code>Scanner</code> to read files.</p>
+<p>First import:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.io.<span class="type">File</span>;
+<span class="kw">import</span> java.io.<span class="type">FileNotFoundException</span>;
+<span class="kw">import</span> java.util.<span class="type">Scanner</span>;</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args)
+        <span class="kw">throws</span> <span class="type">FileNotFoundException</span> {
+
+    <span class="type">File</span> file = <span class="kw">new</span> <span class="type">File</span>(<span class="str">"students.txt"</span>);
+
+    <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(file);
+
+    <span class="kw">while</span> (input.hasNextLine()) {
+        <span class="type">String</span> line = input.nextLine();
+        <span class="type">System</span>.out.println(line);
+    }
+
+    input.close();
+}</code></pre></div>
+<hr>
+<h1>21. Reading line by line</h1>
+<p>Suppose <code>students.txt</code> contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice
+Bob
+Charlie
+David</code></pre></div>
+<p>Code:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">while</span> (input.hasNextLine()) {
+    <span class="type">String</span> name = input.nextLine();
+    <span class="type">System</span>.out.println(name);
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice
+Bob
+Charlie
+David</code></pre></div>
+<hr>
+<h1>22. Reading structured data</h1>
+<p>Suppose the file contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice 92
+Bob 85
+Charlie 78</code></pre></div>
+<p>We can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">while</span> (input.hasNext()) {
+
+    <span class="type">String</span> name = input.next();
+    <span class="kw">int</span> grade = input.nextInt();
+
+    <span class="type">System</span>.out.println(name + <span class="str">": "</span> + grade);
+}</code></pre></div>
+<hr>
+<h1>23. Reading csv-style data</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice,92
+Bob,85
+Charlie,78</code></pre></div>
+<p>One approach is to read each line:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">while</span> (input.hasNextLine()) {
+
+    <span class="type">String</span> line = input.nextLine();
+
+    <span class="type">String</span>[] parts = line.split(<span class="str">","</span>);
+
+    <span class="type">String</span> name = parts[<span class="num">0</span>];
+    <span class="kw">int</span> grade = <span class="type">Integer</span>.parseInt(parts[<span class="num">1</span>]);
+
+    <span class="type">System</span>.out.println(name + <span class="str">" -&gt; "</span> + grade);
+}</code></pre></div>
+<p>This example combines:</p>
+<ul><li>file I/O</li><li>arrays</li><li>strings</li><li>parsing</li><li>exceptions</li></ul>
+<hr>
+<h1>24. What can go wrong?</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"students.txt"</span>));</code></pre></div>
+<p>The file may not exist.</p>
+<p>Java therefore requires us to handle:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>FileNotFoundException</code></pre></div>
+<p>Option 1:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args)
+        <span class="kw">throws</span> <span class="type">FileNotFoundException</span> {</code></pre></div>
+<p>Option 2:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="type">Scanner</span> input =
+        <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"students.txt"</span>));
+}
+<span class="kw">catch</span> (<span class="type">FileNotFoundException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"File not found."</span>);
+}</code></pre></div>
+<p>For user-facing applications, handling the error is often preferable.</p>
+<hr>
+<h1>25. Writing to files</h1>
+<p>A convenient class for writing text is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">PrintWriter</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.io.<span class="type">PrintWriter</span>;
+<span class="kw">import</span> java.io.<span class="type">FileNotFoundException</span>;</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">PrintWriter</span> output =
+    <span class="kw">new</span> <span class="type">PrintWriter</span>(<span class="str">"results.txt"</span>);
+
+output.println(<span class="str">"Alice,92"</span>);
+output.println(<span class="str">"Bob,85"</span>);
+output.println(<span class="str">"Charlie,78"</span>);
+
+output.close();</code></pre></div>
+<p>The resulting file contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice,92
+Bob,85
+Charlie,78</code></pre></div>
+<hr>
+<h1>26. The importance of closing files</h1>
+<p>When a program opens a file, the operating system allocates resources.</p>
+<p>We should release those resources when we are finished.</p>
+<p>Old style:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"data.txt"</span>));
+
+<span class="kw">try</span> {
+    <span class="cmt">// use input</span>
+}
+<span class="kw">finally</span> {
+    input.close();
+}</code></pre></div>
+<p>Modern Java provides a cleaner solution.</p>
+<hr>
+<h1>27. Try-with-resources</h1>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> (<span class="type">Scanner</span> input =
+        <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"data.txt"</span>))) {
+
+    <span class="kw">while</span> (input.hasNextLine()) {
+        <span class="type">System</span>.out.println(input.nextLine());
+    }
+
+}
+<span class="kw">catch</span> (<span class="type">FileNotFoundException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">"File not found."</span>);
+}</code></pre></div>
+<p>Java automatically closes the <code>Scanner</code>.</p>
+<p>This is called:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>try-with-resources</code></pre></div>
+<p>The general form is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> (<span class="type">Resource</span> resource = ...) {
+
+    <span class="cmt">// use resource</span>
+
+}</code></pre></div>
+<p>When the block finishes, Java closes the resource automatically.</p>
+<p>This is the preferred approach.</p>
+<hr>
+<h1>28. Example: reading student grades</h1>
+<p>Suppose the file is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice,92
+Bob,85
+Charlie,78
+David,95</code></pre></div>
+<p>We want to calculate the average.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.io.<span class="type">File</span>;
+<span class="kw">import</span> java.io.<span class="type">FileNotFoundException</span>;
+<span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">GradeReader</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="kw">double</span> total = <span class="num">0</span>;
+        <span class="kw">int</span> count = <span class="num">0</span>;
+
+        <span class="kw">try</span> (<span class="type">Scanner</span> input =
+                <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"grades.txt"</span>))) {
+
+            <span class="kw">while</span> (input.hasNextLine()) {
+
+                <span class="type">String</span> line = input.nextLine();
+
+                <span class="type">String</span>[] parts = line.split(<span class="str">","</span>);
+
+                <span class="type">String</span> name = parts[<span class="num">0</span>];
+                <span class="kw">double</span> grade =
+                    <span class="type">Double</span>.parseDouble(parts[<span class="num">1</span>]);
+
+                <span class="type">System</span>.out.println(
+                    name + <span class="str">": "</span> + grade
+                );
+
+                total += grade;
+                count++;
+            }
+
+            <span class="kw">if</span> (count &gt; <span class="num">0</span>) {
+                <span class="type">System</span>.out.println(
+                    <span class="str">"Average: "</span> + total / count
+                );
+            }
+
+        }
+        <span class="kw">catch</span> (<span class="type">FileNotFoundException</span> e) {
+
+            <span class="type">System</span>.out.println(
+                <span class="str">"Could not locate grades.txt"</span>
+            );
+
+        }
+    }
+}</code></pre></div>
+<hr>
+<h1>29. A more difficult problem: malformed data</h1>
+<p>Suppose the file contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice,92
+Bob,eighty
+Charlie,78</code></pre></div>
+<p>This statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Double</span>.parseDouble(parts[<span class="num">1</span>]);</code></pre></div>
+<p>will throw:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NumberFormatException</code></pre></div>
+<p>We can handle malformed records.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">while</span> (input.hasNextLine()) {
+
+    <span class="type">String</span> line = input.nextLine();
+
+    <span class="kw">try</span> {
+
+        <span class="type">String</span>[] parts = line.split(<span class="str">","</span>);
+
+        <span class="type">String</span> name = parts[<span class="num">0</span>];
+
+        <span class="kw">double</span> grade =
+            <span class="type">Double</span>.parseDouble(parts[<span class="num">1</span>]);
+
+        <span class="type">System</span>.out.println(
+            name + <span class="str">": "</span> + grade
+        );
+
+    }
+    <span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+
+        <span class="type">System</span>.out.println(
+            <span class="str">"Skipping invalid record: "</span> + line
+        );
+
+    }
+}</code></pre></div>
+<p>Notice something important.</p>
+<p>The <code>try-catch</code> is inside the loop.</p>
+<p>Why?</p>
+<p>Because one bad record should not necessarily prevent us from processing the remaining file.</p>
+<hr>
+<h1>30. Designing error policies</h1>
+<p>There is not always one correct way to handle an error.</p>
+<p>Suppose we encounter:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Bob,eighty</code></pre></div>
+<p>Possible policies include:</p>
+<ul><li>terminate immediately</li><li>skip the record</li><li>substitute a default value</li><li>ask the user for correction</li><li>log the error</li><li>throw the exception to another part of the program</li></ul>
+<p>The correct strategy depends on the application.</p>
+<p>A payroll application may need to stop.</p>
+<p>A data-analysis program may skip malformed rows.</p>
+<p>A GUI application may display an error message.</p>
+<p>Software design includes deciding <strong>how failure should behave</strong>.</p>
+<hr>
+<h1>31. Testing</h1>
+<p>Now we shift from handling known error conditions to detecting mistakes in our own programs.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a;
+}</code></pre></div>
+<p>The program compiles.</p>
+<p>It runs.</p>
+<p>No exception occurs.</p>
+<p>But the method is incorrect.</p>
+<p>How do we detect the problem?</p>
+<p>Testing.</p>
+<hr>
+<h1>32. What is software testing?</h1>
+<p>Software testing is the systematic process of evaluating whether software behaves as expected.</p>
+<p>The key word is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>systematic</code></pre></div>
+<p>Testing is not simply running the program once and seeing whether it appears to work.</p>
+<hr>
+<h1>33. Manual testing</h1>
+<p>Suppose we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+
+    <span class="kw">if</span> (a &gt; b) {
+        <span class="kw">return</span> a;
+    }
+
+    <span class="kw">return</span> b;
+}</code></pre></div>
+<p>We could manually test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(max(<span class="num">10</span>, <span class="num">5</span>));
+<span class="type">System</span>.out.println(max(<span class="num">5</span>, <span class="num">10</span>));
+<span class="type">System</span>.out.println(max(<span class="num">10</span>, <span class="num">10</span>));</code></pre></div>
+<p>Expected output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10
+10
+10</code></pre></div>
+<p>This is useful, but manual testing becomes difficult as programs grow.</p>
+<hr>
+<h1>34. Test cases</h1>
+<p>A test case consists of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>input
+expected result
+actual result</code></pre></div>
+<p>For <code>max()</code>:</p>
+<table><thead><tr><th>Input</th><th>Expected</th></tr></thead><tbody><tr><td><code>max(10, 5)</code></td><td><code>10</code></td></tr><tr><td><code>max(5, 10)</code></td><td><code>10</code></td></tr><tr><td><code>max(10, 10)</code></td><td><code>10</code></td></tr><tr><td><code>max(-5, -10)</code></td><td><code>-5</code></td></tr></tbody></table>
+<p>Good testing requires us to deliberately choose different kinds of inputs.</p>
+<hr>
+<h1>35. Normal cases</h1>
+<p>Normal cases represent typical inputs.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>max(<span class="num">10</span>, <span class="num">5</span>)</code></pre></div>
+<p>For a method calculating an average:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>average({<span class="num">80</span>, <span class="num">90</span>, <span class="num">100</span>})</code></pre></div>
+<p>Normal cases are important, but they are not enough.</p>
+<hr>
+<h1>36. Boundary cases</h1>
+<p>Boundary cases occur near limits.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isValidAge(<span class="kw">int</span> age) {
+    <span class="kw">return</span> age &gt;= <span class="num">0</span> &amp;&amp; age &lt;= <span class="num">120</span>;
+}</code></pre></div>
+<p>Important tests include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>-1
+0
+1
+119
+120
+121</code></pre></div>
+<p>Why?</p>
+<p>Because programming errors frequently occur at boundaries.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>&lt; instead of &lt;=
+index 0
+index length - 1
+empty array
+exact threshold values</code></pre></div>
+<hr>
+<h1>37. Exceptional cases</h1>
+<p>Exceptional cases deliberately test invalid or unusual inputs.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>null
+empty file
+missing file
+negative values
+zero
+incorrect data format</code></pre></div>
+<p>Good programmers do not merely ask:</p>
+<blockquote>Does this work when everything is correct?</blockquote>
+<p>They also ask:</p>
+<blockquote>What happens when something goes wrong?</blockquote>
+<hr>
+<h1>38. Unit testing</h1>
+<p>A <strong>unit test</strong> tests a small, isolated component of a program.</p>
+<p>Usually that component is:</p>
+<ul><li>a method</li><li>a class</li></ul>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">MathUtils</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> x) {
+        <span class="kw">return</span> x * x;
+    }
+}</code></pre></div>
+<p>We want to test <code>square()</code> independently.</p>
+<hr>
+<h1>39. Junit</h1>
+<p>A common Java testing framework is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>JUnit</code></pre></div>
+<p>A basic JUnit test might look like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> <span class="kw">static</span> org.junit.jupiter.api.<span class="type">Assertions</span>.*;
+<span class="kw">import</span> org.junit.jupiter.api.<span class="type">Test</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">MathUtilsTest</span> {
+
+    <span class="ann">@Test</span>
+    <span class="kw">public</span> <span class="kw">void</span> testSquarePositive() {
+
+        assertEquals(
+            <span class="num">25</span>,
+            <span class="type">MathUtils</span>.square(<span class="num">5</span>)
+        );
+    }
+}</code></pre></div>
+<p><code>assertEquals</code> compares:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>expected value
+actual value</code></pre></div>
+<hr>
+<h1>40. Multiple unit tests</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">MathUtilsTest</span> {
+
+    <span class="ann">@Test</span>
+    <span class="kw">public</span> <span class="kw">void</span> testSquarePositive() {
+        assertEquals(<span class="num">25</span>, <span class="type">MathUtils</span>.square(<span class="num">5</span>));
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">public</span> <span class="kw">void</span> testSquareZero() {
+        assertEquals(<span class="num">0</span>, <span class="type">MathUtils</span>.square(<span class="num">0</span>));
+    }
+
+    <span class="ann">@Test</span>
+    <span class="kw">public</span> <span class="kw">void</span> testSquareNegative() {
+        assertEquals(<span class="num">25</span>, <span class="type">MathUtils</span>.square(-<span class="num">5</span>));
+    }
+}</code></pre></div>
+<p>Each test examines a different situation.</p>
+<hr>
+<h1>41. Testing boolean methods</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isEven(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x % <span class="num">2</span> == <span class="num">0</span>;
+}</code></pre></div>
+<p>Tests:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testEvenNumber() {
+    assertTrue(<span class="type">MathUtils</span>.isEven(<span class="num">10</span>));
+}
+
+<span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testOddNumber() {
+    assertFalse(<span class="type">MathUtils</span>.isEven(<span class="num">7</span>));
+}</code></pre></div>
+<p>Useful assertions include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>assertEquals(...)
+assertTrue(...)
+assertFalse(...)
+assertNull(...)
+assertNotNull(...)</code></pre></div>
+<hr>
+<h1>42. Testing exceptions</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> divide(
+        <span class="kw">double</span> a,
+        <span class="kw">double</span> b) {
+
+    <span class="kw">if</span> (b == <span class="num">0</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"Denominator cannot be zero."</span>
+        );
+    }
+
+    <span class="kw">return</span> a / b;
+}</code></pre></div>
+<p>We should test normal behavior:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testDivide() {
+
+    assertEquals(
+        <span class="num">5.0</span>,
+        <span class="type">MathUtils</span>.divide(<span class="num">10</span>, <span class="num">2</span>)
+    );
+}</code></pre></div>
+<p>But we should also test the exception:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testDivideByZero() {
+
+    assertThrows(
+        <span class="type">IllegalArgumentException</span>.<span class="kw">class</span>,
+        () -&gt; <span class="type">MathUtils</span>.divide(<span class="num">10</span>, <span class="num">0</span>)
+    );
+}</code></pre></div>
+<p>This confirms that invalid input produces the intended failure.</p>
+<hr>
+<h1>43. Tests are executable specifications</h1>
+<p>Suppose we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>assertThrows(
+    <span class="type">IllegalArgumentException</span>.<span class="kw">class</span>,
+    () -&gt; account.withdraw(-<span class="num">100</span>)
+);</code></pre></div>
+<p>This does more than check implementation.</p>
+<p>It documents expected behavior.</p>
+<p>The test says:</p>
+<blockquote>Withdrawing a negative amount is invalid and should produce an <code>IllegalArgumentException</code>.</blockquote>
+<p>This is why tests can serve as a form of documentation.</p>
+<hr>
+<h1>44. Testing classes</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BankAccount</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> balance;
+
+    <span class="kw">public</span> <span class="type">BankAccount</span>(<span class="kw">double</span> balance) {
+
+        <span class="kw">if</span> (balance &lt; <span class="num">0</span>) {
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>();
+        }
+
+        <span class="kw">this</span>.balance = balance;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> deposit(<span class="kw">double</span> amount) {
+
+        <span class="kw">if</span> (amount &lt;= <span class="num">0</span>) {
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>();
+        }
+
+        balance += amount;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> getBalance() {
+        <span class="kw">return</span> balance;
+    }
+}</code></pre></div>
+<p>Possible tests:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testInitialBalance() {
+
+    <span class="type">BankAccount</span> account =
+        <span class="kw">new</span> <span class="type">BankAccount</span>(<span class="num">100</span>);
+
+    assertEquals(
+        <span class="num">100</span>,
+        account.getBalance()
+    );
+}</code></pre></div>
+<p>Another:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testDeposit() {
+
+    <span class="type">BankAccount</span> account =
+        <span class="kw">new</span> <span class="type">BankAccount</span>(<span class="num">100</span>);
+
+    account.deposit(<span class="num">50</span>);
+
+    assertEquals(
+        <span class="num">150</span>,
+        account.getBalance()
+    );
+}</code></pre></div>
+<p>Invalid input:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testNegativeDeposit() {
+
+    <span class="type">BankAccount</span> account =
+        <span class="kw">new</span> <span class="type">BankAccount</span>(<span class="num">100</span>);
+
+    assertThrows(
+        <span class="type">IllegalArgumentException</span>.<span class="kw">class</span>,
+        () -&gt; account.deposit(-<span class="num">20</span>)
+    );
+}</code></pre></div>
+<hr>
+<h1>45. Arrange - act - assert</h1>
+<p>A useful structure for tests is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Arrange
+Act
+Assert</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testDeposit() {
+
+    <span class="cmt">// Arrange</span>
+    <span class="type">BankAccount</span> account =
+        <span class="kw">new</span> <span class="type">BankAccount</span>(<span class="num">100</span>);
+
+    <span class="cmt">// Act</span>
+    account.deposit(<span class="num">50</span>);
+
+    <span class="cmt">// Assert</span>
+    assertEquals(
+        <span class="num">150</span>,
+        account.getBalance()
+    );
+}</code></pre></div>
+<p>This makes tests easier to read.</p>
+<hr>
+<h1>46. Testing is not proof</h1>
+<p>Passing tests does not prove that a program is correct.</p>
+<p>Suppose a program passes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 tests</code></pre></div>
+<p>There may still be an input we forgot to test.</p>
+<p>Testing gives us evidence of correctness.</p>
+<p>It does not provide mathematical proof of correctness.</p>
+<p>That distinction becomes increasingly important in algorithms and advanced computer science.</p>
+<hr>
+<h1>47. Writing testable code</h1>
+<p>Some code is easier to test than other code.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> process() {
+
+    <span class="type">Scanner</span> input =
+        <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+    <span class="type">System</span>.out.println(
+        <span class="str">"Enter two numbers:"</span>
+    );
+
+    <span class="kw">int</span> a = input.nextInt();
+    <span class="kw">int</span> b = input.nextInt();
+
+    <span class="type">System</span>.out.println(a + b);
+}</code></pre></div>
+<p>This method combines:</p>
+<ul><li>input</li><li>computation</li><li>output</li></ul>
+<p>It is difficult to test automatically.</p>
+<p>A better design separates responsibilities.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a + b;
+}</code></pre></div>
+<p>Then another method handles input/output.</p>
+<p>This method is easy to test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>assertEquals(<span class="num">7</span>, add(<span class="num">3</span>, <span class="num">4</span>));</code></pre></div>
+<hr>
+<h1>48. Separation of concerns</h1>
+<p>This illustrates an important software design principle:</p>
+<blockquote>Separate computation from input/output whenever practical.</blockquote>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>read data
+calculate result
+print result</code></pre></div>
+<p>all in one method, prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>input layer
+    ↓
+processing layer
+    ↓
+output layer</code></pre></div>
+<p>This improves:</p>
+<ul><li>readability</li><li>reuse</li><li>testing</li><li>debugging</li></ul>
+<hr>
+<h1>49. Example: a better grade program</h1>
+<p>Instead of writing everything in <code>main</code>, separate responsibilities.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> average(
+        <span class="kw">double</span>[] grades) {
+
+    <span class="kw">if</span> (grades.length == <span class="num">0</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"No grades provided."</span>
+        );
+    }
+
+    <span class="kw">double</span> total = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="kw">double</span> grade : grades) {
+        total += grade;
+    }
+
+    <span class="kw">return</span> total / grades.length;
+}</code></pre></div>
+<p>Now we can test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testAverage() {
+
+    <span class="kw">double</span>[] grades =
+        {<span class="num">80</span>, <span class="num">90</span>, <span class="num">100</span>};
+
+    assertEquals(
+        <span class="num">90</span>,
+        <span class="type">GradeUtils</span>.average(grades)
+    );
+}</code></pre></div>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testEmptyGrades() {
+
+    <span class="kw">double</span>[] grades = {};
+
+    assertThrows(
+        <span class="type">IllegalArgumentException</span>.<span class="kw">class</span>,
+        () -&gt; <span class="type">GradeUtils</span>.average(grades)
+    );
+}</code></pre></div>
+<hr>
+<h1>50. Robustness vs. correctness</h1>
+<p>These terms are related but different.</p>
+<h3>Correctness</h3>
+<p>Does the program give the right answer for valid inputs?</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>average(80, 90, 100) → 90</code></pre></div>
+<h3>Robustness</h3>
+<p>Does the program behave sensibly when something unexpected happens?</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>missing file
+invalid number
+empty array
+null reference
+incorrect user input</code></pre></div>
+<p>Good software should strive for both.</p>
+<hr>
+<h1>51. Common beginner mistakes with exceptions</h1>
+<h2>Mistake 1: catching everything</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">Exception</span> e) {
+}</code></pre></div>
+<p>This hides problems.</p>
+<p>The program may fail silently.</p>
+<hr>
+<h2>Mistake 2: empty catch blocks</h2>
+<p>Bad:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">FileNotFoundException</span> e) {
+}</code></pre></div>
+<p>The exception disappears and the programmer may not know something went wrong.</p>
+<hr>
+<h2>Mistake 3: using exceptions instead of validation</h2>
+<p>Bad:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    array[index] = value;
+}
+<span class="kw">catch</span> (<span class="type">ArrayIndexOutOfBoundsException</span> e) {
+}</code></pre></div>
+<p>Better:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (index &gt;= <span class="num">0</span> &amp;&amp;
+    index &lt; array.length) {
+
+    array[index] = value;
+}</code></pre></div>
+<hr>
+<h2>Mistake 4: catching an exception too early</h2>
+<p>Sometimes the method that detects the problem does not know how to recover.</p>
+<p>In that case, propagating the exception can be better than catching it immediately.</p>
+<hr>
+<h2>Mistake 5: treating stack traces as useless noise</h2>
+<p>When debugging, read:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>exception type
+message
+first line referring to your code
+line number
+method call sequence</code></pre></div>
+<p>The stack trace often tells you exactly where to start investigating.</p>
+<hr>
+<h1>52. Reading a stack trace</h1>
+<p>Suppose Java prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Exception in thread "main"
+java.lang.NullPointerException
+    at Student.getName(Student.java:18)
+    at Course.printRoster(Course.java:42)
+    at Main.main(Main.java:10)</code></pre></div>
+<p>Read from the top.</p>
+<p>The error occurred at:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student.java:18</code></pre></div>
+<p>That method was called by:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Course.java:42</code></pre></div>
+<p>which was called by:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Main.java:10</code></pre></div>
+<p>The stack trace represents the active method calls when the exception occurred.</p>
+<hr>
+<h1>53. Debugging strategy</h1>
+<p>When an exception occurs:</p>
+<ol><li>Read the exception type.</li><li>Read the exception message.</li><li>Find the first stack-trace line referring to your code.</li><li>Inspect the values involved.</li><li>Determine why an invalid state was possible.</li><li>Fix the underlying cause rather than merely suppressing the exception.</li></ol>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NullPointerException</code></pre></div>
+<p>Do not immediately add:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x != <span class="lit">null</span>)</code></pre></div>
+<p>Ask:</p>
+<blockquote>Why is <code>x</code> null?</blockquote>
+<p>The deeper bug may be somewhere else.</p>
+<hr>
+<h1>54. Integrated example</h1>
+<p>Consider a small student-grade application.</p>
+<p>The file:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice,90
+Bob,83
+Charlie,not-a-number
+David,95</code></pre></div>
+<p>We want to:</p>
+<ol><li>read each record</li><li>parse the grade</li><li>reject malformed records</li><li>validate grade range</li><li>calculate an average</li></ol>
+<p>A helper method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> parseGrade(
+        <span class="type">String</span> text) {
+
+    <span class="kw">double</span> grade =
+        <span class="type">Double</span>.parseDouble(text);
+
+    <span class="kw">if</span> (grade &lt; <span class="num">0</span> || grade &gt; <span class="num">100</span>) {
+
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"Grade must be between 0 and 100."</span>
+        );
+    }
+
+    <span class="kw">return</span> grade;
+}</code></pre></div>
+<p>File processing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span> (<span class="type">Scanner</span> input =
+        <span class="kw">new</span> <span class="type">Scanner</span>(<span class="kw">new</span> <span class="type">File</span>(<span class="str">"grades.txt"</span>))) {
+
+    <span class="kw">while</span> (input.hasNextLine()) {
+
+        <span class="type">String</span> line = input.nextLine();
+
+        <span class="kw">try</span> {
+
+            <span class="type">String</span>[] parts =
+                line.split(<span class="str">","</span>);
+
+            <span class="kw">if</span> (parts.length != <span class="num">2</span>) {
+                <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+                    <span class="str">"Invalid record format."</span>
+                );
+            }
+
+            <span class="type">String</span> name = parts[<span class="num">0</span>];
+
+            <span class="kw">double</span> grade =
+                parseGrade(parts[<span class="num">1</span>]);
+
+            <span class="type">System</span>.out.println(
+                name + <span class="str">" -&gt; "</span> + grade
+            );
+
+        }
+        <span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+
+            <span class="type">System</span>.out.println(
+                <span class="str">"Invalid number: "</span> + line
+            );
+
+        }
+        <span class="kw">catch</span> (<span class="type">IllegalArgumentException</span> e) {
+
+            <span class="type">System</span>.out.println(
+                <span class="str">"Invalid record: "</span> + line
+            );
+
+        }
+
+    }
+
+}
+<span class="kw">catch</span> (<span class="type">FileNotFoundException</span> e) {
+
+    <span class="type">System</span>.out.println(
+        <span class="str">"Unable to open grades.txt"</span>
+    );
+}</code></pre></div>
+<p>This example demonstrates several concepts together:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>file input
+string parsing
+validation
+exceptions
+nested error handling
+defensive programming</code></pre></div>
+<hr>
+<h1>55. Discussion question</h1>
+<p>Suppose a program reads 10,000 customer records.</p>
+<p>Record 5,328 contains invalid data.</p>
+<p>Should the program:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A. terminate immediately
+B. skip the bad record
+C. substitute a default value
+D. log the bad record and continue
+E. ask the user what to do</code></pre></div>
+<p>There is no universally correct answer.</p>
+<p>The correct response depends on the requirements of the system.</p>
+<p>This is an important transition from introductory programming to software engineering:</p>
+<blockquote>Error handling is a design decision.</blockquote>
+<hr>
+<h1>56. Testing the integrated example</h1>
+<p>We do not need to test file I/O and parsing simultaneously.</p>
+<p>First test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>parseGrade()</code></pre></div>
+<p>Normal case:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testValidGrade() {
+
+    assertEquals(
+        <span class="num">92</span>,
+        parseGrade(<span class="str">"92"</span>)
+    );
+}</code></pre></div>
+<p>Boundary cases:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testZeroGrade() {
+
+    assertEquals(
+        <span class="num">0</span>,
+        parseGrade(<span class="str">"0"</span>)
+    );
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testHundredGrade() {
+
+    assertEquals(
+        <span class="num">100</span>,
+        parseGrade(<span class="str">"100"</span>)
+    );
+}</code></pre></div>
+<p>Invalid numeric range:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testTooLargeGrade() {
+
+    assertThrows(
+        <span class="type">IllegalArgumentException</span>.<span class="kw">class</span>,
+        () -&gt; parseGrade(<span class="str">"105"</span>)
+    );
+}</code></pre></div>
+<p>Invalid format:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Test</span>
+<span class="kw">public</span> <span class="kw">void</span> testNonNumericGrade() {
+
+    assertThrows(
+        <span class="type">NumberFormatException</span>.<span class="kw">class</span>,
+        () -&gt; parseGrade(<span class="str">"excellent"</span>)
+    );
+}</code></pre></div>
+<p>This demonstrates an important idea:</p>
+<blockquote>Break complex programs into small components that can be tested independently.</blockquote>
+<hr>
+<h1>57. Designing good tests</h1>
+<p>Before writing tests, ask:</p>
+<h3>Typical cases</h3>
+<p>What inputs represent ordinary usage?</p>
+<h3>Boundary cases</h3>
+<p>What happens at the edges?</p>
+<h3>Invalid cases</h3>
+<p>What inputs should be rejected?</p>
+<h3>Empty cases</h3>
+<p>What happens with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>empty arrays
+empty strings
+empty files</code></pre></div>
+<h3>Special cases</h3>
+<p>What about:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>zero
+negative values
+duplicate values
+null</code></pre></div>
+<hr>
+<h1>58. Example test design exercise</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isPassing(
+        <span class="kw">double</span> grade) {
+
+    <span class="kw">return</span> grade &gt;= <span class="num">60</span>;
+}</code></pre></div>
+<p>What should we test?</p>
+<p>A weak test set:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>70
+80
+90</code></pre></div>
+<p>All three test essentially the same situation.</p>
+<p>A stronger test set:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>59
+60
+61
+0
+100</code></pre></div>
+<p>Why is <code>60</code> especially important?</p>
+<p>Because it is the boundary.</p>
+<hr>
+<h1>59. Exceptions and method contracts</h1>
+<p>Every method has an implicit or explicit contract.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> sqrt(<span class="kw">double</span> x)</code></pre></div>
+<p>A possible contract is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Precondition:
+x &gt;= 0
+
+Postcondition:
+returns the nonnegative square root of x</code></pre></div>
+<p>If a caller violates the precondition, we might throw:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">IllegalArgumentException</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x &lt; <span class="num">0</span>) {
+    <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+        <span class="str">"x must be nonnegative"</span>
+    );
+}</code></pre></div>
+<p>Exceptions therefore help enforce contracts between different parts of a program.</p>
+<hr>
+<h1>60. Key design principle: fail fast</h1>
+<p>A useful principle is:</p>
+<blockquote>Detect invalid states as early as possible.</blockquote>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> student =
+    <span class="kw">new</span> <span class="type">Student</span>(<span class="str">""</span>, -<span class="num">3</span>);</code></pre></div>
+<p>If empty names and negative IDs are invalid, reject them in the constructor.</p>
+<p>Do not allow an invalid object to travel throughout the program.</p>
+<p>The longer invalid data survives, the harder the eventual bug may be to diagnose.</p>
+<hr>
+<h1>61. When to catch and when to throw</h1>
+<p>A useful guideline:</p>
+<h3>Throw an exception when:</h3>
+<p>A method detects a problem that prevents it from completing its contract.</p>
+<h3>Catch an exception when:</h3>
+<p>The current part of the program knows what meaningful action to take.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>parseGrade()</code></pre></div>
+<p>may throw an exception.</p>
+<p>The file-processing code may catch it because it knows it can skip the malformed record.</p>
+<hr>
+<h1>62. Exception propagation</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main()
+   calls loadStudents()
+      calls parseStudent()
+         <span class="kw">throws</span> <span class="type">an</span> <span class="type">exception</span></code></pre></div>
+<p>If <code>parseStudent()</code> does not catch it, the exception travels to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>loadStudents()</code></pre></div>
+<p>If <code>loadStudents()</code> does not catch it, it travels to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main()</code></pre></div>
+<p>This process is called:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>exception propagation</code></pre></div>
+<p>The runtime searches the call stack for a compatible handler.</p>
+<hr>
+<h1>63. Connections to object-oriented programming</h1>
+<p>Exceptions reinforce concepts we already learned.</p>
+<p>Exceptions are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>objects</code></pre></div>
+<p>Exception types are organized through:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>inheritance</code></pre></div>
+<p>A <code>catch</code> block can demonstrate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>polymorphism</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">Exception</span> e)</code></pre></div>
+<p>can catch objects belonging to many subclasses of <code>Exception</code>.</p>
+<p>Thus, exception handling is also an application of the object-oriented model.</p>
+<hr>
+<h1>64. Connections to future topics</h1>
+<p>Next week we will study recursion.</p>
+<p>Later we will study:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>searching
+sorting
+lists
+stacks
+queues
+trees</code></pre></div>
+<p>Exceptions and testing will remain important.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>What happens when a stack is empty?
+What happens when an index is invalid?
+What happens when binary search receives bad input?
+What happens when a tree does not contain a value?</code></pre></div>
+<p>Data structures require us to think carefully about valid and invalid operations.</p>
+<hr>
+<h1>65. In-class coding exercise 1</h1>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> readPositiveInteger(
+        <span class="type">Scanner</span> input)</code></pre></div>
+<p>The method should repeatedly ask for input until the user provides a positive integer.</p>
+<p>It should correctly handle inputs such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>hello
+-10
+0
+42</code></pre></div>
+<p>Expected behavior:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Enter positive integer: hello
+Invalid integer.
+
+Enter positive integer: -10
+Number must be positive.
+
+Enter positive integer: 42</code></pre></div>
+<hr>
+<h1>66. In-class coding exercise 2</h1>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> divide(
+        <span class="kw">double</span> numerator,
+        <span class="kw">double</span> denominator)</code></pre></div>
+<p>Requirements:</p>
+<ul><li>return the quotient</li><li>throw <code>IllegalArgumentException</code> when denominator is zero</li></ul>
+<p>Then write unit tests for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 / 2
+0 / 5
+-10 / 2
+10 / -2
+10 / 0</code></pre></div>
+<hr>
+<h1>67. In-class coding exercise 3</h1>
+<p>Suppose <code>temperatures.txt</code> contains one temperature per line.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>72.5
+68.2
+invalid
+75.1
+70.0</code></pre></div>
+<p>Write a program that:</p>
+<ol><li>opens the file</li><li>reads each line</li><li>converts valid lines to <code>double</code></li><li>skips invalid lines</li><li>reports the number of valid temperatures</li><li>calculates their average</li></ol>
+<hr>
+<h1>68. In-class coding exercise 4</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> findLargest(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Design tests before implementing the method.</p>
+<p>Your tests should include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>normal array
+single-element array
+all negative numbers
+duplicate maximum
+empty array</code></pre></div>
+<p>Then decide what the method should do when the array is empty.</p>
+<p>Should it:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>return 0?
+return Integer.MIN_VALUE?
+throw an exception?</code></pre></div>
+<p>Explain your design decision.</p>
+<hr>
+<h1>69. Suggested lab</h1>
+<h2>Robust grade processor</h2>
+<p>Write a Java program that reads:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>grades.csv</code></pre></div>
+<p>Each line contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>studentName,grade</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice,91
+Bob,82
+Charlie,hello
+David,105
+Eva,88</code></pre></div>
+<p>The program should:</p>
+<ul><li>read the file</li><li>validate each record</li><li>require exactly two fields</li><li>convert the grade to a number</li><li>require grade between 0 and 100</li><li>skip invalid records</li><li>print a meaningful error message for invalid records</li><li>calculate the average of valid grades</li><li>report the number of valid and invalid records</li></ul>
+<p>At least one part of the program should be separated into a method that can be unit tested.</p>
+<p>Recommended methods:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>parseGrade(<span class="type">String</span> text)
+
+isValidGrade(<span class="kw">double</span> grade)
+
+calculateAverage(<span class="kw">double</span>[] grades)</code></pre></div>
+<hr>
+<h1>70. Concept check</h1>
+<h3>Question 1</h3>
+<p>What is the difference between:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">throw</span></code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">throws</span></code></pre></div>
+<h3>Question 2</h3>
+<p>Why might this be poor design?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">catch</span> (<span class="type">Exception</span> e) {
+}</code></pre></div>
+<h3>Question 3</h3>
+<p>What is the difference between a checked and unchecked exception?</p>
+<h3>Question 4</h3>
+<p>Why is <code>try-with-resources</code> useful?</p>
+<h3>Question 5</h3>
+<p>What is the difference between a logic error and an exception?</p>
+<h3>Question 6</h3>
+<p>Why should we test boundary cases?</p>
+<h3>Question 7</h3>
+<p>Does passing all of our tests prove a program is correct?</p>
+<h3>Question 8</h3>
+<p>Why does separating computation from input/output improve testability?</p>
+<hr>
+<h1>71. Summary</h1>
+<p>This week introduced three major ideas.</p>
+<h2>Exceptions</h2>
+<p>Exceptions represent abnormal runtime conditions.</p>
+<p>We learned:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span>
+<span class="kw">catch</span>
+<span class="kw">finally</span>
+<span class="kw">throw</span>
+<span class="kw">throws</span></code></pre></div>
+<p>We also distinguished:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>checked exceptions
+unchecked exceptions</code></pre></div>
+<hr>
+<h2>File I/O</h2>
+<p>Files allow programs to work with persistent data.</p>
+<p>We used:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">File</span>
+<span class="type">Scanner</span>
+<span class="type">PrintWriter</span></code></pre></div>
+<p>and learned why:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">try</span>-with-resources</code></pre></div>
+<p>is preferred for managing resources.</p>
+<hr>
+<h2>Testing</h2>
+<p>Testing helps detect defects systematically.</p>
+<p>We discussed:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>normal cases
+boundary cases
+exceptional cases
+unit tests
+JUnit
+assertions</code></pre></div>
+<p>Most importantly, we saw that software quality depends not merely on whether a program works under ideal conditions.</p>
+<p>A robust program must also define what happens when conditions are not ideal.</p>
+<hr>
+<h1>72. Key takeaways</h1>
+<ol><li>Programs should expect that things can go wrong.</li><li>Exceptions provide a structured mechanism for handling abnormal situations.</li><li>Throw exceptions when a method cannot fulfill its contract.</li><li>Catch exceptions when you know how to meaningfully recover.</li><li>Do not use exceptions as a substitute for ordinary validation.</li><li>Validate input as early as practical.</li><li>Use <code>try-with-resources</code> for files and other closeable resources.</li><li>Separate computation from input/output to improve testability.</li><li>Test boundaries and invalid inputs, not only typical cases.</li><li>Passing tests increases confidence but does not prove correctness.</li><li>Robust error handling and systematic testing are fundamental software engineering skills.</li></ol>
+<hr>
+<h1>73. Preparation for week 10</h1>
+<p>Next week we will introduce <strong>recursion and algorithmic thinking</strong>.</p>
+<p>Before then, make sure you are comfortable with:</p>
+<ul><li>method calls</li><li>parameters and return values</li><li>local variables</li><li>the call stack</li><li>tracing execution</li><li>writing tests for individual methods</li></ul>
+<p>Recursion will rely heavily on your ability to reason about how method calls are created, executed, and completed.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

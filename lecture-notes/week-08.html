@@ -1,0 +1,1604 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 8: inheritance and polymorphism</h2>
+<h3>Learning objectives</h3>
+<p>By the end of this week, students should be able to:</p>
+<ul><li>Explain the purpose of inheritance in object-oriented programming.</li><li>Distinguish between an <strong>is-a</strong> relationship and a <strong>has-a</strong> relationship.</li><li>Define subclasses using <code>extends</code>.</li><li>Use <code>super</code> to invoke superclass constructors and methods.</li><li>Explain method overriding and distinguish it from method overloading.</li><li>Use polymorphism through superclass references.</li><li>Explain dynamic method dispatch.</li><li>Define and use abstract classes.</li><li>Define and implement Java interfaces.</li><li>Recognize when inheritance is appropriate and when composition is preferable.</li><li>Design a small class hierarchy using sound object-oriented principles.</li></ul>
+<hr>
+<h1>1. Why inheritance?</h1>
+<p>So far, we have designed programs using classes and objects.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="kw">int</span> id;
+
+    <span class="kw">public</span> <span class="type">Student</span>(<span class="type">String</span> name, <span class="kw">int</span> id) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.id = id;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+
+    <span class="kw">public</span> <span class="kw">int</span> getId() {
+        <span class="kw">return</span> id;
+    }
+}</code></pre></div>
+<p>Suppose our program also contains employees:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Employee</span> {
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="kw">int</span> id;
+    <span class="kw">private</span> <span class="kw">double</span> salary;
+
+    <span class="kw">public</span> <span class="type">Employee</span>(<span class="type">String</span> name, <span class="kw">int</span> id, <span class="kw">double</span> salary) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.id = id;
+        <span class="kw">this</span>.salary = salary;
+    }
+}</code></pre></div>
+<p>There is duplication here.</p>
+<p>Both <code>Student</code> and <code>Employee</code> have:</p>
+<ul><li>a name</li><li>an ID</li><li>behaviors associated with a person</li></ul>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student is a Person
+Employee is a Person</code></pre></div>
+<p>We could capture the common behavior in a superclass:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span> {
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="kw">int</span> id;
+
+    <span class="kw">public</span> <span class="type">Person</span>(<span class="type">String</span> name, <span class="kw">int</span> id) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.id = id;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+
+    <span class="kw">public</span> <span class="kw">int</span> getId() {
+        <span class="kw">return</span> id;
+    }
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+}</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Employee</span> <span class="kw">extends</span> <span class="type">Person</span> {
+}</code></pre></div>
+<p>This relationship is called <strong>inheritance</strong>.</p>
+<hr>
+<h1>2. Superclasses and subclasses</h1>
+<p>Inheritance creates a relationship between two classes.</p>
+<p>The more general class is called the:</p>
+<ul><li>superclass</li><li>parent class</li><li>base class</li></ul>
+<p>The more specialized class is called the:</p>
+<ul><li>subclass</li><li>child class</li><li>derived class</li></ul>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span> {
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+}</code></pre></div>
+<p>Here:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Animal = superclass
+Dog    = subclass</code></pre></div>
+<p>We can say:</p>
+<blockquote>A Dog is an Animal.</blockquote>
+<p>Java expresses this relationship with the keyword:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">extends</span></code></pre></div>
+<hr>
+<h1>3. The "is-a" test</h1>
+<p>Inheritance should generally represent an <strong>is-a</strong> relationship.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Dog is an Animal
+Car is a Vehicle
+Professor is an Employee
+SavingsAccount is a BankAccount
+Circle is a Shape</code></pre></div>
+<p>These may be reasonable inheritance relationships.</p>
+<p>But consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Car is an Engine
+Student is a Course
+Computer is a Processor</code></pre></div>
+<p>These are not valid.</p>
+<p>Instead:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Car has an Engine
+Student takes a Course
+Computer has a Processor</code></pre></div>
+<p>These relationships usually require <strong>composition</strong>, not inheritance.</p>
+<p>A useful rule is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"is-a"  → consider inheritance
+"has-a" → consider composition</code></pre></div>
+<hr>
+<h1>4. A basic inheritance example</h1>
+<p>Consider a superclass representing bank accounts.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BankAccount</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> accountNumber;
+    <span class="kw">private</span> <span class="kw">double</span> balance;
+
+    <span class="kw">public</span> <span class="type">BankAccount</span>(<span class="type">String</span> accountNumber, <span class="kw">double</span> balance) {
+        <span class="kw">this</span>.accountNumber = accountNumber;
+        <span class="kw">this</span>.balance = balance;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> deposit(<span class="kw">double</span> amount) {
+        balance += amount;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> withdraw(<span class="kw">double</span> amount) {
+        balance -= amount;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> getBalance() {
+        <span class="kw">return</span> balance;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getAccountNumber() {
+        <span class="kw">return</span> accountNumber;
+    }
+}</code></pre></div>
+<p>Now suppose we want a specialized account:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">SavingsAccount</span> <span class="kw">extends</span> <span class="type">BankAccount</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> interestRate;
+
+    <span class="kw">public</span> <span class="type">SavingsAccount</span>(
+            <span class="type">String</span> accountNumber,
+            <span class="kw">double</span> balance,
+            <span class="kw">double</span> interestRate) {
+
+        <span class="kw">super</span>(accountNumber, balance);
+
+        <span class="kw">this</span>.interestRate = interestRate;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> addInterest() {
+        <span class="kw">double</span> interest = getBalance() * interestRate;
+        deposit(interest);
+    }
+}</code></pre></div>
+<p>The <code>SavingsAccount</code> class inherits accessible methods from <code>BankAccount</code>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">SavingsAccount</span> account =
+    <span class="kw">new</span> <span class="type">SavingsAccount</span>(<span class="str">"A123"</span>, <span class="num">1000.0</span>, <span class="num">0.05</span>);
+
+account.deposit(<span class="num">200</span>);
+account.addInterest();
+
+<span class="type">System</span>.out.println(account.getBalance());</code></pre></div>
+<p>Although <code>SavingsAccount</code> does not explicitly define <code>deposit()</code> or <code>getBalance()</code>, those methods are inherited.</p>
+<hr>
+<h1>5. Constructors and <code>super</code></h1>
+<p>Constructors are not inherited.</p>
+<p>When a subclass object is created, the superclass portion of the object must also be initialized.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="type">Person</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> major;
+
+    <span class="kw">public</span> <span class="type">Student</span>(<span class="type">String</span> name, <span class="type">String</span> major) {
+        <span class="kw">super</span>(name);
+        <span class="kw">this</span>.major = major;
+    }
+}</code></pre></div>
+<p>The statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">super</span>(name);</code></pre></div>
+<p>calls the constructor of the superclass.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>new Student("Alice", "Computer Science")
+        |
+        v
+Person constructor initializes name
+        |
+        v
+Student constructor initializes major</code></pre></div>
+<p>A call to a superclass constructor must occur before the subclass constructor finishes initializing the subclass.</p>
+<p>If used explicitly, <code>super(...)</code> must be the first statement in the constructor.</p>
+<hr>
+<h1>6. What does a subclass inherit?</h1>
+<p>A subclass inherits accessible members of its superclass.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> eat() {
+        <span class="type">System</span>.out.println(<span class="str">"Eating..."</span>);
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> sleep() {
+        <span class="type">System</span>.out.println(<span class="str">"Sleeping..."</span>);
+    }
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> bark() {
+        <span class="type">System</span>.out.println(<span class="str">"Woof!"</span>);
+    }
+}</code></pre></div>
+<p>A <code>Dog</code> object can use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Dog</span> dog = <span class="kw">new</span> <span class="type">Dog</span>();
+
+dog.eat();
+dog.sleep();
+dog.bark();</code></pre></div>
+<p>The first two methods come from <code>Animal</code>.</p>
+<p>The third comes from <code>Dog</code>.</p>
+<hr>
+<h1>7. Private fields and inheritance</h1>
+<p>A common misunderstanding is that subclasses can directly access private fields inherited from a superclass.</p>
+<p>They cannot.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="type">Person</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+}</code></pre></div>
+<p>This will not compile:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> printName() {
+        <span class="type">System</span>.out.println(name);
+    }
+}</code></pre></div>
+<p>Because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>name</code></pre></div>
+<p>is private to the <code>Person</code> class.</p>
+<p>Instead, the superclass should provide an appropriate method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">String</span> getName() {
+    <span class="kw">return</span> name;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> printName() {
+        <span class="type">System</span>.out.println(getName());
+    }
+}</code></pre></div>
+<p>This preserves encapsulation.</p>
+<hr>
+<h1>8. <code>protected</code></h1>
+<p>Java provides another access modifier:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">protected</span></code></pre></div>
+<p>A protected member can be accessed by subclasses.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span> {
+
+    <span class="kw">protected</span> <span class="type">String</span> name;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> printName() {
+        <span class="type">System</span>.out.println(name);
+    }
+}</code></pre></div>
+<p>This compiles.</p>
+<p>However, using <code>protected</code> fields can weaken encapsulation.</p>
+<p>In many cases, this design is preferable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">String</span> name;
+
+<span class="kw">public</span> <span class="type">String</span> getName() {
+    <span class="kw">return</span> name;
+}</code></pre></div>
+<p>rather than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">protected</span> <span class="type">String</span> name;</code></pre></div>
+<hr>
+<h1>9. Method overriding</h1>
+<p>A subclass can provide its own implementation of an inherited method.</p>
+<p>This is called <strong>method overriding</strong>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> makeSound() {
+        <span class="type">System</span>.out.println(<span class="str">"Some animal sound"</span>);
+    }
+}</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> makeSound() {
+        <span class="type">System</span>.out.println(<span class="str">"Woof!"</span>);
+    }
+}</code></pre></div>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Cat</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> makeSound() {
+        <span class="type">System</span>.out.println(<span class="str">"Meow!"</span>);
+    }
+}</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Dog</span> dog = <span class="kw">new</span> <span class="type">Dog</span>();
+dog.makeSound();</code></pre></div>
+<p>prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Woof!</code></pre></div>
+<p>The <code>Dog</code> implementation replaces the inherited behavior for <code>Dog</code> objects.</p>
+<hr>
+<h1>10. The <code>@Override</code> annotation</h1>
+<p>Java allows us to write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Override</span></code></pre></div>
+<p>before an overriding method.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Override</span>
+<span class="kw">public</span> <span class="kw">void</span> makeSound() {
+    <span class="type">System</span>.out.println(<span class="str">"Woof!"</span>);
+}</code></pre></div>
+<p>Technically, the method may still override without the annotation.</p>
+<p>However, you should almost always include it.</p>
+<p>Why?</p>
+<p>Suppose you accidentally write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Override</span>
+<span class="kw">public</span> <span class="kw">void</span> makesound() {
+    <span class="type">System</span>.out.println(<span class="str">"Woof!"</span>);
+}</code></pre></div>
+<p>Notice the lowercase <code>s</code>.</p>
+<p>Java reports an error because no superclass method matches.</p>
+<p>Without <code>@Override</code>, Java might interpret this as an entirely new method.</p>
+<p>Therefore:</p>
+<blockquote>Use <code>@Override</code> whenever you intend to override a method.</blockquote>
+<hr>
+<h1>11. Overriding vs. overloading</h1>
+<p>These concepts are frequently confused.</p>
+<h2>Overloading</h2>
+<p>Same method name, different parameter lists.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> print(<span class="kw">int</span> x) {
+}
+
+<span class="kw">public</span> <span class="kw">void</span> print(<span class="kw">double</span> x) {
+}
+
+<span class="kw">public</span> <span class="kw">void</span> print(<span class="type">String</span> x) {
+}</code></pre></div>
+<p>The compiler decides which method to call based on the arguments.</p>
+<h2>Overriding</h2>
+<p>A subclass provides a new implementation of a method inherited from its superclass.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> speak() {
+        <span class="type">System</span>.out.println(<span class="str">"Animal speaks"</span>);
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> speak() {
+        <span class="type">System</span>.out.println(<span class="str">"Woof"</span>);
+    }
+}</code></pre></div>
+<p>A useful comparison:</p>
+<table><thead><tr><th>Concept</th><th>Meaning</th></tr></thead><tbody><tr><td>Overloading</td><td>Same method name, different parameters</td></tr><tr><td>Overriding</td><td>Subclass replaces inherited method behavior</td></tr></tbody></table>
+<hr>
+<h1>12. Calling a superclass method</h1>
+<p>Sometimes a subclass overrides a method but still wants to use the superclass implementation.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">super</span>.methodName()</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> describe() {
+        <span class="type">System</span>.out.println(<span class="str">"I am a person."</span>);
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> describe() {
+        <span class="kw">super</span>.describe();
+        <span class="type">System</span>.out.println(<span class="str">"I am also a student."</span>);
+    }
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> s = <span class="kw">new</span> <span class="type">Student</span>();
+s.describe();</code></pre></div>
+<p>produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>I am a person.
+I am also a student.</code></pre></div>
+<hr>
+<h1>13. Introducing polymorphism</h1>
+<p>Inheritance becomes particularly powerful when combined with <strong>polymorphism</strong>.</p>
+<p>The word polymorphism roughly means:</p>
+<blockquote>many forms</blockquote>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> makeSound() {
+        <span class="type">System</span>.out.println(<span class="str">"Animal sound"</span>);
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> makeSound() {
+        <span class="type">System</span>.out.println(<span class="str">"Woof!"</span>);
+    }
+}</code></pre></div>
+<p>Now observe:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> animal = <span class="kw">new</span> <span class="type">Dog</span>();</code></pre></div>
+<p>This is legal.</p>
+<p>Why?</p>
+<p>Because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Dog is an Animal</code></pre></div>
+<p>The variable type is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span></code></pre></div>
+<p>but the actual object is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Dog</span></code></pre></div>
+<hr>
+<h1>14. Reference type vs. object type</h1>
+<p>This distinction is central to Java polymorphism.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Dog</span>();</code></pre></div>
+<p>There are two types involved.</p>
+<h3>Reference type</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span></code></pre></div>
+<p>The variable <code>a</code> is declared as an <code>Animal</code>.</p>
+<h3>Runtime object type</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Dog</span></code></pre></div>
+<p>The object created with <code>new</code> is a <code>Dog</code>.</p>
+<p>We can visualize this as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Animal a
+   |
+   v
++--------+
+|  Dog   |
++--------+</code></pre></div>
+<hr>
+<h1>15. Dynamic method dispatch</h1>
+<p>What happens here?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Dog</span>();
+a.makeSound();</code></pre></div>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> makeSound() {
+        <span class="type">System</span>.out.println(<span class="str">"Animal"</span>);
+    }
+}</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> makeSound() {
+        <span class="type">System</span>.out.println(<span class="str">"Dog"</span>);
+    }
+}</code></pre></div>
+<p>The output is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Dog</code></pre></div>
+<p>Why?</p>
+<p>Java determines the overriding method using the object's actual runtime type.</p>
+<p>The object is a <code>Dog</code>.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Dog</span>.makeSound()</code></pre></div>
+<p>runs.</p>
+<p>This is known as:</p>
+<p><strong>dynamic method dispatch</strong>.</p>
+<hr>
+<h1>16. Why polymorphism matters</h1>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> { ... }
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Cat</span> <span class="kw">extends</span> <span class="type">Animal</span> { ... }
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Cow</span> <span class="kw">extends</span> <span class="type">Animal</span> { ... }</code></pre></div>
+<p>Without polymorphism, we might write separate code for every animal.</p>
+<p>With polymorphism:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span>[] animals = <span class="kw">new</span> <span class="type">Animal</span>[<span class="num">3</span>];
+
+animals[<span class="num">0</span>] = <span class="kw">new</span> <span class="type">Dog</span>();
+animals[<span class="num">1</span>] = <span class="kw">new</span> <span class="type">Cat</span>();
+animals[<span class="num">2</span>] = <span class="kw">new</span> <span class="type">Cow</span>();</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Animal</span> animal : animals) {
+    animal.makeSound();
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Woof!
+Meow!
+Moo!</code></pre></div>
+<p>The loop does not need to know which specific subtype it is processing.</p>
+<p>Each object determines its own behavior.</p>
+<p>This gives us:</p>
+<ul><li>extensibility</li><li>reduced duplication</li><li>simpler code</li><li>separation between general behavior and specific implementation</li></ul>
+<hr>
+<h1>17. A more realistic example</h1>
+<p>Imagine a payroll system.</p>
+<p>Superclass:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Employee</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="type">Employee</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> calculatePay() {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+}</code></pre></div>
+<p>Subclass:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">SalariedEmployee</span> <span class="kw">extends</span> <span class="type">Employee</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> annualSalary;
+
+    <span class="kw">public</span> <span class="type">SalariedEmployee</span>(
+            <span class="type">String</span> name,
+            <span class="kw">double</span> annualSalary) {
+
+        <span class="kw">super</span>(name);
+        <span class="kw">this</span>.annualSalary = annualSalary;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> calculatePay() {
+        <span class="kw">return</span> annualSalary / <span class="num">12.0</span>;
+    }
+}</code></pre></div>
+<p>Another subclass:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">HourlyEmployee</span> <span class="kw">extends</span> <span class="type">Employee</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> hourlyRate;
+    <span class="kw">private</span> <span class="kw">double</span> hoursWorked;
+
+    <span class="kw">public</span> <span class="type">HourlyEmployee</span>(
+            <span class="type">String</span> name,
+            <span class="kw">double</span> hourlyRate,
+            <span class="kw">double</span> hoursWorked) {
+
+        <span class="kw">super</span>(name);
+        <span class="kw">this</span>.hourlyRate = hourlyRate;
+        <span class="kw">this</span>.hoursWorked = hoursWorked;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> calculatePay() {
+        <span class="kw">return</span> hourlyRate * hoursWorked;
+    }
+}</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Employee</span>[] employees = {
+    <span class="kw">new</span> <span class="type">SalariedEmployee</span>(<span class="str">"Alice"</span>, <span class="num">120000</span>),
+    <span class="kw">new</span> <span class="type">HourlyEmployee</span>(<span class="str">"Bob"</span>, <span class="num">30</span>, <span class="num">160</span>)
+};</code></pre></div>
+<p>We can process them uniformly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Employee</span> employee : employees) {
+
+    <span class="type">System</span>.out.println(
+        employee.getName()
+        + <span class="str">": "</span>
+        + employee.calculatePay()
+    );
+}</code></pre></div>
+<p>Each employee calculates pay differently.</p>
+<p>The calling code does not need to know how.</p>
+<hr>
+<h1>18. The power of programming to an abstraction</h1>
+<p>Notice what the payroll code does:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Employee</span> employee</code></pre></div>
+<p>rather than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">SalariedEmployee</span> employee</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HourlyEmployee</span> employee</code></pre></div>
+<p>Whenever possible, code should depend on the general abstraction rather than a specific implementation.</p>
+<p>This principle will become increasingly important when we study data structures.</p>
+<p>For example, later we may write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>rather than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>The same design idea is at work.</p>
+<hr>
+<h1>19. Abstract classes</h1>
+<p>Our previous <code>Employee</code> superclass contained:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">double</span> calculatePay() {
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre></div>
+<p>But does a generic employee really have a meaningful pay calculation?</p>
+<p>Probably not.</p>
+<p>Every particular kind of employee must decide how pay is calculated.</p>
+<p>Java allows us to express this using an <strong>abstract method</strong>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Employee</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="type">Employee</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+
+    <span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> calculatePay();
+}</code></pre></div>
+<p>The method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> calculatePay();</code></pre></div>
+<p>has no implementation.</p>
+<p>It declares a requirement:</p>
+<blockquote>Every concrete subclass of Employee must provide this method.</blockquote>
+<hr>
+<h1>20. Abstract classes cannot be instantiated</h1>
+<p>Because <code>Employee</code> is abstract:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Employee</span> e = <span class="kw">new</span> <span class="type">Employee</span>(<span class="str">"Alice"</span>);</code></pre></div>
+<p>is illegal.</p>
+<p>Java prevents us from creating an object whose behavior is incomplete.</p>
+<p>But this is legal:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Employee</span> e =
+    <span class="kw">new</span> <span class="type">SalariedEmployee</span>(<span class="str">"Alice"</span>, <span class="num">120000</span>);</code></pre></div>
+<p>The variable has type:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Employee</span></code></pre></div>
+<p>but the object is a concrete subclass.</p>
+<hr>
+<h1>21. Concrete and abstract classes</h1>
+<p>A <strong>concrete class</strong> can be instantiated:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Dog</span> dog = <span class="kw">new</span> <span class="type">Dog</span>();</code></pre></div>
+<p>An <strong>abstract class</strong> cannot:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> animal = <span class="kw">new</span> <span class="type">Animal</span>();</code></pre></div>
+<p>if <code>Animal</code> has been declared:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Animal</span></code></pre></div>
+<p>Abstract classes are useful when:</p>
+<ul><li>several subclasses share state</li><li>several subclasses share some implementation</li><li>the superclass should define common behavior</li><li>some operations must be supplied by subclasses</li></ul>
+<hr>
+<h1>22. Example: abstract shape class</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Shape</span> {
+
+    <span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> area();
+
+    <span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> perimeter();
+}</code></pre></div>
+<p>Circle:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Circle</span> <span class="kw">extends</span> <span class="type">Shape</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> radius;
+
+    <span class="kw">public</span> <span class="type">Circle</span>(<span class="kw">double</span> radius) {
+        <span class="kw">this</span>.radius = radius;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> area() {
+        <span class="kw">return</span> <span class="type">Math</span>.PI * radius * radius;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> perimeter() {
+        <span class="kw">return</span> <span class="num">2</span> * <span class="type">Math</span>.PI * radius;
+    }
+}</code></pre></div>
+<p>Rectangle:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Rectangle</span> <span class="kw">extends</span> <span class="type">Shape</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> width;
+    <span class="kw">private</span> <span class="kw">double</span> height;
+
+    <span class="kw">public</span> <span class="type">Rectangle</span>(<span class="kw">double</span> width, <span class="kw">double</span> height) {
+        <span class="kw">this</span>.width = width;
+        <span class="kw">this</span>.height = height;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> area() {
+        <span class="kw">return</span> width * height;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> perimeter() {
+        <span class="kw">return</span> <span class="num">2</span> * (width + height);
+    }
+}</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Shape</span>[] shapes = {
+    <span class="kw">new</span> <span class="type">Circle</span>(<span class="num">5</span>),
+    <span class="kw">new</span> <span class="type">Rectangle</span>(<span class="num">4</span>, <span class="num">8</span>),
+    <span class="kw">new</span> <span class="type">Circle</span>(<span class="num">2</span>)
+};</code></pre></div>
+<p>We can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> totalArea = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="type">Shape</span> shape : shapes) {
+    totalArea += shape.area();
+}</code></pre></div>
+<p>The same code works with every kind of <code>Shape</code>.</p>
+<hr>
+<h1>23. Interfaces</h1>
+<p>An interface describes a set of behaviors that a class promises to provide.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">Printable</span> {
+
+    <span class="kw">void</span> print();
+}</code></pre></div>
+<p>A class can implement the interface:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Report</span> <span class="kw">implements</span> <span class="type">Printable</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> print() {
+        <span class="type">System</span>.out.println(<span class="str">"Printing report..."</span>);
+    }
+}</code></pre></div>
+<p>The keyword is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">implements</span></code></pre></div>
+<hr>
+<h1>24. Interface as a contract</h1>
+<p>An interface can be viewed as a contract.</p>
+<p>If a class says:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">implements</span> <span class="type">Printable</span></code></pre></div>
+<p>it promises:</p>
+<blockquote>Objects of this class can be printed.</blockquote>
+<p>The exact implementation is up to the class.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Invoice</span> <span class="kw">implements</span> <span class="type">Printable</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> print() {
+        <span class="type">System</span>.out.println(<span class="str">"Printing invoice..."</span>);
+    }
+}</code></pre></div>
+<p>Another class:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Photo</span> <span class="kw">implements</span> <span class="type">Printable</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> print() {
+        <span class="type">System</span>.out.println(<span class="str">"Printing photo..."</span>);
+    }
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Printable</span>[] items = {
+    <span class="kw">new</span> <span class="type">Invoice</span>(),
+    <span class="kw">new</span> <span class="type">Photo</span>(),
+    <span class="kw">new</span> <span class="type">Report</span>()
+};</code></pre></div>
+<p>We can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Printable</span> item : items) {
+    item.print();
+}</code></pre></div>
+<p>This is polymorphism again.</p>
+<hr>
+<h1>25. Interface reference types</h1>
+<p>An interface can be used as a variable type.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Printable</span> p = <span class="kw">new</span> <span class="type">Report</span>();</code></pre></div>
+<p>The reference type is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Printable</span></code></pre></div>
+<p>The actual object type is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Report</span></code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>p.print();</code></pre></div>
+<p>uses the <code>Report</code> implementation.</p>
+<hr>
+<h1>26. Multiple interfaces</h1>
+<p>Java classes can extend only one class.</p>
+<p>This is illegal:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">C</span> <span class="kw">extends</span> <span class="type">A</span>, <span class="type">B</span> {
+}</code></pre></div>
+<p>Java does not support multiple class inheritance.</p>
+<p>However, a class may implement multiple interfaces.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">SmartPhone</span>
+        <span class="kw">implements</span> <span class="type">Printable</span>, <span class="type">Comparable</span>&lt;<span class="type">SmartPhone</span>&gt; {
+}</code></pre></div>
+<p>This allows a class to participate in several behavioral abstractions.</p>
+<hr>
+<h1>27. Abstract classes vs. interfaces</h1>
+<p>Both abstract classes and interfaces support abstraction and polymorphism.</p>
+<p>A simplified comparison:</p>
+<table><thead><tr><th>Abstract Class</th><th>Interface</th></tr></thead><tbody><tr><td>Uses <code>extends</code></td><td>Uses <code>implements</code></td></tr><tr><td>Can contain instance fields</td><td>Primarily defines capabilities/contracts</td></tr><tr><td>Can define constructors</td><td>Has no ordinary object constructor</td></tr><tr><td>Can contain implemented methods</td><td>Can contain abstract and certain implemented methods</td></tr><tr><td>Class can extend only one</td><td>Class can implement multiple</td></tr><tr><td>Often represents a shared type hierarchy</td><td>Often represents a shared capability</td></tr></tbody></table>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Dog is an Animal</code></pre></div>
+<p>suggests inheritance.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Report is Printable
+Photo is Printable
+Invoice is Printable</code></pre></div>
+<p>suggests an interface.</p>
+<p>A useful intuition is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>abstract class → "what something fundamentally is"
+interface      → "what something can do"</code></pre></div>
+<p>This is a guideline, not an absolute rule.</p>
+<hr>
+<h1>28. Composition vs. inheritance</h1>
+<p>Inheritance is powerful, but it is often overused.</p>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Engine</span> {
+    <span class="kw">public</span> <span class="kw">void</span> start() {
+    }
+}</code></pre></div>
+<p>We should not write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Car</span> <span class="kw">extends</span> <span class="type">Engine</span> {
+}</code></pre></div>
+<p>because a car is not an engine.</p>
+<p>Instead:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Car</span> {
+
+    <span class="kw">private</span> <span class="type">Engine</span> engine;
+
+    <span class="kw">public</span> <span class="type">Car</span>() {
+        engine = <span class="kw">new</span> <span class="type">Engine</span>();
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> start() {
+        engine.start();
+    }
+}</code></pre></div>
+<p>This is <strong>composition</strong>.</p>
+<p>The relationship is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Car has an Engine</code></pre></div>
+<p>rather than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Car is an Engine</code></pre></div>
+<hr>
+<h1>29. Prefer composition when appropriate</h1>
+<p>Inheritance creates a strong relationship between classes.</p>
+<p>A subclass depends heavily on its superclass.</p>
+<p>Therefore, use inheritance only when there is a genuine conceptual subtype relationship.</p>
+<p>Ask:</p>
+<blockquote>Can every object of the subclass reasonably be treated as an object of the superclass?</blockquote>
+<p>If yes, inheritance may be appropriate.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Every Dog can be treated as an Animal.
+Every Circle can be treated as a Shape.
+Every SavingsAccount can be treated as a BankAccount.</code></pre></div>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Every Car can be treated as an Engine.</code></pre></div>
+<p>does not make sense.</p>
+<hr>
+<h1>30. Polymorphic collections</h1>
+<p>One of the most useful applications of polymorphism is storing different subclasses in a single collection.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Shape</span>&gt; shapes = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>shapes.add(<span class="kw">new</span> <span class="type">Circle</span>(<span class="num">5</span>));
+shapes.add(<span class="kw">new</span> <span class="type">Rectangle</span>(<span class="num">4</span>, <span class="num">8</span>));
+shapes.add(<span class="kw">new</span> <span class="type">Circle</span>(<span class="num">2</span>));</code></pre></div>
+<p>Later:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Shape</span> shape : shapes) {
+    <span class="type">System</span>.out.println(shape.area());
+}</code></pre></div>
+<p>This allows heterogeneous objects to be processed through a common abstraction.</p>
+<hr>
+<h1>31. Compile-time type checking</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Dog</span>();</code></pre></div>
+<p>and <code>Dog</code> has:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> fetch() {
+    <span class="type">System</span>.out.println(<span class="str">"Fetching..."</span>);
+}</code></pre></div>
+<p>but <code>Animal</code> does not.</p>
+<p>Can we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a.fetch();</code></pre></div>
+<p>No.</p>
+<p>The compiler examines the reference type:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span></code></pre></div>
+<p>and asks:</p>
+<blockquote>Does <code>Animal</code> declare a method named <code>fetch</code>?</blockquote>
+<p>It does not.</p>
+<p>Therefore the call does not compile.</p>
+<p>Even though the actual object happens to be a <code>Dog</code>.</p>
+<hr>
+<h1>32. Casting</h1>
+<p>We could write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Dog</span>();
+
+<span class="type">Dog</span> d = (<span class="type">Dog</span>) a;
+
+d.fetch();</code></pre></div>
+<p>This is called <strong>downcasting</strong>.</p>
+<p>However, casting must be used carefully.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Cat</span>();
+
+<span class="type">Dog</span> d = (<span class="type">Dog</span>) a;</code></pre></div>
+<p>This compiles, but fails at runtime with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ClassCastException</code></pre></div>
+<p>because the object is actually a <code>Cat</code>.</p>
+<p>Excessive downcasting is often a sign that the object-oriented design could be improved.</p>
+<hr>
+<h1>33. <code>instanceof</code></h1>
+<p>Java allows us to check an object's type:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (a <span class="kw">instanceof</span> <span class="type">Dog</span>) {
+    <span class="type">Dog</span> d = (<span class="type">Dog</span>) a;
+    d.fetch();
+}</code></pre></div>
+<p>Modern Java also supports pattern matching syntax:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (a <span class="kw">instanceof</span> <span class="type">Dog</span> <span class="type">d</span>) {
+    d.fetch();
+}</code></pre></div>
+<p>However, a large amount of code such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x <span class="kw">instanceof</span> <span class="type">Dog</span>) {
+    ...
+} <span class="kw">else</span> <span class="kw">if</span> (x <span class="kw">instanceof</span> <span class="type">Cat</span>) {
+    ...
+} <span class="kw">else</span> <span class="kw">if</span> (x <span class="kw">instanceof</span> <span class="type">Cow</span>) {
+    ...
+}</code></pre></div>
+<p>may indicate that polymorphism should be used instead.</p>
+<p>For example, instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (animal <span class="kw">instanceof</span> <span class="type">Dog</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Woof"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (animal <span class="kw">instanceof</span> <span class="type">Cat</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Meow"</span>);
+}</code></pre></div>
+<p>prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>animal.makeSound();</code></pre></div>
+<p>and let each subclass implement its own behavior.</p>
+<hr>
+<h1>34. <code>Object</code>: the root of Java classes</h1>
+<p>Every Java class ultimately inherits from:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Object</span></code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+}</code></pre></div>
+<p>implicitly behaves as though it were:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Object</span> {
+}</code></pre></div>
+<p>This means every Java object inherits methods such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>toString()
+equals()
+hashCode()</code></pre></div>
+<p>These methods are often overridden.</p>
+<hr>
+<h1>35. Overriding <code>toString()</code></h1>
+<p>By default:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> s = <span class="kw">new</span> <span class="type">Student</span>(...);
+
+<span class="type">System</span>.out.println(s);</code></pre></div>
+<p>may produce something like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student@3fee733d</code></pre></div>
+<p>That is usually not useful.</p>
+<p>We can override:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="ann">@Override</span>
+<span class="kw">public</span> <span class="type">String</span> toString() {
+    <span class="kw">return</span> <span class="str">"Student{name='"</span> + name + <span class="str">"', id="</span> + id + <span class="str">"}"</span>;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(s);</code></pre></div>
+<p>might print:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student{name='Alice', id=123}</code></pre></div>
+<p>This makes objects easier to inspect and debug.</p>
+<hr>
+<h1>36. A complete design example</h1>
+<p>Suppose we are building a notification system.</p>
+<p>Different notifications may be sent differently.</p>
+<p>We begin with an interface:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">Notification</span> {
+
+    <span class="kw">void</span> send();
+}</code></pre></div>
+<p>Email:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">EmailNotification</span>
+        <span class="kw">implements</span> <span class="type">Notification</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> address;
+    <span class="kw">private</span> <span class="type">String</span> message;
+
+    <span class="kw">public</span> <span class="type">EmailNotification</span>(
+            <span class="type">String</span> address,
+            <span class="type">String</span> message) {
+
+        <span class="kw">this</span>.address = address;
+        <span class="kw">this</span>.message = message;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> send() {
+        <span class="type">System</span>.out.println(
+            <span class="str">"Sending email to "</span> + address
+        );
+    }
+}</code></pre></div>
+<p>SMS:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">SmsNotification</span>
+        <span class="kw">implements</span> <span class="type">Notification</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> phoneNumber;
+    <span class="kw">private</span> <span class="type">String</span> message;
+
+    <span class="kw">public</span> <span class="type">SmsNotification</span>(
+            <span class="type">String</span> phoneNumber,
+            <span class="type">String</span> message) {
+
+        <span class="kw">this</span>.phoneNumber = phoneNumber;
+        <span class="kw">this</span>.message = message;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> send() {
+        <span class="type">System</span>.out.println(
+            <span class="str">"Sending SMS to "</span> + phoneNumber
+        );
+    }
+}</code></pre></div>
+<p>Application:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Notification</span>[] notifications = {
+    <span class="kw">new</span> <span class="type">EmailNotification</span>(
+        <span class="str">"alice@example.com"</span>,
+        <span class="str">"Your order shipped"</span>
+    ),
+
+    <span class="kw">new</span> <span class="type">SmsNotification</span>(
+        <span class="str">"555-1234"</span>,
+        <span class="str">"Your order shipped"</span>
+    )
+};</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Notification</span> n : notifications) {
+    n.send();
+}</code></pre></div>
+<p>Notice that the calling code knows nothing about how email or SMS works.</p>
+<p>It knows only:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Every Notification can send().</code></pre></div>
+<p>That is abstraction and polymorphism working together.</p>
+<hr>
+<h1>37. Extensibility</h1>
+<p>Suppose later we add:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">PushNotification</span>
+        <span class="kw">implements</span> <span class="type">Notification</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> send() {
+        <span class="type">System</span>.out.println(
+            <span class="str">"Sending push notification..."</span>
+        );
+    }
+}</code></pre></div>
+<p>The existing processing loop does not change:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Notification</span> n : notifications) {
+    n.send();
+}</code></pre></div>
+<p>This is an important benefit of polymorphic design.</p>
+<p>We can introduce new implementations without rewriting code that depends only on the abstraction.</p>
+<hr>
+<h1>38. A mental model for polymorphism</h1>
+<p>When you see:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Superclass</span> variable = <span class="kw">new</span> <span class="type">Subclass</span>();</code></pre></div>
+<p>ask two questions.</p>
+<h3>Question 1: what methods may I call?</h3>
+<p>Look at the <strong>declared reference type</strong>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Dog</span>();</code></pre></div>
+<p>The compiler allows methods declared by <code>Animal</code>.</p>
+<h3>Question 2: which overridden implementation runs?</h3>
+<p>Look at the <strong>actual object type</strong>.</p>
+<p>Since the object is a <code>Dog</code>, an overridden method in <code>Dog</code> runs.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Compiler:
+"What operations are allowed?"
+
+Runtime:
+"Which implementation should execute?"</code></pre></div>
+<p>This distinction is fundamental.</p>
+<hr>
+<h1>39. Example trace</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">A</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> print() {
+        <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">B</span> <span class="kw">extends</span> <span class="type">A</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> print() {
+        <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+    }
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A x = <span class="kw">new</span> <span class="type">A</span>();
+A y = <span class="kw">new</span> <span class="type">B</span>();
+B z = <span class="kw">new</span> <span class="type">B</span>();
+
+x.print();
+y.print();
+z.print();</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B
+B</code></pre></div>
+<p>Why?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x refers to an A object → A.print()
+
+y refers to a B object → B.print()
+
+z refers to a B object → B.print()</code></pre></div>
+<p>The declared type of <code>y</code> does not force <code>A.print()</code> to run.</p>
+<hr>
+<h1>40. Common mistakes</h1>
+<h2>Mistake 1: thinking private fields are directly accessible</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> test() {
+        name = <span class="str">"Alice"</span>;
+    }
+}</code></pre></div>
+<p>if <code>name</code> is private in <code>Person</code>.</p>
+<p>Use methods provided by the superclass.</p>
+<hr>
+<h2>Mistake 2: forgetting <code>super(...)</code></h2>
+<p>If the superclass has no zero-argument constructor:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Person</span>(<span class="type">String</span> name)</code></pre></div>
+<p>the subclass must explicitly call it.</p>
+<hr>
+<h2>Mistake 3: confusing overloading and overriding</h2>
+<p>Remember:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>overloading → different parameters
+overriding → new subclass implementation</code></pre></div>
+<hr>
+<h2>Mistake 4: thinking reference type determines overridden behavior</h2>
+<p>Incorrect mental model:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Animal a = new Dog();
+
+Since a is an Animal,
+Animal.makeSound() runs.</code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>The actual object is a Dog,
+so Dog.makeSound() runs.</code></pre></div>
+<hr>
+<h2>Mistake 5: using inheritance only to reuse code</h2>
+<p>Code reuse alone does not justify inheritance.</p>
+<p>The relationship should represent a meaningful subtype.</p>
+<hr>
+<h1>41. Design principle: depend on abstractions</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> printReport(
+    <span class="type">LaserPrinter</span> printer) {
+}</code></pre></div>
+<p>This function works only with <code>LaserPrinter</code>.</p>
+<p>Suppose instead we define:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">Printer</span> {
+    <span class="kw">void</span> print(<span class="type">String</span> text);
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> printReport(
+    <span class="type">Printer</span> printer) {
+}</code></pre></div>
+<p>Now the method can work with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LaserPrinter
+InkjetPrinter
+PdfPrinter
+NetworkPrinter</code></pre></div>
+<p>provided each implements <code>Printer</code>.</p>
+<p>This principle makes software easier to change.</p>
+<hr>
+<h1>42. Class hierarchy example</h1>
+<p>A possible hierarchy might be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>                  Shape
+                    |
+          +---------+---------+
+          |                   |
+        Circle             Rectangle
+                              |
+                            Square</code></pre></div>
+<p>We can interpret this as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Circle is a Shape.
+Rectangle is a Shape.
+Square is a Rectangle.</code></pre></div>
+<p>However, class hierarchies should be designed carefully.</p>
+<p>Mathematical relationships do not automatically translate into good software inheritance relationships.</p>
+<p>We should ask whether subclass behavior truly satisfies the expectations of the superclass.</p>
+<hr>
+<h1>43. Inheritance hierarchies should usually be shallow</h1>
+<p>Very deep hierarchies can become difficult to understand.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Entity
+  |
+LivingThing
+  |
+Animal
+  |
+Mammal
+  |
+Canine
+  |
+DomesticCanine
+  |
+Dog
+  |
+WorkingDog
+  |
+PoliceDog</code></pre></div>
+<p>Such designs can become fragile.</p>
+<p>In many applications, composition and interfaces produce simpler designs.</p>
+<p>Prefer simple relationships unless a deeper hierarchy genuinely models the problem.</p>
+<hr>
+<h1>44. In-class example</h1>
+<p>Suppose we need to model different types of course assignments.</p>
+<p>Every assignment has:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>title
+points possible</code></pre></div>
+<p>Different assignment types may calculate scores differently.</p>
+<p>We might create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Assignment</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> title;
+    <span class="kw">private</span> <span class="kw">double</span> pointsPossible;
+
+    <span class="kw">public</span> <span class="type">Assignment</span>(
+            <span class="type">String</span> title,
+            <span class="kw">double</span> pointsPossible) {
+
+        <span class="kw">this</span>.title = title;
+        <span class="kw">this</span>.pointsPossible = pointsPossible;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getTitle() {
+        <span class="kw">return</span> title;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> getPointsPossible() {
+        <span class="kw">return</span> pointsPossible;
+    }
+
+    <span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> calculateScore();
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Exam</span> <span class="kw">extends</span> <span class="type">Assignment</span> {
+
+    <span class="kw">private</span> <span class="kw">int</span> correct;
+    <span class="kw">private</span> <span class="kw">int</span> totalQuestions;
+
+    <span class="kw">public</span> <span class="type">Exam</span>(
+            <span class="type">String</span> title,
+            <span class="kw">double</span> pointsPossible,
+            <span class="kw">int</span> correct,
+            <span class="kw">int</span> totalQuestions) {
+
+        <span class="kw">super</span>(title, pointsPossible);
+
+        <span class="kw">this</span>.correct = correct;
+        <span class="kw">this</span>.totalQuestions = totalQuestions;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> calculateScore() {
+        <span class="kw">return</span> ((<span class="kw">double</span>) correct / totalQuestions)
+                * getPointsPossible();
+    }
+}</code></pre></div>
+<p>Another subclass might calculate a score differently.</p>
+<p>The grading system can still process all assignments uniformly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Assignment</span> a : assignments) {
+    <span class="type">System</span>.out.println(
+        a.getTitle()
+        + <span class="str">": "</span>
+        + a.calculateScore()
+    );
+}</code></pre></div>
+<hr>
+<h1>45. In-class exercise 1: predict the output</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Vehicle</span> {
+
+    <span class="kw">public</span> <span class="kw">void</span> move() {
+        <span class="type">System</span>.out.println(<span class="str">"Vehicle moves"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">Car</span> <span class="kw">extends</span> <span class="type">Vehicle</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> move() {
+        <span class="type">System</span>.out.println(<span class="str">"Car drives"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">Bicycle</span> <span class="kw">extends</span> <span class="type">Vehicle</span> {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> move() {
+        <span class="type">System</span>.out.println(<span class="str">"Bicycle pedals"</span>);
+    }
+}</code></pre></div>
+<p>What does this program print?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Vehicle</span>[] vehicles = {
+    <span class="kw">new</span> <span class="type">Vehicle</span>(),
+    <span class="kw">new</span> <span class="type">Car</span>(),
+    <span class="kw">new</span> <span class="type">Bicycle</span>()
+};
+
+<span class="kw">for</span> (<span class="type">Vehicle</span> v : vehicles) {
+    v.move();
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Vehicle moves
+Car drives
+Bicycle pedals</code></pre></div>
+<hr>
+<h1>46. In-class exercise 2: find the problem</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="type">Animal</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+
+    <span class="kw">public</span> <span class="type">Dog</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+}</code></pre></div>
+<p>Why does this not compile?</p>
+<p>Because <code>name</code> is private to <code>Animal</code>.</p>
+<p>A correct constructor is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Dog</span>(<span class="type">String</span> name) {
+    <span class="kw">super</span>(name);
+}</code></pre></div>
+<hr>
+<h1>47. In-class exercise 3: design the hierarchy</h1>
+<p>Suppose a university system contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Person
+Student
+Professor
+Administrator
+Course
+Department</code></pre></div>
+<p>Which relationships should use inheritance?</p>
+<p>Possible:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student is a Person
+Professor is a Person
+Administrator is a Person</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>              Person
+          /      |       \
+     Student Professor Administrator</code></pre></div>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Course is a Person
+Department is a Person</code></pre></div>
+<p>are clearly incorrect.</p>
+<p>Those classes will instead have associations or composition relationships.</p>
+<hr>
+<h1>48. In-class exercise 4: interface design</h1>
+<p>Suppose several classes should be capable of being saved:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Document
+Image
+GameState
+UserProfile</code></pre></div>
+<p>We could define:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">Saveable</span> {
+
+    <span class="kw">void</span> save(<span class="type">String</span> filename);
+}</code></pre></div>
+<p>Then each class could implement its own persistence behavior.</p>
+<p>This is useful because the classes may otherwise have no natural common superclass.</p>
+<p>Their commonality is a capability:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>They can be saved.</code></pre></div>
+<hr>
+<h1>49. Key vocabulary</h1>
+<p>Students should be comfortable with the following terms:</p>
+<p><strong>Inheritance</strong> A mechanism by which one class derives behavior and characteristics from another.</p>
+<p><strong>Superclass</strong> The more general class in an inheritance relationship.</p>
+<p><strong>Subclass</strong> The more specialized class.</p>
+<p><strong>Overriding</strong> Providing a new implementation of an inherited method.</p>
+<p><strong>Polymorphism</strong> Treating objects of different concrete types through a common abstraction.</p>
+<p><strong>Dynamic method dispatch</strong> Selecting an overridden method at runtime based on the object's actual type.</p>
+<p><strong>Abstract class</strong> A class that cannot be directly instantiated and may contain abstract methods.</p>
+<p><strong>Abstract method</strong> A method declaration without an implementation that subclasses must implement.</p>
+<p><strong>Interface</strong> A type describing a behavioral contract that implementing classes agree to provide.</p>
+<p><strong>Composition</strong> Building an object from other objects through has-a relationships.</p>
+<hr>
+<h1>50. Conceptual summary</h1>
+<p>Inheritance allows us to express:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A specialized type is a more general type.</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Dog is an Animal.</code></pre></div>
+<p>Method overriding allows subclasses to specialize behavior:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Animal.makeSound()
+Dog.makeSound()
+Cat.makeSound()</code></pre></div>
+<p>Polymorphism allows us to write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Dog</span>();</code></pre></div>
+<p>and later:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a.makeSound();</code></pre></div>
+<p>without knowing the exact subtype in the calling code.</p>
+<p>Abstract classes allow us to define:</p>
+<ul><li>shared state</li><li>shared behavior</li><li>required subclass behavior</li></ul>
+<p>Interfaces allow unrelated classes to share a behavioral contract.</p>
+<p>Together these concepts allow us to design programs around <strong>abstractions rather than individual concrete classes</strong>.</p>
+<hr>
+<h1>51. What students should be able to read</h1>
+<p>By the end of the week, students should be able to explain this program:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Shape</span> {
+
+    <span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> area();
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Circle</span> <span class="kw">extends</span> <span class="type">Shape</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> radius;
+
+    <span class="kw">public</span> <span class="type">Circle</span>(<span class="kw">double</span> radius) {
+        <span class="kw">this</span>.radius = radius;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> area() {
+        <span class="kw">return</span> <span class="type">Math</span>.PI * radius * radius;
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Rectangle</span> <span class="kw">extends</span> <span class="type">Shape</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> width;
+    <span class="kw">private</span> <span class="kw">double</span> height;
+
+    <span class="kw">public</span> <span class="type">Rectangle</span>(
+            <span class="kw">double</span> width,
+            <span class="kw">double</span> height) {
+
+        <span class="kw">this</span>.width = width;
+        <span class="kw">this</span>.height = height;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> area() {
+        <span class="kw">return</span> width * height;
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Main</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Shape</span>[] shapes = {
+            <span class="kw">new</span> <span class="type">Circle</span>(<span class="num">5</span>),
+            <span class="kw">new</span> <span class="type">Rectangle</span>(<span class="num">4</span>, <span class="num">6</span>),
+            <span class="kw">new</span> <span class="type">Circle</span>(<span class="num">10</span>)
+        };
+
+        <span class="kw">for</span> (<span class="type">Shape</span> shape : shapes) {
+            <span class="type">System</span>.out.println(shape.area());
+        }
+    }
+}</code></pre></div>
+<p>A student should be able to explain:</p>
+<ol><li>Why <code>Shape</code> is abstract.</li><li>Why <code>new Shape()</code> is illegal.</li><li>Why a <code>Circle</code> can be stored in a <code>Shape</code> variable.</li><li>Why the loop does not need <code>instanceof</code>.</li><li>Which <code>area()</code> method executes for each element.</li><li>How a new subtype such as <code>Triangle</code> could be added without changing the loop.</li></ol>
+<hr>
+<h1>52. Suggested lab</h1>
+<h2>Polymorphic employee payroll system</h2>
+<p>Create an abstract class:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Employee</span></code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>name
+employee ID
+calculatePay()</code></pre></div>
+<p>Create at least three subclasses:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>SalariedEmployee
+HourlyEmployee
+CommissionEmployee</code></pre></div>
+<p>Each should implement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculatePay()</code></pre></div>
+<p>appropriately.</p>
+<p>Create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Employee</span>&gt;</code></pre></div>
+<p>and store several employees of different types.</p>
+<p>Write code that prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Employee Name
+Employee Type
+Calculated Pay</code></pre></div>
+<p>for every employee.</p>
+<p>Do not use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">instanceof</span></code></pre></div>
+<p>to determine how pay should be calculated.</p>
+<p>The goal is to use polymorphism.</p>
+<hr>
+<h1>53. Suggested homework</h1>
+<p>Design a small application representing a media library.</p>
+<p>Create an abstract superclass:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">MediaItem</span></code></pre></div>
+<p>with common fields such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>title
+year</code></pre></div>
+<p>Create at least three subclasses:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Book
+Movie
+Podcast</code></pre></div>
+<p>Each subclass should override:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>getDescription()</code></pre></div>
+<p>Create a collection:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">MediaItem</span>&gt;</code></pre></div>
+<p>and populate it with several objects.</p>
+<p>Iterate through the collection and display each object's description polymorphically.</p>
+<p>Students should submit:</p>
+<ul><li>source code</li><li>a class diagram</li><li>sample output</li><li>a short explanation of where inheritance and polymorphism occur</li></ul>
+<hr>
+<h1>54. Review questions</h1>
+<ol><li>What does the <code>extends</code> keyword mean?</li></ol>
+<ol><li>What is the difference between a superclass and a subclass?</li></ol>
+<ol><li>What type of relationship should inheritance normally represent?</li></ol>
+<ol><li>Why are constructors not inherited?</li></ol>
+<ol><li>What does <code>super(...)</code> do?</li></ol>
+<ol><li>Can a subclass directly access a private superclass field?</li></ol>
+<ol><li>What is method overriding?</li></ol>
+<ol><li>How is overriding different from overloading?</li></ol>
+<ol><li>What does <code>@Override</code> accomplish?</li></ol>
+<ol><li>Given:</li></ol>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Animal</span> a = <span class="kw">new</span> <span class="type">Dog</span>();</code></pre></div>
+<p>what is the reference type?</p>
+<ol><li>What is the runtime object type?</li></ol>
+<ol><li>If <code>Dog</code> overrides <code>makeSound()</code>, which implementation executes when we write:</li></ol>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a.makeSound();</code></pre></div>
+<ol><li>What is dynamic method dispatch?</li></ol>
+<ol><li>Why can't an abstract class normally be instantiated?</li></ol>
+<ol><li>What is an abstract method?</li></ol>
+<ol><li>What is an interface?</li></ol>
+<ol><li>Why can interfaces be useful even for unrelated classes?</li></ol>
+<ol><li>How many classes can a Java class extend?</li></ol>
+<ol><li>How many interfaces can a Java class implement?</li></ol>
+<ol><li>When should composition be preferred to inheritance?</li></ol>
+<hr>
+<h1>55. Exit check</h1>
+<p>Students should be able to answer this without running the program:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">A</span> {
+    <span class="kw">public</span> <span class="kw">void</span> f() {
+        <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">B</span> <span class="kw">extends</span> <span class="type">A</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> f() {
+        <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">C</span> <span class="kw">extends</span> <span class="type">B</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> f() {
+        <span class="type">System</span>.out.println(<span class="str">"C"</span>);
+    }
+}</code></pre></div>
+<p>What does this print?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A x = <span class="kw">new</span> <span class="type">A</span>();
+A y = <span class="kw">new</span> <span class="type">B</span>();
+A z = <span class="kw">new</span> <span class="type">C</span>();
+
+x.f();
+y.f();
+z.f();</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B
+C</code></pre></div>
+<p>The key principle is:</p>
+<blockquote>The reference type determines which operations the compiler allows, while the runtime object type determines which overridden implementation executes.</blockquote>
+<hr>
+<h1>Week 8 takeaways</h1>
+<p>The most important ideas from this week are:</p>
+<ol><li><strong>Inheritance models subtype relationships.</strong></li></ol>
+<p>``<code>text Dog is an Animal. </code>``</p>
+<ol><li><strong>A subclass can override superclass behavior.</strong></li></ol>
+<ol><li><strong>A superclass reference can refer to subclass objects.</strong></li></ol>
+<p>``<code>java Animal a = new Dog(); </code>``</p>
+<ol><li><strong>Overridden methods are selected according to the runtime object type.</strong></li></ol>
+<ol><li><strong>Abstract classes represent incomplete generalizations that subclasses complete.</strong></li></ol>
+<ol><li><strong>Interfaces represent behavioral contracts.</strong></li></ol>
+<ol><li><strong>Polymorphism lets us write code against abstractions rather than specific implementations.</strong></li></ol>
+<ol><li><strong>Inheritance should be used deliberately; composition is often the better design for has-a relationships.</strong></li></ol>
+<p>The larger lesson is that object-oriented programming is not primarily about building complicated class hierarchies. It is about identifying useful abstractions and designing software so that different implementations can be used through stable, well-defined interfaces.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

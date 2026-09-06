@@ -1,0 +1,1662 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 4: methods and program decomposition</h2>
+<h3>Topics</h3>
+<ul><li>Why methods are useful</li><li>Defining and calling methods</li><li>Parameters and arguments</li><li>Return values</li><li><code>void</code> methods</li><li>Variable scope</li><li>Local variables</li><li>Method call execution</li><li>The call stack</li><li>Program decomposition</li><li>Designing programs using methods</li><li>Common mistakes involving methods</li></ul>
+<hr>
+<h1>1. Motivation: programs are getting bigger</h1>
+<p>During the first few weeks of the course, most of our programs were relatively small.</p>
+<p>A typical program might:</p>
+<ol><li>read some input,</li><li>perform some calculations,</li><li>use a loop or conditional,</li><li>print a result.</li></ol>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">GradeCalculator</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter exam 1 score: "</span>);
+        <span class="kw">double</span> exam1 = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter exam 2 score: "</span>);
+        <span class="kw">double</span> exam2 = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter final exam score: "</span>);
+        <span class="kw">double</span> finalExam = input.nextDouble();
+
+        <span class="kw">double</span> average =
+                exam1 * <span class="num">0.30</span> +
+                exam2 * <span class="num">0.30</span> +
+                finalExam * <span class="num">0.40</span>;
+
+        <span class="kw">if</span> (average &gt;= <span class="num">90</span>) {
+            <span class="type">System</span>.out.println(<span class="str">"Grade: A"</span>);
+        } <span class="kw">else</span> <span class="kw">if</span> (average &gt;= <span class="num">80</span>) {
+            <span class="type">System</span>.out.println(<span class="str">"Grade: B"</span>);
+        } <span class="kw">else</span> <span class="kw">if</span> (average &gt;= <span class="num">70</span>) {
+            <span class="type">System</span>.out.println(<span class="str">"Grade: C"</span>);
+        } <span class="kw">else</span> <span class="kw">if</span> (average &gt;= <span class="num">60</span>) {
+            <span class="type">System</span>.out.println(<span class="str">"Grade: D"</span>);
+        } <span class="kw">else</span> {
+            <span class="type">System</span>.out.println(<span class="str">"Grade: F"</span>);
+        }
+    }
+}</code></pre></div>
+<p>This program works.</p>
+<p>But imagine that the program grows to 500, 5,000, or 50,000 lines.</p>
+<p>Putting all of the logic inside <code>main</code> quickly becomes difficult to:</p>
+<ul><li>read,</li><li>understand,</li><li>debug,</li><li>test,</li><li>modify,</li><li>and reuse.</li></ul>
+<p>Programming therefore relies heavily on <strong>decomposition</strong>.</p>
+<blockquote><strong>Program decomposition</strong> is the process of breaking a large problem into smaller, manageable pieces.</blockquote>
+<p>In Java, one of our primary tools for decomposition is the <strong>method</strong>.</p>
+<hr>
+<h1>2. What is a method?</h1>
+<p>A <strong>method</strong> is a named block of code that performs a particular task.</p>
+<p>You have already used methods.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Hello"</span>);</code></pre></div>
+<p><code>println</code> is a method.</p>
+<p>Similarly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Math</span>.sqrt(<span class="num">25</span>);</code></pre></div>
+<p><code>sqrt</code> is a method.</p>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>input.nextInt();</code></pre></div>
+<p><code>nextInt</code> is a method.</p>
+<p>Until now, we have mostly been <strong>calling methods written by other programmers</strong>.</p>
+<p>This week, we begin writing our own.</p>
+<hr>
+<h1>3. A simple method</h1>
+<p>Consider the following program:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">GreetingExample</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printGreeting() {
+        <span class="type">System</span>.out.println(<span class="str">"Welcome to CSC500!"</span>);
+        <span class="type">System</span>.out.println(<span class="str">"Let's learn Java."</span>);
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        printGreeting();
+    }
+}</code></pre></div>
+<p>The method is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printGreeting() {
+    <span class="type">System</span>.out.println(<span class="str">"Welcome to CSC500!"</span>);
+    <span class="type">System</span>.out.println(<span class="str">"Let's learn Java."</span>);
+}</code></pre></div>
+<p>The method is called using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printGreeting();</code></pre></div>
+<p>When Java encounters the method call, it temporarily transfers execution to the method.</p>
+<p>After the method finishes, execution returns to the point immediately following the method call.</p>
+<hr>
+<h1>4. Anatomy of a method</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printGreeting() {
+    <span class="type">System</span>.out.println(<span class="str">"Hello!"</span>);
+}</code></pre></div>
+<p>The structure is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>public static void methodName(parameters) {
+    statements
+}</code></pre></div>
+<p>For now, we will concentrate on four pieces.</p>
+<h2>Method name</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printGreeting</code></pre></div>
+<p>The method name identifies the method.</p>
+<p>Java method names conventionally use <strong>camelCase</strong>.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateAverage
+printMenu
+findMaximum
+convertTemperature
+isValidPassword</code></pre></div>
+<p>Good method names describe what the method does.</p>
+<p>Avoid vague names such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>doStuff
+thing
+process
+method1</code></pre></div>
+<hr>
+<h1>5. <code>void</code> methods</h1>
+<p>Some methods perform an action but do not produce a value.</p>
+<p>These are called <strong>void methods</strong>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printSeparator() {
+    <span class="type">System</span>.out.println(<span class="str">"--------------------"</span>);
+}</code></pre></div>
+<p>The word:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">void</span></code></pre></div>
+<p>means that the method does not return a value.</p>
+<p>We can call it several times:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    printSeparator();
+    <span class="type">System</span>.out.println(<span class="str">"CSC500"</span>);
+    printSeparator();
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>--------------------
+CSC500
+--------------------</code></pre></div>
+<p>Methods allow us to avoid repeating code.</p>
+<hr>
+<h1>6. Why methods matter</h1>
+<p>Methods provide several important benefits.</p>
+<h2>6.1 readability</h2>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> subtotal = price * quantity;
+<span class="kw">double</span> tax = subtotal * <span class="num">0.06</span>;
+<span class="kw">double</span> total = subtotal + tax;
+<span class="type">System</span>.out.printf(<span class="str">"%.2f%n"</span>, total);</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> total = calculateTotal(price, quantity);
+printTotal(total);</code></pre></div>
+<p>The second version expresses the intention of the program more clearly.</p>
+<hr>
+<h2>6.2 reuse</h2>
+<p>Instead of writing the same calculation several times, we can write it once.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateTax(<span class="kw">double</span> amount) {
+    <span class="kw">return</span> amount * <span class="num">0.06</span>;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> tax1 = calculateTax(<span class="num">100</span>);
+<span class="kw">double</span> tax2 = calculateTax(<span class="num">250</span>);
+<span class="kw">double</span> tax3 = calculateTax(<span class="num">37.50</span>);</code></pre></div>
+<hr>
+<h2>6.3 testing</h2>
+<p>It is easier to test a small method independently than to test an entire large program.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number * number;
+}</code></pre></div>
+<p>We can test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(square(<span class="num">3</span>));   <span class="cmt">// should be 9</span>
+<span class="type">System</span>.out.println(square(<span class="num">0</span>));   <span class="cmt">// should be 0</span>
+<span class="type">System</span>.out.println(square(-<span class="num">4</span>));  <span class="cmt">// should be 16</span></code></pre></div>
+<hr>
+<h2>6.4 debugging</h2>
+<p>If a program consists of well-designed methods, we can often identify which method contains an error.</p>
+<p>Instead of asking:</p>
+<blockquote>"Where is the bug in these 500 lines?"</blockquote>
+<p>we can ask:</p>
+<blockquote>"Is the bug in <code>readInput</code>, <code>calculateAverage</code>, or <code>determineGrade</code>?"</blockquote>
+<hr>
+<h1>7. Parameters</h1>
+<p>Methods often need information from the caller.</p>
+<p>That information is passed using <strong>parameters</strong>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> greet(<span class="type">String</span> name) {
+    <span class="type">System</span>.out.println(<span class="str">"Hello, "</span> + name + <span class="str">"!"</span>);
+}</code></pre></div>
+<p>Here:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> name</code></pre></div>
+<p>is a parameter.</p>
+<p>We can call the method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>greet(<span class="str">"Maria"</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello, Maria!</code></pre></div>
+<p>Or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>greet(<span class="str">"James"</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello, James!</code></pre></div>
+<p>The same method can operate on different data.</p>
+<hr>
+<h1>8. Parameters vs. arguments</h1>
+<p>The words <strong>parameter</strong> and <strong>argument</strong> are closely related but have different meanings.</p>
+<p>In the method definition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> greet(<span class="type">String</span> name)</code></pre></div>
+<p><code>name</code> is a <strong>parameter</strong>.</p>
+<p>In the method call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>greet(<span class="str">"Maria"</span>);</code></pre></div>
+<p><code>"Maria"</code> is an <strong>argument</strong>.</p>
+<p>A useful distinction is:</p>
+<blockquote>A parameter is a variable in the method definition.  
+An argument is the value supplied when the method is called.</blockquote>
+<hr>
+<h1>9. Multiple parameters</h1>
+<p>Methods may have multiple parameters.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printRectangle(<span class="kw">int</span> width, <span class="kw">int</span> height) {
+    <span class="type">System</span>.out.println(<span class="str">"Width: "</span> + width);
+    <span class="type">System</span>.out.println(<span class="str">"Height: "</span> + height);
+}</code></pre></div>
+<p>Call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printRectangle(<span class="num">10</span>, <span class="num">5</span>);</code></pre></div>
+<p>The values correspond by position.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>width  receives 10
+height receives 5</code></pre></div>
+<p>Order matters.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printPerson(<span class="type">String</span> name, <span class="kw">int</span> age) {
+    <span class="type">System</span>.out.println(name + <span class="str">" is "</span> + age + <span class="str">" years old."</span>);
+}</code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printPerson(<span class="str">"Aisha"</span>, <span class="num">28</span>);</code></pre></div>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printPerson(<span class="num">28</span>, <span class="str">"Aisha"</span>);</code></pre></div>
+<p>The types and positions must match the method definition.</p>
+<hr>
+<h1>10. Methods that return values</h1>
+<p>Many methods calculate something and return the result.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number * number;
+}</code></pre></div>
+<p>The method's return type is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span></code></pre></div>
+<p>That means the method promises to produce an integer.</p>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>square(<span class="num">5</span>)</code></pre></div>
+<p>produces the value:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>25</code></pre></div>
+<p>We can store that value:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> result = square(<span class="num">5</span>);</code></pre></div>
+<p>Or print it:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(square(<span class="num">5</span>));</code></pre></div>
+<p>Or use it in another expression:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = square(<span class="num">3</span>) + square(<span class="num">4</span>);</code></pre></div>
+<p>which becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>9 + 16</code></pre></div>
+<p>and therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>25</code></pre></div>
+<hr>
+<h1>11. Return type</h1>
+<p>Every method declares what kind of value it returns.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> getAge()</code></pre></div>
+<p>returns an <code>int</code>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateAverage()</code></pre></div>
+<p>returns a <code>double</code>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isValid()</code></pre></div>
+<p>returns a <code>boolean</code>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> getName()</code></pre></div>
+<p>returns a <code>String</code>.</p>
+<p>A method that returns nothing uses:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">void</span></code></pre></div>
+<hr>
+<h1>12. The <code>return</code> statement</h1>
+<p>The <code>return</code> statement ends the method and sends a value back to the caller.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateArea(<span class="kw">double</span> radius) {
+    <span class="kw">double</span> area = <span class="type">Math</span>.PI * radius * radius;
+    <span class="kw">return</span> area;
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> result = calculateArea(<span class="num">5</span>);</code></pre></div>
+<p>causes the following sequence:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>radius = 5
+area = π × 5 × 5
+return area</code></pre></div>
+<p>The returned result is assigned to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>result</code></pre></div>
+<hr>
+<h1>13. Returning expressions directly</h1>
+<p>A temporary variable is not always necessary.</p>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateArea(<span class="kw">double</span> radius) {
+    <span class="kw">double</span> area = <span class="type">Math</span>.PI * radius * radius;
+    <span class="kw">return</span> area;
+}</code></pre></div>
+<p>we can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateArea(<span class="kw">double</span> radius) {
+    <span class="kw">return</span> <span class="type">Math</span>.PI * radius * radius;
+}</code></pre></div>
+<p>Both are correct.</p>
+<p>Choose whichever is clearer.</p>
+<hr>
+<h1>14. Example: maximum of two numbers</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">if</span> (a &gt; b) {
+        <span class="kw">return</span> a;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> b;
+    }
+}</code></pre></div>
+<p>Call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> larger = max(<span class="num">12</span>, <span class="num">7</span>);</code></pre></div>
+<p>Result:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>12</code></pre></div>
+<p>We can also write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">if</span> (a &gt; b) {
+        <span class="kw">return</span> a;
+    }
+
+    <span class="kw">return</span> b;
+}</code></pre></div>
+<p>Once Java executes a <code>return</code>, the method ends.</p>
+<hr>
+<h1>15. Boolean methods</h1>
+<p>Methods returning <code>boolean</code> are especially useful.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isEven(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number % <span class="num">2</span> == <span class="num">0</span>;
+}</code></pre></div>
+<p>Usage:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (isEven(<span class="num">10</span>)) {
+    <span class="type">System</span>.out.println(<span class="str">"The number is even."</span>);
+}</code></pre></div>
+<p>Boolean methods often have names beginning with words such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>is
+has
+can
+contains
+should</code></pre></div>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>isValidAge()
+hasPermission()
+canRegister()
+containsValue()</code></pre></div>
+<p>These names help make code read almost like English.</p>
+<hr>
+<h1>16. Example: eligibility method</h1>
+<p>Suppose a student may register for a graduate course if the student:</p>
+<ul><li>has completed CSC500, and</li><li>has a GPA of at least 3.0.</li></ul>
+<p>We could write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> canRegister(<span class="kw">boolean</span> completedCSC500,
+                                  <span class="kw">double</span> gpa) {
+    <span class="kw">return</span> completedCSC500 &amp;&amp; gpa &gt;= <span class="num">3.0</span>;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (canRegister(<span class="lit">true</span>, <span class="num">3.4</span>)) {
+    <span class="type">System</span>.out.println(<span class="str">"Registration permitted."</span>);
+}</code></pre></div>
+<p>Notice how the method name communicates the meaning of the condition.</p>
+<hr>
+<h1>17. Methods calling other methods</h1>
+<p>Methods can call other methods.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateSubtotal(<span class="kw">double</span> price, <span class="kw">int</span> quantity) {
+    <span class="kw">return</span> price * quantity;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateTax(<span class="kw">double</span> subtotal) {
+    <span class="kw">return</span> subtotal * <span class="num">0.06</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateTotal(<span class="kw">double</span> price, <span class="kw">int</span> quantity) {
+    <span class="kw">double</span> subtotal = calculateSubtotal(price, quantity);
+    <span class="kw">double</span> tax = calculateTax(subtotal);
+
+    <span class="kw">return</span> subtotal + tax;
+}</code></pre></div>
+<p>This is one of the most important ideas in software development.</p>
+<p>Complex operations can be constructed from simpler operations.</p>
+<hr>
+<h1>18. Program decomposition</h1>
+<p>Suppose we are asked to write a program that:</p>
+<ol><li>reads three exam scores,</li><li>calculates their average,</li><li>determines the letter grade,</li><li>prints the result.</li></ol>
+<p>A beginning programmer might put everything inside <code>main</code>.</p>
+<p>Instead, we can identify smaller tasks.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main
+ |
+ +-- readScore
+ |
+ +-- calculateAverage
+ |
+ +-- determineGrade
+ |
+ +-- printResult</code></pre></div>
+<p>Now each method performs one focused task.</p>
+<hr>
+<h1>19. Example of decomposition</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">GradeProgram</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> readScore(<span class="type">Scanner</span> input,
+                                   <span class="type">String</span> prompt) {
+        <span class="type">System</span>.out.print(prompt);
+        <span class="kw">return</span> input.nextDouble();
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateAverage(
+            <span class="kw">double</span> score1,
+            <span class="kw">double</span> score2,
+            <span class="kw">double</span> score3) {
+
+        <span class="kw">return</span> (score1 + score2 + score3) / <span class="num">3.0</span>;
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">char</span> determineGrade(<span class="kw">double</span> average) {
+        <span class="kw">if</span> (average &gt;= <span class="num">90</span>) {
+            <span class="kw">return</span> <span class="str">'A'</span>;
+        } <span class="kw">else</span> <span class="kw">if</span> (average &gt;= <span class="num">80</span>) {
+            <span class="kw">return</span> <span class="str">'B'</span>;
+        } <span class="kw">else</span> <span class="kw">if</span> (average &gt;= <span class="num">70</span>) {
+            <span class="kw">return</span> <span class="str">'C'</span>;
+        } <span class="kw">else</span> <span class="kw">if</span> (average &gt;= <span class="num">60</span>) {
+            <span class="kw">return</span> <span class="str">'D'</span>;
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> <span class="str">'F'</span>;
+        }
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printResult(<span class="kw">double</span> average,
+                                   <span class="kw">char</span> grade) {
+        <span class="type">System</span>.out.printf(<span class="str">"Average: %.2f%n"</span>, average);
+        <span class="type">System</span>.out.println(<span class="str">"Grade: "</span> + grade);
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="kw">double</span> exam1 =
+                readScore(input, <span class="str">"Enter exam 1: "</span>);
+
+        <span class="kw">double</span> exam2 =
+                readScore(input, <span class="str">"Enter exam 2: "</span>);
+
+        <span class="kw">double</span> exam3 =
+                readScore(input, <span class="str">"Enter exam 3: "</span>);
+
+        <span class="kw">double</span> average =
+                calculateAverage(exam1, exam2, exam3);
+
+        <span class="kw">char</span> grade =
+                determineGrade(average);
+
+        printResult(average, grade);
+    }
+}</code></pre></div>
+<p>Notice that <code>main</code> now describes the overall algorithm.</p>
+<p>It is almost readable as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>read the scores
+calculate the average
+determine the grade
+print the result</code></pre></div>
+<p>This is good program design.</p>
+<hr>
+<h1>20. The role of <code>main</code></h1>
+<p>At this stage of the course, students often think:</p>
+<blockquote>Everything happens inside <code>main</code>.</blockquote>
+<p>A better mental model is:</p>
+<blockquote><code>main</code> coordinates the program.</blockquote>
+<p>Ideally, <code>main</code> should often describe the high-level workflow while other methods perform the details.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    displayWelcomeMessage();
+    getUserInput();
+    performCalculations();
+    displayResults();
+}</code></pre></div>
+<p>The exact design depends on the application, but large blocks of unrelated logic inside <code>main</code> are usually a sign that decomposition would help.</p>
+<hr>
+<h1>21. Variable scope</h1>
+<p>A variable is not necessarily accessible everywhere in a program.</p>
+<p>The region in which a variable exists is called its <strong>scope</strong>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printNumber() {
+    <span class="kw">int</span> number = <span class="num">10</span>;
+
+    <span class="type">System</span>.out.println(number);
+}</code></pre></div>
+<p>The variable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number</code></pre></div>
+<p>exists only inside <code>printNumber</code>.</p>
+<p>This would not work:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    printNumber();
+
+    <span class="type">System</span>.out.println(number);
+}</code></pre></div>
+<p>Java would produce a compilation error because <code>number</code> does not exist inside <code>main</code>.</p>
+<hr>
+<h1>22. Local variables</h1>
+<p>Variables declared inside a method are called <strong>local variables</strong>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateArea(<span class="kw">double</span> radius) {
+    <span class="kw">double</span> area = <span class="type">Math</span>.PI * radius * radius;
+    <span class="kw">return</span> area;
+}</code></pre></div>
+<p>Both:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>radius</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>area</code></pre></div>
+<p>are local to this particular invocation of <code>calculateArea</code>.</p>
+<p>Other methods cannot directly access them.</p>
+<hr>
+<h1>23. Different methods can use the same variable name</h1>
+<p>Because local variables belong to different scopes, this is legal:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> methodA() {
+    <span class="kw">int</span> x = <span class="num">10</span>;
+    <span class="type">System</span>.out.println(x);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> methodB() {
+    <span class="kw">int</span> x = <span class="num">20</span>;
+    <span class="type">System</span>.out.println(x);
+}</code></pre></div>
+<p>The two variables named <code>x</code> are completely separate variables.</p>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>methodA();
+methodB();</code></pre></div>
+<p>prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10
+20</code></pre></div>
+<hr>
+<h1>24. Parameters are local variables</h1>
+<p>Parameters behave like local variables.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number * number;
+}</code></pre></div>
+<p>The parameter:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number</code></pre></div>
+<p>exists only during that invocation of <code>square</code>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>square(<span class="num">5</span>);
+square(<span class="num">10</span>);</code></pre></div>
+<p>Conceptually, Java creates a different <code>number</code> for each call.</p>
+<p>First call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number = 5</code></pre></div>
+<p>Second call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number = 10</code></pre></div>
+<hr>
+<h1>25. Java passes primitive values to methods</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> changeNumber(<span class="kw">int</span> number) {
+    number = <span class="num">100</span>;
+}</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> x = <span class="num">5</span>;
+
+    changeNumber(x);
+
+    <span class="type">System</span>.out.println(x);
+}</code></pre></div>
+<p>What prints?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5</code></pre></div>
+<p>Not:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>100</code></pre></div>
+<p>Why?</p>
+<p>The method receives a copy of the value stored in <code>x</code>.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main:
+
+x = 5
+
+          copy
+           |
+           v
+
+changeNumber:
+
+number = 5</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number = <span class="num">100</span>;</code></pre></div>
+<p>changes the local variable <code>number</code>.</p>
+<p>It does not change <code>x</code>.</p>
+<p>We will revisit Java's parameter passing more deeply when we study objects and references.</p>
+<hr>
+<h1>26. Execution flow</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> methodA() {
+    <span class="type">System</span>.out.println(<span class="str">"A1"</span>);
+    methodB();
+    <span class="type">System</span>.out.println(<span class="str">"A2"</span>);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> methodB() {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="type">System</span>.out.println(<span class="str">"Start"</span>);
+    methodA();
+    <span class="type">System</span>.out.println(<span class="str">"End"</span>);
+}</code></pre></div>
+<p>What is printed?</p>
+<p>Trace carefully.</p>
+<p>First:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Start</code></pre></div>
+<p>Then <code>methodA</code> begins:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A1</code></pre></div>
+<p>Then <code>methodA</code> calls <code>methodB</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>B</code></pre></div>
+<p><code>methodB</code> finishes.</p>
+<p>Execution returns to <code>methodA</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A2</code></pre></div>
+<p><code>methodA</code> finishes.</p>
+<p>Execution returns to <code>main</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>End</code></pre></div>
+<p>Complete output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Start
+A1
+B
+A2
+End</code></pre></div>
+<hr>
+<h1>27. The call stack</h1>
+<p>Java must remember where to return after a method finishes.</p>
+<p>It does this using a structure called the <strong>call stack</strong>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main calls methodA
+methodA calls methodB
+methodB calls methodC</code></pre></div>
+<p>At the deepest point, we can visualize the stack as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>+-----------+
+| methodC   |
++-----------+
+| methodB   |
++-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+</code></pre></div>
+<p>When <code>methodC</code> finishes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>+-----------+
+| methodB   |
++-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+</code></pre></div>
+<p>Then <code>methodB</code> finishes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>+-----------+
+| methodA   |
++-----------+
+| main      |
++-----------+</code></pre></div>
+<p>Eventually execution returns to <code>main</code>.</p>
+<p>The stack becomes especially important when we study <strong>recursion</strong> later in the course.</p>
+<hr>
+<h1>28. Method call tracing example</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> doubleNumber(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x * <span class="num">2</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> addFive(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x + <span class="num">5</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> result = addFive(doubleNumber(<span class="num">4</span>));
+
+    <span class="type">System</span>.out.println(result);
+}</code></pre></div>
+<p>Evaluate from the inside outward.</p>
+<p>First:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>doubleNumber(<span class="num">4</span>)</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>8</code></pre></div>
+<p>The expression becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>addFive(<span class="num">8</span>)</code></pre></div>
+<p>which returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>13</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>result = <span class="num">13</span>;</code></pre></div>
+<hr>
+<h1>29. Designing good methods</h1>
+<p>A method should usually perform <strong>one clear conceptual task</strong>.</p>
+<p>Good examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateAverage()
+findMaximum()
+printMenu()
+readScore()
+isValidPassword()
+convertMilesToKilometers()</code></pre></div>
+<p>Less desirable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>readInputCalculateAverageDetermineGradeAndPrintResult()</code></pre></div>
+<p>That method is doing too many unrelated tasks.</p>
+<p>A useful principle is:</p>
+<blockquote>One method, one responsibility.</blockquote>
+<p>This principle becomes increasingly important as programs become larger.</p>
+<hr>
+<h1>30. How large should a method be?</h1>
+<p>There is no universal maximum number of lines.</p>
+<p>Instead, ask:</p>
+<h3>Does the method have one clear purpose?</h3>
+<p>If yes, the size may be appropriate.</p>
+<p>If you find yourself describing the method as:</p>
+<blockquote>"This method reads data, calculates totals, checks eligibility, prints the results, and saves a file..."</blockquote>
+<p>the method probably has too many responsibilities.</p>
+<p>Another useful clue is comments such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">// read data</span>
+
+...
+
+<span class="cmt">// calculate totals</span>
+
+...
+
+<span class="cmt">// determine grade</span>
+
+...
+
+<span class="cmt">// print result</span></code></pre></div>
+<p>Each comment may indicate an opportunity to create a separate method.</p>
+<hr>
+<h1>31. Top-down design</h1>
+<p>One useful design strategy is called <strong>top-down design</strong>.</p>
+<p>Start with the high-level problem.</p>
+<p>Suppose we need to create an ATM simulation.</p>
+<p>At the highest level:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>runATM</code></pre></div>
+<p>Break that into:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>displayMenu
+readChoice
+processChoice</code></pre></div>
+<p>Then <code>processChoice</code> may break into:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>deposit
+withdraw
+checkBalance</code></pre></div>
+<p>The hierarchy might look like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main
+ |
+ +-- displayMenu
+ |
+ +-- readChoice
+ |
+ +-- processChoice
+       |
+       +-- deposit
+       |
+       +-- withdraw
+       |
+       +-- checkBalance</code></pre></div>
+<p>Rather than solving the entire problem at once, we repeatedly divide it into smaller problems.</p>
+<hr>
+<h1>32. Example: temperature conversion</h1>
+<p>Problem:</p>
+<p>Create a program that converts Fahrenheit temperatures to Celsius.</p>
+<p>Formula:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C = (F - 32) × 5/9</code></pre></div>
+<p>We can separate calculation from user interaction.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> fahrenheitToCelsius(<span class="kw">double</span> fahrenheit) {
+    <span class="kw">return</span> (fahrenheit - <span class="num">32</span>) * <span class="num">5.0</span> / <span class="num">9.0</span>;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter temperature in Fahrenheit: "</span>);
+    <span class="kw">double</span> fahrenheit = input.nextDouble();
+
+    <span class="kw">double</span> celsius =
+            fahrenheitToCelsius(fahrenheit);
+
+    <span class="type">System</span>.out.printf(<span class="str">"%.2f F = %.2f C%n"</span>,
+                      fahrenheit,
+                      celsius);
+}</code></pre></div>
+<p>This separation provides an important benefit:</p>
+<p>The conversion method does not know anything about keyboards, scanners, or printing.</p>
+<p>It simply performs a calculation.</p>
+<p>That makes the method easier to reuse and test.</p>
+<hr>
+<h1>33. Pure calculation methods</h1>
+<p>When possible, calculation methods should receive the information they need as parameters and return their result.</p>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateBMI(<span class="kw">double</span> weight,
+                                  <span class="kw">double</span> height) {
+    <span class="kw">return</span> weight / (height * height);
+}</code></pre></div>
+<p>instead of having the method directly ask the user for input.</p>
+<p>Why?</p>
+<p>Because the first version can be reused in:</p>
+<ul><li>a console application,</li><li>a web application,</li><li>a mobile application,</li><li>automated tests,</li><li>another Java program.</li></ul>
+<p>The calculation itself is independent of how input is collected.</p>
+<p>This separation is an early example of good software design.</p>
+<hr>
+<h1>34. Example: input validation method</h1>
+<p>We can move validation logic into its own method.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isValidScore(<span class="kw">double</span> score) {
+    <span class="kw">return</span> score &gt;= <span class="num">0</span> &amp;&amp; score &lt;= <span class="num">100</span>;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> score = input.nextDouble();
+
+<span class="kw">if</span> (isValidScore(score)) {
+    <span class="type">System</span>.out.println(<span class="str">"Valid score."</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Invalid score."</span>);
+}</code></pre></div>
+<p>This is more readable than repeatedly writing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>score &gt;= <span class="num">0</span> &amp;&amp; score &lt;= <span class="num">100</span></code></pre></div>
+<p>throughout the program.</p>
+<hr>
+<h1>35. Method signatures</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateArea(<span class="kw">double</span> radius)</code></pre></div>
+<p>The method has:</p>
+<ul><li>a name: <code>calculateArea</code></li><li>a parameter list: <code>(double radius)</code></li><li>a return type: <code>double</code></li></ul>
+<p>Methods are distinguished in part by their names and parameter types.</p>
+<p>For example, Java can support:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span> a, <span class="kw">int</span> b)</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> max(<span class="kw">double</span> a, <span class="kw">double</span> b)</code></pre></div>
+<p>This concept is called <strong>method overloading</strong>.</p>
+<p>We will only use it lightly for now, but students should recognize that methods may share a name if their parameter lists differ.</p>
+<hr>
+<h1>36. Common error: forgetting to return a value</h1>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> number) {
+    <span class="kw">int</span> result = number * number;
+}</code></pre></div>
+<p>Java expects the method to return an <code>int</code>.</p>
+<p>The method promises:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span></code></pre></div>
+<p>but never returns one.</p>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> number) {
+    <span class="kw">int</span> result = number * number;
+    <span class="kw">return</span> result;
+}</code></pre></div>
+<hr>
+<h1>37. Common error: returning the wrong type</h1>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> getAverage(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> <span class="str">"hello"</span>;
+}</code></pre></div>
+<p>The method promises an:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span></code></pre></div>
+<p>but attempts to return a:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span></code></pre></div>
+<p>The returned value must be compatible with the declared return type.</p>
+<hr>
+<h1>38. Common error: using a <code>void</code> method as a value</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printHello() {
+    <span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+}</code></pre></div>
+<p>This is incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> x = printHello();</code></pre></div>
+<p><code>printHello</code> does not produce a value.</p>
+<p>Its return type is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">void</span></code></pre></div>
+<hr>
+<h1>39. Common error: printing instead of returning</h1>
+<p>Beginning programmers frequently confuse:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(...)</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span></code></pre></div>
+<p>These are very different operations.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> square(<span class="kw">int</span> number) {
+    <span class="type">System</span>.out.println(number * number);
+}</code></pre></div>
+<p>This displays the square, but the caller cannot use the result.</p>
+<p>For example, we cannot meaningfully write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> result = square(<span class="num">5</span>);</code></pre></div>
+<p>Instead:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number * number;
+}</code></pre></div>
+<p>Now the caller decides what to do with the value.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> result = square(<span class="num">5</span>);
+<span class="type">System</span>.out.println(result);</code></pre></div>
+<p>As a design principle:</p>
+<blockquote>If a method computes a value that other code may need, returning the value is usually more flexible than printing it directly.</blockquote>
+<hr>
+<h1>40. Common error: incorrect argument count</h1>
+<p>Definition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a + b;
+}</code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add(<span class="num">5</span>, <span class="num">7</span>);</code></pre></div>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add(<span class="num">5</span>);</code></pre></div>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add(<span class="num">5</span>, <span class="num">7</span>, <span class="num">10</span>);</code></pre></div>
+<p>The number of arguments must match the parameters.</p>
+<hr>
+<h1>41. Common error: incorrect argument types</h1>
+<p>Definition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateTax(<span class="kw">double</span> amount) {
+    <span class="kw">return</span> amount * <span class="num">0.06</span>;
+}</code></pre></div>
+<p>This is reasonable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateTax(<span class="num">100.0</span>);</code></pre></div>
+<p>This is not:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateTax(<span class="str">"one hundred"</span>);</code></pre></div>
+<p>Java checks parameter types at compile time.</p>
+<p>This is one benefit of a statically typed language.</p>
+<hr>
+<h1>42. Common error: scope confusion</h1>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> calculate() {
+    <span class="kw">int</span> result = <span class="num">25</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    calculate();
+
+    <span class="type">System</span>.out.println(result);
+}</code></pre></div>
+<p><code>result</code> belongs to <code>calculate</code>, not to <code>main</code>.</p>
+<p>One solution is to return the value.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> calculate() {
+    <span class="kw">return</span> <span class="num">25</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> result = calculate();
+
+    <span class="type">System</span>.out.println(result);
+}</code></pre></div>
+<hr>
+<h1>43. Worked example: loan payment</h1>
+<p>Suppose we want to calculate a simple monthly payment.</p>
+<p>For this example, assume:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>monthly payment = loan amount / number of months</code></pre></div>
+<p>We could write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateMonthlyPayment(
+        <span class="kw">double</span> loanAmount,
+        <span class="kw">int</span> months) {
+
+    <span class="kw">return</span> loanAmount / months;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> displayPayment(<span class="kw">double</span> payment) {
+    <span class="type">System</span>.out.printf(<span class="str">"Monthly payment: $%.2f%n"</span>,
+                      payment);
+}</code></pre></div>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+    <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+    <span class="type">System</span>.out.print(<span class="str">"Loan amount: "</span>);
+    <span class="kw">double</span> amount = input.nextDouble();
+
+    <span class="type">System</span>.out.print(<span class="str">"Number of months: "</span>);
+    <span class="kw">int</span> months = input.nextInt();
+
+    <span class="kw">double</span> payment =
+            calculateMonthlyPayment(amount, months);
+
+    displayPayment(payment);
+}</code></pre></div>
+<p>Notice the separation between:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>input
+calculation
+output</code></pre></div>
+<p>This pattern appears constantly in software.</p>
+<hr>
+<h1>44. Worked example: number analysis</h1>
+<p>Suppose a program reads an integer and reports whether it is:</p>
+<ul><li>positive, negative, or zero,</li><li>and even or odd.</li></ul>
+<p>We could create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isPositive(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number &gt; <span class="num">0</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isNegative(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number &lt; <span class="num">0</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isEven(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number % <span class="num">2</span> == <span class="num">0</span>;
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> describeNumber(<span class="kw">int</span> number) {
+
+    <span class="kw">if</span> (isPositive(number)) {
+        <span class="type">System</span>.out.println(<span class="str">"Positive"</span>);
+    } <span class="kw">else</span> <span class="kw">if</span> (isNegative(number)) {
+        <span class="type">System</span>.out.println(<span class="str">"Negative"</span>);
+    } <span class="kw">else</span> {
+        <span class="type">System</span>.out.println(<span class="str">"Zero"</span>);
+    }
+
+    <span class="kw">if</span> (isEven(number)) {
+        <span class="type">System</span>.out.println(<span class="str">"Even"</span>);
+    } <span class="kw">else</span> {
+        <span class="type">System</span>.out.println(<span class="str">"Odd"</span>);
+    }
+}</code></pre></div>
+<p>This example demonstrates that small methods can communicate concepts clearly.</p>
+<hr>
+<h1>45. Methods and loops</h1>
+<p>Methods can contain loops.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumFromOneTo(<span class="kw">int</span> n) {
+
+    <span class="kw">int</span> sum = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
+        sum += i;
+    }
+
+    <span class="kw">return</span> sum;
+}</code></pre></div>
+<p>Call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> result = sumFromOneTo(<span class="num">5</span>);</code></pre></div>
+<p>The method computes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 + 2 + 3 + 4 + 5</code></pre></div>
+<p>and returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>15</code></pre></div>
+<hr>
+<h1>46. Methods and conditionals</h1>
+<p>Methods can contain conditionals.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> absoluteValue(<span class="kw">double</span> number) {
+
+    <span class="kw">if</span> (number &lt; <span class="num">0</span>) {
+        <span class="kw">return</span> -number;
+    }
+
+    <span class="kw">return</span> number;
+}</code></pre></div>
+<p>Methods do not replace loops or conditionals.</p>
+<p>Instead, methods allow us to organize programs containing those structures.</p>
+<hr>
+<h1>47. Nested method calls</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x * x;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumOfSquares(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> square(a) + square(b);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumOfSquares(<span class="num">3</span>, <span class="num">4</span>)</code></pre></div>
+<p>becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>square(3) + square(4)</code></pre></div>
+<p>then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>9 + 16</code></pre></div>
+<p>then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>25</code></pre></div>
+<p>This idea-building larger abstractions from smaller ones-is fundamental to computer science.</p>
+<hr>
+<h1>48. Abstraction</h1>
+<p>When we call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Math</span>.sqrt(<span class="num">25</span>)</code></pre></div>
+<p>we do not need to understand exactly how Java computes the square root.</p>
+<p>We only need to know:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>input: a number
+output: its square root</code></pre></div>
+<p>This is an example of <strong>abstraction</strong>.</p>
+<p>A method allows a programmer to hide implementation details behind a meaningful name.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> tax = calculateTax(amount);</code></pre></div>
+<p>The caller does not need to know the exact formula used inside <code>calculateTax</code>.</p>
+<p>The method provides a useful abstraction.</p>
+<p>This principle becomes central when we study objects and classes.</p>
+<hr>
+<h1>49. Method contracts</h1>
+<p>It is helpful to think of a method as having a contract.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateArea(<span class="kw">double</span> radius)</code></pre></div>
+<p>The caller provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a radius</code></pre></div>
+<p>The method provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>an area</code></pre></div>
+<p>We can describe this formally.</p>
+<h3>Method</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateArea</code></pre></div>
+<h3>Input</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>radius: double</code></pre></div>
+<h3>Output</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>area: double</code></pre></div>
+<h3>Assumption</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>radius &gt;= 0</code></pre></div>
+<h3>Behavior</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>returns π × radius²</code></pre></div>
+<p>Thinking about methods this way will become important later when designing larger software systems.</p>
+<hr>
+<h1>50. Choosing parameters</h1>
+<p>A method should receive the information necessary to perform its task.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateTotal(
+        <span class="kw">double</span> price,
+        <span class="kw">int</span> quantity,
+        <span class="kw">double</span> taxRate)</code></pre></div>
+<p>This is flexible because the required information is explicit.</p>
+<p>Compare that with relying on hidden values elsewhere in the program.</p>
+<p>Explicit parameters often make a method easier to:</p>
+<ul><li>understand,</li><li>test,</li><li>reuse,</li><li>and modify.</li></ul>
+<hr>
+<h1>51. Avoid unnecessary parameters</h1>
+<p>Do not pass information the method does not need.</p>
+<p>Suppose a method only calculates area:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateRectangleArea(
+        <span class="kw">double</span> width,
+        <span class="kw">double</span> height) {
+
+    <span class="kw">return</span> width * height;
+}</code></pre></div>
+<p>There is no reason to also pass:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>userName
+programVersion
+menuChoice</code></pre></div>
+<p>A clean method interface contains only relevant information.</p>
+<hr>
+<h1>52. Example of poor decomposition</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> doEverything() {
+    <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter price: "</span>);
+    <span class="kw">double</span> price = input.nextDouble();
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter quantity: "</span>);
+    <span class="kw">int</span> quantity = input.nextInt();
+
+    <span class="kw">double</span> subtotal = price * quantity;
+    <span class="kw">double</span> tax = subtotal * <span class="num">0.06</span>;
+    <span class="kw">double</span> total = subtotal + tax;
+
+    <span class="kw">if</span> (total &gt; <span class="num">100</span>) {
+        total *= <span class="num">0.95</span>;
+    }
+
+    <span class="type">System</span>.out.println(total);
+}</code></pre></div>
+<p>This works, but several responsibilities have been combined.</p>
+<p>Possible decomposition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>readPrice
+readQuantity
+calculateSubtotal
+calculateTax
+applyDiscount
+printReceipt</code></pre></div>
+<p>The point is not to create methods mechanically.</p>
+<p>The goal is to identify meaningful responsibilities.</p>
+<hr>
+<h1>53. Too many tiny methods</h1>
+<p>Decomposition can also go too far.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> addOne(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x + <span class="num">1</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> addTwo(<span class="kw">int</span> x) {
+    <span class="kw">return</span> addOne(addOne(x));
+}</code></pre></div>
+<p>This may be useful in a particular context, but creating a separate method for every trivial operation can make code harder rather than easier to understand.</p>
+<p>Good decomposition requires judgment.</p>
+<p>Ask:</p>
+<blockquote>Does naming this operation make the program easier to understand, test, or reuse?</blockquote>
+<hr>
+<h1>54. Incremental development</h1>
+<p>Methods work well with <strong>incremental development</strong>.</p>
+<p>Instead of writing an entire program and testing at the end:</p>
+<ol><li>write one method,</li><li>test it,</li><li>verify that it works,</li><li>write another method,</li><li>test again,</li><li>gradually assemble the complete program.</li></ol>
+<p>For example, if implementing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateAverage
+determineGrade
+printResult</code></pre></div>
+<p>first verify:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(calculateAverage(<span class="num">90</span>, <span class="num">80</span>, <span class="num">70</span>));</code></pre></div>
+<p>Then test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(determineGrade(<span class="num">95</span>));
+<span class="type">System</span>.out.println(determineGrade(<span class="num">85</span>));
+<span class="type">System</span>.out.println(determineGrade(<span class="num">75</span>));</code></pre></div>
+<p>Only after those methods work should we integrate them into the complete application.</p>
+<p>This greatly reduces debugging difficulty.</p>
+<hr>
+<h1>55. Debugging method-based programs</h1>
+<p>When debugging, ask:</p>
+<h3>Did the method receive the correct inputs?</h3>
+<p>Print temporary diagnostic information if necessary:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"DEBUG: score = "</span> + score);</code></pre></div>
+<h3>Did the method return the expected result?</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> average = calculateAverage(<span class="num">70</span>, <span class="num">80</span>, <span class="num">90</span>);
+<span class="type">System</span>.out.println(<span class="str">"DEBUG average = "</span> + average);</code></pre></div>
+<h3>Is the error inside the method or in the caller?</h3>
+<p>Test methods independently.</p>
+<hr>
+<h1>56. Tracing exercise 1</h1>
+<p>What does this program print?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mystery(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x + <span class="num">3</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> a = <span class="num">5</span>;
+
+    <span class="kw">int</span> b = mystery(a);
+
+    <span class="type">System</span>.out.println(a);
+    <span class="type">System</span>.out.println(b);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5
+8</code></pre></div>
+<p><code>a</code> remains unchanged.</p>
+<p>The returned value is stored in <code>b</code>.</p>
+<hr>
+<h1>57. Tracing exercise 2</h1>
+<p>What is printed?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> multiply(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a * b;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+    <span class="kw">int</span> result =
+            add(multiply(<span class="num">2</span>, <span class="num">3</span>), multiply(<span class="num">4</span>, <span class="num">5</span>));
+
+    <span class="type">System</span>.out.println(result);
+}</code></pre></div>
+<p>First:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>multiply(2, 3) = 6</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>multiply(4, 5) = 20</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add(6, 20) = 26</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>26</code></pre></div>
+<hr>
+<h1>58. Tracing exercise 3</h1>
+<p>What is printed?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> change(<span class="kw">int</span> x) {
+    x = x + <span class="num">10</span>;
+    <span class="type">System</span>.out.println(x);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+    <span class="kw">int</span> x = <span class="num">5</span>;
+
+    change(x);
+
+    <span class="type">System</span>.out.println(x);
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>15
+5</code></pre></div>
+<p>The <code>x</code> inside <code>change</code> is separate from the <code>x</code> inside <code>main</code>.</p>
+<hr>
+<h1>59. In-class exercise: write <code>isOdd</code></h1>
+<p>Write a method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isOdd(<span class="kw">int</span> number)</code></pre></div>
+<p>that returns <code>true</code> if the number is odd.</p>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isOdd(<span class="kw">int</span> number) {
+    <span class="kw">return</span> number % <span class="num">2</span> != <span class="num">0</span>;
+}</code></pre></div>
+<hr>
+<h1>60. In-class exercise: find the smaller number</h1>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> min(<span class="kw">int</span> a, <span class="kw">int</span> b)</code></pre></div>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> min(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+
+    <span class="kw">if</span> (a &lt; b) {
+        <span class="kw">return</span> a;
+    }
+
+    <span class="kw">return</span> b;
+}</code></pre></div>
+<hr>
+<h1>61. In-class exercise: celsius conversion</h1>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> celsiusToFahrenheit(<span class="kw">double</span> celsius)</code></pre></div>
+<p>using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>F = C × 9/5 + 32</code></pre></div>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> celsiusToFahrenheit(
+        <span class="kw">double</span> celsius) {
+
+    <span class="kw">return</span> celsius * <span class="num">9.0</span> / <span class="num">5.0</span> + <span class="num">32</span>;
+}</code></pre></div>
+<hr>
+<h1>62. In-class exercise: valid month</h1>
+<p>Write a method that returns whether an integer represents a valid month.</p>
+<p>Valid months are 1 through 12.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isValidMonth(<span class="kw">int</span> month)</code></pre></div>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isValidMonth(<span class="kw">int</span> month) {
+    <span class="kw">return</span> month &gt;= <span class="num">1</span> &amp;&amp; month &lt;= <span class="num">12</span>;
+}</code></pre></div>
+<hr>
+<h1>63. In-class exercise: letter grade</h1>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">char</span> getLetterGrade(<span class="kw">double</span> score)</code></pre></div>
+<p>Assume:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>90–100 A
+80–89  B
+70–79  C
+60–69  D
+below 60 F</code></pre></div>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">char</span> getLetterGrade(<span class="kw">double</span> score) {
+
+    <span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+        <span class="kw">return</span> <span class="str">'A'</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+        <span class="kw">return</span> <span class="str">'B'</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">70</span>) {
+        <span class="kw">return</span> <span class="str">'C'</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+        <span class="kw">return</span> <span class="str">'D'</span>;
+    }
+
+    <span class="kw">return</span> <span class="str">'F'</span>;
+}</code></pre></div>
+<hr>
+<h1>64. In-class exercise: sum of integers</h1>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumTo(<span class="kw">int</span> n)</code></pre></div>
+<p>that returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 + 2 + ... + n</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumTo(<span class="num">4</span>)</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10</code></pre></div>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumTo(<span class="kw">int</span> n) {
+
+    <span class="kw">int</span> sum = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
+        sum += i;
+    }
+
+    <span class="kw">return</span> sum;
+}</code></pre></div>
+<hr>
+<h1>65. Larger decomposition exercise</h1>
+<p>Design a program that calculates the cost of movie tickets.</p>
+<p>Rules:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Child ticket:   $8
+Adult ticket:   $12
+Senior ticket:  $9</code></pre></div>
+<p>Additionally, purchases of five or more tickets receive a 10% discount.</p>
+<p>Do not begin by writing code.</p>
+<p>First identify possible methods.</p>
+<p>Possible design:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>getTicketPrice
+calculateSubtotal
+applyDiscount
+printReceipt</code></pre></div>
+<p>One possible method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> getTicketPrice(<span class="kw">int</span> age) {
+
+    <span class="kw">if</span> (age &lt; <span class="num">13</span>) {
+        <span class="kw">return</span> <span class="num">8.0</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> (age &gt;= <span class="num">65</span>) {
+        <span class="kw">return</span> <span class="num">9.0</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">12.0</span>;
+}</code></pre></div>
+<p>Another:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> applyDiscount(
+        <span class="kw">double</span> subtotal,
+        <span class="kw">int</span> quantity) {
+
+    <span class="kw">if</span> (quantity &gt;= <span class="num">5</span>) {
+        <span class="kw">return</span> subtotal * <span class="num">0.90</span>;
+    }
+
+    <span class="kw">return</span> subtotal;
+}</code></pre></div>
+<p>The important skill is not merely coding the methods.</p>
+<p>The important skill is recognizing how a large problem can be divided into smaller responsibilities.</p>
+<hr>
+<h1>66. Method documentation</h1>
+<p>Methods should be understandable from their names, but documentation can provide additional information.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">/**
+ * Calculates the area of a circle.
+ *
+ * @param radius the radius of the circle
+ * @return the area of the circle
+ */</span>
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateCircleArea(<span class="kw">double</span> radius) {
+    <span class="kw">return</span> <span class="type">Math</span>.PI * radius * radius;
+}</code></pre></div>
+<p>This style is called <strong>Javadoc</strong>.</p>
+<p>You do not need extensive documentation for every trivial method, but public methods in larger programs should have understandable contracts.</p>
+<hr>
+<h1>67. Naming conventions</h1>
+<p>Method names should generally be verbs or verb phrases.</p>
+<p>Good:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateAverage
+findMaximum
+printMenu
+readInput
+validateScore</code></pre></div>
+<p>Boolean methods often work well as questions:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>isEven
+isValid
+hasPermission
+canRegister</code></pre></div>
+<p>Avoid names like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>stuff
+abc
+function1
+work
+data</code></pre></div>
+<p>Code is read much more often than it is written.</p>
+<p>Names matter.</p>
+<hr>
+<h1>68. A useful design question</h1>
+<p>Whenever you encounter a piece of code, ask:</p>
+<blockquote>What does this code mean conceptually?</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">18</span> &amp;&amp; hasID &amp;&amp; !accountSuspended)</code></pre></div>
+<p>could become:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (canAccessAccount(age, hasID, accountSuspended))</code></pre></div>
+<p>Methods can give <strong>names to ideas</strong>.</p>
+<p>That is one of their greatest benefits.</p>
+<hr>
+<h1>69. Methods as building blocks</h1>
+<p>Think of programming as constructing increasingly powerful building blocks.</p>
+<p>Java provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Math</span>.sqrt
+<span class="type">System</span>.out.println
+<span class="type">String</span>.length</code></pre></div>
+<p>We create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateAverage
+isValidScore
+determineGrade</code></pre></div>
+<p>Later, we will construct entire <strong>classes and objects</strong> that group related data and methods together.</p>
+<p>Methods are therefore an important bridge from basic programming toward object-oriented programming.</p>
+<hr>
+<h1>70. Key distinctions</h1>
+<p>Make sure you understand these pairs.</p>
+<h3>Method definition vs. method call</h3>
+<p>Definition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> square(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x * x;
+}</code></pre></div>
+<p>Call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>square(<span class="num">5</span>);</code></pre></div>
+<hr>
+<h3>Parameter vs. argument</h3>
+<p>Parameter:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x</code></pre></div>
+<p>Argument:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">5</span></code></pre></div>
+<hr>
+<h3><code>return</code> vs. <code>println</code></h3>
+<p><code>return</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> result;</code></pre></div>
+<p>sends data back to the caller.</p>
+<p><code>println</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(result);</code></pre></div>
+<p>sends text to the console.</p>
+<hr>
+<h3>Local variable vs. variable in another method</h3>
+<p>Variables inside different methods belong to different scopes.</p>
+<hr>
+<h3>Calculation vs. user interaction</h3>
+<p>Whenever practical, separate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>reading input
+performing calculations
+printing output</code></pre></div>
+<hr>
+<h1>71. Week 4 programming style guidelines</h1>
+<p>For CSC500 programs from this point forward:</p>
+<ol><li>Avoid placing the entire program in <code>main</code>.</li><li>Use methods for meaningful subtasks.</li><li>Give methods descriptive names.</li><li>Prefer calculation methods that return values.</li><li>Keep input/output separate from calculations when reasonable.</li><li>Avoid unnecessary global state.</li><li>Keep variables in the smallest reasonable scope.</li><li>Test methods independently.</li><li>Do not duplicate code that can reasonably be placed in a method.</li><li>Make <code>main</code> communicate the overall structure of the program.</li></ol>
+<hr>
+<h1>72. End-of-week example</h1>
+<p>Here is a complete program demonstrating several concepts from this week.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">FitnessCalculator</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateBMI(
+            <span class="kw">double</span> weightKg,
+            <span class="kw">double</span> heightMeters) {
+
+        <span class="kw">return</span> weightKg /
+                (heightMeters * heightMeters);
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> classifyBMI(<span class="kw">double</span> bmi) {
+
+        <span class="kw">if</span> (bmi &lt; <span class="num">18.5</span>) {
+            <span class="kw">return</span> <span class="str">"Underweight"</span>;
+        } <span class="kw">else</span> <span class="kw">if</span> (bmi &lt; <span class="num">25</span>) {
+            <span class="kw">return</span> <span class="str">"Normal"</span>;
+        } <span class="kw">else</span> <span class="kw">if</span> (bmi &lt; <span class="num">30</span>) {
+            <span class="kw">return</span> <span class="str">"Overweight"</span>;
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> <span class="str">"Obese"</span>;
+        }
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> displayResult(
+            <span class="kw">double</span> bmi,
+            <span class="type">String</span> category) {
+
+        <span class="type">System</span>.out.printf(<span class="str">"BMI: %.1f%n"</span>, bmi);
+        <span class="type">System</span>.out.println(<span class="str">"Category: "</span> + category);
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Weight in kilograms: "</span>);
+        <span class="kw">double</span> weight = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Height in meters: "</span>);
+        <span class="kw">double</span> height = input.nextDouble();
+
+        <span class="kw">double</span> bmi =
+                calculateBMI(weight, height);
+
+        <span class="type">String</span> category =
+                classifyBMI(bmi);
+
+        displayResult(bmi, category);
+    }
+}</code></pre></div>
+<p>Notice how the program has three conceptual operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculate BMI
+classify BMI
+display result</code></pre></div>
+<p>Each operation is represented by a method.</p>
+<p><code>main</code> coordinates those operations.</p>
+<hr>
+<h1>73. Concept check questions</h1>
+<p>Students should be able to answer these questions by the end of the week.</p>
+<h3>1. What is a method?</h3>
+<p>A named block of code designed to perform a particular task.</p>
+<h3>2. Why do programmers use methods?</h3>
+<p>To improve decomposition, readability, reuse, testing, abstraction, and maintainability.</p>
+<h3>3. What is a parameter?</h3>
+<p>A variable declared in a method definition that receives information from the caller.</p>
+<h3>4. What is an argument?</h3>
+<p>A value supplied when calling a method.</p>
+<h3>5. What does <code>void</code> mean?</h3>
+<p>The method does not return a value.</p>
+<h3>6. What does <code>return</code> do?</h3>
+<p>It ends the method and sends a value back to the caller.</p>
+<h3>7. What is scope?</h3>
+<p>The part of a program in which a variable can be accessed.</p>
+<h3>8. What is a local variable?</h3>
+<p>A variable declared inside a method or block whose scope is limited to that region.</p>
+<h3>9. What happens when one method calls another?</h3>
+<p>Execution transfers to the called method. When it finishes, execution returns to the caller.</p>
+<h3>10. What is program decomposition?</h3>
+<p>Breaking a complex problem into smaller, manageable subproblems.</p>
+<hr>
+<h1>74. Exit ticket</h1>
+<p>Without running the program, determine its output.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> f(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x * <span class="num">2</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> g(<span class="kw">int</span> x) {
+    <span class="kw">return</span> f(x) + <span class="num">1</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+    <span class="kw">int</span> a = <span class="num">3</span>;
+    <span class="kw">int</span> b = g(a);
+
+    <span class="type">System</span>.out.println(a);
+    <span class="type">System</span>.out.println(b);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3
+7</code></pre></div>
+<p>Reasoning:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>g(3)
+→ f(3) + 1
+→ 6 + 1
+→ 7</code></pre></div>
+<p>The variable <code>a</code> remains <code>3</code>.</p>
+<hr>
+<h1>75. Week 4 summary</h1>
+<p>This week introduced one of the most important transitions in programming.</p>
+<p>Until now, we mainly focused on individual statements:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>variables
+conditionals
+loops</code></pre></div>
+<p>Methods allow us to organize those statements into larger conceptual units.</p>
+<p>The central ideas are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>method = named computation
+
+parameters = information going into a method
+
+return value = information coming out of a method
+
+scope = where a variable exists
+
+decomposition = dividing a large problem into smaller problems</code></pre></div>
+<p>The most important habit to develop is this:</p>
+<blockquote>Do not think of a program as one long sequence of statements.</blockquote>
+<p>Instead, think of a program as a collection of smaller operations that cooperate to solve a larger problem.</p>
+<p>That way of thinking prepares us for the next major topic in Java:</p>
+<p><strong>classes and objects.</strong></p>
+<hr>
+<h1>Suggested homework</h1>
+<h2>Part a - short exercises</h2>
+<p>Write methods for each of the following:</p>
+<ol><li><code>cube(int n)</code> - returns the cube of <code>n</code>.</li><li><code>isPositive(double n)</code> - returns whether <code>n</code> is positive.</li><li><code>larger(double a, double b)</code> - returns the larger value.</li><li><code>calculateTip(double bill, double percentage)</code> - returns the tip.</li><li><code>countDown(int n)</code> - prints from <code>n</code> down to 1.</li><li><code>isLeapYear(int year)</code> - determines whether a year is a leap year.</li></ol>
+<h2>Part b - program decomposition</h2>
+<p>Create a program that calculates a student's final course grade.</p>
+<p>The program should:</p>
+<ul><li>read homework, midterm, and final-exam scores,</li><li>calculate a weighted average,</li><li>determine a letter grade,</li><li>determine whether the student passed,</li><li>and print a formatted report.</li></ul>
+<p>Required methods:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateFinalAverage(...)
+determineLetterGrade(...)
+hasPassed(...)
+printReport(...)</code></pre></div>
+<p>Students should decide the appropriate:</p>
+<ul><li>parameter types,</li><li>return types,</li><li>variables,</li><li>and method calls.</li></ul>
+<h2>Part C - code tracing</h2>
+<p>Given several programs containing nested method calls, determine:</p>
+<ul><li>the order in which methods execute,</li><li>the values of parameters,</li><li>local-variable values,</li><li>returned values,</li><li>and final program output.</li></ul>
+<p>Do the tracing by hand before using Java to verify the answers.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

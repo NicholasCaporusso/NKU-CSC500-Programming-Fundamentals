@@ -1,0 +1,1873 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 15: putting it together - software design</h2>
+<h3>Topics</h3>
+<ul><li>Designing programs before writing code</li><li>Decomposing large problems</li><li>Choosing appropriate data structures</li><li>Separating interfaces from implementations</li><li>Modularity and abstraction</li><li>Coupling and cohesion</li><li>Refactoring</li><li>Testing larger programs</li><li>Debugging systematically</li><li>Reading Java API documentation</li><li>Integrating concepts from the course</li></ul>
+<hr>
+<h1>1. Where we are in the course</h1>
+<p>During the semester, we have learned many individual programming concepts:</p>
+<ul><li>variables and expressions</li><li>conditionals</li><li>loops</li><li>methods</li><li>arrays</li><li>classes and objects</li><li>inheritance</li><li>interfaces</li><li>polymorphism</li><li>exceptions</li><li>file I/O</li><li>recursion</li><li>algorithm analysis</li><li>searching and sorting</li><li>lists</li><li>stacks</li><li>queues</li><li>maps</li><li>sets</li><li>trees</li></ul>
+<p>Knowing these concepts individually is important.</p>
+<p>However, real programming problems rarely tell us:</p>
+<blockquote>"Use a loop here."</blockquote>
+<p>or</p>
+<blockquote>"This problem requires a HashMap."</blockquote>
+<p>Instead, we are given a problem and must decide:</p>
+<ol><li>What information does the program need to represent?</li><li>What objects should exist?</li><li>What responsibilities should each object have?</li><li>What data structures should we use?</li><li>What algorithms should we use?</li><li>How should the different pieces communicate?</li><li>How can we test whether the program works?</li><li>How can we design the program so that it can be modified later?</li></ol>
+<p>These questions are the subject of <strong>software design</strong>.</p>
+<hr>
+<h1>2. Programming vs. software design</h1>
+<p>Programming is the process of expressing instructions in a programming language.</p>
+<p>Software design is the process of deciding:</p>
+<ul><li>what components should exist,</li><li>how those components should be organized,</li><li>what responsibilities they should have,</li><li>and how they should interact.</li></ul>
+<p>Consider the following problem:</p>
+<blockquote>Create a program that manages student registrations for university courses.</blockquote>
+<p>A beginning programmer may immediately start writing code.</p>
+<p>A stronger programmer first asks questions.</p>
+<p>For example:</p>
+<ul><li>What is a student?</li><li>What is a course?</li><li>What information belongs to a student?</li><li>What information belongs to a course?</li><li>Who is responsible for registration?</li><li>How are enrolled students stored?</li><li>Can a student register twice?</li><li>Does a course have a maximum capacity?</li><li>Should the program prevent registration when the course is full?</li><li>How will the system find students?</li><li>How will the system find courses?</li></ul>
+<p>Before writing code, we need a <strong>model</strong>.</p>
+<hr>
+<h1>3. A running example: course registration system</h1>
+<p>Suppose we want to build a simplified university registration system.</p>
+<p>The system should support the following operations:</p>
+<ul><li>add a student</li><li>add a course</li><li>enroll a student in a course</li><li>drop a student from a course</li><li>display students enrolled in a course</li><li>display the courses taken by a student</li><li>find students by ID</li><li>find courses by course code</li></ul>
+<p>A poor implementation might put everything inside one class:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">RegistrationProgram</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="cmt">// all data</span>
+        <span class="cmt">// all input</span>
+        <span class="cmt">// all registration logic</span>
+        <span class="cmt">// all searching</span>
+        <span class="cmt">// all output</span>
+        <span class="cmt">// all file handling</span>
+    }
+}</code></pre></div>
+<p>This might work for a tiny program.</p>
+<p>But as the program grows, it becomes difficult to:</p>
+<ul><li>understand,</li><li>test,</li><li>modify,</li><li>reuse,</li><li>and debug.</li></ul>
+<p>Instead, we should identify the major concepts in the problem.</p>
+<p>Possible classes include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+Course
+RegistrationSystem</code></pre></div>
+<p>We might assign responsibilities as follows.</p>
+<h3>Student</h3>
+<p>Responsible for representing one student.</p>
+<p>Possible fields:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">String</span> id;
+<span class="kw">private</span> <span class="type">String</span> name;</code></pre></div>
+<p>Possible methods:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>getId()
+getName()</code></pre></div>
+<h3>Course</h3>
+<p>Responsible for representing one course.</p>
+<p>Possible fields:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">String</span> courseCode;
+<span class="kw">private</span> <span class="type">String</span> title;
+<span class="kw">private</span> <span class="kw">int</span> capacity;</code></pre></div>
+<p>Possible methods:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>getCourseCode()
+getTitle()
+getCapacity()</code></pre></div>
+<h3>Registrationsystem</h3>
+<p>Responsible for coordinating students and courses.</p>
+<p>Possible operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>addStudent(...)
+addCourse(...)
+enrollStudent(...)
+dropStudent(...)
+findStudent(...)
+findCourse(...)</code></pre></div>
+<p>This is an example of <strong>decomposition</strong>.</p>
+<hr>
+<h1>4. Decomposition</h1>
+<p>A large problem should usually be divided into smaller problems.</p>
+<p>This process is called <strong>decomposition</strong>.</p>
+<p>Instead of asking:</p>
+<blockquote>How do I build the entire registration system?</blockquote>
+<p>we ask:</p>
+<blockquote>How do I represent a student?</blockquote>
+<p>Then:</p>
+<blockquote>How do I represent a course?</blockquote>
+<p>Then:</p>
+<blockquote>How do I store students?</blockquote>
+<p>Then:</p>
+<blockquote>How do I find a student by ID?</blockquote>
+<p>Then:</p>
+<blockquote>How do I enroll a student?</blockquote>
+<p>Each smaller problem is easier to reason about.</p>
+<p>Good decomposition usually produces components with clear responsibilities.</p>
+<hr>
+<h1>5. The single responsibility principle</h1>
+<p>A useful design guideline is:</p>
+<blockquote>A class should have one clear primary responsibility.</blockquote>
+<p>This does not mean that a class can only contain one method.</p>
+<p>It means that the methods should generally belong to the same conceptual responsibility.</p>
+<p>Consider this class:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> id;
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="type">Student</span>(<span class="type">String</span> id, <span class="type">String</span> name) {
+        <span class="kw">this</span>.id = id;
+        <span class="kw">this</span>.name = name;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> registerForCourse(<span class="type">Course</span> c) {
+        <span class="cmt">// ...</span>
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> saveDatabase() {
+        <span class="cmt">// ...</span>
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> printUniversityReport() {
+        <span class="cmt">// ...</span>
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> sendEmail() {
+        <span class="cmt">// ...</span>
+    }
+}</code></pre></div>
+<p>The <code>Student</code> class is now responsible for:</p>
+<ul><li>representing a student,</li><li>course registration,</li><li>database persistence,</li><li>reports,</li><li>and email.</li></ul>
+<p>These are unrelated responsibilities.</p>
+<p>A better design might separate them:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+RegistrationSystem
+StudentRepository
+ReportGenerator
+EmailService</code></pre></div>
+<p>For CSC500, we do not need to create elaborate enterprise architectures.</p>
+<p>The important question is:</p>
+<blockquote>Does this responsibility naturally belong to this object?</blockquote>
+<hr>
+<h1>6. Abstraction</h1>
+<p>Abstraction means focusing on <strong>what something does</strong> while hiding unnecessary details about <strong>how it does it</strong>.</p>
+<p>Consider Java's <code>ArrayList</code>.</p>
+<p>We can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+names.add(<span class="str">"Alice"</span>);
+names.add(<span class="str">"Bob"</span>);
+
+<span class="type">System</span>.out.println(names.get(<span class="num">0</span>));</code></pre></div>
+<p>We do not need to know:</p>
+<ul><li>exactly how much internal memory was allocated,</li><li>when the backing array is resized,</li><li>how elements are copied during resizing.</li></ul>
+<p>Those details are hidden.</p>
+<p>We use the abstraction:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a resizable list</code></pre></div>
+<p>The ability to ignore irrelevant implementation details is one of the most important ideas in computer science.</p>
+<hr>
+<h1>7. Interfaces and implementations</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>This works.</p>
+<p>But often this version is preferable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>Why?</p>
+<p>Because <code>List</code> describes the behavior that the program requires.</p>
+<p><code>ArrayList</code> describes one particular implementation.</p>
+<p>The declaration:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">String</span>&gt; names</code></pre></div>
+<p>says:</p>
+<blockquote>I need something that behaves like a list.</blockquote>
+<p>The declaration:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names</code></pre></div>
+<p>says:</p>
+<blockquote>I specifically require an ArrayList.</blockquote>
+<p>Usually we should depend on the more general abstraction when possible.</p>
+<hr>
+<h1>8. Programming to an interface</h1>
+<p>Suppose we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt; students = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>Later, we might decide that another list implementation is preferable.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt; students = <span class="kw">new</span> <span class="type">LinkedList</span>&lt;&gt;();</code></pre></div>
+<p>Much of the program may continue working without changes.</p>
+<p>This is one advantage of <strong>programming to an interface rather than an implementation</strong>.</p>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> printStudents(<span class="type">ArrayList</span>&lt;<span class="type">Student</span>&gt; students)</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> printStudents(<span class="type">List</span>&lt;<span class="type">Student</span>&gt; students)</code></pre></div>
+<p>The second version is more flexible.</p>
+<p>It accepts:</p>
+<ul><li><code>ArrayList</code></li><li><code>LinkedList</code></li><li>or another class implementing <code>List</code></li></ul>
+<p>when appropriate.</p>
+<hr>
+<h1>9. Choosing a data structure</h1>
+<p>One of the most important design decisions is choosing how to represent collections of data.</p>
+<p>We should not ask:</p>
+<blockquote>Which data structure is best?</blockquote>
+<p>There is no universally best data structure.</p>
+<p>Instead ask:</p>
+<blockquote>Which data structure is appropriate for the operations this program performs?</blockquote>
+<hr>
+<h1>10. Arrays</h1>
+<p>Use an array when:</p>
+<ul><li>the number of elements is fixed or predictable,</li><li>indexed access is important,</li><li>simple storage is sufficient.</li></ul>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span>[] temperatures = <span class="kw">new</span> <span class="kw">double</span>[<span class="num">365</span>];</code></pre></div>
+<p>Advantages:</p>
+<ul><li>simple</li><li>fast indexed access</li><li>low overhead</li></ul>
+<p>Disadvantages:</p>
+<ul><li>fixed size</li><li>insertion/removal may be inconvenient</li></ul>
+<hr>
+<h1>11. ArrayList</h1>
+<p>Use an <code>ArrayList</code> when:</p>
+<ul><li>the collection changes size,</li><li>order matters,</li><li>indexed access is useful,</li><li>most insertions occur near the end.</li></ul>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt; students = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>Typical operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>students.add(student);
+students.get(i);
+students.remove(i);</code></pre></div>
+<p>Accessing an element by index is typically efficient.</p>
+<p>Searching for an arbitrary student is generally linear:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h1>12. LinkedList</h1>
+<p>A linked list stores elements using nodes connected by references.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[A] -&gt; [B] -&gt; [C] -&gt; [D]</code></pre></div>
+<p>A linked structure can be useful when frequent insertion and removal occur at known positions.</p>
+<p>However, Java programmers should not automatically choose <code>LinkedList</code> simply because insertions are theoretically efficient.</p>
+<p>The entire access pattern matters.</p>
+<p>For many general-purpose list operations, <code>ArrayList</code> is an excellent default.</p>
+<hr>
+<h1>13. Stack</h1>
+<p>A stack follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Last In, First Out</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LIFO</code></pre></div>
+<p>Operations typically include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push
+pop
+peek</code></pre></div>
+<p>Stacks are useful for:</p>
+<ul><li>undo operations</li><li>expression processing</li><li>depth-first search</li><li>tracking nested structures</li><li>function-call behavior</li></ul>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Browser back history</code></pre></div>
+<p>The most recently visited page is often the first one revisited.</p>
+<hr>
+<h1>14. Queue</h1>
+<p>A queue follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>First In, First Out</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>FIFO</code></pre></div>
+<p>Queues are useful for:</p>
+<ul><li>task scheduling</li><li>print jobs</li><li>customer service simulations</li><li>breadth-first search</li><li>event processing</li></ul>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Printer jobs</code></pre></div>
+<p>The first submitted job is normally processed first.</p>
+<hr>
+<h1>15. Set</h1>
+<p>A set represents a collection in which duplicate elements are not allowed.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">String</span>&gt; registeredIds = <span class="kw">new</span> <span class="type">HashSet</span>&lt;&gt;();</code></pre></div>
+<p>A set is useful when the main question is:</p>
+<blockquote>Is this item already present?</blockquote>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (registeredIds.contains(studentId)) {
+    <span class="type">System</span>.out.println(<span class="str">"Already registered"</span>);
+}</code></pre></div>
+<p>A <code>HashSet</code> usually provides very efficient membership checking.</p>
+<hr>
+<h1>16. Map</h1>
+<p>A map stores associations between keys and values.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Student</span>&gt; studentsById = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();</code></pre></div>
+<p>We might store:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"S1001" -&gt; Student object
+"S1002" -&gt; Student object
+"S1003" -&gt; Student object</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> student = studentsById.get(<span class="str">"S1002"</span>);</code></pre></div>
+<p>This can be much more appropriate than scanning through a list.</p>
+<hr>
+<h1>17. List vs. map</h1>
+<p>Suppose we store 50,000 students.</p>
+<p>With a list:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt; students;</code></pre></div>
+<p>to find student <code>"S48172"</code>, we might need to inspect many students.</p>
+<p>The operation is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>With a hash map:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Student</span>&gt; studentsById;</code></pre></div>
+<p>we can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>studentsById.get(<span class="str">"S48172"</span>);</code></pre></div>
+<p>The average lookup time is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>This illustrates an important design principle:</p>
+<blockquote>Data structures should reflect how the data will be used.</blockquote>
+<hr>
+<h1>18. Choose based on operations</h1>
+<p>Suppose we need to store students.</p>
+<p>Ask what operations matter.</p>
+<h3>Requirement a</h3>
+<p>"We frequently display all students in registration order."</p>
+<p>A list may be appropriate.</p>
+<h3>Requirement b</h3>
+<p>"We constantly retrieve students by ID."</p>
+<p>A map may be better.</p>
+<h3>Requirement C</h3>
+<p>"We only care whether a student ID has appeared."</p>
+<p>A set may be sufficient.</p>
+<h3>Requirement D</h3>
+<p>"We need both ordering and fast ID lookup."</p>
+<p>We may maintain more than one structure if the complexity is justified.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt; students;
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Student</span>&gt; studentsById;</code></pre></div>
+<p>However, maintaining multiple structures also creates additional responsibility:</p>
+<p>both structures must remain consistent.</p>
+<p>Every design choice introduces tradeoffs.</p>
+<hr>
+<h1>19. A useful data structure decision table</h1>
+<table><thead><tr><th>Requirement</th><th>Possible Structure</th></tr></thead><tbody><tr><td>Fixed sequence of values</td><td>Array</td></tr><tr><td>Ordered collection that grows</td><td>ArrayList</td></tr><tr><td>LIFO processing</td><td>Stack / Deque</td></tr><tr><td>FIFO processing</td><td>Queue / Deque</td></tr><tr><td>Unique values</td><td>HashSet</td></tr><tr><td>Key-value lookup</td><td>HashMap</td></tr><tr><td>Hierarchical data</td><td>Tree</td></tr><tr><td>Sorted hierarchical search</td><td>Binary Search Tree</td></tr><tr><td>Priority-based removal</td><td>Priority Queue</td></tr></tbody></table>
+<p>Do not memorize the table as a rigid rule.</p>
+<p>Instead, connect each structure to its operations.</p>
+<hr>
+<h1>20. Designing around responsibilities</h1>
+<p>Suppose our registration system has:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">RegistrationSystem</span> {
+
+    <span class="kw">private</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Student</span>&gt; students;
+    <span class="kw">private</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Course</span>&gt; courses;
+
+}</code></pre></div>
+<p>Why maps?</p>
+<p>Because common operations are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>find student using student ID
+find course using course code</code></pre></div>
+<p>We might initialize them as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">RegistrationSystem</span>() {
+    students = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+    courses = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Student</span> findStudent(<span class="type">String</span> id) {
+    <span class="kw">return</span> students.get(id);
+}</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Course</span> findCourse(<span class="type">String</span> courseCode) {
+    <span class="kw">return</span> courses.get(courseCode);
+}</code></pre></div>
+<p>The data structure supports the behavior of the system.</p>
+<hr>
+<h1>21. Encapsulation revisited</h1>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Course</span> {
+
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Student</span>&gt; students;
+
+}</code></pre></div>
+<p>Any part of the program can now modify the list:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course.students.clear();</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course.students.add(student);</code></pre></div>
+<p>This means the <code>Course</code> object cannot control its own state.</p>
+<p>A better design is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Course</span> {
+
+    <span class="kw">private</span> <span class="type">List</span>&lt;<span class="type">Student</span>&gt; students;
+
+}</code></pre></div>
+<p>and expose controlled operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> enroll(<span class="type">Student</span> student) {
+    <span class="cmt">// validation</span>
+}</code></pre></div>
+<p>Now the <code>Course</code> class can enforce rules such as:</p>
+<ul><li>maximum enrollment</li><li>duplicate prevention</li><li>prerequisite rules</li></ul>
+<p>This is encapsulation.</p>
+<hr>
+<h1>22. Preserve class invariants</h1>
+<p>An <strong>invariant</strong> is a condition that should always be true for an object.</p>
+<p>For a course, possible invariants include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number of enrolled students &lt;= capacity
+capacity &gt;= 0
+course code is not null
+course code is not empty</code></pre></div>
+<p>Suppose we allow this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course.setCapacity(-<span class="num">100</span>);</code></pre></div>
+<p>The object may enter an invalid state.</p>
+<p>A better class protects its invariants.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Course</span>(<span class="type">String</span> code, <span class="type">String</span> title, <span class="kw">int</span> capacity) {
+
+    <span class="kw">if</span> (capacity &lt; <span class="num">0</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"Capacity cannot be negative"</span>
+        );
+    }
+
+    <span class="kw">this</span>.code = code;
+    <span class="kw">this</span>.title = title;
+    <span class="kw">this</span>.capacity = capacity;
+}</code></pre></div>
+<p>Objects should protect themselves from invalid states when practical.</p>
+<hr>
+<h1>23. Cohesion</h1>
+<p><strong>Cohesion</strong> describes how closely related the responsibilities inside a component are.</p>
+<p>High cohesion is generally desirable.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">GradeCalculator</span> {
+
+    <span class="kw">public</span> <span class="kw">double</span> calculateAverage(...) { ... }
+
+    <span class="kw">public</span> <span class="kw">double</span> calculateMedian(...) { ... }
+
+    <span class="kw">public</span> <span class="kw">char</span> determineLetterGrade(...) { ... }
+
+}</code></pre></div>
+<p>These operations are closely related.</p>
+<p>This class has relatively high cohesion.</p>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Utility</span> {
+
+    <span class="kw">public</span> <span class="kw">double</span> calculateGrade(...) { ... }
+
+    <span class="kw">public</span> <span class="kw">void</span> sendEmail(...) { ... }
+
+    <span class="kw">public</span> <span class="kw">void</span> sortStudents(...) { ... }
+
+    <span class="kw">public</span> <span class="kw">void</span> saveImage(...) { ... }
+
+    <span class="kw">public</span> <span class="kw">boolean</span> validatePassword(...) { ... }
+
+}</code></pre></div>
+<p>These methods have little relationship.</p>
+<p>The class has low cohesion.</p>
+<p>Large <code>Utility</code> classes can become a warning sign that responsibilities have not been designed carefully.</p>
+<hr>
+<h1>24. Coupling</h1>
+<p><strong>Coupling</strong> describes how strongly components depend on each other.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">ReportGenerator</span> {
+
+    <span class="kw">private</span> <span class="type">RegistrationSystem</span> system;
+
+}</code></pre></div>
+<p>This is a reasonable dependency.</p>
+<p>Now imagine that <code>ReportGenerator</code> directly modifies:</p>
+<ul><li>internal student arrays,</li><li>internal course arrays,</li><li>private enrollment information,</li><li>file storage details,</li><li>user interface state.</li></ul>
+<p>The components have become tightly coupled.</p>
+<p>Tight coupling makes change difficult.</p>
+<p>A useful goal is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>high cohesion
+low coupling</code></pre></div>
+<p>That means:</p>
+<ul><li>each component has a clear purpose,</li><li>components interact through clear boundaries.</li></ul>
+<hr>
+<h1>25. Information hiding</h1>
+<p>A class should expose what other classes need while hiding unnecessary details.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Course</span> {
+
+    <span class="kw">private</span> <span class="type">List</span>&lt;<span class="type">Student</span>&gt; students;
+
+    <span class="kw">public</span> <span class="kw">int</span> getEnrollmentCount() {
+        <span class="kw">return</span> students.size();
+    }
+}</code></pre></div>
+<p>A caller can ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course.getEnrollmentCount();</code></pre></div>
+<p>The caller does not need to know whether students are stored using:</p>
+<ul><li>an array,</li><li>an ArrayList,</li><li>a HashSet,</li><li>a database,</li><li>or something else.</li></ul>
+<p>That implementation could change later.</p>
+<p>The public interface remains stable.</p>
+<hr>
+<h1>26. Public apis</h1>
+<p>The public methods of a class form an <strong>API</strong>.</p>
+<p>API means:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Application Programming Interface</code></pre></div>
+<p>It is the interface through which other code uses a class.</p>
+<p>For example, a <code>Course</code> API might include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">String</span> getCode()
+
+<span class="kw">public</span> <span class="type">String</span> getTitle()
+
+<span class="kw">public</span> <span class="kw">boolean</span> enroll(<span class="type">Student</span> student)
+
+<span class="kw">public</span> <span class="kw">boolean</span> drop(<span class="type">Student</span> student)
+
+<span class="kw">public</span> <span class="kw">int</span> getEnrollmentCount()
+
+<span class="kw">public</span> <span class="kw">boolean</span> isFull()</code></pre></div>
+<p>The caller should not need to know how these methods are implemented.</p>
+<p>This is similar to how we use Java library classes.</p>
+<hr>
+<h1>27. Separate "what" from "how"</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Student</span> findStudent(<span class="type">String</span> id)</code></pre></div>
+<p>This describes <strong>what</strong> the operation does.</p>
+<p>The implementation determines <strong>how</strong>.</p>
+<p>Version 1 might scan a list:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Student</span> student : students) {
+    <span class="kw">if</span> (student.getId().equals(id)) {
+        <span class="kw">return</span> student;
+    }
+}</code></pre></div>
+<p>Version 2 might use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> studentsById.get(id);</code></pre></div>
+<p>The public method does not have to change.</p>
+<p>That is one of the benefits of abstraction.</p>
+<hr>
+<h1>28. Avoid long methods</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> processRegistration() {
+
+    <span class="cmt">// read user input</span>
+
+    <span class="cmt">// validate student</span>
+
+    <span class="cmt">// find course</span>
+
+    <span class="cmt">// verify capacity</span>
+
+    <span class="cmt">// enroll student</span>
+
+    <span class="cmt">// save data</span>
+
+    <span class="cmt">// update statistics</span>
+
+    <span class="cmt">// display messages</span>
+
+    <span class="cmt">// print report</span>
+}</code></pre></div>
+<p>Even if this method works, it contains too many conceptual steps.</p>
+<p>A better version may delegate responsibilities:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> processRegistration() {
+
+    <span class="type">Student</span> student = readStudent();
+
+    <span class="type">Course</span> course = selectCourse();
+
+    validateRegistration(student, course);
+
+    enroll(student, course);
+
+    save();
+
+    displayConfirmation(student, course);
+}</code></pre></div>
+<p>Now the high-level algorithm is visible.</p>
+<hr>
+<h1>29. Methods should express intent</h1>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (course.getStudents().size() &lt; course.getCapacity()) {</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (!course.isFull()) {</code></pre></div>
+<p>The second version expresses the intent more clearly.</p>
+<p>The details belong inside <code>Course</code>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> isFull() {
+    <span class="kw">return</span> students.size() &gt;= capacity;
+}</code></pre></div>
+<p>Readable programs often use well-named methods to express concepts.</p>
+<hr>
+<h1>30. Naming matters</h1>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x;
+<span class="kw">int</span> n;
+<span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; a;</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> enrollmentCount;
+<span class="kw">int</span> maximumCapacity;
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; studentIds;</code></pre></div>
+<p>Good names reduce the amount of mental effort required to understand code.</p>
+<p>Names should usually communicate purpose.</p>
+<p>Bad names:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>data
+thing
+value
+temp
+stuff
+obj
+x</code></pre></div>
+<p>These names are sometimes appropriate for extremely local calculations, but descriptive names are preferable in most program logic.</p>
+<hr>
+<h1>31. Avoid magic numbers</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">93</span>) {</code></pre></div>
+<p>Why <code>93</code>?</p>
+<p>The meaning is not obvious.</p>
+<p>Instead:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">static</span> <span class="kw">final</span> <span class="kw">int</span> MINIMUM_A_SCORE = <span class="num">93</span>;</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= MINIMUM_A_SCORE) {</code></pre></div>
+<p>Named constants make assumptions visible.</p>
+<hr>
+<h1>32. Refactoring</h1>
+<p><strong>Refactoring</strong> means improving the internal structure of code without changing its externally observable behavior.</p>
+<p>For example, suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (students.size() &gt;= capacity) {
+    <span class="type">System</span>.out.println(<span class="str">"Course full"</span>);
+}</code></pre></div>
+<p>in several different places.</p>
+<p>We might refactor this into:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> isFull() {
+    <span class="kw">return</span> students.size() &gt;= capacity;
+}</code></pre></div>
+<p>Then use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (course.isFull()) {</code></pre></div>
+<p>The behavior has not changed.</p>
+<p>The design has improved.</p>
+<hr>
+<h1>33. Why refactor?</h1>
+<p>Programs usually evolve.</p>
+<p>You may first write code that works.</p>
+<p>Then you realize:</p>
+<ul><li>logic is duplicated,</li><li>methods are too long,</li><li>names are unclear,</li><li>responsibilities are misplaced,</li><li>data structures are inappropriate.</li></ul>
+<p>Refactoring improves the code after we understand the problem better.</p>
+<p>Good programmers rarely produce perfect designs on the first attempt.</p>
+<p>Design is iterative.</p>
+<hr>
+<h1>34. Common refactorings</h1>
+<h3>Extract method</h3>
+<p>Before:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> printReport() {
+
+    <span class="kw">double</span> total = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="type">Student</span> s : students) {
+        total += s.getGrade();
+    }
+
+    <span class="kw">double</span> average = total / students.size();
+
+    <span class="cmt">// many more lines</span>
+}</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> printReport() {
+
+    <span class="kw">double</span> average = calculateAverage();
+
+    <span class="cmt">// ...</span>
+}</code></pre></div>
+<hr>
+<h3>Rename</h3>
+<p>Before:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> n;</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> enrollmentCount;</code></pre></div>
+<hr>
+<h3>Remove duplication</h3>
+<p>Before:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (student.getId() == <span class="lit">null</span> ||
+    student.getId().isEmpty()) {
+    <span class="cmt">// ...</span>
+}</code></pre></div>
+<p>appears in five locations.</p>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">boolean</span> hasValidId(<span class="type">Student</span> student) {
+    <span class="kw">return</span> student.getId() != <span class="lit">null</span> &amp;&amp;
+           !student.getId().isEmpty();
+}</code></pre></div>
+<hr>
+<h3>Move responsibility</h3>
+<p>Suppose registration validation appears in the user-interface class.</p>
+<p>Move it into:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">RegistrationSystem</span></code></pre></div>
+<p>if registration is a business rule rather than a display concern.</p>
+<hr>
+<h1>35. Duplication is a warning sign</h1>
+<p>Suppose you repeatedly write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (students.size() &gt;= capacity) {</code></pre></div>
+<p>in many places.</p>
+<p>If the definition of "full" changes, every copy must be updated.</p>
+<p>For example, perhaps later five seats are reserved.</p>
+<p>Then the rule becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>students.size() &gt;= capacity - RESERVED_SEATS</code></pre></div>
+<p>If the logic exists in one place:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course.isFull()</code></pre></div>
+<p>only one method needs to change.</p>
+<hr>
+<h1>36. Testing larger programs</h1>
+<p>Testing a 20-line program is relatively easy.</p>
+<p>Testing a 1,000-line program is not.</p>
+<p>The solution is not to test the entire program only at the end.</p>
+<p>Instead, test components independently.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+Course
+RegistrationSystem</code></pre></div>
+<p>should each be tested separately when possible.</p>
+<hr>
+<h1>37. Unit testing</h1>
+<p>A <strong>unit test</strong> tests a small component of a program.</p>
+<p>Usually the component is:</p>
+<ul><li>a method,</li><li>a class,</li><li>or a small group of related classes.</li></ul>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> isFull() {
+    <span class="kw">return</span> students.size() &gt;= capacity;
+}</code></pre></div>
+<p>Possible tests include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>empty course -&gt; not full
+one seat remaining -&gt; not full
+exactly capacity students -&gt; full</code></pre></div>
+<p>We care particularly about <strong>boundary cases</strong>.</p>
+<hr>
+<h1>38. Boundary testing</h1>
+<p>Errors often occur near boundaries.</p>
+<p>Suppose capacity is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>30</code></pre></div>
+<p>Test enrollment counts:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0
+1
+29
+30
+31</code></pre></div>
+<p>Why test <code>29</code>, <code>30</code>, and <code>31</code>?</p>
+<p>Because bugs often occur due to confusion between:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>&lt;</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>&lt;=</code></pre></div>
+<p>Boundary testing is especially important for:</p>
+<ul><li>array indexes</li><li>capacities</li><li>numeric ranges</li><li>empty collections</li><li>loop endpoints</li></ul>
+<hr>
+<h1>39. Testing normal, boundary, and invalid cases</h1>
+<p>For most methods, consider three categories.</p>
+<h3>Normal cases</h3>
+<p>Typical expected input.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course has 15 out of 30 students</code></pre></div>
+<h3>Boundary cases</h3>
+<p>Values near limits.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course has 29, 30, or 31 students</code></pre></div>
+<h3>Invalid cases</h3>
+<p>Values that should not occur.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>negative capacity
+null student
+empty course code</code></pre></div>
+<p>Thinking systematically about these categories improves test quality.</p>
+<hr>
+<h1>40. Testing a registration method</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> enroll(<span class="type">Student</span> student)</code></pre></div>
+<p>What should we test?</p>
+<p>Possible cases:</p>
+<ol><li>enroll a valid student</li><li>verify enrollment count increases</li><li>enroll when one seat remains</li><li>attempt enrollment when course is full</li><li>attempt duplicate enrollment</li><li>attempt to enroll <code>null</code></li><li>verify failed enrollment does not modify state</li></ol>
+<p>Testing is not simply:</p>
+<blockquote>Run the program and see whether it crashes.</blockquote>
+<p>Testing means intentionally constructing situations that challenge our assumptions.</p>
+<hr>
+<h1>41. Test behavior, not implementation</h1>
+<p>Suppose <code>Course</code> stores students internally using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Student</span>&gt;</code></pre></div>
+<p>A test generally should not care about that.</p>
+<p>Instead test behavior:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Can a student enroll?
+Can a student drop?
+Does the course recognize when it is full?</code></pre></div>
+<p>Then if the implementation changes to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashSet</span>&lt;<span class="type">Student</span>&gt;</code></pre></div>
+<p>the tests may still remain valid.</p>
+<p>This is another benefit of abstraction.</p>
+<hr>
+<h1>42. Debugging larger programs</h1>
+<p>When a large program fails, random changes are rarely productive.</p>
+<p>A useful debugging process is:</p>
+<ol><li>reproduce the error,</li><li>determine what should have happened,</li><li>determine what actually happened,</li><li>identify where the states first diverged,</li><li>form a hypothesis,</li><li>test the hypothesis,</li><li>fix the underlying cause,</li><li>run tests again.</li></ol>
+<p>Debugging should be systematic.</p>
+<hr>
+<h1>43. Reproduce the bug</h1>
+<p>A vague report such as:</p>
+<blockquote>Registration does not work.</blockquote>
+<p>is difficult to debug.</p>
+<p>A useful bug report looks like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Create course CSC500 with capacity 2.
+2. Enroll student S1.
+3. Enroll student S2.
+4. Attempt to enroll student S3.
+5. S3 is incorrectly accepted.</code></pre></div>
+<p>Now we have a reproducible case.</p>
+<p>Reproducibility dramatically simplifies debugging.</p>
+<hr>
+<h1>44. Observe program state</h1>
+<p>Suppose enrollment fails unexpectedly.</p>
+<p>Relevant state might include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course.capacity
+course.students.size()
+student.id
+course.code</code></pre></div>
+<p>We want to determine where our assumptions stop matching reality.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(
+    <span class="str">"students = "</span> + students.size()
+);</code></pre></div>
+<p>can help.</p>
+<p>A debugger is even better because it lets us inspect program state without constantly adding print statements.</p>
+<hr>
+<h1>45. Debuggers</h1>
+<p>Modern IDEs provide debuggers.</p>
+<p>Important debugger concepts include:</p>
+<h3>Breakpoint</h3>
+<p>Pause execution at a particular line.</p>
+<h3>Step over</h3>
+<p>Execute the current line and move to the next line.</p>
+<h3>Step into</h3>
+<p>Enter a method being called.</p>
+<h3>Step out</h3>
+<p>Complete the current method and return to its caller.</p>
+<h3>Variable inspection</h3>
+<p>View current values of local variables, fields, and objects.</p>
+<p>Learning to use a debugger is one of the highest-value practical programming skills.</p>
+<hr>
+<h1>46. Do not debug by guessing</h1>
+<p>A common beginner debugging strategy is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>change code
+run
+change something else
+run
+add random condition
+run</code></pre></div>
+<p>This can occasionally work, but it does not teach us why the program failed.</p>
+<p>Instead ask:</p>
+<blockquote>What evidence do I have?</blockquote>
+<p>For example:</p>
+<p>Hypothesis:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>The course allows too many students because isFull() uses &gt; instead of &gt;=.</code></pre></div>
+<p>Then inspect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> isFull() {
+    <span class="kw">return</span> students.size() &gt; capacity;
+}</code></pre></div>
+<p>Indeed, when size equals capacity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>30 &gt; 30</code></pre></div>
+<p>is false.</p>
+<p>Therefore one additional student can enroll.</p>
+<p>The correct expression is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>students.size() &gt;= capacity</code></pre></div>
+<p>This is evidence-based debugging.</p>
+<hr>
+<h1>47. Exceptions and failure</h1>
+<p>Exceptions should communicate exceptional situations.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Course</span>(
+    <span class="type">String</span> code,
+    <span class="type">String</span> title,
+    <span class="kw">int</span> capacity
+)</code></pre></div>
+<p>receives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>capacity = -<span class="num">4</span></code></pre></div>
+<p>One approach is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+    <span class="str">"Capacity must be nonnegative"</span>
+);</code></pre></div>
+<p>This is better than silently constructing an invalid object.</p>
+<p>However, exceptions should not replace normal control flow.</p>
+<p>For example, checking whether a course is full is usually a normal condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (course.isFull()) {</code></pre></div>
+<p>rather than an unexpected exceptional event.</p>
+<hr>
+<h1>48. Reading documentation</h1>
+<p>Professional programmers do not memorize every library class and method.</p>
+<p>Instead, they learn to read documentation efficiently.</p>
+<p>For Java, an important resource is the Java API documentation.</p>
+<p>Suppose you encounter:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span></code></pre></div>
+<p>You should be able to determine:</p>
+<ul><li>what it represents,</li><li>how to construct it,</li><li>what interfaces it implements,</li><li>what <code>put()</code> does,</li><li>what <code>get()</code> does,</li><li>what <code>containsKey()</code> does,</li><li>what <code>remove()</code> does,</li><li>what happens when a key does not exist.</li></ul>
+<p>You are not expected to memorize the entire Java library.</p>
+<p>You are expected to know how to learn from documentation.</p>
+<hr>
+<h1>49. Reading a method signature</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>V put(K key, V value)</code></pre></div>
+<p>The generic types mean:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>K = key type
+V = value type</code></pre></div>
+<p>If we declare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Student</span>&gt; students;</code></pre></div>
+<p>then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>K = String
+V = Student</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> put(<span class="type">String</span> key, <span class="type">Student</span> value)</code></pre></div>
+<p>conceptually describes the specific types in this map.</p>
+<hr>
+<h1>50. Read more than the method name</h1>
+<p>Suppose you see:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>get(<span class="type">Object</span> key)</code></pre></div>
+<p>Do not assume its behavior.</p>
+<p>Read the documentation.</p>
+<p>Questions include:</p>
+<ul><li>What is returned when the key exists?</li><li>What is returned when it does not?</li><li>Can <code>null</code> be returned?</li><li>Does this operation modify the map?</li><li>What complexity should we expect?</li></ul>
+<p>Correct use of APIs requires understanding their contracts.</p>
+<hr>
+<h1>51. Documentation as a programming skill</h1>
+<p>As you advance in computer science, you will constantly encounter technologies you have never used.</p>
+<p>The specific technology changes.</p>
+<p>The learning process remains similar:</p>
+<ol><li>identify the abstraction,</li><li>read examples,</li><li>read method signatures,</li><li>understand the contract,</li><li>experiment with a small program,</li><li>integrate it into the larger system.</li></ol>
+<p>Independent technical learning is part of programming competence.</p>
+<hr>
+<h1>52. An integrated design example</h1>
+<p>Consider a simplified library system.</p>
+<p>Requirements:</p>
+<ul><li>add books</li><li>register users</li><li>borrow books</li><li>return books</li><li>find books by ISBN</li><li>display books currently borrowed by a user</li></ul>
+<p>Before coding, identify concepts:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Book
+User
+Library</code></pre></div>
+<p>Possible representation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Book</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> isbn;
+    <span class="kw">private</span> <span class="type">String</span> title;
+    <span class="kw">private</span> <span class="type">String</span> author;
+    <span class="kw">private</span> <span class="kw">boolean</span> borrowed;
+
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">User</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> id;
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="type">List</span>&lt;<span class="type">Book</span>&gt; borrowedBooks;
+
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Library</span> {
+
+    <span class="kw">private</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Book</span>&gt; booksByIsbn;
+    <span class="kw">private</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">User</span>&gt; usersById;
+
+}</code></pre></div>
+<hr>
+<h1>53. Why these data structures?</h1>
+<p>Books are frequently located using ISBN:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Book</span>&gt;</code></pre></div>
+<p>Users are frequently located using ID:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">User</span>&gt;</code></pre></div>
+<p>Each user's borrowed books form a relatively small ordered collection:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Book</span>&gt;</code></pre></div>
+<p>These are not arbitrary choices.</p>
+<p>They follow from the required operations.</p>
+<hr>
+<h1>54. Library API</h1>
+<p>A possible API:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> addBook(<span class="type">Book</span> book)
+
+<span class="kw">public</span> <span class="kw">void</span> addUser(<span class="type">User</span> user)
+
+<span class="kw">public</span> <span class="type">Book</span> findBook(<span class="type">String</span> isbn)
+
+<span class="kw">public</span> <span class="type">User</span> findUser(<span class="type">String</span> id)
+
+<span class="kw">public</span> <span class="kw">boolean</span> borrowBook(
+    <span class="type">String</span> userId,
+    <span class="type">String</span> isbn
+)
+
+<span class="kw">public</span> <span class="kw">boolean</span> returnBook(
+    <span class="type">String</span> userId,
+    <span class="type">String</span> isbn
+)</code></pre></div>
+<p>Notice that outside code does not directly manipulate the internal maps.</p>
+<p>The <code>Library</code> object controls its state.</p>
+<hr>
+<h1>55. Borrowing a book</h1>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>borrowBook(userId, isbn)
+
+1. Find user.
+2. Find book.
+3. Verify user exists.
+4. Verify book exists.
+5. Verify book is available.
+6. Mark book borrowed.
+7. Add book to user's borrowed books.
+8. Return success.</code></pre></div>
+<p>The implementation follows the algorithm.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> borrowBook(
+        <span class="type">String</span> userId,
+        <span class="type">String</span> isbn) {
+
+    <span class="type">User</span> user = usersById.get(userId);
+    <span class="type">Book</span> book = booksByIsbn.get(isbn);
+
+    <span class="kw">if</span> (user == <span class="lit">null</span> || book == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="lit">false</span>;
+    }
+
+    <span class="kw">if</span> (book.isBorrowed()) {
+        <span class="kw">return</span> <span class="lit">false</span>;
+    }
+
+    book.setBorrowed(<span class="lit">true</span>);
+    user.borrowBook(book);
+
+    <span class="kw">return</span> <span class="lit">true</span>;
+}</code></pre></div>
+<hr>
+<h1>56. Think about failure before coding</h1>
+<p>What can go wrong?</p>
+<p>Possible cases:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>unknown user
+unknown ISBN
+book already borrowed
+user already borrowed the same book
+user reached borrowing limit
+null arguments</code></pre></div>
+<p>A strong programmer considers these cases while designing the method rather than discovering all of them after deployment.</p>
+<hr>
+<h1>57. Complexity of the design</h1>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Book</span>&gt; booksByIsbn;</code></pre></div>
+<p>Finding a book is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>on average.</p>
+<p>If we instead used:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Book</span>&gt; books;</code></pre></div>
+<p>finding a book might require:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>search.</p>
+<p>The choice matters increasingly as the data grows.</p>
+<hr>
+<h1>58. Software design is about tradeoffs</h1>
+<p>There is rarely one perfect design.</p>
+<p>Suppose we store borrowed status in:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Book</span></code></pre></div>
+<p>That is simple.</p>
+<p>But suppose the system later needs:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>loan date
+due date
+renewal count
+fine amount</code></pre></div>
+<p>Now a boolean is insufficient.</p>
+<p>We may introduce:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Loan</span></code></pre></div>
+<p>with fields such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">Book</span> book;
+<span class="kw">private</span> <span class="type">User</span> user;
+<span class="kw">private</span> <span class="type">LocalDate</span> borrowedDate;
+<span class="kw">private</span> <span class="type">LocalDate</span> dueDate;</code></pre></div>
+<p>The design changes as requirements become more sophisticated.</p>
+<p>This is normal.</p>
+<hr>
+<h1>59. Do not overdesign</h1>
+<p>There is an opposite danger.</p>
+<p>A simple 300-line student project does not require:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>17 interfaces
+14 abstract classes
+8 factories
+5 manager classes</code></pre></div>
+<p>Good design is not the same as maximum complexity.</p>
+<p>We want enough structure to make the program understandable and maintainable.</p>
+<p>A good principle is:</p>
+<blockquote>Use the simplest design that cleanly solves the current problem while leaving reasonable room for change.</blockquote>
+<hr>
+<h1>60. Design smells</h1>
+<p>A <strong>design smell</strong> is a sign that code may need improvement.</p>
+<p>Common examples include:</p>
+<h3>Very long methods</h3>
+<p>A method contains many unrelated operations.</p>
+<h3>Very large classes</h3>
+<p>One class seems responsible for almost everything.</p>
+<h3>Duplicate code</h3>
+<p>The same logic appears repeatedly.</p>
+<h3>Excessive public fields</h3>
+<p>Outside code can directly manipulate internal state.</p>
+<h3>Excessive <code>if</code> statements based on type</h3>
+<p>This may indicate that polymorphism could be useful.</p>
+<h3>Unclear names</h3>
+<p>Variables and methods do not communicate their purpose.</p>
+<h3>Excessive dependencies</h3>
+<p>Changing one class requires modifying many unrelated classes.</p>
+<p>These are not absolute rules.</p>
+<p>They are signals worth investigating.</p>
+<hr>
+<h1>61. Example: type-based logic</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (employee.getType().equals(<span class="str">"FULL_TIME"</span>)) {
+    pay = employee.getHours() * <span class="num">40</span>;
+} <span class="kw">else</span> <span class="kw">if</span> (
+    employee.getType().equals(<span class="str">"PART_TIME"</span>)
+) {
+    pay = employee.getHours() * <span class="num">25</span>;
+} <span class="kw">else</span> <span class="kw">if</span> (
+    employee.getType().equals(<span class="str">"CONTRACTOR"</span>)
+) {
+    pay = employee.getHours() * <span class="num">60</span>;
+}</code></pre></div>
+<p>If each employee type has different behavior, we might instead use polymorphism:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">Employee</span> {
+    <span class="kw">double</span> calculatePay();
+}</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>employee.calculatePay();</code></pre></div>
+<p>Each class implements its own rule.</p>
+<p>This removes centralized type-checking logic.</p>
+<hr>
+<h1>62. But do not use inheritance automatically</h1>
+<p>Inheritance is useful when there is a genuine:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>is-a</code></pre></div>
+<p>relationship.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>GraduateStudent is a Student</code></pre></div>
+<p>may sometimes make sense.</p>
+<p>Composition is often better when the relationship is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>has-a</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Course has a List&lt;Student&gt;</code></pre></div>
+<p>not:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Course extends ArrayList&lt;Student&gt;</code></pre></div>
+<p>Ask what conceptual relationship actually exists.</p>
+<hr>
+<h1>63. Composition</h1>
+<p>Composition means building objects using other objects.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Course</span> {
+
+    <span class="kw">private</span> <span class="type">Instructor</span> instructor;
+    <span class="kw">private</span> <span class="type">List</span>&lt;<span class="type">Student</span>&gt; students;
+
+}</code></pre></div>
+<p>A course:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>has an instructor
+has students</code></pre></div>
+<p>Composition is one of the most common relationships in object-oriented programs.</p>
+<hr>
+<h1>64. Designing before coding</h1>
+<p>A practical process for a medium-sized assignment is:</p>
+<h3>Step 1: understand the requirements</h3>
+<p>Write down exactly what the system must do.</p>
+<h3>Step 2: identify important nouns</h3>
+<p>Nouns often suggest classes or data.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>student
+course
+registration
+instructor</code></pre></div>
+<p>This technique is useful but not mechanical.</p>
+<p>Not every noun should become a class.</p>
+<h3>Step 3: identify important verbs</h3>
+<p>Verbs often suggest operations.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>enroll
+drop
+find
+add
+remove</code></pre></div>
+<h3>Step 4: assign responsibilities</h3>
+<p>Ask:</p>
+<blockquote>Which class should be responsible for each operation?</blockquote>
+<h3>Step 5: choose data structures</h3>
+<p>Ask:</p>
+<blockquote>What operations do we perform most frequently?</blockquote>
+<h3>Step 6: define public interfaces</h3>
+<p>Determine which methods other classes need.</p>
+<h3>Step 7: implement incrementally</h3>
+<p>Build small pieces.</p>
+<h3>Step 8: test continuously</h3>
+<p>Do not wait until the entire program is finished.</p>
+<h3>Step 9: refactor</h3>
+<p>Improve the structure after it works.</p>
+<hr>
+<h1>65. Incremental development</h1>
+<p>Do not attempt to write 800 lines and then run the program for the first time.</p>
+<p>Instead:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Create Student
+test Student
+
+Create Course
+test Course
+
+Create RegistrationSystem
+test addStudent
+
+test addCourse
+
+test findStudent
+
+test enrollment
+
+add file loading
+
+test file loading</code></pre></div>
+<p>At each stage, the program should remain relatively stable.</p>
+<p>This makes bugs easier to isolate.</p>
+<hr>
+<h1>66. Version 1 does not need every feature</h1>
+<p>Suppose the final application requires:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add student
+add course
+register
+drop
+save
+load
+search
+report</code></pre></div>
+<p>Do not implement everything simultaneously.</p>
+<p>A possible sequence is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Version 1:
+add student and course
+
+Version 2:
+registration
+
+Version 3:
+dropping
+
+Version 4:
+search
+
+Version 5:
+file persistence
+
+Version 6:
+reports</code></pre></div>
+<p>Incremental development reduces risk.</p>
+<hr>
+<h1>67. Separate user interface from program logic</h1>
+<p>Suppose your program uses a menu:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Add student
+2. Add course
+3. Register student
+4. Exit</code></pre></div>
+<p>Avoid placing all business logic inside the menu code.</p>
+<p>Bad approach:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (choice == <span class="num">3</span>) {
+
+    <span class="cmt">// search students</span>
+    <span class="cmt">// search courses</span>
+    <span class="cmt">// verify capacity</span>
+    <span class="cmt">// modify course</span>
+    <span class="cmt">// update student</span>
+    <span class="cmt">// save file</span>
+}</code></pre></div>
+<p>Better:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (choice == <span class="num">3</span>) {
+    registerStudentUI();
+}</code></pre></div>
+<p>which eventually calls:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>registrationSystem.enroll(studentId, courseCode);</code></pre></div>
+<p>The user interface handles interaction.</p>
+<p>The domain classes handle the underlying logic.</p>
+<hr>
+<h1>68. Why separation helps</h1>
+<p>Later we might replace:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>console interface</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>graphical interface
+web interface
+mobile application</code></pre></div>
+<p>If business logic is separated, much of it can remain unchanged.</p>
+<p>This demonstrates the value of modularity.</p>
+<hr>
+<h1>69. Data structure vs. domain model</h1>
+<p>Do not confuse the data structure with the conceptual object.</p>
+<p>A student is not:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;</code></pre></div>
+<p>A student is a conceptual entity.</p>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> student;</code></pre></div>
+<p>where appropriate.</p>
+<p>The collection of students might be represented using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Student</span>&gt;</code></pre></div>
+<p>Data structures organize objects.</p>
+<p>Classes model concepts.</p>
+<hr>
+<h1>70. Readability is a design goal</h1>
+<p>Programs are read far more often than they are originally written.</p>
+<p>A correct but incomprehensible program is difficult to maintain.</p>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; x.size(); i++) {
+    <span class="kw">if</span> (x.get(i).g() &gt;= y) {
+        z++;
+    }
+}</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Student</span> student : students) {
+    <span class="kw">if</span> (student.getGrade() &gt;= passingGrade) {
+        passingStudentCount++;
+    }
+}</code></pre></div>
+<p>Both may perform the same computation.</p>
+<p>The second communicates meaning.</p>
+<hr>
+<h1>71. Comments</h1>
+<p>Comments should explain things that are not obvious from the code.</p>
+<p>Poor comment:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">// increase i by 1</span>
+i++;</code></pre></div>
+<p>The code already tells us this.</p>
+<p>More useful:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">// Students who withdraw remain in the enrollment</span>
+<span class="cmt">// history, so do not remove this entry.</span></code></pre></div>
+<p>That comment explains a design decision.</p>
+<hr>
+<h1>72. Avoid comments that compensate for bad code</h1>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">// Check whether the course has enough space</span>
+<span class="kw">if</span> (students.size() &lt; capacity) {</code></pre></div>
+<p>we might write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (!isFull()) {</code></pre></div>
+<p>The method name communicates the idea.</p>
+<p>Readable code reduces the need for explanatory comments.</p>
+<hr>
+<h1>73. Defensive programming</h1>
+<p>Programs should anticipate invalid states and inputs.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> addStudent(<span class="type">Student</span> student) {
+
+    <span class="kw">if</span> (student == <span class="lit">null</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"Student cannot be null"</span>
+        );
+    }
+
+    <span class="kw">if</span> (students.containsKey(student.getId())) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"Duplicate student ID"</span>
+        );
+    }
+
+    students.put(student.getId(), student);
+}</code></pre></div>
+<p>The method protects the system's assumptions.</p>
+<hr>
+<h1>74. Preconditions and postconditions</h1>
+<p>A <strong>precondition</strong> is something that must be true before an operation.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student ID must not already exist.</code></pre></div>
+<p>A <strong>postcondition</strong> is something that should be true afterward.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>After addStudent succeeds, the student can be found using the ID.</code></pre></div>
+<p>Thinking in terms of preconditions and postconditions helps us reason about methods.</p>
+<hr>
+<h1>75. Example method contract</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> enroll(
+    <span class="type">String</span> studentId,
+    <span class="type">String</span> courseCode
+)</code></pre></div>
+<p>Possible contract:</p>
+<h3>Preconditions</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>studentId is not null
+courseCode is not null</code></pre></div>
+<h3>Success</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>student exists
+course exists
+course has capacity
+student is not already enrolled</code></pre></div>
+<h3>Postcondition after success</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>student appears in course enrollment
+method returns true</code></pre></div>
+<h3>Failure</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>system remains unchanged
+method returns false</code></pre></div>
+<p>This contract clarifies expected behavior.</p>
+<hr>
+<h1>76. Consistency matters</h1>
+<p>Suppose enrollment information is stored in both:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Course.students
+Student.courses</code></pre></div>
+<p>When a student enrolls, both structures must change.</p>
+<p>If one changes and the other does not, the program becomes inconsistent.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Course says Alice is enrolled.
+Student says Alice is not enrolled.</code></pre></div>
+<p>When data is duplicated, consistency becomes a design concern.</p>
+<p>Sometimes it is better to store the relationship once.</p>
+<p>Other times duplicating it improves performance or convenience.</p>
+<p>Again, design involves tradeoffs.</p>
+<hr>
+<h1>77. Avoid invalid intermediate states</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course.addStudent(student);
+student.addCourse(course);</code></pre></div>
+<p>What happens if the first succeeds and the second fails?</p>
+<p>The program may become inconsistent.</p>
+<p>Centralizing the operation in one responsible class can help:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>registrationSystem.enroll(
+    studentId,
+    courseCode
+);</code></pre></div>
+<p>The method coordinates the entire operation.</p>
+<hr>
+<h1>78. Think in terms of invariants</h1>
+<p>Ask:</p>
+<blockquote>What must always be true?</blockquote>
+<p>For a registration system:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>No duplicate student IDs.
+No duplicate course codes.
+Enrollment never exceeds capacity.
+A student cannot be enrolled twice.
+All registrations reference valid students.
+All registrations reference valid courses.</code></pre></div>
+<p>These invariants guide both implementation and testing.</p>
+<hr>
+<h1>79. Complexity is part of design</h1>
+<p>Suppose a method works correctly.</p>
+<p>That does not necessarily mean it is appropriate.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Student</span> s : students) {
+    <span class="kw">for</span> (<span class="type">Course</span> c : courses) {
+        <span class="cmt">// ...</span>
+    }
+}</code></pre></div>
+<p>If there are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10,000 students
+5,000 courses</code></pre></div>
+<p>the nested loop may perform:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>50,000,000 comparisons</code></pre></div>
+<p>Understanding complexity helps us identify designs that work at realistic scales.</p>
+<hr>
+<h1>80. But do not optimize everything</h1>
+<p>Another common mistake is premature optimization.</p>
+<p>A student may spend hours replacing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span></code></pre></div>
+<p>with a complicated structure to improve an operation that runs five times.</p>
+<p>Before optimizing ask:</p>
+<ol><li>Is there a performance problem?</li><li>Which operation causes it?</li><li>How large is the input?</li><li>Will the more complex design actually matter?</li></ol>
+<p>Correctness and clarity are usually the first priorities.</p>
+<hr>
+<h1>81. Appropriate efficiency</h1>
+<p>For CSC500, develop the habit of asking:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>What is n?
+How does the runtime grow as n grows?
+Which operations dominate?
+Is there a better data structure?</code></pre></div>
+<p>You do not need to perform advanced mathematical analysis for every method.</p>
+<p>But you should recognize obvious differences such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)
+O(log n)
+O(n)
+O(n log n)
+O(n²)</code></pre></div>
+<hr>
+<h1>82. Putting everything together</h1>
+<p>For a medium-sized Java program, you should now be able to reason at several levels.</p>
+<h3>Syntax level</h3>
+<p>Is the Java code legal?</p>
+<h3>Execution level</h3>
+<p>What does each statement do?</p>
+<h3>Algorithm level</h3>
+<p>What sequence of steps solves the problem?</p>
+<h3>Data structure level</h3>
+<p>How should information be organized?</p>
+<h3>Object-oriented level</h3>
+<p>What classes and relationships represent the domain?</p>
+<h3>Design level</h3>
+<p>How should components interact?</p>
+<h3>Complexity level</h3>
+<p>How does the solution scale?</p>
+<h3>Testing level</h3>
+<p>How do we know the program is correct?</p>
+<p>Strong programmers move between all of these levels.</p>
+<hr>
+<h1>83. A design checklist</h1>
+<p>Before implementing a substantial program, ask:</p>
+<h3>Requirements</h3>
+<ul><li>What must the program do?</li><li>What inputs exist?</li><li>What outputs are required?</li><li>What invalid situations can occur?</li></ul>
+<h3>Classes</h3>
+<ul><li>What concepts should become classes?</li><li>What responsibility does each class have?</li><li>Are responsibilities clearly separated?</li></ul>
+<h3>Data</h3>
+<ul><li>What information does each class store?</li><li>Which fields should be private?</li><li>What invariants must hold?</li></ul>
+<h3>Data structures</h3>
+<ul><li>Do I need ordering?</li><li>Do I need indexed access?</li><li>Do I need unique elements?</li><li>Do I need fast lookup by key?</li><li>Do I need FIFO or LIFO processing?</li></ul>
+<h3>Methods</h3>
+<ul><li>What operations should each class provide?</li><li>Are the method names meaningful?</li><li>Are any methods too large?</li></ul>
+<h3>Dependencies</h3>
+<ul><li>Which classes need to know about each other?</li><li>Can unnecessary dependencies be removed?</li></ul>
+<h3>Testing</h3>
+<ul><li>What are the normal cases?</li><li>What are the boundary cases?</li><li>What are the invalid cases?</li></ul>
+<h3>Complexity</h3>
+<ul><li>What operations happen most often?</li><li>What are their approximate costs?</li></ul>
+<hr>
+<h1>84. Code review checklist</h1>
+<p>Before submitting a project, review your own code.</p>
+<p>Ask:</p>
+<h3>Correctness</h3>
+<ul><li>Does the program satisfy the requirements?</li><li>Have I tested edge cases?</li></ul>
+<h3>Readability</h3>
+<ul><li>Are variables named clearly?</li><li>Are methods named clearly?</li><li>Is formatting consistent?</li></ul>
+<h3>Modularity</h3>
+<ul><li>Are methods reasonably small?</li><li>Does each class have a clear responsibility?</li></ul>
+<h3>Encapsulation</h3>
+<ul><li>Are fields private when appropriate?</li><li>Does outside code modify internal structures directly?</li></ul>
+<h3>Duplication</h3>
+<ul><li>Is logic repeated unnecessarily?</li></ul>
+<h3>Data structures</h3>
+<ul><li>Are the chosen structures appropriate?</li></ul>
+<h3>Error handling</h3>
+<ul><li>Are invalid inputs handled?</li></ul>
+<h3>Testing</h3>
+<ul><li>Can important components be tested independently?</li></ul>
+<h3>Documentation</h3>
+<ul><li>Are non-obvious assumptions documented?</li></ul>
+<hr>
+<h1>85. Capstone project expectations</h1>
+<p>Your capstone project should demonstrate more than Java syntax.</p>
+<p>It should demonstrate that you can integrate the major ideas from the course.</p>
+<p>A strong project should contain:</p>
+<ul><li>multiple classes,</li><li>meaningful encapsulation,</li><li>clear object relationships,</li><li>appropriate use of Java collections,</li><li>nontrivial program logic,</li><li>input validation,</li><li>error handling,</li><li>file I/O where appropriate,</li><li>clear method decomposition,</li><li>systematic testing,</li><li>readable code.</li></ul>
+<p>You should also be prepared to explain your design decisions.</p>
+<hr>
+<h1>86. Questions you should be able to answer about your project</h1>
+<p>You should be able to explain:</p>
+<ol><li>Why did you choose these classes?</li><li>What responsibility does each class have?</li><li>Why did you choose your data structures?</li><li>Why is a particular collection a <code>List</code>, <code>Set</code>, or <code>Map</code>?</li><li>What are the important invariants?</li><li>Where is input validated?</li><li>What happens when an invalid operation occurs?</li><li>What is the approximate complexity of important operations?</li><li>What were the most important bugs you encountered?</li><li>How did you test the program?</li><li>What would you redesign if the system became ten times larger?</li><li>What would you change if new requirements were added?</li></ol>
+<p>Being able to explain code is an important part of understanding code.</p>
+<hr>
+<h1>87. Example design exercise</h1>
+<p>Consider the following problem:</p>
+<blockquote>Design a package delivery system. Each package has a tracking number, recipient, address, weight, and status. The system must allow users to add packages, locate a package by tracking number, update its status, and display all packages having a particular status.</blockquote>
+<p>Before coding, answer the following.</p>
+<h3>What classes might exist?</h3>
+<p>Possible answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Package
+DeliverySystem</code></pre></div>
+<p>Possibly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Address</code></pre></div>
+<p>if address behavior becomes sufficiently complex.</p>
+<hr>
+<h1>88. What data structure should store packages?</h1>
+<p>A primary operation is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>find package by tracking number</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Package</span>&gt; packagesByTrackingNumber;</code></pre></div>
+<p>is a natural choice.</p>
+<p>Lookup is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>on average.</p>
+<hr>
+<h1>89. How do we find all packages with a status?</h1>
+<p>One simple solution is to scan the map:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Package</span> p : packages.values()) {
+    <span class="kw">if</span> (p.getStatus() == status) {
+        <span class="cmt">// ...</span>
+    }
+}</code></pre></div>
+<p>Runtime:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>If status searches become extremely frequent, we might later maintain additional indexing.</p>
+<p>But that creates more complexity.</p>
+<p>The simple <code>O(n)</code> solution may be completely appropriate.</p>
+<p>This is an example of choosing a solution based on actual requirements.</p>
+<hr>
+<h1>90. Possible package status representation</h1>
+<p>Instead of storing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> status;</code></pre></div>
+<p>we might define:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">enum</span> <span class="type">PackageStatus</span> {
+    CREATED,
+    IN_TRANSIT,
+    OUT_FOR_DELIVERY,
+    DELIVERED
+}</code></pre></div>
+<p>Why might this be better?</p>
+<p>A string permits invalid values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"deleverd"
+"shipping"
+"????"</code></pre></div>
+<p>An enum restricts the program to known states.</p>
+<p>This improves correctness.</p>
+<hr>
+<h1>91. Design exercise: social network</h1>
+<p>Suppose we want a tiny social network.</p>
+<p>Requirements:</p>
+<ul><li>register users</li><li>find a user by username</li><li>add friendships</li><li>list a user's friends</li><li>determine whether two users are friends</li></ul>
+<p>What structures might be useful?</p>
+<p>One possibility:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">User</span>&gt; users;</code></pre></div>
+<p>Inside <code>User</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">User</span>&gt; friends;</code></pre></div>
+<p>Why a set?</p>
+<p>Because:</p>
+<ul><li>duplicate friendships should not exist,</li><li>membership testing is important.</li></ul>
+<p>This illustrates how problem requirements suggest data structures.</p>
+<hr>
+<h1>92. Design exercise: task scheduler</h1>
+<p>Requirements:</p>
+<ul><li>add tasks</li><li>each task has priority</li><li>always process the highest-priority task next</li></ul>
+<p>Which structure is appropriate?</p>
+<p>A:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArrayList</code></pre></div>
+<p>could work.</p>
+<p>But a:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>PriorityQueue</code></pre></div>
+<p>better represents the required behavior.</p>
+<p>Again:</p>
+<blockquote>Choose a structure based on operations.</blockquote>
+<hr>
+<h1>93. From programming student to computer scientist</h1>
+<p>At the beginning of the semester, a problem might have sounded like:</p>
+<blockquote>Write a Java program using a loop.</blockquote>
+<p>Now the questions should be different.</p>
+<p>You should ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>How should the problem be modeled?
+
+What abstractions are important?
+
+What data structures support the necessary operations?
+
+What algorithm should I use?
+
+How efficient is it?
+
+What edge cases exist?
+
+How can the system be tested?
+
+How can the design accommodate change?</code></pre></div>
+<p>That transition in thinking is one of the major goals of this course.</p>
+<hr>
+<h1>94. Key takeaways</h1>
+<h3>1. Design before coding.</h3>
+<p>Understand the problem before writing large amounts of Java.</p>
+<h3>2. Decompose large problems.</h3>
+<p>Divide systems into components with clear responsibilities.</p>
+<h3>3. Favor high cohesion.</h3>
+<p>Keep closely related responsibilities together.</p>
+<h3>4. Reduce unnecessary coupling.</h3>
+<p>Components should interact through clear interfaces.</p>
+<h3>5. Use encapsulation.</h3>
+<p>Protect internal state and class invariants.</p>
+<h3>6. Choose data structures based on operations.</h3>
+<p>A <code>List</code>, <code>Set</code>, <code>Map</code>, stack, queue, or tree represents different needs.</p>
+<h3>7. Program to abstractions when appropriate.</h3>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt;</code></pre></div>
+<p>rather than unnecessarily requiring:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Student</span>&gt;</code></pre></div>
+<h3>8. Refactor.</h3>
+<p>Working code can still be improved.</p>
+<h3>9. Test components systematically.</h3>
+<p>Include normal, boundary, and invalid cases.</p>
+<h3>10. Debug using evidence.</h3>
+<p>Reproduce problems and inspect program state rather than guessing.</p>
+<h3>11. Learn to read documentation.</h3>
+<p>Professional programming requires continuously learning unfamiliar APIs.</p>
+<h3>12. Software design involves tradeoffs.</h3>
+<p>There is rarely one universally correct solution.</p>
+<hr>
+<h1>95. In-class discussion questions</h1>
+<ol><li>When would you choose a <code>HashMap</code> instead of an <code>ArrayList</code>?</li></ol>
+<ol><li>Why might returning a class's internal <code>ArrayList</code> violate encapsulation?</li></ol>
+<ol><li>What does it mean for a class to have high cohesion?</li></ol>
+<ol><li>Why can excessive coupling make software difficult to modify?</li></ol>
+<ol><li>What is the difference between an interface and an implementation?</li></ol>
+<ol><li>Why might we declare:</li></ol>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<ol><li>What are the risks of storing the same relationship in two different places?</li></ol>
+<ol><li>Why are boundary cases important when testing?</li></ol>
+<ol><li>What is the difference between debugging and randomly modifying code until it works?</li></ol>
+<ol><li>Why is reading API documentation an essential programming skill?</li></ol>
+<hr>
+<h1>96. In-class design activity</h1>
+<h2>Campus event registration system</h2>
+<p>Design a system with the following requirements:</p>
+<ul><li>students can register for campus events,</li><li>each student has a unique student ID,</li><li>each event has a unique event ID,</li><li>events have capacities,</li><li>students cannot register twice for the same event,</li><li>the system can find students by ID,</li><li>the system can find events by ID,</li><li>the system can list students registered for an event,</li><li>the system can list events for which a student is registered.</li></ul>
+<h3>Part a - identify classes</h3>
+<p>Possible candidates:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+Event
+RegistrationSystem</code></pre></div>
+<p>Should there also be a:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Registration</code></pre></div>
+<p>class?</p>
+<p>Discuss when such a class might become useful.</p>
+<p>For example, if a registration later contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>registration date
+waitlist status
+payment status
+attendance status</code></pre></div>
+<p>then representing the relationship as its own object may make sense.</p>
+<hr>
+<h1>97. Activity: select data structures</h1>
+<p>Decide how to represent:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>all students
+all events
+students registered for an event
+events registered by a student</code></pre></div>
+<p>Possible solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Student</span>&gt; studentsById;
+
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Event</span>&gt; eventsById;</code></pre></div>
+<p>For event participants:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">Student</span>&gt; participants;</code></pre></div>
+<p>Why might a set be preferable to a list?</p>
+<p>Because duplicate participants should not exist.</p>
+<hr>
+<h1>98. Activity: define the API</h1>
+<p>Write method signatures without implementing them.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> addStudent(<span class="type">Student</span> student)
+
+<span class="kw">public</span> <span class="kw">void</span> addEvent(<span class="type">Event</span> event)
+
+<span class="kw">public</span> <span class="kw">boolean</span> register(
+    <span class="type">String</span> studentId,
+    <span class="type">String</span> eventId
+)
+
+<span class="kw">public</span> <span class="kw">boolean</span> unregister(
+    <span class="type">String</span> studentId,
+    <span class="type">String</span> eventId
+)
+
+<span class="kw">public</span> <span class="type">Student</span> findStudent(<span class="type">String</span> studentId)
+
+<span class="kw">public</span> <span class="type">Event</span> findEvent(<span class="type">String</span> eventId)</code></pre></div>
+<p>Defining the API before implementation forces us to think about the responsibilities of the system.</p>
+<hr>
+<h1>99. Activity: identify invariants</h1>
+<p>Possible invariants:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student IDs are unique.
+Event IDs are unique.
+Participant count never exceeds capacity.
+A student cannot register twice.
+All registrations reference existing students.
+All registrations reference existing events.</code></pre></div>
+<p>How should the classes enforce these rules?</p>
+<hr>
+<h1>100. Activity: develop tests before implementation</h1>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>register(studentId, eventId)</code></pre></div>
+<p>write test cases.</p>
+<p>Possible tests:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>valid registration
+unknown student
+unknown event
+event exactly at capacity
+duplicate registration
+last available seat
+student unregisters and registers again</code></pre></div>
+<p>The goal is to think about correctness before implementing the method.</p>
+<hr>
+<h1>101. Suggested lab</h1>
+<h2>Refactoring a poorly designed program</h2>
+<p>Students receive a working program containing:</p>
+<ul><li>one very large class,</li><li>public fields,</li><li>duplicated code,</li><li>poorly named variables,</li><li>an inappropriate data structure,</li><li>one very long method,</li><li>mixed user-interface and domain logic.</li></ul>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">App</span> {
+
+    <span class="kw">public</span> <span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; a =
+        <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+    <span class="kw">public</span> <span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; b =
+        <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+    <span class="kw">public</span> <span class="kw">void</span> doStuff() {
+
+        <span class="cmt">// 150 lines of code</span>
+
+    }
+}</code></pre></div>
+<p>Students must refactor the program.</p>
+<p>Possible goals:</p>
+<ol><li>identify domain classes,</li><li>make fields private,</li><li>rename variables and methods,</li><li>extract methods,</li><li>remove duplicated code,</li><li>replace linear search with a map where appropriate,</li><li>separate UI code from application logic,</li><li>preserve existing behavior,</li><li>add tests.</li></ol>
+<p>The purpose is not to add new features.</p>
+<p>The purpose is to improve the design.</p>
+<hr>
+<h1>102. Suggested homework</h1>
+<h2>Capstone design review</h2>
+<p>Before completing the capstone project, submit a short design document containing:</p>
+<h3>1. Problem description</h3>
+<p>Explain what the application does.</p>
+<h3>2. Major classes</h3>
+<p>For each class provide:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>class name
+responsibility
+important fields
+important methods</code></pre></div>
+<h3>3. Relationships</h3>
+<p>Describe how the classes interact.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A Course contains many Students.
+A RegistrationSystem manages Courses.</code></pre></div>
+<h3>4. Data structures</h3>
+<p>For each major collection explain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>which Java data structure is used
+why it was chosen
+what important operations it supports</code></pre></div>
+<h3>5. Important invariants</h3>
+<p>List conditions that must remain true.</p>
+<h3>6. Complexity</h3>
+<p>Analyze at least three important operations using Big-O notation.</p>
+<h3>7. Testing plan</h3>
+<p>Identify:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>normal cases
+boundary cases
+invalid cases</code></pre></div>
+<h3>8. Known limitations</h3>
+<p>Explain at least one feature or design improvement that would be needed if the program became substantially larger.</p>
+<hr>
+<h1>103. Exit questions</h1>
+<p>At the end of class, students should answer these without looking at notes.</p>
+<h3>Question 1</h3>
+<p>You frequently need to retrieve customer records using a unique customer ID. Which data structure would you consider first?</p>
+<p><strong>Answer:</strong> A map, such as <code>HashMap&lt;CustomerId, Customer&gt;</code> or commonly <code>HashMap&lt;String, Customer&gt;</code>.</p>
+<h3>Question 2</h3>
+<p>What does high cohesion mean?</p>
+<p><strong>Answer:</strong> A component's responsibilities are closely related to one clear purpose.</p>
+<h3>Question 3</h3>
+<p>Why is low coupling desirable?</p>
+<p><strong>Answer:</strong> It reduces unnecessary dependencies, making components easier to change, test, and reuse.</p>
+<h3>Question 4</h3>
+<p>What is refactoring?</p>
+<p><strong>Answer:</strong> Improving the internal organization of code without intentionally changing its observable behavior.</p>
+<h3>Question 5</h3>
+<p>What is an invariant?</p>
+<p><strong>Answer:</strong> A condition that should remain true for an object or system whenever it is in a valid state.</p>
+<h3>Question 6</h3>
+<p>What three categories should you consider when designing tests?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>normal cases
+boundary cases
+invalid cases</code></pre></div>
+<h3>Question 7</h3>
+<p>Why might:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt; students =
+    <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>be preferable to declaring the variable as <code>ArrayList&lt;Student&gt;</code>?</p>
+<p><strong>Answer:</strong> The code depends on the more general <code>List</code> abstraction and can more easily substitute another implementation.</p>
+<hr>
+<h1>104. Summary</h1>
+<p>The central lesson of Week 15 is that programming is no longer primarily about remembering Java syntax.</p>
+<p>A programmer should be able to move from:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>problem</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>requirements</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>model</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>classes</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>data structures</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>algorithms</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>implementation</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>testing</code></pre></div>
+<p>to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>refactoring</code></pre></div>
+<p>Software development is an iterative process.</p>
+<p>The first solution may work.</p>
+<p>A stronger solution is:</p>
+<ul><li>correct,</li><li>understandable,</li><li>appropriately efficient,</li><li>testable,</li><li>modular,</li><li>and adaptable.</li></ul>
+<p>The ultimate goal is not merely to write Java programs that run.</p>
+<p>The goal is to learn how to <strong>reason about software</strong>.</p>
+<p>That skill will become increasingly important in every computer science course that follows.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

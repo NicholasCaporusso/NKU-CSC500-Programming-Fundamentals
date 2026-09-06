@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 7: object-oriented design</h2>
+<h3>Learning objectives</h3>
+<p>By the end of this week, students should be able to:</p>
+<ul><li>distinguish between a class and an object</li><li>identify appropriate classes in a problem description</li><li>use encapsulation to protect an object's internal state</li><li>explain the difference between instance members and static members</li><li>use composition to model relationships between classes</li><li>distinguish between “is-a” and “has-a” relationships</li><li>use enums to represent a fixed set of meaningful values</li><li>organize Java code into multiple classes and packages</li><li>design a small object-oriented program before writing its implementation</li></ul>
+<hr>
+<h1>1. From programming to program design</h1>
+<p>So far, we have learned how to write Java programs using:</p>
+<ul><li>variables</li><li>conditionals</li><li>loops</li><li>methods</li><li>arrays</li><li>strings</li><li>classes and objects</li></ul>
+<p>Knowing how to write individual Java statements is important, but larger programs require another skill:</p>
+<blockquote><strong>How should we organize the program?</strong></blockquote>
+<p>Suppose we want to build a program for a university.</p>
+<p>We might need to represent:</p>
+<ul><li>students</li><li>courses</li><li>instructors</li><li>departments</li><li>enrollments</li><li>grades</li></ul>
+<p>One approach would be to place everything in one large class.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">UniversityProgram</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">String</span> studentName = <span class="str">"Alice"</span>;
+        <span class="kw">int</span> studentId = <span class="num">12345</span>;
+
+        <span class="type">String</span> courseName = <span class="str">"Programming Fundamentals"</span>;
+        <span class="type">String</span> courseCode = <span class="str">"CSC500"</span>;
+
+        <span class="type">String</span> instructorName = <span class="str">"Dr. Smith"</span>;
+
+        <span class="cmt">// hundreds of additional variables and methods</span>
+    }
+}</code></pre></div>
+<p>This approach quickly becomes difficult to manage.</p>
+<p>Instead, object-oriented programming encourages us to organize a program around <strong>objects that represent meaningful concepts in the problem domain</strong>.</p>
+<p>We might create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+Course
+Instructor
+Department
+Enrollment</code></pre></div>
+<p>Each class becomes responsible for representing one concept.</p>
+<hr>
+<h1>2. Review: classes and objects</h1>
+<p>A <strong>class</strong> describes a type of object.</p>
+<p>An <strong>object</strong> is an instance of that class.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="kw">int</span> id;
+
+    <span class="kw">public</span> <span class="type">Student</span>(<span class="type">String</span> name, <span class="kw">int</span> id) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.id = id;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+
+    <span class="kw">public</span> <span class="kw">int</span> getId() {
+        <span class="kw">return</span> id;
+    }
+}</code></pre></div>
+<p>We can create objects from this class:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> s1 = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Alice"</span>, <span class="num">12345</span>);
+<span class="type">Student</span> s2 = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Bob"</span>, <span class="num">67890</span>);</code></pre></div>
+<p>Here:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student</code></pre></div>
+<p>is the class.</p>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>s1
+s2</code></pre></div>
+<p>refer to two different <code>Student</code> objects.</p>
+<p>Each object has its own state.</p>
+<hr>
+<h1>3. State and behavior</h1>
+<p>Objects typically contain two things:</p>
+<h2>State</h2>
+<p>State describes what an object currently knows.</p>
+<p>Examples for a student:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>name
+student ID
+GPA
+major
+number of credits</code></pre></div>
+<p>These are usually represented using <strong>instance variables</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">String</span> name;
+<span class="kw">private</span> <span class="kw">int</span> id;
+<span class="kw">private</span> <span class="kw">double</span> gpa;</code></pre></div>
+<h2>Behavior</h2>
+<p>Behavior describes what an object can do.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>register for a course
+change major
+calculate academic standing
+display student information</code></pre></div>
+<p>These behaviors are represented using methods.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> changeMajor(<span class="type">String</span> newMajor) {
+    major = newMajor;
+}</code></pre></div>
+<p>A useful design question is therefore:</p>
+<blockquote>What information should this object know, and what operations should it perform?</blockquote>
+<hr>
+<h1>4. Encapsulation</h1>
+<p>One of the central principles of object-oriented programming is <strong>encapsulation</strong>.</p>
+<p>Encapsulation means:</p>
+<blockquote>An object controls access to its internal state.</blockquote>
+<p>Suppose we have a bank account.</p>
+<p>A poor design might look like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BankAccount</span> {
+
+    <span class="kw">public</span> <span class="kw">double</span> balance;
+}</code></pre></div>
+<p>Now another part of the program can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">BankAccount</span> account = <span class="kw">new</span> <span class="type">BankAccount</span>();
+
+account.balance = -<span class="num">1000000</span>;</code></pre></div>
+<p>Nothing prevents the balance from becoming invalid.</p>
+<p>A better design hides the field:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BankAccount</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> balance;
+
+    <span class="kw">public</span> <span class="type">BankAccount</span>(<span class="kw">double</span> initialBalance) {
+        balance = initialBalance;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> getBalance() {
+        <span class="kw">return</span> balance;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> deposit(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount &gt; <span class="num">0</span>) {
+            balance += amount;
+        }
+    }
+}</code></pre></div>
+<p>Now outside code cannot directly change the balance.</p>
+<p>Instead, changes must go through controlled methods.</p>
+<hr>
+<h1>5. Why encapsulation matters</h1>
+<p>Encapsulation helps us enforce the rules of an object.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> withdraw(<span class="kw">double</span> amount) {
+
+    <span class="kw">if</span> (amount &gt; <span class="num">0</span> &amp;&amp; amount &lt;= balance) {
+        balance -= amount;
+    }
+}</code></pre></div>
+<p>The <code>BankAccount</code> class is responsible for ensuring that the account remains valid.</p>
+<p>This idea is important:</p>
+<blockquote>The class that owns the data should usually enforce the rules for that data.</blockquote>
+<p>A class should not simply expose all of its fields.</p>
+<p>For example, avoid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">double</span> balance;
+<span class="kw">public</span> <span class="type">String</span> accountNumber;
+<span class="kw">public</span> <span class="type">String</span> owner;</code></pre></div>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">double</span> balance;
+<span class="kw">private</span> <span class="type">String</span> accountNumber;
+<span class="kw">private</span> <span class="type">String</span> owner;</code></pre></div>
+<p>and provide appropriate operations.</p>
+<hr>
+<h1>6. Getters and setters</h1>
+<p>Students often learn the following pattern:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">int</span> age;
+
+<span class="kw">public</span> <span class="kw">int</span> getAge() {
+    <span class="kw">return</span> age;
+}
+
+<span class="kw">public</span> <span class="kw">void</span> setAge(<span class="kw">int</span> age) {
+    <span class="kw">this</span>.age = age;
+}</code></pre></div>
+<p>But object-oriented design does <strong>not</strong> mean automatically creating a getter and setter for every field.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> setBalance(<span class="kw">double</span> balance) {
+    <span class="kw">this</span>.balance = balance;
+}</code></pre></div>
+<p>This method allows outside code to bypass the rules of the bank account.</p>
+<p>Instead, we might provide meaningful operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>deposit(amount)
+withdraw(amount)
+transfer(amount)</code></pre></div>
+<p>This is usually better than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>setBalance(...)</code></pre></div>
+<p>because the methods describe actual operations in the problem domain.</p>
+<hr>
+<h1>7. Instance variables and instance methods</h1>
+<p>An <strong>instance variable</strong> belongs to a particular object.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+}</code></pre></div>
+<p>If we create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> s1 = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Alice"</span>);
+<span class="type">Student</span> s2 = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Bob"</span>);</code></pre></div>
+<p>then each object has its own <code>name</code>.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>s1
+name = "Alice"
+
+s2
+name = "Bob"</code></pre></div>
+<p>An <strong>instance method</strong> operates on a particular object.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">String</span> getName() {
+    <span class="kw">return</span> name;
+}</code></pre></div>
+<p>When we call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>s1.getName();</code></pre></div>
+<p>the method operates on the object referred to by <code>s1</code>.</p>
+<hr>
+<h1>8. Static variables</h1>
+<p>A <code>static</code> variable belongs to the <strong>class</strong>, rather than to one particular object.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">private</span> <span class="kw">static</span> <span class="kw">int</span> numberOfStudents = <span class="num">0</span>;
+
+    <span class="kw">public</span> <span class="type">Student</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+        numberOfStudents++;
+    }
+}</code></pre></div>
+<p>Every student object shares the same:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>numberOfStudents</code></pre></div>
+<p>Suppose we create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> s1 = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Alice"</span>);
+<span class="type">Student</span> s2 = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Bob"</span>);
+<span class="type">Student</span> s3 = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Carlos"</span>);</code></pre></div>
+<p>There are three different <code>name</code> variables, but only one shared:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>numberOfStudents = 3</code></pre></div>
+<hr>
+<h1>9. Static methods</h1>
+<p>Static methods belong to the class rather than to a particular object.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> getNumberOfStudents() {
+    <span class="kw">return</span> numberOfStudents;
+}</code></pre></div>
+<p>We call it using the class name:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span>.getNumberOfStudents();</code></pre></div>
+<p>This is different from an instance method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>s1.getName();</code></pre></div>
+<p>A useful rule:</p>
+<blockquote>If a method depends on the state of a particular object, it should usually be an instance method.</blockquote>
+<p>If it represents behavior associated with the class as a whole, a static method may be appropriate.</p>
+<hr>
+<h1>10. The <code>Math</code> class as an example</h1>
+<p>Java's <code>Math</code> class contains static methods.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> x = <span class="type">Math</span>.sqrt(<span class="num">25</span>);
+<span class="kw">double</span> y = <span class="type">Math</span>.pow(<span class="num">2</span>, <span class="num">10</span>);</code></pre></div>
+<p>We do not create a <code>Math</code> object:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Math</span> m = <span class="kw">new</span> <span class="type">Math</span>();</code></pre></div>
+<p>Instead, we call methods directly on the class.</p>
+<p>This is appropriate because <code>sqrt</code> does not depend on the state of a particular <code>Math</code> object.</p>
+<hr>
+<h1>11. Class relationships</h1>
+<p>Real programs usually contain many classes.</p>
+<p>Those classes interact with one another.</p>
+<p>Consider a course registration system.</p>
+<p>Possible classes include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+Course
+Instructor
+Department</code></pre></div>
+<p>These classes are related.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A Course has an Instructor.
+A Department has Courses.
+A Student has a list of Courses.</code></pre></div>
+<p>This leads to an important OOP concept:</p>
+<blockquote><strong>composition</strong></blockquote>
+<hr>
+<h1>12. Composition</h1>
+<p>Composition means that one object contains or uses another object.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Instructor</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="type">Instructor</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+}</code></pre></div>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Course</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> code;
+    <span class="kw">private</span> <span class="type">Instructor</span> instructor;
+
+    <span class="kw">public</span> <span class="type">Course</span>(<span class="type">String</span> code, <span class="type">Instructor</span> instructor) {
+        <span class="kw">this</span>.code = code;
+        <span class="kw">this</span>.instructor = instructor;
+    }
+}</code></pre></div>
+<p>A <code>Course</code> contains a reference to an <code>Instructor</code>.</p>
+<p>We describe this relationship as:</p>
+<blockquote>A Course <strong>has an</strong> Instructor.</blockquote>
+<hr>
+<h1>13. Creating objects with composition</h1>
+<p>We can create objects like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Instructor</span> instructor =
+        <span class="kw">new</span> <span class="type">Instructor</span>(<span class="str">"Dr. Smith"</span>);
+
+<span class="type">Course</span> course =
+        <span class="kw">new</span> <span class="type">Course</span>(<span class="str">"CSC500"</span>, instructor);</code></pre></div>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>course
+   |
+   +-- code = "CSC500"
+   |
+   +-- instructor -----&gt; Instructor object
+                         name = "Dr. Smith"</code></pre></div>
+<p>Notice that the <code>Course</code> object does not contain a copy of the instructor.</p>
+<p>Instead, it stores a <strong>reference</strong> to the <code>Instructor</code> object.</p>
+<hr>
+<h1>14. Objects can share other objects</h1>
+<p>Suppose an instructor teaches two courses.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Instructor</span> professor =
+        <span class="kw">new</span> <span class="type">Instructor</span>(<span class="str">"Dr. Smith"</span>);
+
+<span class="type">Course</span> c1 =
+        <span class="kw">new</span> <span class="type">Course</span>(<span class="str">"CSC500"</span>, professor);
+
+<span class="type">Course</span> c2 =
+        <span class="kw">new</span> <span class="type">Course</span>(<span class="str">"CSC510"</span>, professor);</code></pre></div>
+<p>Both courses refer to the same instructor object.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>c1 ----\
+        \
+         ---&gt; Instructor
+        /
+c2 ----/</code></pre></div>
+<p>This illustrates an important idea:</p>
+<blockquote>Object variables contain references to objects.</blockquote>
+<hr>
+<h1>15. Composition with collections</h1>
+<p>Objects often contain multiple related objects.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="type">ArrayList</span>&lt;<span class="type">Course</span>&gt; courses;
+
+    <span class="kw">public</span> <span class="type">Student</span>(<span class="type">String</span> name) {
+        <span class="kw">this</span>.name = name;
+        courses = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+    }
+}</code></pre></div>
+<p>We might add a method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> enroll(<span class="type">Course</span> course) {
+    courses.add(course);
+}</code></pre></div>
+<p>Now a student can contain references to many courses.</p>
+<hr>
+<h1>16. “has-a” relationships</h1>
+<p>Composition typically represents a:</p>
+<blockquote><strong>has-a relationship</strong></blockquote>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A Car has an Engine.
+
+A Course has an Instructor.
+
+A University has Students.
+
+An Order has Products.
+
+A Playlist has Songs.</code></pre></div>
+<p>When identifying classes, look for these relationships.</p>
+<p>For example, if the problem says:</p>
+<blockquote>Each customer has a shopping cart.</blockquote>
+<p>we might design:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Customer
+ShoppingCart</code></pre></div>
+<p>with a composition relationship.</p>
+<hr>
+<h1>17. “is-a” vs. “has-a”</h1>
+<p>Object-oriented design frequently involves two important relationships.</p>
+<h3>Has-a</h3>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A Car has an Engine.</code></pre></div>
+<p>This suggests composition.</p>
+<h3>Is-a</h3>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A Dog is an Animal.</code></pre></div>
+<p>This suggests inheritance.</p>
+<p>Inheritance will be studied in more detail next week.</p>
+<p>For now, remember:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>has-a → composition
+is-a → inheritance</code></pre></div>
+<hr>
+<h1>18. Prefer composition when appropriate</h1>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Car
+Engine</code></pre></div>
+<p>A car is <strong>not</strong> an engine.</p>
+<p>Therefore this would be incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Car</span> <span class="kw">extends</span> <span class="type">Engine</span> {
+}</code></pre></div>
+<p>The correct relationship is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A Car has an Engine.</code></pre></div>
+<p>So we use composition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Car</span> {
+
+    <span class="kw">private</span> <span class="type">Engine</span> engine;
+}</code></pre></div>
+<p>This distinction becomes very important when designing larger programs.</p>
+<hr>
+<h1>19. Responsibility</h1>
+<p>A good class should have a clear responsibility.</p>
+<p>Consider a class named:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span></code></pre></div>
+<p>Reasonable responsibilities might include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>store student information
+track registered courses
+calculate credit totals</code></pre></div>
+<p>But perhaps not:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>print university payroll
+manage database backups
+calculate instructor salaries</code></pre></div>
+<p>Those tasks belong to other classes.</p>
+<p>A useful principle is:</p>
+<blockquote>Each class should have a focused purpose.</blockquote>
+<p>This idea is sometimes called the <strong>Single Responsibility Principle</strong>.</p>
+<p>At this stage, students do not need to memorize formal design principles, but they should begin asking:</p>
+<blockquote>Does this behavior really belong in this class?</blockquote>
+<hr>
+<h1>20. Example: poor class design</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+
+    <span class="kw">public</span> <span class="kw">void</span> calculatePayroll() {
+        <span class="cmt">// ...</span>
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> sendUniversityEmail() {
+        <span class="cmt">// ...</span>
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> backupDatabase() {
+        <span class="cmt">// ...</span>
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> registerForCourse() {
+        <span class="cmt">// ...</span>
+    }
+}</code></pre></div>
+<p>This class is doing too many unrelated things.</p>
+<p>Better:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+PayrollSystem
+EmailService
+DatabaseBackup
+RegistrationSystem</code></pre></div>
+<p>Each class has a more focused responsibility.</p>
+<hr>
+<h1>21. Designing classes from a problem description</h1>
+<p>Suppose we receive this requirement:</p>
+<blockquote>Build a system for a library. The library contains books and members. Members may borrow books. Each book has a title, author, and ISBN. A member has a name and member ID.</blockquote>
+<p>Before writing code, identify important nouns.</p>
+<p>Possible nouns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Library
+Book
+Member
+Author
+ISBN</code></pre></div>
+<p>Not every noun necessarily becomes a class.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>title → String
+ISBN → String
+name → String</code></pre></div>
+<p>Possible classes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Library
+Book
+Member</code></pre></div>
+<hr>
+<h1>22. Identifying responsibilities</h1>
+<p>Now ask what each class should know and do.</p>
+<h3>Book</h3>
+<p>State:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>title
+author
+ISBN
+availability</code></pre></div>
+<p>Behavior:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>check out
+return
+display information</code></pre></div>
+<h3>Member</h3>
+<p>State:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>name
+member ID
+borrowed books</code></pre></div>
+<p>Behavior:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>borrow book
+return book</code></pre></div>
+<h3>Library</h3>
+<p>State:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>collection of books
+collection of members</code></pre></div>
+<p>Behavior:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add book
+register member
+find book
+lend book</code></pre></div>
+<p>This gives us an initial design.</p>
+<hr>
+<h1>23. Example <code>Book</code> class</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Book</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> title;
+    <span class="kw">private</span> <span class="type">String</span> author;
+    <span class="kw">private</span> <span class="type">String</span> isbn;
+    <span class="kw">private</span> <span class="kw">boolean</span> available;
+
+    <span class="kw">public</span> <span class="type">Book</span>(<span class="type">String</span> title,
+                <span class="type">String</span> author,
+                <span class="type">String</span> isbn) {
+
+        <span class="kw">this</span>.title = title;
+        <span class="kw">this</span>.author = author;
+        <span class="kw">this</span>.isbn = isbn;
+        available = <span class="lit">true</span>;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getTitle() {
+        <span class="kw">return</span> title;
+    }
+
+    <span class="kw">public</span> <span class="kw">boolean</span> isAvailable() {
+        <span class="kw">return</span> available;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> checkout() {
+        <span class="kw">if</span> (available) {
+            available = <span class="lit">false</span>;
+        }
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> returnBook() {
+        available = <span class="lit">true</span>;
+    }
+}</code></pre></div>
+<p>Notice that users cannot directly write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>book.available = <span class="lit">false</span>;</code></pre></div>
+<p>because the field is private.</p>
+<p>Instead, they must call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>book.checkout();</code></pre></div>
+<p>This keeps the logic inside the <code>Book</code> class.</p>
+<hr>
+<h1>24. Representing state with booleans</h1>
+<p>The previous class used:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">boolean</span> available;</code></pre></div>
+<p>This works because the book has two possible states:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>available
+not available</code></pre></div>
+<p>But sometimes objects have more than two states.</p>
+<p>For example, suppose an order can be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NEW
+PROCESSING
+SHIPPED
+DELIVERED
+CANCELLED</code></pre></div>
+<p>Using several boolean variables would be dangerous.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> shipped;
+<span class="kw">boolean</span> cancelled;
+<span class="kw">boolean</span> delivered;</code></pre></div>
+<p>What happens if:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>shipped = true
+cancelled = true
+delivered = true</code></pre></div>
+<p>The state becomes inconsistent.</p>
+<p>Java provides a better solution.</p>
+<hr>
+<h1>25. Enumerations (<code>enum</code>)</h1>
+<p>An enum represents a fixed set of values.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">enum</span> <span class="type">OrderStatus</span> {
+
+    NEW,
+    PROCESSING,
+    SHIPPED,
+    DELIVERED,
+    CANCELLED
+}</code></pre></div>
+<p>Now an order can contain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">OrderStatus</span> status;</code></pre></div>
+<p>The constructor might initialize it:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Order</span>() {
+    status = <span class="type">OrderStatus</span>.NEW;
+}</code></pre></div>
+<p>Later:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>status = <span class="type">OrderStatus</span>.SHIPPED;</code></pre></div>
+<p>This is safer and clearer than using strings.</p>
+<p>Avoid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>status = <span class="str">"Shippd"</span>;</code></pre></div>
+<p>With enums, the compiler helps prevent invalid values.</p>
+<hr>
+<h1>26. Enums with conditionals</h1>
+<p>Enums work naturally with conditional statements.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (status == <span class="type">OrderStatus</span>.SHIPPED) {
+    <span class="type">System</span>.out.println(<span class="str">"The order is on the way."</span>);
+}</code></pre></div>
+<p>Or with <code>switch</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">switch</span> (status) {
+
+    <span class="kw">case</span> NEW:
+        <span class="type">System</span>.out.println(<span class="str">"Order received."</span>);
+        <span class="kw">break</span>;
+
+    <span class="kw">case</span> PROCESSING:
+        <span class="type">System</span>.out.println(<span class="str">"Preparing order."</span>);
+        <span class="kw">break</span>;
+
+    <span class="kw">case</span> SHIPPED:
+        <span class="type">System</span>.out.println(<span class="str">"Order shipped."</span>);
+        <span class="kw">break</span>;
+
+    <span class="kw">case</span> DELIVERED:
+        <span class="type">System</span>.out.println(<span class="str">"Order delivered."</span>);
+        <span class="kw">break</span>;
+
+    <span class="kw">case</span> CANCELLED:
+        <span class="type">System</span>.out.println(<span class="str">"Order cancelled."</span>);
+        <span class="kw">break</span>;
+}</code></pre></div>
+<p>Enums are useful whenever a variable should contain one value from a small, predefined set.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>DayOfWeek
+OrderStatus
+LetterGrade
+AccountType
+Direction
+MembershipLevel</code></pre></div>
+<hr>
+<h1>27. Packages</h1>
+<p>As programs become larger, we need to organize classes.</p>
+<p>Java uses <strong>packages</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">package</span> university;</code></pre></div>
+<p>A project might contain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>university.Student
+university.Course
+university.Instructor</code></pre></div>
+<p>Larger systems might use several packages:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>university.students
+university.courses
+university.registration
+university.billing</code></pre></div>
+<p>Packages provide:</p>
+<ul><li>organization</li><li>namespaces</li><li>access control</li><li>easier project maintenance</li></ul>
+<hr>
+<h1>28. Importing classes</h1>
+<p>Suppose a class is in another package.</p>
+<p>We may need to import it.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayList</span>;</code></pre></div>
+<p>Then we can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java.util.<span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names =
+    <span class="kw">new</span> <span class="type">java</span>.<span class="type">util</span>.<span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>You have already used Java packages whenever you write imports such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayList</span>;</code></pre></div>
+<hr>
+<h1>29. Designing before coding</h1>
+<p>Beginning programmers often start writing code immediately.</p>
+<p>For larger problems, this creates problems.</p>
+<p>Instead, begin by asking:</p>
+<ol><li>What are the important entities?</li><li>Which entities should become classes?</li><li>What information should each class store?</li><li>What operations should each class perform?</li><li>How are the classes related?</li><li>Which object should be responsible for each operation?</li></ol>
+<p>This is the beginning of <strong>object-oriented design</strong>.</p>
+<hr>
+<h1>30. Example design problem</h1>
+<p>Suppose we want to create a restaurant ordering system.</p>
+<p>Requirements:</p>
+<blockquote>A restaurant has menu items. Customers create orders. An order contains several menu items. Each menu item has a name and price. An order can calculate its total price.</blockquote>
+<p>Possible classes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Restaurant
+MenuItem
+Order
+Customer</code></pre></div>
+<p>Possible relationships:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Restaurant has MenuItems.
+Customer has Orders.
+Order has MenuItems.</code></pre></div>
+<hr>
+<h1>31. Designing <code>MenuItem</code></h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">MenuItem</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="kw">double</span> price;
+
+    <span class="kw">public</span> <span class="type">MenuItem</span>(<span class="type">String</span> name, <span class="kw">double</span> price) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.price = price;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> getPrice() {
+        <span class="kw">return</span> price;
+    }
+}</code></pre></div>
+<hr>
+<h1>32. Designing <code>Order</code></h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayList</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Order</span> {
+
+    <span class="kw">private</span> <span class="type">ArrayList</span>&lt;<span class="type">MenuItem</span>&gt; items;
+
+    <span class="kw">public</span> <span class="type">Order</span>() {
+        items = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> addItem(<span class="type">MenuItem</span> item) {
+        items.add(item);
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> calculateTotal() {
+
+        <span class="kw">double</span> total = <span class="num">0</span>;
+
+        <span class="kw">for</span> (<span class="type">MenuItem</span> item : items) {
+            total += item.getPrice();
+        }
+
+        <span class="kw">return</span> total;
+    }
+}</code></pre></div>
+<p>Notice where the calculation belongs.</p>
+<p>The total is a property of an order.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateTotal()</code></pre></div>
+<p>belongs naturally in the <code>Order</code> class.</p>
+<hr>
+<h1>33. Object interaction</h1>
+<p>A program's behavior often emerges from objects collaborating.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">MenuItem</span> burger =
+    <span class="kw">new</span> <span class="type">MenuItem</span>(<span class="str">"Burger"</span>, <span class="num">9.99</span>);
+
+<span class="type">MenuItem</span> fries =
+    <span class="kw">new</span> <span class="type">MenuItem</span>(<span class="str">"Fries"</span>, <span class="num">3.99</span>);
+
+<span class="type">Order</span> order = <span class="kw">new</span> <span class="type">Order</span>();
+
+order.addItem(burger);
+order.addItem(fries);
+
+<span class="type">System</span>.out.println(order.calculateTotal());</code></pre></div>
+<p>The <code>Order</code> object collaborates with several <code>MenuItem</code> objects.</p>
+<p>This is an important shift in thinking.</p>
+<p>Instead of asking:</p>
+<blockquote>What sequence of statements should my program execute?</blockquote>
+<p>we also ask:</p>
+<blockquote>Which objects should exist, and how should they interact?</blockquote>
+<hr>
+<h1>34. Reference variables</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">MenuItem</span> burger =
+    <span class="kw">new</span> <span class="type">MenuItem</span>(<span class="str">"Burger"</span>, <span class="num">9.99</span>);</code></pre></div>
+<p>The variable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>burger</code></pre></div>
+<p>does not contain the entire object directly.</p>
+<p>It contains a <strong>reference</strong> to the object.</p>
+<p>This becomes important when multiple variables refer to the same object.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">MenuItem</span> item1 =
+    <span class="kw">new</span> <span class="type">MenuItem</span>(<span class="str">"Burger"</span>, <span class="num">9.99</span>);
+
+<span class="type">MenuItem</span> item2 = item1;</code></pre></div>
+<p>Now both variables refer to the same object.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>item1 ----\
+           ---&gt; MenuItem object
+item2 ----/</code></pre></div>
+<p>Changes through either reference affect the same object.</p>
+<hr>
+<h1>35. Reference equality</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span> s1 =
+    <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Alice"</span>, <span class="num">123</span>);
+
+<span class="type">Student</span> s2 =
+    <span class="kw">new</span> <span class="type">Student</span>(<span class="str">"Alice"</span>, <span class="num">123</span>);</code></pre></div>
+<p>Although they contain identical information:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>s1 == s2</code></pre></div>
+<p>is normally:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>false</code></pre></div>
+<p>Why?</p>
+<p>Because <code>==</code> compares object references.</p>
+<p>The two variables refer to two different objects.</p>
+<p>Later in the course, students will learn how Java classes can define logical equality using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>equals()</code></pre></div>
+<hr>
+<h1>36. Null references</h1>
+<p>An object reference may also contain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">null</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Instructor</span> instructor = <span class="lit">null</span>;</code></pre></div>
+<p>This means:</p>
+<blockquote>The variable currently refers to no object.</blockquote>
+<p>If we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>instructor.getName();</code></pre></div>
+<p>Java produces a:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NullPointerException</code></pre></div>
+<p>Understanding references helps explain one of the most common errors in Java.</p>
+<hr>
+<h1>37. Class invariants</h1>
+<p>A useful design concept is an <strong>invariant</strong>.</p>
+<p>An invariant is a condition that should always remain true for a valid object.</p>
+<p>For example, a bank account might require:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>balance &gt;= 0</code></pre></div>
+<p>A course might require:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>capacity &gt; 0</code></pre></div>
+<p>A product might require:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>price &gt;= 0</code></pre></div>
+<p>Encapsulation helps classes preserve these invariants.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> setPrice(<span class="kw">double</span> price) {
+
+    <span class="kw">if</span> (price &gt;= <span class="num">0</span>) {
+        <span class="kw">this</span>.price = price;
+    }
+}</code></pre></div>
+<p>Better still, invalid values might be rejected using exceptions, which we will study later.</p>
+<hr>
+<h1>38. Tell objects what to do</h1>
+<p>Consider this design:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (account.getBalance() &gt;= amount) {
+
+    <span class="kw">double</span> newBalance =
+        account.getBalance() - amount;
+
+    account.setBalance(newBalance);
+}</code></pre></div>
+<p>Here, outside code is responsible for the withdrawal rules.</p>
+<p>A better design is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>account.withdraw(amount);</code></pre></div>
+<p>Now the <code>BankAccount</code> object handles its own rules.</p>
+<p>This reflects a useful OOP idea:</p>
+<blockquote>Tell an object what you want it to do rather than manipulating its internal data from the outside.</blockquote>
+<hr>
+<h1>39. Common design mistake: the “god class”</h1>
+<p>A common beginner mistake is creating one class that does everything.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>UniversitySystem</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>100 fields
+75 methods
+student management
+course management
+payroll
+billing
+registration
+email
+reporting</code></pre></div>
+<p>This becomes difficult to understand and maintain.</p>
+<p>Instead, divide responsibilities among smaller classes.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+Course
+Registration
+Invoice
+Instructor
+Department</code></pre></div>
+<hr>
+<h1>40. Common design mistake: too many tiny classes</h1>
+<p>The opposite problem is also possible.</p>
+<p>Not every value needs its own class.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>FirstName
+LastName
+Age
+StreetNumber
+ZIPCode</code></pre></div>
+<p>could theoretically all become classes.</p>
+<p>But doing so may unnecessarily complicate the program.</p>
+<p>Object-oriented design requires judgment.</p>
+<p>Ask:</p>
+<blockquote>Does this concept have meaningful state and behavior of its own?</blockquote>
+<p>If the answer is no, a primitive or <code>String</code> may be sufficient.</p>
+<hr>
+<h1>41. A practical design process</h1>
+<p>When designing a small Java application:</p>
+<h3>Step 1 - read the requirements</h3>
+<p>Understand what the program must do.</p>
+<h3>Step 2 - identify candidate classes</h3>
+<p>Look for meaningful nouns.</p>
+<h3>Step 3 - assign responsibilities</h3>
+<p>What should each class know and do?</p>
+<h3>Step 4 - identify relationships</h3>
+<p>Ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>has-a?
+is-a?
+uses-a?</code></pre></div>
+<h3>Step 5 - design public interfaces</h3>
+<p>Determine what methods other objects should be allowed to call.</p>
+<h3>Step 6 - protect internal state</h3>
+<p>Use <code>private</code> fields unless there is a strong reason not to.</p>
+<h3>Step 7 - implement incrementally</h3>
+<p>Create and test one class at a time.</p>
+<hr>
+<h1>42. Mini design exercise</h1>
+<p>Consider the following requirement:</p>
+<blockquote>A fitness application tracks users and workouts. Each user has a name and age. A workout records a type, duration, and calories burned. Each user may have many workouts. The application should calculate the total calories burned by a user.</blockquote>
+<p>Candidate classes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>User
+Workout
+FitnessApplication</code></pre></div>
+<p>Possible design:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>User
+    name
+    age
+    workouts
+
+Workout
+    type
+    duration
+    caloriesBurned</code></pre></div>
+<p>Relationship:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>User has Workouts.</code></pre></div>
+<p>Where should this method belong?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateTotalCaloriesBurned()</code></pre></div>
+<p>A reasonable answer is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>User</code></pre></div>
+<p>because the calculation operates on that user's collection of workouts.</p>
+<hr>
+<h1>43. Example implementation</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Workout</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> type;
+    <span class="kw">private</span> <span class="kw">int</span> durationMinutes;
+    <span class="kw">private</span> <span class="kw">int</span> caloriesBurned;
+
+    <span class="kw">public</span> <span class="type">Workout</span>(<span class="type">String</span> type,
+                   <span class="kw">int</span> durationMinutes,
+                   <span class="kw">int</span> caloriesBurned) {
+
+        <span class="kw">this</span>.type = type;
+        <span class="kw">this</span>.durationMinutes = durationMinutes;
+        <span class="kw">this</span>.caloriesBurned = caloriesBurned;
+    }
+
+    <span class="kw">public</span> <span class="kw">int</span> getCaloriesBurned() {
+        <span class="kw">return</span> caloriesBurned;
+    }
+}</code></pre></div>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayList</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">User</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="kw">int</span> age;
+    <span class="kw">private</span> <span class="type">ArrayList</span>&lt;<span class="type">Workout</span>&gt; workouts;
+
+    <span class="kw">public</span> <span class="type">User</span>(<span class="type">String</span> name, <span class="kw">int</span> age) {
+
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.age = age;
+        workouts = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> addWorkout(<span class="type">Workout</span> workout) {
+        workouts.add(workout);
+    }
+
+    <span class="kw">public</span> <span class="kw">int</span> calculateTotalCaloriesBurned() {
+
+        <span class="kw">int</span> total = <span class="num">0</span>;
+
+        <span class="kw">for</span> (<span class="type">Workout</span> workout : workouts) {
+            total += workout.getCaloriesBurned();
+        }
+
+        <span class="kw">return</span> total;
+    }
+}</code></pre></div>
+<p>This example demonstrates:</p>
+<ul><li>classes</li><li>objects</li><li>encapsulation</li><li>composition</li><li>collections</li><li>object interaction</li><li>responsibility assignment</li></ul>
+<hr>
+<h1>44. Design discussion</h1>
+<p>Why not store each workout as three arrays?</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span>[] workoutTypes;
+<span class="kw">int</span>[] durations;
+<span class="kw">int</span>[] calories;</code></pre></div>
+<p>This is possible, but the data logically belongs together.</p>
+<p>Instead:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Workout</span></code></pre></div>
+<p>groups related information into one meaningful abstraction.</p>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Workout</span>&gt;</code></pre></div>
+<p>expresses the program's meaning more clearly.</p>
+<p>This demonstrates an important advantage of object-oriented programming:</p>
+<blockquote>Classes allow us to create abstractions that match concepts in the problem we are solving.</blockquote>
+<hr>
+<h1>45. Abstraction</h1>
+<p>An abstraction hides unnecessary detail.</p>
+<p>Consider a car.</p>
+<p>To drive it, we use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>steering wheel
+accelerator
+brake
+gear selector</code></pre></div>
+<p>The driver does not directly manipulate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>fuel injectors
+transmission gears
+engine valves
+spark timing</code></pre></div>
+<p>The interface hides implementation details.</p>
+<p>Software objects work similarly.</p>
+<p>A user of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt;</code></pre></div>
+<p>calls:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>list.add(<span class="str">"Alice"</span>);</code></pre></div>
+<p>without needing to know exactly how the array list internally manages memory.</p>
+<p>Good class design creates useful abstractions.</p>
+<hr>
+<h1>46. Public interface vs. private implementation</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Counter</span> {
+
+    <span class="kw">private</span> <span class="kw">int</span> count;
+
+    <span class="kw">public</span> <span class="kw">void</span> increment() {
+        count++;
+    }
+
+    <span class="kw">public</span> <span class="kw">int</span> getCount() {
+        <span class="kw">return</span> count;
+    }
+}</code></pre></div>
+<p>The <strong>public interface</strong> is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>increment()
+getCount()</code></pre></div>
+<p>The internal representation is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">int</span> count;</code></pre></div>
+<p>Outside code should depend primarily on the public interface.</p>
+<p>This gives the class freedom to change how it works internally.</p>
+<hr>
+<h1>47. Why interfaces matter even before Java interfaces</h1>
+<p>The word <strong>interface</strong> has two meanings.</p>
+<p>Later, we will learn Java's formal:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">interface</span></code></pre></div>
+<p>keyword.</p>
+<p>But more generally, a class's interface means:</p>
+<blockquote>The set of operations available to users of the class.</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>account.deposit(<span class="num">100</span>);
+account.withdraw(<span class="num">50</span>);
+account.getBalance();</code></pre></div>
+<p>These methods form part of the public interface of <code>BankAccount</code>.</p>
+<p>Good object-oriented design tries to keep that interface small, clear, and meaningful.</p>
+<hr>
+<h1>48. Week 7 summary</h1>
+<p>The most important ideas from this week are:</p>
+<h3>Classes model concepts.</h3>
+<p>A class should represent a meaningful abstraction.</p>
+<h3>Objects contain state and behavior.</h3>
+<p>State is usually stored in fields.</p>
+<p>Behavior is represented using methods.</p>
+<h3>Encapsulation protects object state.</h3>
+<p>Fields should normally be private.</p>
+<h3>Objects collaborate.</h3>
+<p>Large programs are built from multiple interacting objects.</p>
+<h3>Composition models “has-a” relationships.</h3>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Course has Instructor
+Order has MenuItems
+Student has Courses</code></pre></div>
+<h3>Static members belong to the class.</h3>
+<p>Instance members belong to individual objects.</p>
+<h3>Enums represent fixed sets of values.</h3>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>OrderStatus
+Direction
+LetterGrade</code></pre></div>
+<h3>Good OOP requires design.</h3>
+<p>Before coding, ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>What objects should exist?
+What should each object know?
+What should each object do?
+How should the objects interact?</code></pre></div>
+<hr>
+<h1>49. Suggested in-class exercise</h1>
+<p>Design a simple hotel reservation system.</p>
+<p>Requirements:</p>
+<blockquote>A hotel has rooms. Each room has a room number, room type, nightly rate, and availability status. Guests have names and IDs. A reservation connects a guest with a room for a certain number of nights. A reservation should be able to calculate its total cost.</blockquote>
+<p>Students should identify:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hotel
+Room
+Guest
+Reservation</code></pre></div>
+<p>Then determine:</p>
+<ul><li>fields for each class</li><li>methods for each class</li><li>has-a relationships</li><li>which fields should be private</li><li>where <code>calculateTotalCost()</code> belongs</li><li>whether an enum would be appropriate for room type or reservation status</li></ul>
+<p>Possible enums:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">enum</span> <span class="type">RoomType</span> {
+    SINGLE,
+    DOUBLE,
+    SUITE
+}</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">enum</span> <span class="type">ReservationStatus</span> {
+    PENDING,
+    CONFIRMED,
+    CANCELLED,
+    COMPLETED
+}</code></pre></div>
+<hr>
+<h1>50. End-of-lecture check</h1>
+<p>Students should be able to answer the following questions:</p>
+<ol><li>What is the difference between a class and an object?</li><li>What is encapsulation?</li><li>Why are fields usually declared <code>private</code>?</li><li>What is the difference between an instance variable and a static variable?</li><li>What does a “has-a” relationship mean?</li><li>Why would <code>Course</code> contain an <code>Instructor</code> rather than extend <code>Instructor</code>?</li><li>What problem do enums solve?</li><li>What does it mean for a class to have a responsibility?</li><li>Why should we design classes before writing implementation code?</li><li>Why is <code>account.withdraw(100)</code> generally better design than directly changing the account's balance?</li></ol>
+<hr>
+<h1>Suggested homework</h1>
+<p>Design and implement a small Java application for a movie theater.</p>
+<p>The program should contain at least the following classes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Movie
+Showtime
+Customer
+Ticket</code></pre></div>
+<p>Requirements:</p>
+<ul><li>a movie has a title, rating, and duration</li><li>a showtime has a movie, start time, and ticket price</li><li>a customer has a name and customer ID</li><li>a ticket connects a customer with a showtime</li><li>the program should prevent invalid ticket prices</li><li>all fields should use appropriate access modifiers</li><li>at least one enum should be used</li><li>at least one class should contain another class using composition</li><li>the program should contain a driver class demonstrating the creation and interaction of several objects</li></ul>
+<p>Students should submit:</p>
+<ol><li>source code</li><li>a simple class diagram or written description of the class relationships</li><li>a short explanation of why each class has the responsibilities assigned to it</li></ol>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

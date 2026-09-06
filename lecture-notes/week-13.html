@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 13: stacks, queues, sets, and maps</h2>
+<hr>
+<h2>1. Overview</h2>
+<p>So far, we have learned how to store collections of data using arrays, <code>ArrayList</code>, and linked structures. This week we study several important <strong>abstract data types</strong>:</p>
+<ul><li><strong>Stacks</strong></li><li><strong>Queues</strong></li><li><strong>Sets</strong></li><li><strong>Maps</strong></li></ul>
+<p>These structures appear throughout computer science and software development.</p>
+<p>The important question is no longer simply:</p>
+<blockquote>“How can I store several values?”</blockquote>
+<p>Instead, we begin asking:</p>
+<blockquote>“What operations should my collection support, and how efficiently should those operations work?”</blockquote>
+<p>This distinction leads us to the idea of an <strong>Abstract Data Type</strong>, or ADT.</p>
+<hr>
+<h1>2. Learning objectives</h1>
+<p>By the end of this week, you should be able to:</p>
+<ol><li>Explain the difference between an abstract data type and its implementation.</li><li>Describe the behavior of a stack and identify applications of stacks.</li><li>Implement and use a stack in Java.</li><li>Describe the behavior of a queue and identify applications of queues.</li><li>Implement and use a queue in Java.</li><li>Explain the purpose of sets and maps.</li><li>Use Java's <code>HashSet</code> and <code>HashMap</code>.</li><li>Explain the basic idea behind hashing.</li><li>Analyze the expected running time of common stack, queue, set, and map operations.</li><li>Select an appropriate data structure for a programming problem.</li></ol>
+<hr>
+<h1>Part I - abstract data types</h1>
+<h2>3. What is an abstract data type?</h2>
+<p>An <strong>Abstract Data Type (ADT)</strong> specifies:</p>
+<ul><li>what kind of data is stored,</li><li>what operations are supported,</li><li>and what those operations mean.</li></ul>
+<p>An ADT does <strong>not</strong> necessarily specify how those operations are implemented.</p>
+<p>Consider a stack.</p>
+<p>A stack supports operations such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push
+pop
+peek
+isEmpty</code></pre></div>
+<p>This describes the <strong>behavior</strong> of a stack.</p>
+<p>It does not tell us whether the stack is implemented using:</p>
+<ul><li>an array,</li><li>an <code>ArrayList</code>,</li><li>a linked list,</li><li>or some other representation.</li></ul>
+<p>That distinction is extremely important.</p>
+<h3>Adt versus implementation</h3>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack ADT
+    |
+    +-- Array implementation
+    |
+    +-- ArrayList implementation
+    |
+    +-- Linked-list implementation</code></pre></div>
+<p>All three implementations can behave like stacks.</p>
+<p>The user of the stack does not necessarily need to know which implementation is being used.</p>
+<p>This is another example of <strong>abstraction</strong>, a concept we have repeatedly encountered in object-oriented programming.</p>
+<hr>
+<h1>Part II - stacks</h1>
+<h2>4. The stack adt</h2>
+<p>A <strong>stack</strong> is a collection in which elements are removed in the reverse order from which they were added.</p>
+<p>This behavior is called:</p>
+<blockquote><strong>Last In, First Out (LIFO)</strong></blockquote>
+<p>Imagine a stack of plates.</p>
+<p>If we place plates onto the top:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      C   &lt;- top
+      B
+      A</code></pre></div>
+<p>the first plate we remove is <code>C</code>.</p>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      B   &lt;- top
+      A</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      A   &lt;- top</code></pre></div>
+<p>The last item inserted is the first item removed.</p>
+<hr>
+<h2>5. Core stack operations</h2>
+<p>A stack typically provides the following operations.</p>
+<h3><code>push</code></h3>
+<p>Add an item to the top of the stack.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push(x)</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack before:
+
+B
+A
+
+push(C)
+
+Stack after:
+
+C
+B
+A</code></pre></div>
+<hr>
+<h3><code>pop</code></h3>
+<p>Remove and return the item on top.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>pop()</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack:
+
+C
+B
+A</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>pop()</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C</code></pre></div>
+<p>and leaves:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>B
+A</code></pre></div>
+<hr>
+<h3><code>peek</code></h3>
+<p>Return the top item without removing it.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>peek()</code></pre></div>
+<p>If the stack contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C
+B
+A</code></pre></div>
+<p>then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>peek()</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C</code></pre></div>
+<p>but the stack remains unchanged.</p>
+<hr>
+<h3><code>isEmpty</code></h3>
+<p>Determines whether the stack contains any elements.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>isEmpty()</code></pre></div>
+<hr>
+<h2>6. Stack example</h2>
+<p>Suppose we perform the following operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push(10)
+push(20)
+push(30)
+pop()
+push(40)</code></pre></div>
+<p>Trace the stack.</p>
+<p>Initially:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>empty</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push(10)</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push(20)</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+10</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push(30)</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>30
+20
+10</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>pop()</code></pre></div>
+<p>returns <code>30</code>.</p>
+<p>The stack becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+10</code></pre></div>
+<p>Finally:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push(40)</code></pre></div>
+<p>produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40
+20
+10</code></pre></div>
+<hr>
+<h1>7. Why are stacks useful?</h1>
+<p>Stacks occur naturally whenever the most recently created task must be handled first.</p>
+<p>Examples include:</p>
+<ul><li>method calls,</li><li>recursion,</li><li>undo operations,</li><li>browser navigation,</li><li>expression evaluation,</li><li>syntax checking,</li><li>depth-first search,</li><li>backtracking algorithms.</li></ul>
+<hr>
+<h1>8. The call stack</h1>
+<p>You have already been using stacks throughout this course.</p>
+<p>Whenever Java calls a method, information about that method call is stored on the <strong>call stack</strong>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    methodA();
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> methodA() {
+    methodB();
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> methodB() {
+    <span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+}</code></pre></div>
+<p>The call stack evolves approximately as follows.</p>
+<p>First:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main</code></pre></div>
+<p>Then <code>main</code> calls <code>methodA</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>methodA
+main</code></pre></div>
+<p>Then <code>methodA</code> calls <code>methodB</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>methodB
+methodA
+main</code></pre></div>
+<p>When <code>methodB</code> finishes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>methodA
+main</code></pre></div>
+<p>Then <code>methodA</code> finishes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>main</code></pre></div>
+<p>Finally <code>main</code> finishes.</p>
+<p>This is why recursion naturally works using a stack.</p>
+<p>Each recursive call creates another stack frame.</p>
+<hr>
+<h1>9. Using a stack in Java</h1>
+<p>Java provides several ways of implementing stack behavior.</p>
+<p>An older Java class called <code>Stack</code> exists:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Stack</span>&lt;<span class="type">Integer</span>&gt; stack = <span class="kw">new</span> <span class="type">Stack</span>&lt;&gt;();</code></pre></div>
+<p>However, modern Java generally prefers using the <code>Deque</code> interface.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayDeque</span>;
+<span class="kw">import</span> java.util.<span class="type">Deque</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">StackDemo</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Deque</span>&lt;<span class="type">Integer</span>&gt; stack = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+
+        stack.push(<span class="num">10</span>);
+        stack.push(<span class="num">20</span>);
+        stack.push(<span class="num">30</span>);
+
+        <span class="type">System</span>.out.println(stack.pop());
+        <span class="type">System</span>.out.println(stack.peek());
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>30
+20</code></pre></div>
+<p>Notice the declaration:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">Integer</span>&gt; stack = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();</code></pre></div>
+<p>This uses an interface type for the variable and a concrete implementation for the object.</p>
+<p>That is an example of programming to an abstraction.</p>
+<hr>
+<h1>10. Example: reverse a string using a stack</h1>
+<p>A stack naturally reverses order.</p>
+<p>Suppose we want to reverse:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>computer</code></pre></div>
+<p>Push every character:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>c
+o
+m
+p
+u
+t
+e
+r</code></pre></div>
+<p>Because the last character pushed is removed first, popping all characters produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>retupmoc</code></pre></div>
+<p>Java implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayDeque</span>;
+<span class="kw">import</span> java.util.<span class="type">Deque</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">ReverseString</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> reverse(<span class="type">String</span> text) {
+
+        <span class="type">Deque</span>&lt;<span class="type">Character</span>&gt; stack = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+
+        <span class="kw">for</span> (<span class="kw">char</span> c : text.toCharArray()) {
+            stack.push(c);
+        }
+
+        <span class="type">StringBuilder</span> result = <span class="kw">new</span> <span class="type">StringBuilder</span>();
+
+        <span class="kw">while</span> (!stack.isEmpty()) {
+            result.append(stack.pop());
+        }
+
+        <span class="kw">return</span> result.toString();
+    }
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">System</span>.out.println(reverse(<span class="str">"computer"</span>));
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>retupmoc</code></pre></div>
+<hr>
+<h1>11. Example: matching parentheses</h1>
+<p>Stacks are useful for determining whether brackets are correctly nested.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>((a + b) * c)</code></pre></div>
+<p>This is valid.</p>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>((a + b) * c</code></pre></div>
+<p>is not.</p>
+<p>Consider something more complicated:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>{ [ (a + b) * c ] + d }</code></pre></div>
+<p>To check the expression:</p>
+<ol><li>When we encounter an opening symbol, push it.</li><li>When we encounter a closing symbol, pop the corresponding opening symbol.</li><li>If the symbols do not match, the expression is invalid.</li><li>At the end, the stack should be empty.</li></ol>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Input:
+
+{ [ ( ) ] }</code></pre></div>
+<p>Trace:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Read {    stack: {
+
+Read [    stack: [
+                   {
+
+Read (    stack: (
+                   [
+                   {
+
+Read )    pop (
+
+Read ]    pop [
+
+Read }    pop {
+
+stack is empty</code></pre></div>
+<p>Therefore the brackets are balanced.</p>
+<hr>
+<h1>Part III - queues</h1>
+<h1>12. The queue adt</h1>
+<p>A <strong>queue</strong> stores elements in the order in which they arrive.</p>
+<p>A queue follows:</p>
+<blockquote><strong>First In, First Out (FIFO)</strong></blockquote>
+<p>Think about people waiting in line.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice arrives
+Bob arrives
+Carol arrives</code></pre></div>
+<p>The queue is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Front                      Back
+Alice   Bob   Carol</code></pre></div>
+<p>Alice is served first.</p>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Front                Back
+Bob   Carol</code></pre></div>
+<hr>
+<h1>13. Queue operations</h1>
+<p>A queue commonly supports:</p>
+<h3>Enqueue</h3>
+<p>Add an element to the back.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>enqueue(x)</code></pre></div>
+<h3>Dequeue</h3>
+<p>Remove an element from the front.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>dequeue()</code></pre></div>
+<h3>Peek</h3>
+<p>Look at the front element.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>peek()</code></pre></div>
+<h3>Isempty</h3>
+<p>Check whether the queue contains any elements.</p>
+<hr>
+<h1>14. Queue example</h1>
+<p>Suppose the following operations occur:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>enqueue(10)
+enqueue(20)
+enqueue(30)
+dequeue()
+enqueue(40)</code></pre></div>
+<p>Initially:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>empty</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>enqueue(10)</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Front
+10</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>enqueue(20)</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Front       Back
+10    20</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>enqueue(30)</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Front             Back
+10    20    30</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>dequeue()</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10</code></pre></div>
+<p>and leaves:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Front       Back
+20    30</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>enqueue(40)</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Front             Back
+20    30    40</code></pre></div>
+<hr>
+<h1>15. Queue applications</h1>
+<p>Queues appear whenever tasks should generally be handled in arrival order.</p>
+<p>Examples include:</p>
+<ul><li>printer jobs,</li><li>customer-service requests,</li><li>web-server requests,</li><li>event processing,</li><li>operating-system scheduling,</li><li>breadth-first search,</li><li>simulations,</li><li>message systems.</li></ul>
+<hr>
+<h1>16. Using a queue in Java</h1>
+<p>The Java Collections Framework provides the <code>Queue</code> interface.</p>
+<p>A common implementation is <code>ArrayDeque</code>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayDeque</span>;
+<span class="kw">import</span> java.util.<span class="type">Queue</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">QueueDemo</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Queue</span>&lt;<span class="type">String</span>&gt; customers = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+
+        customers.offer(<span class="str">"Alice"</span>);
+        customers.offer(<span class="str">"Bob"</span>);
+        customers.offer(<span class="str">"Carol"</span>);
+
+        <span class="type">System</span>.out.println(customers.poll());
+
+        <span class="type">System</span>.out.println(customers.peek());
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice
+Bob</code></pre></div>
+<p>Here:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>offer()</code></pre></div>
+<p>adds an item.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>poll()</code></pre></div>
+<p>removes the front item.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>peek()</code></pre></div>
+<p>examines the front item.</p>
+<hr>
+<h1>17. Stack versus queue</h1>
+<p>Stacks and queues differ only in the order in which elements are removed.</p>
+<table><thead><tr><th>Property</th><th>Stack</th><th>Queue</th></tr></thead><tbody><tr><td>Rule</td><td>LIFO</td><td>FIFO</td></tr><tr><td>Add operation</td><td>push</td><td>enqueue / offer</td></tr><tr><td>Remove operation</td><td>pop</td><td>dequeue / poll</td></tr><tr><td>Inspect next item</td><td>peek</td><td>peek</td></tr><tr><td>Typical example</td><td>Undo history</td><td>Waiting line</td></tr></tbody></table>
+<p>Suppose we insert:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B
+C</code></pre></div>
+<p>A stack removes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C
+B
+A</code></pre></div>
+<p>A queue removes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B
+C</code></pre></div>
+<p>That small difference leads to very different algorithms.</p>
+<hr>
+<h1>Part IV - sets</h1>
+<h1>18. The set adt</h1>
+<p>A <strong>set</strong> is a collection that does not contain duplicate elements.</p>
+<p>Mathematically:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>{1, 2, 3}</code></pre></div>
+<p>is a set.</p>
+<p>Adding <code>2</code> again does not produce:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>{1, 2, 2, 3}</code></pre></div>
+<p>The set remains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>{1, 2, 3}</code></pre></div>
+<hr>
+<h1>19. Why use a set?</h1>
+<p>Suppose we are storing usernames that have visited a website:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>alice
+bob
+alice
+carol
+bob
+david</code></pre></div>
+<p>If we only care about unique visitors, the relevant collection is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>alice
+bob
+carol
+david</code></pre></div>
+<p>A set naturally represents this concept.</p>
+<hr>
+<h1>20. Java HashSet</h1>
+<p>Java provides the <code>Set</code> interface.</p>
+<p>A common implementation is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashSet</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">HashSet</span>;
+<span class="kw">import</span> java.util.<span class="type">Set</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">SetDemo</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Set</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">HashSet</span>&lt;&gt;();
+
+        names.add(<span class="str">"Alice"</span>);
+        names.add(<span class="str">"Bob"</span>);
+        names.add(<span class="str">"Carol"</span>);
+        names.add(<span class="str">"Alice"</span>);
+
+        <span class="type">System</span>.out.println(names);
+    }
+}</code></pre></div>
+<p>Although we inserted <code>"Alice"</code> twice, only one copy is stored.</p>
+<hr>
+<h1>21. Important set operations</h1>
+<h3>Add</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>names.add(<span class="str">"Alice"</span>);</code></pre></div>
+<h3>Remove</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>names.remove(<span class="str">"Alice"</span>);</code></pre></div>
+<h3>Membership</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>names.contains(<span class="str">"Alice"</span>);</code></pre></div>
+<h3>Size</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>names.size();</code></pre></div>
+<h3>Empty check</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>names.isEmpty();</code></pre></div>
+<hr>
+<h1>22. Example: detecting duplicates</h1>
+<p>Suppose we want to determine whether an array contains duplicate values.</p>
+<p>A simple nested-loop solution might take:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>time.</p>
+<p>Using a hash set, we can often solve the problem in expected:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>time.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">HashSet</span>;
+<span class="kw">import</span> java.util.<span class="type">Set</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">DuplicateDetector</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> containsDuplicate(<span class="kw">int</span>[] numbers) {
+
+        <span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; seen = <span class="kw">new</span> <span class="type">HashSet</span>&lt;&gt;();
+
+        <span class="kw">for</span> (<span class="kw">int</span> value : numbers) {
+
+            <span class="kw">if</span> (seen.contains(value)) {
+                <span class="kw">return</span> <span class="lit">true</span>;
+            }
+
+            seen.add(value);
+        }
+
+        <span class="kw">return</span> <span class="lit">false</span>;
+    }
+}</code></pre></div>
+<p>The key idea is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Have I already seen this element?</code></pre></div>
+<p>A set answers exactly that question.</p>
+<hr>
+<h1>23. Example: counting distinct values</h1>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 20 10 30 20 40</code></pre></div>
+<p>how many distinct values appear?</p>
+<p>We can insert everything into a set:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; values = <span class="kw">new</span> <span class="type">HashSet</span>&lt;&gt;();
+
+values.add(<span class="num">10</span>);
+values.add(<span class="num">20</span>);
+values.add(<span class="num">10</span>);
+values.add(<span class="num">30</span>);
+values.add(<span class="num">20</span>);
+values.add(<span class="num">40</span>);</code></pre></div>
+<p>The set contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10
+20
+30
+40</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>values.size()</code></pre></div>
+<p>is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4</code></pre></div>
+<hr>
+<h1>Part V - maps</h1>
+<h1>24. The map adt</h1>
+<p>A <strong>map</strong> associates one value with another.</p>
+<p>Each entry contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>key -&gt; value</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>student ID -&gt; student name</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>word -&gt; frequency</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>username -&gt; password hash</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>state -&gt; capital</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"Colorado" -&gt; "Denver"
+"Florida"  -&gt; "Tallahassee"
+"Texas"    -&gt; "Austin"</code></pre></div>
+<hr>
+<h1>25. Keys are unique</h1>
+<p>A map associates each key with at most one value.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice -&gt; 90
+Bob   -&gt; 85
+Carol -&gt; 95</code></pre></div>
+<p>If we later do:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice -&gt; 100</code></pre></div>
+<p>the value associated with <code>Alice</code> changes.</p>
+<p>We do not create another independent Alice entry.</p>
+<hr>
+<h1>26. Java HashMap</h1>
+<p>Java provides the <code>Map</code> interface.</p>
+<p>A common implementation is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">HashMap</span>;
+<span class="kw">import</span> java.util.<span class="type">Map</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">MapDemo</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; scores = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+        scores.put(<span class="str">"Alice"</span>, <span class="num">95</span>);
+        scores.put(<span class="str">"Bob"</span>, <span class="num">87</span>);
+        scores.put(<span class="str">"Carol"</span>, <span class="num">91</span>);
+
+        <span class="type">System</span>.out.println(scores.get(<span class="str">"Alice"</span>));
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>95</code></pre></div>
+<hr>
+<h1>27. Map operations</h1>
+<h3>Insert or update</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>scores.put(<span class="str">"Alice"</span>, <span class="num">95</span>);</code></pre></div>
+<h3>Retrieve a value</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>scores.get(<span class="str">"Alice"</span>);</code></pre></div>
+<h3>Determine whether a key exists</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>scores.containsKey(<span class="str">"Alice"</span>);</code></pre></div>
+<h3>Remove an entry</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>scores.remove(<span class="str">"Alice"</span>);</code></pre></div>
+<h3>Number of entries</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>scores.size();</code></pre></div>
+<hr>
+<h1>28. Example: phone directory</h1>
+<p>A map is ideal when we want to look up information using some key.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; phoneBook = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+phoneBook.put(<span class="str">"Alice"</span>, <span class="str">"555-1234"</span>);
+phoneBook.put(<span class="str">"Bob"</span>, <span class="str">"555-9876"</span>);
+phoneBook.put(<span class="str">"Carol"</span>, <span class="str">"555-4321"</span>);</code></pre></div>
+<p>We can retrieve Alice's number with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>phoneBook.get(<span class="str">"Alice"</span>);</code></pre></div>
+<p>There is no need to scan the entire collection manually.</p>
+<hr>
+<h1>29. Example: word frequency</h1>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>the cat chased the dog</code></pre></div>
+<p>We want:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>the     -&gt; 2
+cat     -&gt; 1
+chased  -&gt; 1
+dog     -&gt; 1</code></pre></div>
+<p>A map is ideal.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">HashMap</span>;
+<span class="kw">import</span> java.util.<span class="type">Map</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">WordFrequency</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">String</span> text = <span class="str">"the cat chased the dog"</span>;
+
+        <span class="type">String</span>[] words = text.split(<span class="str">" "</span>);
+
+        <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; counts = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+        <span class="kw">for</span> (<span class="type">String</span> word : words) {
+
+            <span class="kw">if</span> (counts.containsKey(word)) {
+                counts.put(word, counts.get(word) + <span class="num">1</span>);
+            } <span class="kw">else</span> {
+                counts.put(word, <span class="num">1</span>);
+            }
+        }
+
+        <span class="type">System</span>.out.println(counts);
+    }
+}</code></pre></div>
+<p>We can simplify this using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>getOrDefault()</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">String</span> word : words) {
+    counts.put(word, counts.getOrDefault(word, <span class="num">0</span>) + <span class="num">1</span>);
+}</code></pre></div>
+<p>This pattern is extremely common.</p>
+<hr>
+<h1>30. Iterating through a map</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; scores = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();</code></pre></div>
+<p>We can iterate through the keys:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">String</span> name : scores.keySet()) {
+    <span class="type">System</span>.out.println(name);
+}</code></pre></div>
+<p>Or through both keys and values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Map</span>.<span class="type">Entry</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; entry : scores.entrySet()) {
+
+    <span class="type">System</span>.out.println(
+        entry.getKey() + <span class="str">": "</span> + entry.getValue()
+    );
+}</code></pre></div>
+<hr>
+<h1>Part VI - hashing</h1>
+<h1>31. The lookup problem</h1>
+<p>Suppose we have 1,000,000 usernames.</p>
+<p>We want to determine:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Does "alice42" exist?</code></pre></div>
+<p>If we store usernames in an ordinary list, we may have to search through many elements.</p>
+<p>Linear search requires:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>time.</p>
+<p>Can we do better?</p>
+<p>Hash-based data structures attempt to make lookup approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>on average.</p>
+<hr>
+<h1>32. The basic idea of hashing</h1>
+<p>A <strong>hash function</strong> converts a key into an integer.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>key
+ |
+ v
+hash function
+ |
+ v
+integer
+ |
+ v
+array location</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"Alice"
+    |
+    v
+ hash(...)
+    |
+    v
+  29384</code></pre></div>
+<p>That hash value can help determine where the item should be stored.</p>
+<hr>
+<h1>33. Simplified hash table example</h1>
+<p>Imagine an array with ten locations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0
+1
+2
+3
+4
+5
+6
+7
+8
+9</code></pre></div>
+<p>Suppose we compute:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>hash("Alice") = 173</code></pre></div>
+<p>We might calculate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>173 % 10</code></pre></div>
+<p>which gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3</code></pre></div>
+<p>So <code>"Alice"</code> could be placed at index <code>3</code>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0
+1
+2
+3  Alice
+4
+5
+6
+7
+8
+9</code></pre></div>
+<p>To search for Alice later:</p>
+<ol><li>Compute Alice's hash.</li><li>Calculate the corresponding position.</li><li>Check that location.</li></ol>
+<p>We do not necessarily search the entire table.</p>
+<hr>
+<h1>34. Collisions</h1>
+<p>A complication occurs when two keys map to the same location.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>hash("Alice") % 10 = 3</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>hash("David") % 10 = 3</code></pre></div>
+<p>Both want position <code>3</code>.</p>
+<p>This is called a <strong>collision</strong>.</p>
+<p>Hash tables therefore need a strategy for resolving collisions.</p>
+<p>Common approaches include:</p>
+<ul><li>chaining,</li><li>open addressing.</li></ul>
+<p>We will not implement a full production-quality hash table in this course, but you should understand that collisions are normal and must be handled correctly.</p>
+<hr>
+<h1>35. Expected complexity of hash tables</h1>
+<p>For a well-designed hash table, operations such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>put
+get
+contains
+remove</code></pre></div>
+<p>are typically expected to take:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>time on average.</p>
+<p>However, this is not a guarantee that every operation always requires constant time.</p>
+<p>In pathological situations involving many collisions, operations may become slower.</p>
+<p>For CSC500, remember:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>HashSet membership: expected O(1)
+
+HashMap lookup: expected O(1)</code></pre></div>
+<hr>
+<h1>36. Why <code>equals()</code> and <code>hashCode()</code> matter</h1>
+<p>Java objects used as hash keys rely on two important methods:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>equals()</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>hashCode()</code></pre></div>
+<p>Conceptually:</p>
+<ul><li><code>hashCode()</code> helps determine where an object should be stored.</li><li><code>equals()</code> determines whether two keys should be considered equal.</li></ul>
+<p>An important Java rule is:</p>
+<blockquote>If two objects are equal according to <code>equals()</code>, they must produce the same hash code.</blockquote>
+<p>This becomes especially important when you create your own classes and use instances of those classes in a <code>HashSet</code> or as keys in a <code>HashMap</code>.</p>
+<hr>
+<h1>Part VII - choosing the right data structure</h1>
+<h1>37. Data structure selection</h1>
+<p>An important programming skill is deciding which structure best fits a problem.</p>
+<p>Do not simply choose whichever structure you remember first.</p>
+<p>Ask:</p>
+<blockquote>What operations matter most?</blockquote>
+<hr>
+<h2>Scenario 1</h2>
+<p>You need an undo system.</p>
+<p>The most recent action should be undone first.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack</code></pre></div>
+<p>because the behavior is LIFO.</p>
+<hr>
+<h2>Scenario 2</h2>
+<p>Customers should be served in arrival order.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Queue</code></pre></div>
+<p>because the behavior is FIFO.</p>
+<hr>
+<h2>Scenario 3</h2>
+<p>You want to know whether a username has already appeared.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Set</code></pre></div>
+<p>because you care about membership and uniqueness.</p>
+<hr>
+<h2>Scenario 4</h2>
+<p>You want to look up a student's GPA using their student ID.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Map</code></pre></div>
+<p>because you want:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>student ID -&gt; GPA</code></pre></div>
+<hr>
+<h2>Scenario 5</h2>
+<p>You need elements in index order and frequently access:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>values.get(i)</code></pre></div>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArrayList</code></pre></div>
+<p>rather than a set, queue, or stack.</p>
+<hr>
+<h1>38. Comparing our structures</h1>
+<table><thead><tr><th>Structure</th><th>Main Idea</th><th>Common Operations</th></tr></thead><tbody><tr><td>Array</td><td>Indexed collection</td><td>get/set by index</td></tr><tr><td>ArrayList</td><td>Dynamic indexed collection</td><td>add/get/remove</td></tr><tr><td>Linked List</td><td>Elements connected by references</td><td>insert/remove</td></tr><tr><td>Stack</td><td>LIFO</td><td>push/pop</td></tr><tr><td>Queue</td><td>FIFO</td><td>offer/poll</td></tr><tr><td>Set</td><td>Unique collection</td><td>add/contains</td></tr><tr><td>Map</td><td>Key-value associations</td><td>put/get</td></tr></tbody></table>
+<p>The correct structure depends on the problem.</p>
+<hr>
+<h1>39. Complexity summary</h1>
+<p>Typical complexities are:</p>
+<table><thead><tr><th>Operation</th><th>Stack</th><th>Queue</th><th>HashSet</th><th>HashMap</th></tr></thead><tbody><tr><td>Add</td><td>O(1)</td><td>O(1)</td><td>O(1) expected</td><td>O(1) expected</td></tr><tr><td>Remove</td><td>O(1)</td><td>O(1)</td><td>O(1) expected</td><td>O(1) expected</td></tr><tr><td>Inspect next</td><td>O(1)</td><td>O(1)</td><td>N/A</td><td>N/A</td></tr><tr><td>Membership</td><td>O(n)</td><td>O(n)</td><td>O(1) expected</td><td>O(1) expected</td></tr><tr><td>Lookup by key</td><td>N/A</td><td>N/A</td><td>N/A</td><td>O(1) expected</td></tr></tbody></table>
+<p>These complexities assume appropriate standard implementations.</p>
+<hr>
+<h1>Part VIII - worked problems</h1>
+<h1>40. Problem: valid parentheses</h1>
+<p>Given a string containing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>(
+)
+[
+]
+{
+}</code></pre></div>
+<p>determine whether the brackets are correctly balanced.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>([]{})</code></pre></div>
+<p>is valid.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>([)]</code></pre></div>
+<p>is not valid.</p>
+<h3>Solution strategy</h3>
+<p>Use a stack.</p>
+<p>Whenever we see:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>(
+[
+{</code></pre></div>
+<p>push it.</p>
+<p>Whenever we see:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>)
+]
+}</code></pre></div>
+<p>check whether the top of the stack contains the matching opening symbol.</p>
+<hr>
+<h3>Java solution</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayDeque</span>;
+<span class="kw">import</span> java.util.<span class="type">Deque</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">BalancedBrackets</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isBalanced(<span class="type">String</span> text) {
+
+        <span class="type">Deque</span>&lt;<span class="type">Character</span>&gt; stack = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+
+        <span class="kw">for</span> (<span class="kw">char</span> c : text.toCharArray()) {
+
+            <span class="kw">if</span> (c == <span class="str">'('</span> || c == <span class="str">'['</span> || c == <span class="str">'{'</span>) {
+
+                stack.push(c);
+
+            } <span class="kw">else</span> <span class="kw">if</span> (c == <span class="str">')'</span> || c == <span class="str">']'</span> || c == <span class="str">'}'</span>) {
+
+                <span class="kw">if</span> (stack.isEmpty()) {
+                    <span class="kw">return</span> <span class="lit">false</span>;
+                }
+
+                <span class="kw">char</span> opening = stack.pop();
+
+                <span class="kw">if</span> (c == <span class="str">')'</span> &amp;&amp; opening != <span class="str">'('</span>) {
+                    <span class="kw">return</span> <span class="lit">false</span>;
+                }
+
+                <span class="kw">if</span> (c == <span class="str">']'</span> &amp;&amp; opening != <span class="str">'['</span>) {
+                    <span class="kw">return</span> <span class="lit">false</span>;
+                }
+
+                <span class="kw">if</span> (c == <span class="str">'}'</span> &amp;&amp; opening != <span class="str">'{'</span>) {
+                    <span class="kw">return</span> <span class="lit">false</span>;
+                }
+            }
+        }
+
+        <span class="kw">return</span> stack.isEmpty();
+    }
+}</code></pre></div>
+<hr>
+<h1>41. Problem: customer service queue</h1>
+<p>Suppose customers arrive at a help desk.</p>
+<p>Each customer should be served in arrival order.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayDeque</span>;
+<span class="kw">import</span> java.util.<span class="type">Queue</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">HelpDesk</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">Queue</span>&lt;<span class="type">String</span>&gt; customers = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+
+        customers.offer(<span class="str">"Alice"</span>);
+        customers.offer(<span class="str">"Bob"</span>);
+        customers.offer(<span class="str">"Carol"</span>);
+
+        <span class="kw">while</span> (!customers.isEmpty()) {
+
+            <span class="type">String</span> customer = customers.poll();
+
+            <span class="type">System</span>.out.println(
+                <span class="str">"Helping "</span> + customer
+            );
+        }
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Helping Alice
+Helping Bob
+Helping Carol</code></pre></div>
+<hr>
+<h1>42. Problem: unique words</h1>
+<p>Given a sentence, determine how many unique words it contains.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> text =
+    <span class="str">"to be or not to be"</span>;</code></pre></div>
+<p>The unique words are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>to
+be
+or
+not</code></pre></div>
+<p>There are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4</code></pre></div>
+<p>unique words.</p>
+<p>Implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">HashSet</span>;
+<span class="kw">import</span> java.util.<span class="type">Set</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">UniqueWords</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">String</span> text = <span class="str">"to be or not to be"</span>;
+
+        <span class="type">String</span>[] words = text.split(<span class="str">" "</span>);
+
+        <span class="type">Set</span>&lt;<span class="type">String</span>&gt; unique = <span class="kw">new</span> <span class="type">HashSet</span>&lt;&gt;();
+
+        <span class="kw">for</span> (<span class="type">String</span> word : words) {
+            unique.add(word);
+        }
+
+        <span class="type">System</span>.out.println(unique.size());
+    }
+}</code></pre></div>
+<hr>
+<h1>43. Problem: most frequent word</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>cat dog cat bird dog cat</code></pre></div>
+<p>We want:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>cat -&gt; 3
+dog -&gt; 2
+bird -&gt; 1</code></pre></div>
+<p>Use a map:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; counts = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+<span class="kw">for</span> (<span class="type">String</span> word : words) {
+
+    counts.put(
+        word,
+        counts.getOrDefault(word, <span class="num">0</span>) + <span class="num">1</span>
+    );
+}</code></pre></div>
+<p>Then find the key with the largest value.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> mostFrequent = <span class="lit">null</span>;
+<span class="kw">int</span> largestCount = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="type">Map</span>.<span class="type">Entry</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; entry :
+        counts.entrySet()) {
+
+    <span class="kw">if</span> (entry.getValue() &gt; largestCount) {
+
+        largestCount = entry.getValue();
+
+        mostFrequent = entry.getKey();
+    }
+}</code></pre></div>
+<hr>
+<h1>Part IX - deeper conceptual connections</h1>
+<h1>44. Stack and recursion</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> countdown(<span class="kw">int</span> n) {
+
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.println(n);
+
+    countdown(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(<span class="num">3</span>);</code></pre></div>
+<p>creates calls approximately like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(3)
+countdown(2)
+countdown(1)
+countdown(0)</code></pre></div>
+<p>These are stacked on the call stack.</p>
+<p>This means recursion and explicit stack-based algorithms are closely related.</p>
+<p>Many recursive algorithms can be rewritten using an explicit stack.</p>
+<hr>
+<h1>45. Queues and breadth-first processing</h1>
+<p>Suppose tasks generate additional tasks.</p>
+<p>A queue allows us to process them in discovery order.</p>
+<p>This idea is the foundation of <strong>breadth-first search</strong>, an algorithm you will encounter again in data structures and algorithms courses.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>place starting item in queue
+
+while queue not empty:
+    remove next item
+    process it
+    add newly discovered items</code></pre></div>
+<p>Notice how the queue determines the order in which work happens.</p>
+<hr>
+<h1>46. Maps as indexes</h1>
+<p>A map can be thought of as an <strong>index</strong>.</p>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Student</span> {
+    <span class="kw">private</span> <span class="kw">int</span> id;
+    <span class="kw">private</span> <span class="type">String</span> name;
+}</code></pre></div>
+<p>If students are stored in a list:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Student</span>&gt; students;</code></pre></div>
+<p>finding student <code>12345</code> might require scanning the list.</p>
+<p>Instead we could maintain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">Integer</span>, <span class="type">Student</span>&gt; studentsById;</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>studentsById.get(<span class="num">12345</span>);</code></pre></div>
+<p>directly expresses what we want.</p>
+<p>This is a powerful general programming technique:</p>
+<blockquote>Organize data according to how you need to retrieve it.</blockquote>
+<hr>
+<h1>Part X - common mistakes</h1>
+<h1>47. Mistake: using a stack when you need a queue</h1>
+<p>Suppose jobs arrive:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B
+C</code></pre></div>
+<p>If fairness requires processing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B
+C</code></pre></div>
+<p>then a stack is incorrect.</p>
+<p>A stack would produce:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C
+B
+A</code></pre></div>
+<p>Always identify whether the problem requires:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LIFO</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>FIFO</code></pre></div>
+<hr>
+<h1>48. Mistake: assuming HashSet preserves insertion order</h1>
+<p>A <code>HashSet</code> does not promise that iteration will occur in insertion order.</p>
+<p>This code:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">String</span>&gt; values = <span class="kw">new</span> <span class="type">HashSet</span>&lt;&gt;();
+
+values.add(<span class="str">"A"</span>);
+values.add(<span class="str">"B"</span>);
+values.add(<span class="str">"C"</span>);</code></pre></div>
+<p>should not be interpreted as promising that iteration will always print:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A B C</code></pre></div>
+<p>If ordering matters, another data structure may be more appropriate.</p>
+<hr>
+<h1>49. Mistake: assuming HashMap keys are sorted</h1>
+<p>A <code>HashMap</code> does not keep its keys sorted.</p>
+<p>If you need ordering, Java provides alternatives such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>TreeMap</code></pre></div>
+<p>but our focus this week is <code>HashMap</code>.</p>
+<hr>
+<h1>50. Mistake: confusing <code>containsKey()</code> and <code>containsValue()</code></h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; ages = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+ages.put(<span class="str">"Alice"</span>, <span class="num">30</span>);</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ages.containsKey(<span class="str">"Alice"</span>)</code></pre></div>
+<p>is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>true</code></pre></div>
+<p>while:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ages.containsValue(<span class="num">30</span>)</code></pre></div>
+<p>is also:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>true</code></pre></div>
+<p>These answer completely different questions.</p>
+<hr>
+<h1>51. Mistake: forgetting that <code>get()</code> may return <code>null</code></h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>scores.get(<span class="str">"David"</span>);</code></pre></div>
+<p>If <code>"David"</code> is not present, <code>get()</code> may return <code>null</code>.</p>
+<p>Therefore you may need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>containsKey()</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>getOrDefault()</code></pre></div>
+<p>depending on the problem.</p>
+<hr>
+<h1>Part XI - in-class exercises</h1>
+<h2>Exercise 1 - stack trace</h2>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">Integer</span>&gt; stack = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+
+stack.push(<span class="num">4</span>);
+stack.push(<span class="num">8</span>);
+stack.push(<span class="num">12</span>);
+
+<span class="type">System</span>.out.println(stack.pop());
+
+stack.push(<span class="num">16</span>);
+
+<span class="type">System</span>.out.println(stack.peek());
+<span class="type">System</span>.out.println(stack.pop());</code></pre></div>
+<p>Determine:</p>
+<ol><li>What is printed?</li><li>What remains in the stack?</li></ol>
+<hr>
+<h2>Exercise 2 - queue trace</h2>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Queue</span>&lt;<span class="type">String</span>&gt; q = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+
+q.offer(<span class="str">"A"</span>);
+q.offer(<span class="str">"B"</span>);
+q.offer(<span class="str">"C"</span>);
+
+<span class="type">System</span>.out.println(q.poll());
+
+q.offer(<span class="str">"D"</span>);
+
+<span class="type">System</span>.out.println(q.poll());</code></pre></div>
+<p>Determine:</p>
+<ol><li>What is printed?</li><li>What remains in the queue?</li></ol>
+<hr>
+<h2>Exercise 3 - select the data structure</h2>
+<p>Choose from:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack
+Queue
+Set
+Map
+ArrayList</code></pre></div>
+<h3>A.</h3>
+<p>Store browser pages so the user can return to the most recently visited previous page.</p>
+<h3>B.</h3>
+<p>Process print jobs in the order they were submitted.</p>
+<h3>C.</h3>
+<p>Determine whether an email address has already registered.</p>
+<h3>D.</h3>
+<p>Associate a product ID with a product object.</p>
+<h3>E.</h3>
+<p>Store students in a sequence where index-based access matters.</p>
+<hr>
+<h2>Exercise 4 - duplicate detection</h2>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> containsDuplicate(<span class="kw">int</span>[] values)</code></pre></div>
+<p>using a <code>HashSet</code>.</p>
+<hr>
+<h2>Exercise 5 - character frequency</h2>
+<p>Write a method that receives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"banana"</code></pre></div>
+<p>and produces counts equivalent to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>b -&gt; 1
+a -&gt; 3
+n -&gt; 2</code></pre></div>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">Character</span>, <span class="type">Integer</span>&gt;</code></pre></div>
+<hr>
+<h1>Part XII - challenge problems</h1>
+<h2>Challenge 1 - first non-repeated word</h2>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>cat dog bird cat dog mouse</code></pre></div>
+<p>return:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>bird</code></pre></div>
+<p>because <code>"bird"</code> is the first word that appears exactly once.</p>
+<p>Hint:</p>
+<ol><li>Use a map to calculate frequencies.</li><li>Scan the words a second time.</li></ol>
+<hr>
+<h2>Challenge 2 - undo system</h2>
+<p>Create a simple text editor simulation.</p>
+<p>Commands:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>TYPE hello
+TYPE world
+UNDO</code></pre></div>
+<p>Use a stack to store previous text states.</p>
+<hr>
+<h2>Challenge 3 - task scheduler</h2>
+<p>Create a simple queue of tasks.</p>
+<p>Each task should be represented by a class:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Task</span> {
+    <span class="kw">private</span> <span class="type">String</span> description;
+}</code></pre></div>
+<p>Allow users to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ADD
+PROCESS
+SHOW NEXT</code></pre></div>
+<p>The earliest task should be processed first.</p>
+<hr>
+<h2>Challenge 4 - inventory</h2>
+<p>Create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt;</code></pre></div>
+<p>where the key is a product name and the value is the quantity in stock.</p>
+<p>Support:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ADD
+SELL
+LOOKUP</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Laptop -&gt; 12
+Keyboard -&gt; 35
+Mouse -&gt; 20</code></pre></div>
+<hr>
+<h1>Part XIII - concept checks</h1>
+<h2>Check 1</h2>
+<p>What principle describes a stack?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Last In, First Out</code></pre></div>
+<hr>
+<h2>Check 2</h2>
+<p>What principle describes a queue?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>First In, First Out</code></pre></div>
+<hr>
+<h2>Check 3</h2>
+<p>Which data structure is most appropriate for determining whether a value has already been observed?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Set</code></pre></div>
+<hr>
+<h2>Check 4</h2>
+<p>Which data structure represents relationships such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>employee ID -&gt; Employee</code></pre></div>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Map</code></pre></div>
+<hr>
+<h2>Check 5</h2>
+<p>What is the expected complexity of lookup in a <code>HashMap</code>?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>on average.</p>
+<hr>
+<h2>Check 6</h2>
+<p>Does a <code>HashSet</code> store duplicate elements?</p>
+<p><strong>Answer:</strong></p>
+<p>No.</p>
+<hr>
+<h2>Check 7</h2>
+<p>Does a <code>HashMap</code> guarantee that keys appear in insertion order?</p>
+<p><strong>Answer:</strong></p>
+<p>No.</p>
+<hr>
+<h1>Part XIV - summary</h1>
+<p>This week introduced four extremely important abstract data types.</p>
+<h2>Stack</h2>
+<p>A stack follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LIFO</code></pre></div>
+<p>Typical operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push
+pop
+peek</code></pre></div>
+<p>Common applications include:</p>
+<ul><li>recursion,</li><li>undo,</li><li>backtracking,</li><li>expression processing.</li></ul>
+<hr>
+<h2>Queue</h2>
+<p>A queue follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>FIFO</code></pre></div>
+<p>Typical operations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>offer
+poll
+peek</code></pre></div>
+<p>Common applications include:</p>
+<ul><li>scheduling,</li><li>request processing,</li><li>simulations,</li><li>breadth-first algorithms.</li></ul>
+<hr>
+<h2>Set</h2>
+<p>A set stores unique elements.</p>
+<p>Typical operations include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add
+remove
+contains</code></pre></div>
+<p>A <code>HashSet</code> provides expected constant-time membership testing.</p>
+<hr>
+<h2>Map</h2>
+<p>A map stores:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>key -&gt; value</code></pre></div>
+<p>associations.</p>
+<p>Typical operations include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>put
+get
+containsKey
+remove</code></pre></div>
+<p>A <code>HashMap</code> provides expected constant-time lookup by key.</p>
+<hr>
+<h1>52. The most important idea</h1>
+<p>The most important idea from this week is not memorizing Java collection methods.</p>
+<p>It is learning to ask:</p>
+<blockquote>What behavior does my program need from its data?</blockquote>
+<p>If you need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>most recent item first</code></pre></div>
+<p>think:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack</code></pre></div>
+<p>If you need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>oldest item first</code></pre></div>
+<p>think:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Queue</code></pre></div>
+<p>If you need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Have I seen this before?</code></pre></div>
+<p>think:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Set</code></pre></div>
+<p>If you need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Given this key, what value is associated with it?</code></pre></div>
+<p>think:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Map</code></pre></div>
+<p>Choosing the right data structure often turns a complicated program into a simple one.</p>
+<hr>
+<h1>Suggested lab</h1>
+<h2>Mini search engine word index</h2>
+<p>Write a Java program that reads several lines of text and builds a word index.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java is a programming language
+java supports object oriented programming
+programming requires practice</code></pre></div>
+<p>Your program should create a map resembling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java        -&gt; 2
+is          -&gt; 1
+a           -&gt; 1
+programming -&gt; 3
+language    -&gt; 1
+supports    -&gt; 1
+object      -&gt; 1
+oriented    -&gt; 1
+requires    -&gt; 1
+practice    -&gt; 1</code></pre></div>
+<p>Then allow the user to enter a word.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Search: programming
+
+"programming" occurs 3 times.</code></pre></div>
+<h3>Extension</h3>
+<p>Maintain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Set</span>&lt;<span class="type">Integer</span>&gt;&gt;</code></pre></div>
+<p>where the value contains the line numbers where each word occurs.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java        -&gt; {1, 2}
+programming -&gt; {1, 2, 3}
+practice    -&gt; {3}</code></pre></div>
+<p>This combines two of this week's data structures:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Map + Set</code></pre></div>
+<p>and demonstrates a fundamental idea used in search systems: an <strong>inverted index</strong>.</p>
+<hr>
+<h1>Preparation for week 14</h1>
+<p>Next week we will study <strong>trees</strong>.</p>
+<p>Trees introduce a different kind of organization.</p>
+<p>Instead of arranging elements linearly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A -&gt; B -&gt; C -&gt; D</code></pre></div>
+<p>we will organize them hierarchically:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>        A
+       / \
+      B   C
+     / \
+    D   E</code></pre></div>
+<p>We will examine:</p>
+<ul><li>tree terminology,</li><li>binary trees,</li><li>binary search trees,</li><li>recursive tree algorithms,</li><li>tree traversal,</li><li>search and insertion,</li><li>and the relationship between tree structure and algorithm efficiency.</li></ul>
+<p>Before next week, make sure you are comfortable with:</p>
+<ul><li>references,</li><li>linked nodes,</li><li>recursion,</li><li>Big-O notation,</li><li>and the distinction between an ADT and an implementation.</li></ul>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

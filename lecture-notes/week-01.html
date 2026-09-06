@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 1: Computational thinking and Java basics</h2>
+<h3>1. Learning objectives</h3>
+<p>By the end of Week 1, students should be able to:</p>
+<ul><li>Explain what a computer program is.</li><li>Describe, at a high level, how Java source code becomes an executing program.</li><li>Distinguish between source code, compiled code, and program output.</li><li>Write, compile, and run a simple Java program.</li><li>Use variables to store information.</li><li>Work with basic Java primitive data types.</li><li>Construct arithmetic expressions.</li><li>Use assignment statements.</li><li>Produce console output.</li><li>Read simple input from the keyboard.</li><li>Trace the execution of a short Java program by hand.</li><li>Identify syntax errors, runtime errors, and logic errors.</li><li>Begin thinking about programming as the precise specification of a computational process.</li></ul>
+<hr>
+<h1>Part I - What is programming?</h1>
+<h2>2. Programs as precise instructions</h2>
+<p>A computer is extremely fast, but it is not intelligent in the way humans normally use that word.</p>
+<p>A computer does not understand:</p>
+<ul><li>what you intended,</li><li>what you probably meant,</li><li>whether your result makes sense,</li><li>or whether a particular instruction is a good idea.</li></ul>
+<p>It executes instructions according to precisely defined rules.</p>
+<p>Programming is therefore the process of expressing a solution to a problem in a form that a computer can execute.</p>
+<p>Consider the instruction:</p>
+<blockquote>Calculate the average of three exam scores.</blockquote>
+<p>A human may immediately understand what to do.</p>
+<p>A computer needs a much more explicit procedure:</p>
+<ol><li>Obtain the first score.</li><li>Obtain the second score.</li><li>Obtain the third score.</li><li>Add the three scores.</li><li>Divide the sum by 3.</li><li>Display the result.</li></ol>
+<p>This sequence of steps is an example of an <strong>algorithm</strong>.</p>
+<hr>
+<h2>3. Algorithms</h2>
+<p>An algorithm is a finite sequence of well-defined steps for solving a problem or performing a computation.</p>
+<p>Algorithms exist independently of programming languages.</p>
+<p>For example, an algorithm for computing the area of a rectangle could be:</p>
+<ol><li>Obtain the width.</li><li>Obtain the height.</li><li>Multiply width by height.</li><li>Report the result.</li></ol>
+<p>We might express the algorithm mathematically as:</p>
+<div class="math-block"><pre>A = w × h</pre></div>
+<p>We could implement the same algorithm in Java, Python, C++, or another language.</p>
+<p>This distinction is important:</p>
+<p><strong>Algorithm:</strong> the method used to solve the problem.</p>
+<p><strong>Program:</strong> an implementation of that method in a programming language.</p>
+<p>Throughout CSC500, we will repeatedly move through the following process:</p>
+<p><strong>Problem → Algorithm → Program → Execution → Result</strong></p>
+<hr>
+<h1>Part II - A first Java program</h1>
+<h2>4. Hello, World</h2>
+<p>A traditional first Java program is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Hello</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">System</span>.out.println(<span class="str">"Hello, world!"</span>);
+    }
+}</code></pre></div>
+<p>When executed, the program displays:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello, world!</code></pre></div>
+<p>At first, some parts of this program will look mysterious. That is expected.</p>
+<p>For now, focus on its structure.</p>
+<hr>
+<h2>5. The class</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Hello</span> {</code></pre></div>
+<p>Java programs are organized around entities called <strong>classes</strong>.</p>
+<p>Classes will become one of the central ideas of this course when we study object-oriented programming.</p>
+<p>For now, think of a class as a container that holds part of a Java program.</p>
+<p>Here, the class is named:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello</code></pre></div>
+<p>Java is case-sensitive.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello
+hello
+HELLO</code></pre></div>
+<p>are three different names.</p>
+<p>If the class is declared as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Hello</span></code></pre></div>
+<p>the source file should normally be named:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello.java</code></pre></div>
+<hr>
+<h1>Part III - The <code>main</code> method</h1>
+<h2>6. Where execution begins</h2>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {</code></pre></div>
+<p>When we run this Java application, execution begins in the <code>main</code> method.</p>
+<p>For Week 1, treat this line as a required pattern.</p>
+<p>Later in the course we will understand what each part means:</p>
+<ul><li><code>public</code></li><li><code>static</code></li><li><code>void</code></li><li><code>String[]</code></li><li><code>args</code></li></ul>
+<p>For now, remember:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args)</code></pre></div>
+<p>defines the starting point of a basic Java application.</p>
+<hr>
+<h2>7. Statements</h2>
+<p>Inside <code>main</code>, we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Hello, world!"</span>);</code></pre></div>
+<p>This is a Java <strong>statement</strong>.</p>
+<p>A statement tells the computer to perform some action.</p>
+<p>Here, the action is:</p>
+<blockquote>Display the text <code>Hello, world!</code></blockquote>
+<p>Most Java statements end with a semicolon:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>;</code></pre></div>
+<p>Forgetting the semicolon is a common beginning programming error.</p>
+<hr>
+<h1>Part IV - Compilation and execution</h1>
+<h2>8. Source code</h2>
+<p>The Java code that we write is called <strong>source code</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Hello</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">System</span>.out.println(<span class="str">"Hello, world!"</span>);
+    }
+}</code></pre></div>
+<p>might be stored in:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello.java</code></pre></div>
+<p>The computer does not directly execute Java source code.</p>
+<p>Instead, Java normally uses a two-stage process.</p>
+<hr>
+<h2>9. Compilation</h2>
+<p>The Java compiler translates source code into another representation called <strong>bytecode</strong>.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello.java
+    |
+    | Java compiler
+    v
+Hello.class</code></pre></div>
+<p>The command-line Java compiler is called:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>javac</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>javac Hello.java</code></pre></div>
+<p>If compilation succeeds, Java produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello.class</code></pre></div>
+<hr>
+<h2>10. The Java virtual machine</h2>
+<p>The <code>.class</code> file contains Java bytecode.</p>
+<p>The bytecode is executed by the <strong>Java Virtual Machine</strong>, or JVM.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Java source code
+      |
+      v
+   Compiler
+      |
+      v
+   Bytecode
+      |
+      v
+     JVM
+      |
+      v
+Program execution</code></pre></div>
+<p>To run the program from a terminal, we might use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java Hello</code></pre></div>
+<p>Notice that we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java Hello</code></pre></div>
+<p>not:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java Hello.java</code></pre></div>
+<p>when executing the compiled class in the traditional compile-then-run workflow.</p>
+<hr>
+<h1>Part V - Why Java uses a JVM</h1>
+<h2>11. Portability</h2>
+<p>One of Java's historical design goals is portability.</p>
+<p>The idea is approximately:</p>
+<blockquote>Compile Java source into a standard bytecode format, then run that bytecode using an appropriate JVM on each platform.</blockquote>
+<p>Therefore, Java bytecode can often run across operating systems without recompiling the source for each CPU architecture.</p>
+<p>This idea is sometimes summarized by the phrase:</p>
+<blockquote>Write once, run anywhere.</blockquote>
+<p>In reality, platform differences still matter in some situations, but the JVM provides a useful level of abstraction between the Java program and the underlying machine.</p>
+<hr>
+<h1>Part VI - Output</h1>
+<h2>12. <code>System.out.println</code></h2>
+<p>We can print text using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Welcome to CSC500"</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Welcome to CSC500</code></pre></div>
+<p>We can print multiple lines:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"CSC500"</span>);
+<span class="type">System</span>.out.println(<span class="str">"Programming Fundamentals"</span>);
+<span class="type">System</span>.out.println(<span class="str">"Week 1"</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>CSC500
+Programming Fundamentals
+Week 1</code></pre></div>
+<p>Each call to <code>println</code> ends the current output line.</p>
+<hr>
+<h2>13. <code>print</code> versus <code>println</code></h2>
+<p>Java also provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(...)</code></pre></div>
+<p>Unlike <code>println</code>, <code>print</code> does not automatically move to the next line.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(<span class="str">"Hello "</span>);
+<span class="type">System</span>.out.print(<span class="str">"world"</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello world</code></pre></div>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+<span class="type">System</span>.out.println(<span class="str">"world"</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Hello
+world</code></pre></div>
+<hr>
+<h1>Part VII - Variables</h1>
+<h2>14. Programs need memory</h2>
+<p>Programs often need to remember information.</p>
+<p>Suppose we want to calculate someone's age next year.</p>
+<p>We need somewhere to store the current age.</p>
+<p>Java provides <strong>variables</strong> for this purpose.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">25</span>;</code></pre></div>
+<p>This declares a variable named:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age</code></pre></div>
+<p>and gives it the value:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>25</code></pre></div>
+<hr>
+<h2>15. Variables as named storage</h2>
+<p>A useful first mental model is:</p>
+<blockquote>A variable is a named location in which a program stores a value.</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> students = <span class="num">20</span>;
+<span class="kw">double</span> temperature = <span class="num">72.5</span>;</code></pre></div>
+<p>We have two variables:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>students
+temperature</code></pre></div>
+<p>with corresponding values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+72.5</code></pre></div>
+<p>The variable names allow us to refer to those values later.</p>
+<hr>
+<h1>Part VIII - Variable declaration</h1>
+<h2>16. Declaring a variable</h2>
+<p>In Java, variables have types.</p>
+<p>The general form is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>type variableName;</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> count;</code></pre></div>
+<p>This declares a variable named <code>count</code> capable of storing an integer.</p>
+<p>We can later assign a value:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>count = <span class="num">10</span>;</code></pre></div>
+<p>Or we can declare and initialize the variable at the same time:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">10</span>;</code></pre></div>
+<hr>
+<h2>17. Assignment</h2>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;
+x = <span class="num">12</span>;</code></pre></div>
+<p>After the first statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x contains 5</code></pre></div>
+<p>After the second statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x contains 12</code></pre></div>
+<p>The old value has been replaced.</p>
+<hr>
+<h1>Part IX - Assignment is not algebra</h1>
+<h2>18. Understanding <code>=</code></h2>
+<p>In mathematics:</p>
+<div class="math-block"><pre>x = 5</pre></div>
+<p>usually expresses an equality.</p>
+<p>In Java:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = <span class="num">5</span>;</code></pre></div>
+<p>means:</p>
+<blockquote>Evaluate the expression on the right and store the resulting value in the variable on the left.</blockquote>
+<p>This distinction becomes especially important when we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x + <span class="num">1</span>;</code></pre></div>
+<p>Mathematically,</p>
+<div class="math-block"><pre>x = x + 1</pre></div>
+<p>would be impossible.</p>
+<p>In programming, however, it means:</p>
+<ol><li>Read the current value of <code>x</code>.</li><li>Add 1.</li><li>Store the result back into <code>x</code>.</li></ol>
+<p>If:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 10</code></pre></div>
+<p>before the statement, then after:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x + <span class="num">1</span>;</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 11</code></pre></div>
+<hr>
+<h1>Part X - Primitive data types</h1>
+<h2>19. Why types matter</h2>
+<p>A program works with different kinds of data.</p>
+<p>Examples include:</p>
+<ul><li>whole numbers,</li><li>decimal numbers,</li><li>characters,</li><li>true/false values.</li></ul>
+<p>Java is a <strong>statically typed language</strong>.</p>
+<p>This means that variables have declared types.</p>
+<p>The compiler uses these types to determine what operations are valid.</p>
+<hr>
+<h2>20. <code>int</code></h2>
+<p>The <code>int</code> type stores integers.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> students = <span class="num">24</span>;
+<span class="kw">int</span> temperature = -<span class="num">5</span>;
+<span class="kw">int</span> year = <span class="num">2026</span>;</code></pre></div>
+<p>Valid integer values include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0
+17
+-92
+5000</code></pre></div>
+<p>An <code>int</code> does not store fractional values.</p>
+<p>This is invalid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> price = <span class="num">19.99</span>;</code></pre></div>
+<hr>
+<h2>21. <code>double</code></h2>
+<p>The <code>double</code> type stores floating-point numbers.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> price = <span class="num">19.99</span>;
+<span class="kw">double</span> temperature = <span class="num">72.5</span>;
+<span class="kw">double</span> pi = <span class="num">3.14159</span>;</code></pre></div>
+<p>A <code>double</code> can represent fractional quantities.</p>
+<hr>
+<h2>22. <code>boolean</code></h2>
+<p>A boolean represents one of two logical values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>true
+false</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> enrolled = <span class="lit">true</span>;
+<span class="kw">boolean</span> finished = <span class="lit">false</span>;</code></pre></div>
+<p>Booleans will become extremely important when we introduce decision-making in Week 2.</p>
+<hr>
+<h2>23. <code>char</code></h2>
+<p>A <code>char</code> stores a single character.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">char</span> grade = <span class="str">'A'</span>;</code></pre></div>
+<p>Notice the single quotation marks:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="str">'A'</span></code></pre></div>
+<p>A character differs from a string.</p>
+<p>Character:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="str">'A'</span></code></pre></div>
+<p>String:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="str">"A"</span></code></pre></div>
+<hr>
+<h1>Part XI - Strings</h1>
+<h2>24. Text data</h2>
+<p>Java represents sequences of characters using the <code>String</code> type.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> name = <span class="str">"Ada"</span>;</code></pre></div>
+<p>Another example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> course = <span class="str">"CSC500"</span>;</code></pre></div>
+<p>Strictly speaking, <code>String</code> is not a primitive type.</p>
+<p>It is a class.</p>
+<p>We will understand the significance of that distinction later.</p>
+<p>For now, it is fine to think of <code>String</code> as the standard Java type for text.</p>
+<hr>
+<h1>Part XII - Naming variables</h1>
+<h2>25. Legal names</h2>
+<p>Java identifiers can include:</p>
+<ul><li>letters,</li><li>digits,</li><li>underscore <code>_</code>,</li><li>dollar sign <code>$</code>.</li></ul>
+<p>However, an identifier cannot begin with a digit.</p>
+<p>Valid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age
+studentCount
+exam2
+total_score</code></pre></div>
+<p>Invalid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">2</span>exam
+student-count
+<span class="kw">class</span></code></pre></div>
+<p>The last example is invalid because <code>class</code> is a Java keyword.</p>
+<hr>
+<h2>26. Good names</h2>
+<p>Prefer meaningful variable names.</p>
+<p>Poor:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> x;
+<span class="kw">double</span> y;</code></pre></div>
+<p>Better:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> width;
+<span class="kw">double</span> height;</code></pre></div>
+<p>Poor:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> a;</code></pre></div>
+<p>Better:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> studentCount;</code></pre></div>
+<p>Good variable names make programs easier to read, understand, test, and maintain.</p>
+<hr>
+<h2>27. Java naming convention</h2>
+<p>Java programmers normally use <strong>camelCase</strong> for variable names:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>studentCount
+maximumScore
+monthlyPayment</code></pre></div>
+<p>The first word starts with a lowercase letter, while subsequent words begin with uppercase letters.</p>
+<p>Class names normally begin with uppercase letters:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span>
+<span class="type">BankAccount</span>
+<span class="type">CourseRegistration</span></code></pre></div>
+<hr>
+<h1>Part XIII - Arithmetic expressions</h1>
+<h2>28. Basic arithmetic operators</h2>
+<p>Java supports familiar arithmetic operators.</p>
+<table><thead><tr><th>Operation</th><th>Java</th></tr></thead><tbody><tr><td>Addition</td><td><code>+</code></td></tr><tr><td>Subtraction</td><td><code>-</code></td></tr><tr><td>Multiplication</td><td><code>*</code></td></tr><tr><td>Division</td><td><code>/</code></td></tr><tr><td>Remainder</td><td><code>%</code></td></tr></tbody></table>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+<span class="kw">int</span> y = <span class="num">3</span>;
+
+<span class="kw">int</span> sum = x + y;
+<span class="kw">int</span> difference = x - y;
+<span class="kw">int</span> product = x * y;</code></pre></div>
+<hr>
+<h2>29. Expression evaluation</h2>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;
+<span class="kw">int</span> y = <span class="num">2</span>;
+<span class="kw">int</span> z = x + y * <span class="num">3</span>;</code></pre></div>
+<p>Java follows operator precedence.</p>
+<p>Multiplication happens before addition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>y * 3
+2 * 3
+6</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x + 6
+5 + 6
+11</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>z = 11</code></pre></div>
+<p>Parentheses can make the intended order explicit:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> z = (x + y) * <span class="num">3</span>;</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>(5 + 2) * 3
+7 * 3
+21</code></pre></div>
+<hr>
+<h1>Part XIV - Integer division</h1>
+<h2>30. An important Java rule</h2>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;
+<span class="kw">int</span> y = <span class="num">2</span>;
+
+<span class="type">System</span>.out.println(x / y);</code></pre></div>
+<p>Many new programmers expect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2.5</code></pre></div>
+<p>But Java prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2</code></pre></div>
+<p>Why?</p>
+<p>Both operands are integers.</p>
+<p>Therefore Java performs integer division.</p>
+<p>The fractional part is discarded.</p>
+<hr>
+<h2>31. Producing floating-point division</h2>
+<p>If at least one operand is floating-point:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="num">5.0</span> / <span class="num">2</span>);</code></pre></div>
+<p>the output is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2.5</code></pre></div>
+<p>Similarly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> result = <span class="num">5.0</span> / <span class="num">2.0</span>;</code></pre></div>
+<p>produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2.5</code></pre></div>
+<p>This distinction will cause many bugs if students do not understand it.</p>
+<hr>
+<h1>Part XV - The remainder operator</h1>
+<h2>32. <code>%</code></h2>
+<p>The <code>%</code> operator computes the remainder after integer division.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> remainder = <span class="num">10</span> % <span class="num">3</span>;</code></pre></div>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 = 3 × 3 + 1</code></pre></div>
+<p>we get:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>remainder = 1</code></pre></div>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>8 % 2 = 0
+9 % 2 = 1
+17 % 5 = 2</code></pre></div>
+<p>The remainder operator becomes useful for problems such as:</p>
+<ul><li>determining whether a number is even,</li><li>extracting digits,</li><li>cyclic calculations,</li><li>time calculations.</li></ul>
+<hr>
+<h1>Part XVI - Constants</h1>
+<h2>33. Values that should not change</h2>
+<p>Suppose a program uses a tax rate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> taxRate = <span class="num">0.07</span>;</code></pre></div>
+<p>If the value should not change while the program runs, Java allows us to declare it as a constant:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">final</span> <span class="kw">double</span> TAX_RATE = <span class="num">0.07</span>;</code></pre></div>
+<p>The keyword:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">final</span></code></pre></div>
+<p>means the variable cannot later be assigned another value.</p>
+<p>By convention, constants are often written in uppercase:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>MAX_SCORE
+TAX_RATE
+SECONDS_PER_MINUTE</code></pre></div>
+<hr>
+<h1>Part XVII - Outputting variables and expressions</h1>
+<h2>34. Printing values</h2>
+<p>We can print variables directly.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">30</span>;
+
+<span class="type">System</span>.out.println(age);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>30</code></pre></div>
+<p>We can also print expressions:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+<span class="kw">int</span> y = <span class="num">20</span>;
+
+<span class="type">System</span>.out.println(x + y);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>30</code></pre></div>
+<hr>
+<h2>35. Combining text and values</h2>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">30</span>;</code></pre></div>
+<p>We can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Age: "</span> + age);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Age: 30</code></pre></div>
+<p>Here, <code>+</code> performs string concatenation.</p>
+<p>Another example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> name = <span class="str">"Grace"</span>;
+<span class="kw">int</span> age = <span class="num">27</span>;
+
+<span class="type">System</span>.out.println(name + <span class="str">" is "</span> + age + <span class="str">" years old."</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Grace is 27 years old.</code></pre></div>
+<hr>
+<h1>Part XVIII - A first calculation program</h1>
+<h2>36. Rectangle area</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">RectangleArea</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="kw">double</span> width = <span class="num">5.0</span>;
+        <span class="kw">double</span> height = <span class="num">3.0</span>;
+
+        <span class="kw">double</span> area = width * height;
+
+        <span class="type">System</span>.out.println(<span class="str">"Area = "</span> + area);
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Area = 15.0</code></pre></div>
+<p>Trace the program carefully:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>width  → 5.0
+height → 3.0
+
+area = width * height
+     = 5.0 * 3.0
+     = 15.0</code></pre></div>
+<hr>
+<h1>Part XIX - Input</h1>
+<h2>37. Hard-coded data</h2>
+<p>The previous program contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> width = <span class="num">5.0</span>;
+<span class="kw">double</span> height = <span class="num">3.0</span>;</code></pre></div>
+<p>These values are written directly into the program.</p>
+<p>This is called <strong>hard-coding</strong>.</p>
+<p>Often, however, we want users to provide values while the program is running.</p>
+<hr>
+<h1>Part XX - <code>Scanner</code></h1>
+<h2>38. Reading keyboard input</h2>
+<p>Java provides a class called <code>Scanner</code>.</p>
+<p>We first import it:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;</code></pre></div>
+<p>Then create a <code>Scanner</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Greeting</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter your name: "</span>);
+        <span class="type">String</span> name = input.nextLine();
+
+        <span class="type">System</span>.out.println(<span class="str">"Hello, "</span> + name + <span class="str">"!"</span>);
+    }
+}</code></pre></div>
+<p>Possible interaction:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Enter your name: Maya
+Hello, Maya!</code></pre></div>
+<hr>
+<h1>Part XXI - Reading numbers</h1>
+<h2>39. Reading an integer</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = input.nextInt();</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(<span class="str">"Enter your age: "</span>);
+<span class="kw">int</span> age = input.nextInt();
+
+<span class="type">System</span>.out.println(<span class="str">"You entered "</span> + age);</code></pre></div>
+<hr>
+<h2>40. Reading a <code>double</code></h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> price = input.nextDouble();</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(<span class="str">"Enter the price: "</span>);
+<span class="kw">double</span> price = input.nextDouble();
+
+<span class="type">System</span>.out.println(<span class="str">"Price = "</span> + price);</code></pre></div>
+<hr>
+<h1>Part XXII - Interactive rectangle program</h1>
+<h2>41. Complete example</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">RectangleArea</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter width: "</span>);
+        <span class="kw">double</span> width = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter height: "</span>);
+        <span class="kw">double</span> height = input.nextDouble();
+
+        <span class="kw">double</span> area = width * height;
+
+        <span class="type">System</span>.out.println(<span class="str">"Area = "</span> + area);
+    }
+}</code></pre></div>
+<p>Example execution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Enter width: 5
+Enter height: 3
+Area = 15.0</code></pre></div>
+<p>This program demonstrates a basic computational pattern:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>INPUT
+  ↓
+PROCESSING
+  ↓
+OUTPUT</code></pre></div>
+<p>Many programs can initially be understood using this model.</p>
+<hr>
+<h1>Part XXIII - tracing programs</h1>
+<h2>42. Why trace code?</h2>
+<p>One of the most important programming skills is predicting exactly what a program will do.</p>
+<p>Do not rely only on running the program.</p>
+<p>You should also be able to reason about execution by hand.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">4</span>;
+<span class="kw">int</span> y = <span class="num">2</span>;
+
+x = x + y;
+y = x * <span class="num">2</span>;
+
+<span class="type">System</span>.out.println(x);
+<span class="type">System</span>.out.println(y);</code></pre></div>
+<p>Trace:</p>
+<p>Initially:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 4
+y = 2</code></pre></div>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x + y;</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 6
+y = 2</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>y = x * <span class="num">2</span>;</code></pre></div>
+<p>gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 6
+y = 12</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>6
+12</code></pre></div>
+<hr>
+<h1>Part XXIV - Trace tables</h1>
+<h2>43. A systematic technique</h2>
+<p>For larger examples, use a trace table.</p>
+<p>Program:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> a = <span class="num">3</span>;
+<span class="kw">int</span> b = <span class="num">4</span>;
+
+a = a + b;
+b = a - b;
+a = a - b;</code></pre></div>
+<p>Trace:</p>
+<table><thead><tr><th>Statement</th><th><code>a</code></th><th><code>b</code></th></tr></thead><tbody><tr><td>initial values</td><td>3</td><td>4</td></tr><tr><td><code>a = a + b</code></td><td>7</td><td>4</td></tr><tr><td><code>b = a - b</code></td><td>7</td><td>3</td></tr><tr><td><code>a = a - b</code></td><td>4</td><td>3</td></tr></tbody></table>
+<p>Notice what happened:</p>
+<p>The two values were swapped.</p>
+<p>Initially:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a = 3
+b = 4</code></pre></div>
+<p>Finally:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a = 4
+b = 3</code></pre></div>
+<hr>
+<h1>Part XXV - Errors</h1>
+<h2>44. Programming errors</h2>
+<p>Programs can fail in several different ways.</p>
+<p>It is useful to distinguish among:</p>
+<ol><li>syntax errors,</li><li>runtime errors,</li><li>logic errors.</li></ol>
+<hr>
+<h2>45. Syntax errors</h2>
+<p>A syntax error occurs when code violates the grammatical rules of Java.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Hello"</span>)</code></pre></div>
+<p>The semicolon is missing.</p>
+<p>Another example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = ;</code></pre></div>
+<p>The compiler cannot understand the statement.</p>
+<p>Syntax errors are usually detected during compilation.</p>
+<hr>
+<h2>46. Runtime errors</h2>
+<p>A program may compile successfully but fail while it is executing.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+<span class="kw">int</span> y = <span class="num">0</span>;
+
+<span class="type">System</span>.out.println(x / y);</code></pre></div>
+<p>The program compiles.</p>
+<p>But attempting integer division by zero causes an exception during execution.</p>
+<p>This is a runtime error.</p>
+<hr>
+<h2>47. Logic errors</h2>
+<p>Logic errors are often more difficult.</p>
+<p>The program runs, but produces an incorrect answer.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> width = <span class="num">5</span>;
+<span class="kw">double</span> height = <span class="num">3</span>;
+
+<span class="kw">double</span> area = width + height;</code></pre></div>
+<p>This program compiles.</p>
+<p>It runs.</p>
+<p>But the formula is wrong.</p>
+<p>The programmer intended:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> area = width * height;</code></pre></div>
+<p>The computer faithfully executes what we wrote, not what we intended.</p>
+<hr>
+<h1>Part XXVI - Debugging</h1>
+<h2>48. What is debugging?</h2>
+<p><strong>Debugging</strong> is the process of identifying and correcting defects in a program.</p>
+<p>Useful debugging habits include:</p>
+<ul><li>read compiler messages carefully,</li><li>reduce the problem to a small example,</li><li>print intermediate values,</li><li>trace code by hand,</li><li>test with simple inputs whose correct answers you already know,</li><li>change one thing at a time,</li><li>distinguish symptoms from causes.</li></ul>
+<p>A fundamental rule:</p>
+<blockquote>Do not randomly modify code until it works.</blockquote>
+<p>Instead, develop a hypothesis about what is wrong and test that hypothesis.</p>
+<hr>
+<h1>Part XXVII - comments</h1>
+<h2>49. Comments for humans</h2>
+<p>Comments allow programmers to leave explanatory text in source code.</p>
+<p>A single-line comment begins with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">//</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">// Compute the area of the rectangle</span>
+<span class="kw">double</span> area = width * height;</code></pre></div>
+<p>Java ignores the comment during execution.</p>
+<hr>
+<h2>50. Multi-line comments</h2>
+<p>Java also supports:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">/*
+This is a
+multi-line comment.
+*/</span></code></pre></div>
+<p>Comments should explain useful information, not restate obvious code.</p>
+<p>Weak comment:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">// Add x and y</span>
+sum = x + y;</code></pre></div>
+<p>More useful:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="cmt">// Scores are weighted equally, so divide their sum by the number of exams.</span>
+average = total / examCount;</code></pre></div>
+<hr>
+<h1>Part XXVIII - Code style</h1>
+<h2>51. Readability matters</h2>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x=<span class="num">10</span>;<span class="kw">double</span> y=<span class="num">20.5</span>;<span class="type">System</span>.out.println(x+y);</code></pre></div>
+<p>with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span classs="num">10</span>;
+<span class="kw">double</span> y = <span class="num">20.5</span>;
+
+<span class="type">System</span>.out.println(x + y);</code></pre></div>
+<p>Both may compile.</p>
+<p>The second is much easier to read.</p>
+<p>Professional programming is not only about making code execute.</p>
+<p>Code must also be understandable to humans.</p>
+<hr>
+<h2>52. Indentation</h2>
+<p>Use consistent indentation to show program structure.</p>
+<p>Preferred:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Example</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="kw">int</span> x = <span class="num">5</span>;
+
+        <span class="type">System</span>.out.println(x);
+    }
+}</code></pre></div>
+<p>Poor:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Example</span> {
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+<span class="kw">int</span> x = <span class="num">5</span>;
+<span class="type">System</span>.out.println(x);
+}
+}</code></pre></div>
+<p>As programs become more complex, indentation becomes essential.</p>
+<hr>
+<h1>Part XXIX - Computational thinking</h1>
+<h2>53. From problem to program</h2>
+<p>Suppose the problem is:</p>
+<blockquote>Given a temperature in Fahrenheit, calculate Celsius.</blockquote>
+<p>We should not immediately start typing Java.</p>
+<p>First identify the relationship:</p>
+<div class="math-block"><pre>C = 5 / 9(F - 32)</pre></div>
+<p>Then identify inputs and outputs.</p>
+<p>Input:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Fahrenheit temperature</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Celsius temperature</code></pre></div>
+<p>Then form an algorithm:</p>
+<ol><li>Read Fahrenheit temperature.</li><li>Subtract 32.</li><li>Multiply by 5.</li><li>Divide by 9.</li><li>Display Celsius temperature.</li></ol>
+<p>Then implement it.</p>
+<hr>
+<h2>54. Java implementation</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">TemperatureConverter</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter temperature in Fahrenheit: "</span>);
+        <span class="kw">double</span> fahrenheit = input.nextDouble();
+
+        <span class="kw">double</span> celsius = (<span class="num">5.0</span> / <span class="num">9.0</span>) * (fahrenheit - <span class="num">32</span>);
+
+        <span class="type">System</span>.out.println(<span class="str">"Celsius: "</span> + celsius);
+    }
+}</code></pre></div>
+<p>Notice:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">5.0</span> / <span class="num">9.0</span></code></pre></div>
+<p>rather than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">5</span> / <span class="num">9</span></code></pre></div>
+<p>Why?</p>
+<p>Because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">5</span> / <span class="num">9</span></code></pre></div>
+<p>uses integer division and evaluates to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0</code></pre></div>
+<p>This would cause an incorrect result.</p>
+<hr>
+<h1>Part XXX - examples for class discussion</h1>
+<h2>55. Example 1: predict the output</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+<span class="kw">int</span> y = <span class="num">4</span>;
+
+<span class="type">System</span>.out.println(x + y);
+<span class="type">System</span>.out.println(x / y);
+<span class="type">System</span>.out.println(x % y);</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>14
+2
+2</code></pre></div>
+<hr>
+<h2>56. Example 2: Predict the output</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">3</span>;
+
+<span class="type">System</span>.out.println(x);
+x = x + <span class="num">2</span>;
+<span class="type">System</span>.out.println(x);
+x = x * <span class="num">4</span>;
+<span class="type">System</span>.out.println(x);</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3
+5
+20</code></pre></div>
+<hr>
+<h2>57. Example 3: Find the error</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">25.5</span>;</code></pre></div>
+<p>Problem:</p>
+<p>An <code>int</code> cannot directly store the value <code>25.5</code>.</p>
+<p>Possible correction:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> age = <span class="num">25.5</span>;</code></pre></div>
+<hr>
+<h2>58. Example 4: Find the logic error</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> length = <span class="num">10</span>;
+<span class="kw">double</span> width = <span class="num">5</span>;
+
+<span class="kw">double</span> perimeter = length * width;
+
+<span class="type">System</span>.out.println(perimeter);</code></pre></div>
+<p>The formula calculates area, not perimeter.</p>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> perimeter = <span class="num">2</span> * (length + width);</code></pre></div>
+<hr>
+<h1>Part XXXI - a larger example</h1>
+<h2>59. Calculating a course average</h2>
+<p>Suppose a student has three exam scores.</p>
+<p>We want to compute the average.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">ExamAverage</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter exam 1 score: "</span>);
+        <span class="kw">double</span> exam1 = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter exam 2 score: "</span>);
+        <span class="kw">double</span> exam2 = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter exam 3 score: "</span>);
+        <span class="kw">double</span> exam3 = input.nextDouble();
+
+        <span class="kw">double</span> average = (exam1 + exam2 + exam3) / <span class="num">3.0</span>;
+
+        <span class="type">System</span>.out.println(<span class="str">"Average = "</span> + average);
+    }
+}</code></pre></div>
+<p>This program demonstrates most of the week's important ideas:</p>
+<ul><li>variables,</li><li>data types,</li><li>input,</li><li>arithmetic expressions,</li><li>assignment,</li><li>output.</li></ul>
+<hr>
+<h1>Part XXXII - Mental model of program execution</h1>
+<h2>60. Programs execute sequentially</h2>
+<p>For now, programs execute approximately from top to bottom.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;
+x = x + <span class="num">1</span>;
+x = x * <span class="num">2</span>;
+
+<span class="type">System</span>.out.println(x);</code></pre></div>
+<p>Execution occurs in this order:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 5
+x = 6
+x = 12
+print 12</code></pre></div>
+<p>Later, conditionals, loops, and method calls will make control flow more sophisticated.</p>
+<p>But execution always follows defined rules.</p>
+<hr>
+<h1>Part XXXIII - memory and state</h1>
+<h2>61. Program state</h2>
+<p>At any moment during execution, a program has a <strong>state</strong>.</p>
+<p>The state includes the current values stored in variables.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> balance = <span class="num">100</span>;
+balance = balance - <span class="num">25</span>;
+balance = balance + <span class="num">50</span>;</code></pre></div>
+<p>The state evolves:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>balance = 100
+balance = 75
+balance = 125</code></pre></div>
+<p>Thinking about how program state changes over time is an important skill.</p>
+<p>It becomes especially important when we later study:</p>
+<ul><li>loops,</li><li>objects,</li><li>arrays,</li><li>linked structures,</li><li>recursion,</li><li>algorithms.</li></ul>
+<hr>
+<h1>Part XXXIV - Programming is about abstraction</h1>
+<h2>62. Levels of detail</h2>
+<p>You do not need to understand how electrical signals move through a processor in order to write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;</code></pre></div>
+<p>Java provides abstractions that allow us to reason at a higher level.</p>
+<p>For example, we say:</p>
+<blockquote>Store the integer 5 in the variable <code>x</code>.</blockquote>
+<p>The computer ultimately performs much lower-level operations.</p>
+<p>A major theme throughout computer science is:</p>
+<blockquote>Managing complexity through abstraction.</blockquote>
+<p>Later examples include:</p>
+<ul><li>methods,</li><li>classes,</li><li>interfaces,</li><li>data structures,</li><li>libraries,</li><li>operating systems,</li><li>databases.</li></ul>
+<hr>
+<h1>Part XXXV - Exercises</h1>
+<h2>63. Exercise: variable trace</h2>
+<p>Trace:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> a = <span class="num">5</span>;
+<span class="kw">int</span> b = <span class="num">8</span>;
+
+a = b;
+b = a + <span class="num">2</span>;</code></pre></div>
+<p>What are the final values?</p>
+<p>Answer:</p>
+<p>After:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a = b;</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a = 8
+b = 8</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>b = a + <span class="num">2</span>;</code></pre></div>
+<p>gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a = 8
+b = 10</code></pre></div>
+<hr>
+<h2>64. Exercise: Arithmetic</h2>
+<p>What does this print?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">17</span>;
+<span class="kw">int</span> y = <span class="num">5</span>;
+
+<span class="type">System</span>.out.println(x / y);
+<span class="type">System</span>.out.println(x % y);</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3
+2</code></pre></div>
+<p>because:</p>
+<div class="math-block"><pre>17 = 5(3) + 2</pre></div>
+<hr>
+<h2>65. Exercise: Conversion</h2>
+<p>Write a program that asks the user for a number of minutes and converts it to seconds.</p>
+<p>Formula:</p>
+<div class="math-block"><pre>seconds = minutes × 60</pre></div>
+<p>Possible implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">MinutesToSeconds</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter minutes: "</span>);
+        <span class="kw">double</span> minutes = input.nextDouble();
+
+        <span class="kw">double</span> seconds = minutes * <span class="num">60</span>;
+
+        <span class="type">System</span>.out.println(<span class="str">"Seconds = "</span> + seconds);
+    }
+}</code></pre></div>
+<hr>
+<h1>Part XXXVI - Common beginner mistakes</h1>
+<h2>66. Missing semicolons</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span></code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;</code></pre></div>
+<hr>
+<h2>67. Wrong capitalization</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>system.out.println(<span class="str">"Hello"</span>);</code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Hello"</span>);</code></pre></div>
+<p>Java is case-sensitive.</p>
+<hr>
+<h2>68. Using a variable before declaring it</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = <span class="num">10</span>;
+<span class="kw">int</span> x;</code></pre></div>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;</code></pre></div>
+<hr>
+<h2>69. Confusing <code>int</code> and <code>double</code></h2>
+<p>Potentially problematic:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> average = <span class="num">7</span> / <span class="num">2</span>;</code></pre></div>
+<p>Result:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3</code></pre></div>
+<p>If the intended answer is <code>3.5</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> average = <span class="num">7.0</span> / <span class="num">2.0</span>;</code></pre></div>
+<hr>
+<h2>70. Forgetting quotation marks</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="type">Hello</span>);</code></pre></div>
+<p>Unless <code>Hello</code> is the name of a valid variable, this will not work.</p>
+<p>Text literals require quotation marks:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Hello"</span>);</code></pre></div>
+<hr>
+<h1>Part XXXVII - Week 1 programming lab</h1>
+<h2>71. Lab goals</h2>
+<p>Students should complete several short programs rather than one large program.</p>
+<p>Suggested exercises:</p>
+<h3>Exercise A - Personal introduction</h3>
+<p>Write a program that prints:</p>
+<ul><li>your name,</li><li>your academic background,</li><li>one reason you are studying computer science.</li></ul>
+<hr>
+<h3>Exercise B - Rectangle calculator</h3>
+<p>Ask the user for:</p>
+<ul><li>width,</li><li>height.</li></ul>
+<p>Display:</p>
+<ul><li>area,</li><li>perimeter.</li></ul>
+<p>Use:</p>
+<div class="math-block"><pre>area = width × height</pre></div>
+<p>and:</p>
+<div class="math-block"><pre>perimeter = 2(width + height)</pre></div>
+<hr>
+<h3>Exercise C - Temperature conversion</h3>
+<p>Ask for Fahrenheit and calculate Celsius.</p>
+<div class="math-block"><pre>C = 5 / 9(F - 32)</pre></div>
+<hr>
+<h3>Exercise D - Seconds converter</h3>
+<p>Ask the user for a number of seconds.</p>
+<p>Calculate the equivalent number of minutes and remaining seconds.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Input: 137
+Output:
+2 minutes
+17 seconds</code></pre></div>
+<p>Hint:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>minutes = totalSeconds / <span class="num">60</span>;
+remainingSeconds = totalSeconds % <span class="num">60</span>;</code></pre></div>
+<hr>
+<h3>Exercise E - Bill calculator</h3>
+<p>Ask for:</p>
+<ul><li>meal cost,</li><li>tax percentage,</li><li>tip percentage.</li></ul>
+<p>Calculate:</p>
+<ul><li>tax,</li><li>tip,</li><li>final bill.</li></ul>
+<p>This gives students practice translating a real-world problem into a sequence of computations.</p>
+<hr>
+<h1>Part XXXVIII - Suggested homework</h1>
+<h2>72. Programming assignment 0: Java setup and fundamentals</h2>
+<p>The first assignment should be relatively low stakes.</p>
+<p>Students should submit several small programs demonstrating that they can:</p>
+<ul><li>create a Java source file,</li><li>compile it,</li><li>run it,</li><li>use variables,</li><li>perform arithmetic,</li><li>accept input,</li><li>display output.</li></ul>
+<p>Suggested tasks:</p>
+<h3>Problem 1 - Distance conversion</h3>
+<p>Read a distance in miles and convert it to kilometers.</p>
+<p>Use:</p>
+<div class="math-block"><pre>1  mile = 1.60934  km</pre></div>
+<hr>
+<h3>Problem 2 - Circle measurements</h3>
+<p>Read a radius and calculate:</p>
+<div class="math-block"><pre>area = π r<sup>2</sup></pre></div>
+<p>and:</p>
+<div class="math-block"><pre>circumference = 2π r</pre></div>
+<p>Java provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Math</span>.PI</code></pre></div>
+<hr>
+<h3>Problem 3 - Time conversion</h3>
+<p>Read a number of seconds and calculate:</p>
+<ul><li>hours,</li><li>remaining minutes,</li><li>remaining seconds.</li></ul>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Input: 7384 seconds
+
+Output:
+2 hours
+3 minutes
+4 seconds</code></pre></div>
+<hr>
+<h3>Problem 4 - Weighted grade</h3>
+<p>Read three scores:</p>
+<ul><li>homework,</li><li>midterm,</li><li>final.</li></ul>
+<p>Suppose the weights are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Homework: 30%
+Midterm: 30%
+Final: 40%</code></pre></div>
+<p>Calculate the weighted course score.</p>
+<hr>
+<h1>Part XXXIX - Conceptual questions</h1>
+<h2>73. Students should be able to answer</h2>
+<ol><li>What is an algorithm?</li></ol>
+<ol><li>What is the difference between an algorithm and a program?</li></ol>
+<ol><li>What is source code?</li></ol>
+<ol><li>What does a compiler do?</li></ol>
+<ol><li>What is Java bytecode?</li></ol>
+<ol><li>What is the JVM?</li></ol>
+<ol><li>What is a variable?</li></ol>
+<ol><li>Why do variables have types?</li></ol>
+<ol><li>What is the difference between <code>int</code> and <code>double</code>?</li></ol>
+<ol><li>What is assignment?</li></ol>
+<ol><li>Why is:</li></ol>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x + <span class="num">1</span>;</code></pre></div>
+<p>valid Java?</p>
+<ol><li>What does integer division mean?</li></ol>
+<ol><li>What does <code>%</code> compute?</li></ol>
+<ol><li>What is the difference between a syntax error, runtime error, and logic error?</li></ol>
+<ol><li>Why should programmers trace programs manually?</li></ol>
+<hr>
+<h1>Part XL - key ideas to remember</h1>
+<h2>74. Week 1 summary</h2>
+<p>A <strong>program</strong> is a precise sequence of instructions executed by a computer.</p>
+<p>An <strong>algorithm</strong> is a procedure for solving a problem.</p>
+<p>Java source code is typically:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>written
+   ↓
+compiled
+   ↓
+translated into bytecode
+   ↓
+executed by the JVM</code></pre></div>
+<p>Variables allow programs to maintain state.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> students = <span class="num">25</span>;
+<span class="kw">double</span> average = <span class="num">92.4</span>;
+<span class="kw">boolean</span> enrolled = <span class="lit">true</span>;
+<span class="type">String</span> course = <span class="str">"CSC500"</span>;</code></pre></div>
+<p>Assignment changes program state:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x + <span class="num">1</span>;</code></pre></div>
+<p>Expressions compute values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> area = width * height;</code></pre></div>
+<p>Input can be obtained using <code>Scanner</code>.</p>
+<p>Output can be displayed using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(...)</code></pre></div>
+<p>Three important categories of errors are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>syntax errors
+runtime errors
+logic errors</code></pre></div>
+<p>Most importantly, programming requires learning to reason precisely about how instructions transform program state.</p>
+<hr>
+<h1>Looking ahead</h1>
+<p>In Week 1, our programs execute essentially from top to bottom.</p>
+<p>That severely limits what they can do.</p>
+<p>Suppose we want a program to behave differently depending on a student's grade:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>If the score is at least 90:
+    print "Excellent"
+
+Otherwise:
+    print "Keep working"</code></pre></div>
+<p>To do this, programs need the ability to make decisions.</p>
+<p>That brings us to Week 2: Decisions, boolean logic, and conditional execution</h2>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

@@ -1,0 +1,1535 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 3: loops and iteration</h2>
+<h3>Learning objectives</h3>
+<p>By the end of this week, you should be able to:</p>
+<ul><li>Explain why repetition is an important programming concept.</li><li>Use <code>while</code>, <code>for</code>, and <code>do-while</code> loops in Java.</li><li>Identify the initialization, condition, and update portions of a loop.</li><li>Trace the execution of a loop by hand.</li><li>Use counters and accumulators.</li><li>Process an unknown number of values using sentinel-controlled loops.</li><li>Write nested loops.</li><li>Recognize and prevent infinite loops.</li><li>Choose an appropriate loop structure for a given problem.</li><li>Use loops to solve simple computational problems.</li></ul>
+<hr>
+<h1>1. Why do we need loops?</h1>
+<p>Consider the following task:</p>
+<blockquote>Print the numbers 1 through 5.</blockquote>
+<p>We could write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="num">1</span>);
+<span class="type">System</span>.out.println(<span class="num">2</span>);
+<span class="type">System</span>.out.println(<span class="num">3</span>);
+<span class="type">System</span>.out.println(<span class="num">4</span>);
+<span class="type">System</span>.out.println(<span class="num">5</span>);</code></pre></div>
+<p>This works.</p>
+<p>But what if we want to print the numbers from 1 through 1,000?</p>
+<p>Writing 1,000 <code>println</code> statements would be tedious, difficult to maintain, and error-prone.</p>
+<p>Programming languages provide <strong>loops</strong> to repeat instructions.</p>
+<p>A loop allows us to express:</p>
+<blockquote>Repeat this operation while some condition is true.</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> number = <span class="num">1</span>;
+
+<span class="kw">while</span> (number &lt;= <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(number);
+    number++;
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+2
+3
+4
+5</code></pre></div>
+<p>The program contains only a few lines, but those lines can execute many times.</p>
+<hr>
+<h1>2. Repetition as a programming concept</h1>
+<p>Most interesting programs perform repetition.</p>
+<p>Examples include:</p>
+<ul><li>Processing every student in a class.</li><li>Reading every line in a file.</li><li>Searching through a collection of values.</li><li>Calculating the average of many numbers.</li><li>Simulating thousands of dice rolls.</li><li>Asking a user for input until valid input is entered.</li><li>Checking every item in a shopping cart.</li><li>Repeating a game until the player quits.</li></ul>
+<p>Loops are therefore one of the fundamental building blocks of programming.</p>
+<p>Recall the three basic control structures:</p>
+<ol><li><strong>Sequence</strong></li><li><strong>Selection</strong></li><li><strong>Iteration</strong></li></ol>
+<p>We studied selection using <code>if</code> and <code>else</code>.</p>
+<p>This week we study <strong>iteration</strong>, another word for repetition.</p>
+<hr>
+<h1>3. The <code>while</code> loop</h1>
+<p>The general syntax of a <code>while</code> loop is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">while</span> (condition) {
+    statements;
+}</code></pre></div>
+<p>The loop behaves as follows:</p>
+<ol><li>Evaluate the condition.</li><li>If the condition is <code>true</code>, execute the loop body.</li><li>Return to the condition.</li><li>Repeat.</li><li>When the condition becomes <code>false</code>, exit the loop.</li></ol>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+
+<span class="kw">while</span> (x &lt;= <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(x);
+    x++;
+}</code></pre></div>
+<p>Execution proceeds approximately like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 1
+Is x &lt;= 5? yes
+print 1
+x becomes 2
+
+Is x &lt;= 5? yes
+print 2
+x becomes 3
+
+Is x &lt;= 5? yes
+print 3
+x becomes 4
+
+Is x &lt;= 5? yes
+print 4
+x becomes 5
+
+Is x &lt;= 5? yes
+print 5
+x becomes 6
+
+Is x &lt;= 5? no
+stop</code></pre></div>
+<p>The variable <code>x</code> is often called the <strong>loop control variable</strong>.</p>
+<hr>
+<h1>4. Three important parts of a loop</h1>
+<p>A typical loop has three components.</p>
+<h2>4.1 initialization</h2>
+<p>Before the loop starts, initialize the variable that controls the loop.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;</code></pre></div>
+<h2>4.2 condition</h2>
+<p>The condition determines whether the loop continues.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x &lt;= <span class="num">5</span></code></pre></div>
+<h2>4.3 update</h2>
+<p>Something inside the loop must move the program toward termination.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x++;</code></pre></div>
+<p>Together:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;              <span class="cmt">// initialization</span>
+
+<span class="kw">while</span> (x &lt;= <span class="num">5</span>) {        <span class="cmt">// condition</span>
+    <span class="type">System</span>.out.println(x);
+    x++;                <span class="cmt">// update</span>
+}</code></pre></div>
+<p>When examining a loop, you should always be able to identify these three components.</p>
+<hr>
+<h1>5. Infinite loops</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+
+<span class="kw">while</span> (x &lt;= <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(x);
+}</code></pre></div>
+<p>What happens?</p>
+<p><code>x</code> never changes.</p>
+<p>The condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x &lt;= <span class="num">5</span></code></pre></div>
+<p>therefore remains true forever.</p>
+<p>The program repeatedly prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+1
+1
+1
+1
+...</code></pre></div>
+<p>This is an <strong>infinite loop</strong>.</p>
+<p>An infinite loop occurs when the condition controlling a loop never becomes false.</p>
+<p>Another example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+
+<span class="kw">while</span> (x &lt;= <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(x);
+    x--;
+}</code></pre></div>
+<p>This is also infinite.</p>
+<p>The programmer intended <code>x</code> to approach 5, but instead <code>x</code> moves farther away:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+0
+-1
+-2
+-3
+...</code></pre></div>
+<h3>Important question when designing loops</h3>
+<p>Ask:</p>
+<blockquote>What changes on each iteration, and why will the condition eventually become false?</blockquote>
+<p>If you cannot answer this question, examine the loop carefully.</p>
+<hr>
+<h1>6. Loop tracing</h1>
+<p>Being able to trace code is an important programming skill.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">2</span>;
+
+<span class="kw">while</span> (x &lt; <span class="num">10</span>) {
+    <span class="type">System</span>.out.println(x);
+    x += <span class="num">2</span>;
+}</code></pre></div>
+<p>We can construct a trace table.</p>
+<table><thead><tr><th>Iteration</th><th>x before body</th><th><code>x &lt; 10</code></th><th>Printed</th><th>x after update</th></tr></thead><tbody><tr><td>1</td><td>2</td><td>true</td><td>2</td><td>4</td></tr><tr><td>2</td><td>4</td><td>true</td><td>4</td><td>6</td></tr><tr><td>3</td><td>6</td><td>true</td><td>6</td><td>8</td></tr><tr><td>4</td><td>8</td><td>true</td><td>8</td><td>10</td></tr><tr><td>-</td><td>10</td><td>false</td><td>-</td><td>-</td></tr></tbody></table>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2
+4
+6
+8</code></pre></div>
+<p>Trace tables are especially useful when debugging loops.</p>
+<hr>
+<h1>7. Increment and decrement operators</h1>
+<p>Java provides convenient operators for increasing or decreasing variables.</p>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x + <span class="num">1</span>;</code></pre></div>
+<p>we can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x++;</code></pre></div>
+<p>Similarly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x--;</code></pre></div>
+<p>is equivalent to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x - <span class="num">1</span>;</code></pre></div>
+<p>Java also provides compound assignment operators.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x += <span class="num">5</span>;
+x -= <span class="num">2</span>;
+x *= <span class="num">3</span>;
+x /= <span class="num">4</span>;</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x += <span class="num">5</span>;</code></pre></div>
+<p>means:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = x + <span class="num">5</span>;</code></pre></div>
+<hr>
+<h1>8. Counting down</h1>
+<p>Loops do not have to count upward.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">10</span>;
+
+<span class="kw">while</span> (count &gt;= <span class="num">1</span>) {
+    <span class="type">System</span>.out.println(count);
+    count--;
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Blast off!"</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Blast off!</code></pre></div>
+<hr>
+<h1>9. Counters</h1>
+<p>A <strong>counter</strong> is a variable used to count how many times something occurs.</p>
+<p>Example:</p>
+<p>Suppose we want to count how many numbers from 1 through 100 are divisible by 7.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> number = <span class="num">1</span>;
+<span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="kw">while</span> (number &lt;= <span class="num">100</span>) {
+
+    <span class="kw">if</span> (number % <span class="num">7</span> == <span class="num">0</span>) {
+        count++;
+    }
+
+    number++;
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Count = "</span> + count);</code></pre></div>
+<p>The variable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>count</code></pre></div>
+<p>is a counter.</p>
+<p>It starts at zero and increases whenever a desired event occurs.</p>
+<hr>
+<h1>10. Accumulators</h1>
+<p>An <strong>accumulator</strong> stores a running total.</p>
+<p>Suppose we want to compute:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 + 2 + 3 + 4 + 5</code></pre></div>
+<p>We could write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;
+<span class="kw">int</span> number = <span class="num">1</span>;
+
+<span class="kw">while</span> (number &lt;= <span class="num">5</span>) {
+    total = total + number;
+    number++;
+}
+
+<span class="type">System</span>.out.println(total);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>15</code></pre></div>
+<p>A trace:</p>
+<table><thead><tr><th>number</th><th>total before</th><th>total after</th></tr></thead><tbody><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>2</td><td>1</td><td>3</td></tr><tr><td>3</td><td>3</td><td>6</td></tr><tr><td>4</td><td>6</td><td>10</td></tr><tr><td>5</td><td>10</td><td>15</td></tr></tbody></table>
+<p>The variable <code>total</code> is the accumulator.</p>
+<p>A common abbreviated form is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>total += number;</code></pre></div>
+<hr>
+<h1>11. Computing an average</h1>
+<p>Suppose we have five exam scores.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+<span class="kw">double</span> total = <span class="num">0</span>;
+<span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="kw">while</span> (count &lt; <span class="num">5</span>) {
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter score: "</span>);
+    <span class="kw">double</span> score = input.nextDouble();
+
+    total += score;
+
+    count++;
+}
+
+<span class="kw">double</span> average = total / count;
+
+<span class="type">System</span>.out.println(<span class="str">"Average = "</span> + average);</code></pre></div>
+<p>This program demonstrates an important programming pattern:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>initialize accumulator
+initialize counter
+
+repeat:
+    get a value
+    add value to accumulator
+    increase counter
+
+calculate result</code></pre></div>
+<p>This pattern appears constantly in programs.</p>
+<hr>
+<h1>12. Counter-controlled loops</h1>
+<p>A loop is <strong>counter-controlled</strong> when the number of repetitions is known in advance.</p>
+<p>For example:</p>
+<blockquote>Ask the user to enter 10 numbers.</blockquote>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="kw">while</span> (count &lt; <span class="num">10</span>) {
+    <span class="type">System</span>.out.print(<span class="str">"Enter number: "</span>);
+    <span class="kw">int</span> number = input.nextInt();
+
+    count++;
+}</code></pre></div>
+<p>We know before execution that the loop should execute exactly ten times.</p>
+<hr>
+<h1>13. Sentinel-controlled loops</h1>
+<p>Sometimes we do not know how many values will be processed.</p>
+<p>Suppose we want:</p>
+<blockquote>Read numbers from the user until the user enters <code>-1</code>.</blockquote>
+<p>Here, <code>-1</code> is a <strong>sentinel value</strong>.</p>
+<p>A sentinel is a special value indicating that input is finished.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+<span class="type">System</span>.out.print(<span class="str">"Enter a number (-1 to quit): "</span>);
+<span class="kw">int</span> number = input.nextInt();
+
+<span class="kw">while</span> (number != -<span class="num">1</span>) {
+
+    <span class="type">System</span>.out.println(<span class="str">"You entered "</span> + number);
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter a number (-1 to quit): "</span>);
+    number = input.nextInt();
+}</code></pre></div>
+<p>Notice that input occurs twice:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number = input.nextInt();</code></pre></div>
+<p>once before the loop and once inside the loop.</p>
+<p>This is sometimes called a <strong>priming read</strong> pattern.</p>
+<hr>
+<h1>14. Sentinel-controlled average</h1>
+<p>Suppose a professor wants to enter exam scores but does not know how many students there are.</p>
+<p>The user enters <code>-1</code> when finished.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+<span class="kw">double</span> total = <span class="num">0</span>;
+<span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="type">System</span>.out.print(<span class="str">"Enter score (-1 to finish): "</span>);
+<span class="kw">double</span> score = input.nextDouble();
+
+<span class="kw">while</span> (score != -<span class="num">1</span>) {
+
+    total += score;
+    count++;
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter score (-1 to finish): "</span>);
+    score = input.nextDouble();
+}
+
+<span class="kw">if</span> (count &gt; <span class="num">0</span>) {
+    <span class="kw">double</span> average = total / count;
+
+    <span class="type">System</span>.out.println(<span class="str">"Number of scores: "</span> + count);
+    <span class="type">System</span>.out.println(<span class="str">"Average: "</span> + average);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"No scores entered."</span>);
+}</code></pre></div>
+<p>Notice the check:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (count &gt; <span class="num">0</span>)</code></pre></div>
+<p>Why is it necessary?</p>
+<p>Because otherwise we could perform:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>total / count</code></pre></div>
+<p>when <code>count</code> is zero.</p>
+<hr>
+<h1>15. The <code>for</code> loop</h1>
+<p>Many loops follow the same pattern:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>initialize variable
+
+<span class="kw">while</span> (condition) {
+    statements
+    update variable
+}</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> i = <span class="num">1</span>;
+
+<span class="kw">while</span> (i &lt;= <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(i);
+    i++;
+}</code></pre></div>
+<p>Because this pattern is so common, Java provides the <code>for</code> loop.</p>
+<p>Equivalent code:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">5</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>General structure:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (initialization; condition; update) {
+    statements;
+}</code></pre></div>
+<p>The three components appear together:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">5</span>; i++)</code></pre></div>
+<p>which can be read as:</p>
+<blockquote>Start <code>i</code> at 1.  
+Continue while <code>i &lt;= 5</code>.  
+Increase <code>i</code> by 1 after each iteration.</blockquote>
+<hr>
+<h1>16. Understanding <code>for</code> loop execution</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">3</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>Execution order:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>int i = 1
+
+check i &lt;= 3
+
+execute body
+
+execute i++
+
+check i &lt;= 3
+
+execute body
+
+execute i++
+
+...</code></pre></div>
+<p>The initialization executes only once.</p>
+<p>The condition executes before each iteration.</p>
+<p>The update executes after each iteration.</p>
+<hr>
+<h1>17. Common <code>for</code> loop patterns</h1>
+<h2>Counting from 0 to 9</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<h2>Counting from 1 to 10</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<h2>Counting by 2</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt;= <span class="num">20</span>; i += <span class="num">2</span>) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<h2>Counting backward</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">10</span>; i &gt;= <span class="num">1</span>; i--) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<h2>Counting by 5</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt;= <span class="num">100</span>; i += <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<hr>
+<h1>18. <code>while</code> versus <code>for</code></h1>
+<p>These two loops can often perform exactly the same task.</p>
+<h3><code>while</code></h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> i = <span class="num">1</span>;
+
+<span class="kw">while</span> (i &lt;= <span class="num">10</span>) {
+    <span class="type">System</span>.out.println(i);
+    i++;
+}</code></pre></div>
+<h3><code>for</code></h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>A useful guideline is:</p>
+<h3>Use a <code>for</code> loop when:</h3>
+<p>The number of repetitions is known or naturally expressed using a counter.</p>
+<p>Example:</p>
+<blockquote>Repeat 20 times.</blockquote>
+<h3>Use a <code>while</code> loop when:</h3>
+<p>The number of repetitions is not known in advance.</p>
+<p>Example:</p>
+<blockquote>Continue asking for input until the user enters <code>"quit"</code>.</blockquote>
+<p>This is a guideline rather than a strict rule.</p>
+<hr>
+<h1>19. Variable scope in <code>for</code> loops</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>The variable <code>i</code> exists only inside the loop.</p>
+<p>This will therefore produce a compilation error:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}
+
+<span class="type">System</span>.out.println(i);</code></pre></div>
+<p>If the variable must be used afterward, declare it before the loop.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> i;
+
+<span class="kw">for</span> (i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}
+
+<span class="type">System</span>.out.println(i);</code></pre></div>
+<hr>
+<h1>20. Off-by-one errors</h1>
+<p>A very common programming mistake is an <strong>off-by-one error</strong>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>Does this print 1 through 10?</p>
+<p>No.</p>
+<p>It prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+2
+3
+4
+5
+6
+7
+8
+9</code></pre></div>
+<p>because when <code>i</code> becomes 10:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>i &lt; <span class="num">10</span></code></pre></div>
+<p>is false.</p>
+<p>If we want 1 through 10:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>When designing a loop, carefully ask:</p>
+<ul><li>What is the first value?</li><li>What is the last value?</li><li>Should the condition use <code>&lt;</code> or <code>&lt;=</code>?</li><li>Exactly how many times should the loop execute?</li></ul>
+<hr>
+<h1>21. A useful loop counting formula</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++)</code></pre></div>
+<p>Values of <code>i</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0 1 2 3 4 5 6 7 8 9</code></pre></div>
+<p>There are 10 iterations.</p>
+<p>This pattern:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)</code></pre></div>
+<p>executes exactly <code>n</code> times.</p>
+<p>You will see this pattern constantly in Java.</p>
+<p>Later, when we study arrays, it will become especially important.</p>
+<hr>
+<h1>22. Summation with a <code>for</code> loop</h1>
+<p>Suppose we want to compute:</p>
+<div class="math-block"><pre>1 + 2 + 3 + ·s + 100</pre></div>
+<p>We can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">100</span>; i++) {
+    total += i;
+}
+
+<span class="type">System</span>.out.println(total);</code></pre></div>
+<p>The result is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5050</code></pre></div>
+<hr>
+<h1>23. Finding a maximum</h1>
+<p>Loops frequently keep track of the best, largest, smallest, or most recent value seen so far.</p>
+<p>Suppose the user enters five numbers.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(<span class="str">"Enter number: "</span>);
+<span class="kw">int</span> largest = input.nextInt();
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; <span class="num">5</span>; i++) {
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter number: "</span>);
+    <span class="kw">int</span> number = input.nextInt();
+
+    <span class="kw">if</span> (number &gt; largest) {
+        largest = number;
+    }
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Largest = "</span> + largest);</code></pre></div>
+<p>The key idea is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (number &gt; largest) {
+    largest = number;
+}</code></pre></div>
+<p>At every point in the loop, <code>largest</code> represents:</p>
+<blockquote>the largest value we have seen so far.</blockquote>
+<p>This idea appears frequently in algorithms.</p>
+<hr>
+<h1>24. Counting values that satisfy a condition</h1>
+<p>Suppose we want to determine how many integers from 1 to 100 are divisible by both 3 and 5.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">100</span>; i++) {
+
+    <span class="kw">if</span> (i % <span class="num">3</span> == <span class="num">0</span> &amp;&amp; i % <span class="num">5</span> == <span class="num">0</span>) {
+        count++;
+    }
+}
+
+<span class="type">System</span>.out.println(count);</code></pre></div>
+<p>This combines two important concepts:</p>
+<ul><li>iteration</li><li>selection</li></ul>
+<p>Loops and <code>if</code> statements are frequently used together.</p>
+<hr>
+<h1>25. Example: fizzbuzz</h1>
+<p>Consider the following problem:</p>
+<p>For numbers 1 through 100:</p>
+<ul><li>Print <code>"Fizz"</code> if the number is divisible by 3.</li><li>Print <code>"Buzz"</code> if divisible by 5.</li><li>Print <code>"FizzBuzz"</code> if divisible by both.</li><li>Otherwise print the number.</li></ul>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">100</span>; i++) {
+
+    <span class="kw">if</span> (i % <span class="num">3</span> == <span class="num">0</span> &amp;&amp; i % <span class="num">5</span> == <span class="num">0</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"FizzBuzz"</span>);
+    } <span class="kw">else</span> <span class="kw">if</span> (i % <span class="num">3</span> == <span class="num">0</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"Fizz"</span>);
+    } <span class="kw">else</span> <span class="kw">if</span> (i % <span class="num">5</span> == <span class="num">0</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"Buzz"</span>);
+    } <span class="kw">else</span> {
+        <span class="type">System</span>.out.println(i);
+    }
+}</code></pre></div>
+<p>Why must we test divisibility by both 3 and 5 first?</p>
+<p>Suppose <code>i</code> is 15.</p>
+<p>If we first test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>i % <span class="num">3</span> == <span class="num">0</span></code></pre></div>
+<p>then Java enters that branch immediately and prints <code>"Fizz"</code>.</p>
+<p>The more specific condition should therefore come first.</p>
+<hr>
+<h1>26. The <code>do-while</code> loop</h1>
+<p>Java also provides a third loop structure:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">do</span> {
+    statements;
+} <span class="kw">while</span> (condition);</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+
+<span class="kw">do</span> {
+    <span class="type">System</span>.out.println(x);
+    x++;
+} <span class="kw">while</span> (x &lt;= <span class="num">5</span>);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+2
+3
+4
+5</code></pre></div>
+<p>The important difference is that the condition is checked <strong>after</strong> the loop body.</p>
+<p>Therefore, a <code>do-while</code> loop always executes at least once.</p>
+<hr>
+<h1>27. <code>while</code> versus <code>do-while</code></h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+
+<span class="kw">while</span> (x &lt; <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(x);
+}</code></pre></div>
+<p>The body executes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0 times</code></pre></div>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+
+<span class="kw">do</span> {
+    <span class="type">System</span>.out.println(x);
+} <span class="kw">while</span> (x &lt; <span class="num">5</span>);</code></pre></div>
+<p>The body executes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 time</code></pre></div>
+<p>even though the condition is false.</p>
+<hr>
+<h1>28. Good use case for <code>do-while</code></h1>
+<p>A menu is a common example.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> choice;
+
+<span class="kw">do</span> {
+
+    <span class="type">System</span>.out.println(<span class="str">"1. Add"</span>);
+    <span class="type">System</span>.out.println(<span class="str">"2. Delete"</span>);
+    <span class="type">System</span>.out.println(<span class="str">"3. Search"</span>);
+    <span class="type">System</span>.out.println(<span class="str">"4. Quit"</span>);
+
+    <span class="type">System</span>.out.print(<span class="str">"Choose an option: "</span>);
+    choice = input.nextInt();
+
+    <span class="kw">if</span> (choice == <span class="num">1</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"Adding..."</span>);
+    } <span class="kw">else</span> <span class="kw">if</span> (choice == <span class="num">2</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"Deleting..."</span>);
+    } <span class="kw">else</span> <span class="kw">if</span> (choice == <span class="num">3</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"Searching..."</span>);
+    }
+
+} <span class="kw">while</span> (choice != <span class="num">4</span>);
+
+<span class="type">System</span>.out.println(<span class="str">"Goodbye."</span>);</code></pre></div>
+<p>The menu must appear at least once, making <code>do-while</code> a natural choice.</p>
+<hr>
+<h1>29. Input validation with loops</h1>
+<p>Loops are useful for enforcing valid input.</p>
+<p>Suppose a score must be between 0 and 100.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(<span class="str">"Enter score: "</span>);
+<span class="kw">int</span> score = input.nextInt();
+
+<span class="kw">while</span> (score &lt; <span class="num">0</span> || score &gt; <span class="num">100</span>) {
+
+    <span class="type">System</span>.out.println(<span class="str">"Invalid score."</span>);
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter score again: "</span>);
+    score = input.nextInt();
+}</code></pre></div>
+<p>The loop continues until a valid value is entered.</p>
+<p>Notice the condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>score &lt; <span class="num">0</span> || score &gt; <span class="num">100</span></code></pre></div>
+<p>This means:</p>
+<blockquote>Continue looping while the score is invalid.</blockquote>
+<hr>
+<h1>30. Nested loops</h1>
+<p>A loop can appear inside another loop.</p>
+<p>This is called a <strong>nested loop</strong>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> row = <span class="num">1</span>; row &lt;= <span class="num">3</span>; row++) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> column = <span class="num">1</span>; column &lt;= <span class="num">4</span>; column++) {
+        <span class="type">System</span>.out.print(<span class="str">"*"</span>);
+    }
+
+    <span class="type">System</span>.out.println();
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>****
+****
+****</code></pre></div>
+<p>The outer loop controls the rows.</p>
+<p>The inner loop controls the columns.</p>
+<hr>
+<h1>31. Understanding nested loop execution</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">3</span>; i++) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">1</span>; j &lt;= <span class="num">2</span>; j++) {
+        <span class="type">System</span>.out.println(<span class="str">"i = "</span> + i + <span class="str">", j = "</span> + j);
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>i = 1, j = 1
+i = 1, j = 2
+i = 2, j = 1
+i = 2, j = 2
+i = 3, j = 1
+i = 3, j = 2</code></pre></div>
+<p>For every one iteration of the outer loop, the inner loop completes all of its iterations.</p>
+<p>The outer loop executes 3 times.</p>
+<p>The inner loop executes 2 times for each outer iteration.</p>
+<p>Therefore, the body of the inner loop executes:</p>
+<div class="math-block"><pre>3 × 2 = 6</pre></div>
+<p>times.</p>
+<p>This idea becomes important later when we study algorithm efficiency.</p>
+<hr>
+<h1>32. Pattern printing</h1>
+<p>Nested loops can generate patterns.</p>
+<h2>Rectangle</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> row = <span class="num">0</span>; row &lt; <span class="num">4</span>; row++) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> column = <span class="num">0</span>; column &lt; <span class="num">6</span>; column++) {
+        <span class="type">System</span>.out.print(<span class="str">"*"</span>);
+    }
+
+    <span class="type">System</span>.out.println();
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>******
+******
+******
+******</code></pre></div>
+<h2>Triangle</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> row = <span class="num">1</span>; row &lt;= <span class="num">5</span>; row++) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> column = <span class="num">1</span>; column &lt;= row; column++) {
+        <span class="type">System</span>.out.print(<span class="str">"*"</span>);
+    }
+
+    <span class="type">System</span>.out.println();
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>*
+**
+***
+****
+*****</code></pre></div>
+<p>Ask yourself:</p>
+<p>Why does the second program produce a triangle?</p>
+<p>The inner loop condition is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>column &lt;= row</code></pre></div>
+<p>As <code>row</code> increases, the number of iterations of the inner loop increases.</p>
+<hr>
+<h1>33. Multiplication table</h1>
+<p>Nested loops can also generate a multiplication table.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> row = <span class="num">1</span>; row &lt;= <span class="num">10</span>; row++) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> column = <span class="num">1</span>; column &lt;= <span class="num">10</span>; column++) {
+
+        <span class="kw">int</span> product = row * column;
+
+        <span class="type">System</span>.out.print(product + <span class="str">"\t"</span>);
+    }
+
+    <span class="type">System</span>.out.println();
+}</code></pre></div>
+<p>The variable <code>row</code> determines one factor.</p>
+<p>The variable <code>column</code> determines the other.</p>
+<hr>
+<h1>34. Simulations</h1>
+<p>Loops allow us to simulate repeated random events.</p>
+<p>Suppose we want to roll a six-sided die ten times.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+
+    <span class="kw">int</span> roll = (<span class="kw">int</span>)(<span class="type">Math</span>.random() * <span class="num">6</span>) + <span class="num">1</span>;
+
+    <span class="type">System</span>.out.println(roll);
+}</code></pre></div>
+<p>The expression:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Math</span>.random()</code></pre></div>
+<p>produces a random <code>double</code> approximately in the range:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0.0 &lt;= value &lt; 1.0</code></pre></div>
+<p>Multiplying by 6 gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0.0 &lt;= value &lt; 6.0</code></pre></div>
+<p>Casting to <code>int</code> produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0, 1, 2, 3, 4, or 5</code></pre></div>
+<p>Adding 1 gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1, 2, 3, 4, 5, or 6</code></pre></div>
+<hr>
+<h1>35. Simulation example: counting sixes</h1>
+<p>Suppose we roll a die 1,000 times and count how many times we obtain a 6.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> sixCount = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">1000</span>; i++) {
+
+    <span class="kw">int</span> roll = (<span class="kw">int</span>)(<span class="type">Math</span>.random() * <span class="num">6</span>) + <span class="num">1</span>;
+
+    <span class="kw">if</span> (roll == <span class="num">6</span>) {
+        sixCount++;
+    }
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Number of sixes: "</span> + sixCount);</code></pre></div>
+<p>Because a fair die has six possible outcomes, we might expect approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1000 / 6 ≈ 167</code></pre></div>
+<p>sixes.</p>
+<p>However, the exact result will vary.</p>
+<p>This illustrates an important distinction:</p>
+<h3>Theoretical result</h3>
+<p>About one-sixth of rolls should be sixes.</p>
+<h3>Experimental result</h3>
+<p>The actual number obtained by the simulation.</p>
+<p>As the number of trials increases, experimental results often become closer to theoretical probabilities.</p>
+<hr>
+<h1>36. Example: coin toss simulation</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> heads = <span class="num">0</span>;
+<span class="kw">int</span> tails = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">1000</span>; i++) {
+
+    <span class="kw">int</span> toss = (<span class="kw">int</span>)(<span class="type">Math</span>.random() * <span class="num">2</span>);
+
+    <span class="kw">if</span> (toss == <span class="num">0</span>) {
+        heads++;
+    } <span class="kw">else</span> {
+        tails++;
+    }
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Heads: "</span> + heads);
+<span class="type">System</span>.out.println(<span class="str">"Tails: "</span> + tails);</code></pre></div>
+<p>A possible result might be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Heads: 493
+Tails: 507</code></pre></div>
+<p>Running the program again may produce different results.</p>
+<hr>
+<h1>37. <code>break</code></h1>
+<p>Java provides the <code>break</code> statement to immediately exit a loop.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">100</span>; i++) {
+
+    <span class="kw">if</span> (i == <span class="num">7</span>) {
+        <span class="kw">break</span>;
+    }
+
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+2
+3
+4
+5
+6</code></pre></div>
+<p>When <code>i</code> becomes 7, the loop terminates.</p>
+<p><code>break</code> can be useful, but it should be used carefully.</p>
+<p>In many cases, a well-designed loop condition is easier to understand than multiple <code>break</code> statements.</p>
+<hr>
+<h1>38. <code>continue</code></h1>
+<p>The <code>continue</code> statement skips the remainder of the current iteration.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+
+    <span class="kw">if</span> (i == <span class="num">5</span>) {
+        <span class="kw">continue</span>;
+    }
+
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+2
+3
+4
+6
+7
+8
+9
+10</code></pre></div>
+<p>The number 5 is skipped.</p>
+<p>Again, use <code>continue</code> carefully. Code can often be written more clearly without it.</p>
+<hr>
+<h1>39. Common loop errors</h1>
+<h2>Error 1: forgetting the update</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+
+<span class="kw">while</span> (x &lt;= <span class="num">10</span>) {
+    <span class="type">System</span>.out.println(x);
+}</code></pre></div>
+<p>Result: infinite loop.</p>
+<hr>
+<h2>Error 2: updating in the wrong direction</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+
+<span class="kw">while</span> (x &lt;= <span class="num">10</span>) {
+    <span class="type">System</span>.out.println(x);
+    x--;
+}</code></pre></div>
+<p>Result: infinite loop.</p>
+<hr>
+<h2>Error 3: off-by-one error</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; <span class="num">10</span>; i++)</code></pre></div>
+<p>executes 9 times, not 10.</p>
+<hr>
+<h2>Error 4: extra semicolon</h2>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++); {
+    <span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+}</code></pre></div>
+<p>Notice the semicolon after the <code>for</code> statement.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>i++);</code></pre></div>
+<p>That semicolon represents an empty loop body.</p>
+<p>The following block is therefore not actually part of the loop.</p>
+<p>This code prints <code>"Hello"</code> only once.</p>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+}</code></pre></div>
+<hr>
+<h2>Error 5: incorrect initialization</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> total;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+    total += i;
+}</code></pre></div>
+<p>This produces an error because <code>total</code> has not been initialized.</p>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;</code></pre></div>
+<hr>
+<h2>Error 6: resetting an accumulator inside the loop</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+
+    <span class="kw">int</span> total = <span class="num">0</span>;
+
+    total += i;
+}</code></pre></div>
+<p>The variable is reset to zero during every iteration.</p>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+    total += i;
+}</code></pre></div>
+<hr>
+<h1>40. Choosing the correct loop</h1>
+<p>A useful rule of thumb:</p>
+<table><thead><tr><th>Situation</th><th>Suggested Loop</th></tr></thead><tbody><tr><td>Repeat exactly 10 times</td><td><code>for</code></td></tr><tr><td>Process numbers 1 through 100</td><td><code>for</code></td></tr><tr><td>Process each position in a sequence</td><td><code>for</code></td></tr><tr><td>Continue until user enters <code>-1</code></td><td><code>while</code></td></tr><tr><td>Continue until valid input appears</td><td><code>while</code></td></tr><tr><td>Run a menu at least once</td><td><code>do-while</code></td></tr><tr><td>Repeat until some condition changes</td><td><code>while</code></td></tr></tbody></table>
+<p>Do not choose a loop simply because one form is shorter.</p>
+<p>Choose the structure that best communicates the intent of the program.</p>
+<hr>
+<h1>41. Problem-solving strategy for loops</h1>
+<p>Before writing code, answer four questions.</p>
+<h2>Question 1: what needs to repeat?</h2>
+<p>Example:</p>
+<blockquote>Read a number and add it to a running total.</blockquote>
+<h2>Question 2: when should repetition stop?</h2>
+<p>Example:</p>
+<blockquote>Stop after 10 numbers.</blockquote>
+<p>or:</p>
+<blockquote>Stop when the user enters <code>-1</code>.</blockquote>
+<h2>Question 3: what information must be remembered between iterations?</h2>
+<p>Examples:</p>
+<ul><li>running total</li><li>count</li><li>largest value seen</li><li>smallest value seen</li></ul>
+<h2>Question 4: what changes on every iteration?</h2>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>count++;</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number = input.nextInt();</code></pre></div>
+<p>Thinking through these questions before coding prevents many common loop errors.</p>
+<hr>
+<h1>42. Worked example: sum of even numbers</h1>
+<h3>Problem</h3>
+<p>Calculate the sum of the even integers from 2 through 100.</p>
+<h3>Step 1: identify repetition</h3>
+<p>We need to examine a series of numbers.</p>
+<h3>Step 2: choose a loop</h3>
+<p>The range is known, so a <code>for</code> loop is natural.</p>
+<h3>Step 3: create an accumulator</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> sum = <span class="num">0</span>;</code></pre></div>
+<h3>Solution 1</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> sum = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">2</span>; i &lt;= <span class="num">100</span>; i += <span class="num">2</span>) {
+    sum += i;
+}
+
+<span class="type">System</span>.out.println(sum);</code></pre></div>
+<p>We could also write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> sum = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">100</span>; i++) {
+
+    <span class="kw">if</span> (i % <span class="num">2</span> == <span class="num">0</span>) {
+        sum += i;
+    }
+}</code></pre></div>
+<p>Both solutions work.</p>
+<p>Which is preferable?</p>
+<p>The first is more direct because it generates only even numbers.</p>
+<hr>
+<h1>43. Worked example: number guessing game</h1>
+<p>Suppose the computer chooses a number from 1 through 100.</p>
+<p>The player keeps guessing until they find the number.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+<span class="kw">int</span> secret = (<span class="kw">int</span>)(<span class="type">Math</span>.random() * <span class="num">100</span>) + <span class="num">1</span>;
+
+<span class="kw">int</span> guess = <span class="num">0</span>;
+
+<span class="kw">while</span> (guess != secret) {
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter your guess: "</span>);
+    guess = input.nextInt();
+
+    <span class="kw">if</span> (guess &lt; secret) {
+        <span class="type">System</span>.out.println(<span class="str">"Too low."</span>);
+    } <span class="kw">else</span> <span class="kw">if</span> (guess &gt; secret) {
+        <span class="type">System</span>.out.println(<span class="str">"Too high."</span>);
+    } <span class="kw">else</span> {
+        <span class="type">System</span>.out.println(<span class="str">"Correct!"</span>);
+    }
+}</code></pre></div>
+<p>Here, we do not know how many guesses will be required.</p>
+<p>Therefore a <code>while</code> loop is a natural choice.</p>
+<hr>
+<h1>44. Improving the guessing game</h1>
+<p>We can also count the number of attempts.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+<span class="kw">int</span> secret = (<span class="kw">int</span>)(<span class="type">Math</span>.random() * <span class="num">100</span>) + <span class="num">1</span>;
+
+<span class="kw">int</span> guess = <span class="num">0</span>;
+<span class="kw">int</span> attempts = <span class="num">0</span>;
+
+<span class="kw">while</span> (guess != secret) {
+
+    <span class="type">System</span>.out.print(<span class="str">"Enter your guess: "</span>);
+    guess = input.nextInt();
+
+    attempts++;
+
+    <span class="kw">if</span> (guess &lt; secret) {
+        <span class="type">System</span>.out.println(<span class="str">"Too low."</span>);
+    } <span class="kw">else</span> <span class="kw">if</span> (guess &gt; secret) {
+        <span class="type">System</span>.out.println(<span class="str">"Too high."</span>);
+    }
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Correct!"</span>);
+<span class="type">System</span>.out.println(<span class="str">"Attempts: "</span> + attempts);</code></pre></div>
+<p>Notice that several ideas work together:</p>
+<ul><li>loop</li><li>user input</li><li>conditionals</li><li>counter</li><li>random numbers</li></ul>
+<p>Programs become interesting when fundamental constructs are combined.</p>
+<hr>
+<h1>45. Worked example: digit sum</h1>
+<p>Suppose we want to add the digits of an integer.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5274</code></pre></div>
+<p>should produce:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5 + 2 + 7 + 4 = 18</code></pre></div>
+<p>We can repeatedly extract the last digit.</p>
+<p>Recall:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">5274</span> % <span class="num">10</span></code></pre></div>
+<p>gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4</code></pre></div>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">5274</span> / <span class="num">10</span></code></pre></div>
+<p>using integer division gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>527</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> number = <span class="num">5274</span>;
+<span class="kw">int</span> sum = <span class="num">0</span>;
+
+<span class="kw">while</span> (number &gt; <span class="num">0</span>) {
+
+    <span class="kw">int</span> digit = number % <span class="num">10</span>;
+
+    sum += digit;
+
+    number /= <span class="num">10</span>;
+}
+
+<span class="type">System</span>.out.println(sum);</code></pre></div>
+<p>Trace:</p>
+<table><thead><tr><th>number</th><th>digit</th><th>sum</th></tr></thead><tbody><tr><td>5274</td><td>4</td><td>4</td></tr><tr><td>527</td><td>7</td><td>11</td></tr><tr><td>52</td><td>2</td><td>13</td></tr><tr><td>5</td><td>5</td><td>18</td></tr><tr><td>0</td><td>-</td><td>18</td></tr></tbody></table>
+<p>This is an important example because the loop is not simply counting from one number to another.</p>
+<p>Instead, each iteration transforms the problem into a smaller version of itself.</p>
+<hr>
+<h1>46. Worked example: prime number test</h1>
+<p>An integer greater than 1 is prime if it has no positive divisors other than 1 and itself.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>7</code></pre></div>
+<p>is prime.</p>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>12</code></pre></div>
+<p>is not prime because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>12 % 2 == 0</code></pre></div>
+<p>One basic approach is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> number = <span class="num">17</span>;
+<span class="kw">boolean</span> prime = <span class="lit">true</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> divisor = <span class="num">2</span>; divisor &lt; number; divisor++) {
+
+    <span class="kw">if</span> (number % divisor == <span class="num">0</span>) {
+        prime = <span class="lit">false</span>;
+        <span class="kw">break</span>;
+    }
+}
+
+<span class="kw">if</span> (prime) {
+    <span class="type">System</span>.out.println(number + <span class="str">" is prime."</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(number + <span class="str">" is not prime."</span>);
+}</code></pre></div>
+<p>This is not the most efficient prime-testing algorithm.</p>
+<p>That is intentional.</p>
+<p>At this stage, the important goal is understanding how loops can search for evidence that satisfies a condition.</p>
+<p>Later in the course, we will ask:</p>
+<blockquote>Can we make this algorithm faster?</blockquote>
+<hr>
+<h1>47. Loops and algorithms</h1>
+<p>A loop is a programming construct.</p>
+<p>An <strong>algorithm</strong> is a procedure for solving a problem.</p>
+<p>Loops are often used to implement algorithms.</p>
+<p>Consider finding the largest value among a series of numbers.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>remember the first value as the largest
+
+for every remaining value:
+    if the value is larger than the remembered value:
+        remember this value instead
+
+report the remembered value</code></pre></div>
+<p>This is an algorithm.</p>
+<p>Java provides syntax that allows us to implement the algorithm.</p>
+<p>One important goal of this course is to distinguish:</p>
+<blockquote>What is the algorithm?</blockquote>
+<p>from:</p>
+<blockquote>How is the algorithm written in Java?</blockquote>
+<hr>
+<h1>48. Repetition and efficiency</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>The loop body executes 10 times.</p>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">1000</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>The body executes 1,000 times.</p>
+<p>And:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>executes approximately <code>n</code> times.</p>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        <span class="type">System</span>.out.println(i + <span class="str">", "</span> + j);
+    }
+}</code></pre></div>
+<p>The inner statement executes:</p>
+<div class="math-block"><pre>n × n = n<sup>2</sup></pre></div>
+<p>times.</p>
+<p>We will study this formally later when we introduce algorithm analysis and Big-O notation.</p>
+<p>For now, notice:</p>
+<blockquote>The structure of loops strongly affects how much work a program performs.</blockquote>
+<hr>
+<h1>49. Debugging loops</h1>
+<p>When a loop does not behave as expected, print the important variables.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+
+<span class="kw">while</span> (x &lt; <span class="num">20</span>) {
+
+    <span class="type">System</span>.out.println(<span class="str">"Before update: x = "</span> + x);
+
+    x *= <span class="num">2</span>;
+
+    <span class="type">System</span>.out.println(<span class="str">"After update: x = "</span> + x);
+}</code></pre></div>
+<p>Temporary debugging output can help answer:</p>
+<ul><li>Does the loop execute?</li><li>How many times?</li><li>What value does the control variable have?</li><li>Does the update occur?</li><li>When does the condition become false?</li></ul>
+<p>Do not simply stare at incorrect code.</p>
+<p>Gather evidence about what the program is actually doing.</p>
+<hr>
+<h1>50. Loop invariants: a preview</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> sum = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">5</span>; i++) {
+    sum += i;
+}</code></pre></div>
+<p>After each iteration, <code>sum</code> contains the total of all numbers processed so far.</p>
+<p>For example:</p>
+<p>After processing 3:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sum = 1 + 2 + 3</code></pre></div>
+<p>This statement remains true throughout execution.</p>
+<p>Such a property is related to an idea called a <strong>loop invariant</strong>.</p>
+<p>We will not formally prove loop correctness yet, but this style of reasoning is extremely useful:</p>
+<blockquote>What should be true after every iteration?</blockquote>
+<p>This question helps both when designing and debugging algorithms.</p>
+<hr>
+<h1>51. Lecture checkpoints</h1>
+<h2>Checkpoint 1</h2>
+<p>What does this print?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">3</span>;
+
+<span class="kw">while</span> (x &lt;= <span class="num">7</span>) {
+    <span class="type">System</span>.out.print(x + <span class="str">" "</span>);
+    x++;
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3 4 5 6 7</code></pre></div>
+<hr>
+<h2>Checkpoint 2</h2>
+<p>How many times does this loop execute?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">20</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20 times</code></pre></div>
+<hr>
+<h2>Checkpoint 3</h2>
+<p>What does this print?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">10</span>; i &gt; <span class="num">0</span>; i -= <span class="num">2</span>) {
+    <span class="type">System</span>.out.print(i + <span class="str">" "</span>);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 8 6 4 2</code></pre></div>
+<hr>
+<h2>Checkpoint 4</h2>
+<p>What is wrong?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;
+
+<span class="kw">while</span> (x &gt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(x);
+    x++;
+}</code></pre></div>
+<p><code>x</code> is increasing.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x &gt; <span class="num">0</span></code></pre></div>
+<p>continues to remain true.</p>
+<p>The loop does not terminate.</p>
+<p>It should probably contain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x--;</code></pre></div>
+<hr>
+<h2>Checkpoint 5</h2>
+<p>What is the final value of <code>sum</code>?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> sum = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">4</span>; i++) {
+    sum += i;
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10</code></pre></div>
+<p>because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 + 2 + 3 + 4 = 10</code></pre></div>
+<hr>
+<h2>Checkpoint 6</h2>
+<p>How many times does <code>"Hello"</code> print?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">4</span>; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; <span class="num">3</span>; j++) {
+        <span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+    }
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4 × 3 = 12 times</code></pre></div>
+<hr>
+<h1>52. In-class exercise: trace the program</h1>
+<p>Without running the program, determine the output.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">1</span>;
+<span class="kw">int</span> total = <span class="num">0</span>;
+
+<span class="kw">while</span> (x &lt;= <span class="num">4</span>) {
+
+    total += x * <span class="num">2</span>;
+
+    <span class="type">System</span>.out.println(
+        <span class="str">"x = "</span> + x +
+        <span class="str">", total = "</span> + total
+    );
+
+    x++;
+}</code></pre></div>
+<p>Construct a table:</p>
+<table><thead><tr><th>x</th><th><code>x * 2</code></th><th>total</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
+<p>Then compare your answer with the actual program.</p>
+<hr>
+<h1>53. In-class exercise: write a loop</h1>
+<p>Write a program that prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5
+10
+15
+20
+25
+30
+35
+40
+45
+50</code></pre></div>
+<p>Try solving the problem using:</p>
+<ol><li>a <code>while</code> loop</li><li>a <code>for</code> loop</li></ol>
+<hr>
+<h1>54. In-class exercise: accumulator</h1>
+<p>Write a program that calculates:</p>
+<div class="math-block"><pre>1<sup>2</sup> + 2<sup>2</sup> + 3<sup>2</sup> + ·s + 10<sup>2</sup></pre></div>
+<p>Expected structure:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> sum = <span class="num">0</span>;
+
+<span class="kw">for</span> (...) {
+    ...
+}
+
+<span class="type">System</span>.out.println(sum);</code></pre></div>
+<p>Do not write ten separate addition statements.</p>
+<hr>
+<h1>55. In-class exercise: user input</h1>
+<p>Ask the user to enter five integers.</p>
+<p>Print:</p>
+<ul><li>their sum</li><li>their average</li><li>how many are positive</li><li>how many are negative</li><li>how many are zero</li></ul>
+<p>Think carefully about which variables must be initialized before the loop.</p>
+<hr>
+<h1>56. In-class exercise: sentinel loop</h1>
+<p>Write a program that repeatedly asks for integers.</p>
+<p>Stop when the user enters:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0</code></pre></div>
+<p>Afterward, report:</p>
+<ul><li>number of values entered</li><li>sum</li><li>average</li><li>largest value</li></ul>
+<p>Do not include the sentinel value in the calculations.</p>
+<hr>
+<h1>57. In-class exercise: nested loops</h1>
+<p>Use nested loops to produce:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+12
+123
+1234
+12345</code></pre></div>
+<p>Hint:</p>
+<p>The number of values printed by the inner loop depends on the current outer-loop value.</p>
+<hr>
+<h1>58. Challenge exercise: reverse a number</h1>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5729</code></pre></div>
+<p>produce:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>9275</code></pre></div>
+<p>Hint:</p>
+<p>Repeatedly use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number % <span class="num">10</span></code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number / <span class="num">10</span></code></pre></div>
+<p>Think about how you can construct the reversed value one digit at a time.</p>
+<hr>
+<h1>59. Challenge exercise: guessing strategy</h1>
+<p>Imagine a secret integer lies between 1 and 100.</p>
+<p>Instead of guessing randomly, how could you systematically reduce the number of possibilities?</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Is it 50?
+
+Too high.
+
+Now we know the answer is between 1 and 49.</code></pre></div>
+<p>This idea will later become an important algorithm called <strong>binary search</strong>.</p>
+<hr>
+<h1>60. Key programming patterns from this week</h1>
+<p>You should recognize the following patterns.</p>
+<h2>Counting</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="kw">while</span> (...) {
+    <span class="kw">if</span> (...) {
+        count++;
+    }
+}</code></pre></div>
+<hr>
+<h2>Accumulating</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;
+
+<span class="kw">while</span> (...) {
+    total += value;
+}</code></pre></div>
+<hr>
+<h2>Fixed repetition</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    ...
+}</code></pre></div>
+<hr>
+<h2>Sentinel processing</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>read value
+
+<span class="kw">while</span> (value != sentinel) {
+
+    process value
+
+    read next value
+}</code></pre></div>
+<hr>
+<h2>Finding a maximum</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>largest = firstValue;
+
+<span class="kw">while</span> (...) {
+
+    <span class="kw">if</span> (value &gt; largest) {
+        largest = value;
+    }
+}</code></pre></div>
+<hr>
+<h2>Input validation</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">while</span> (inputIsInvalid) {
+    askForInputAgain();
+}</code></pre></div>
+<p>Conceptually, that is. We will study methods more formally next week.</p>
+<hr>
+<h1>61. Vocabulary</h1>
+<p>You should know the following terms.</p>
+<h3>Iteration</h3>
+<p>Repeated execution of instructions.</p>
+<h3>Loop</h3>
+<p>A programming structure used to perform iteration.</p>
+<h3>Loop body</h3>
+<p>The statements that execute repeatedly.</p>
+<h3>Loop condition</h3>
+<p>A boolean expression determining whether repetition continues.</p>
+<h3>Loop control variable</h3>
+<p>A variable whose value affects loop termination.</p>
+<h3>Counter</h3>
+<p>A variable used to count events or iterations.</p>
+<h3>Accumulator</h3>
+<p>A variable used to maintain a running total.</p>
+<h3>Sentinel</h3>
+<p>A special value used to indicate the end of input.</p>
+<h3>Infinite loop</h3>
+<p>A loop that never terminates.</p>
+<h3>Nested loop</h3>
+<p>A loop contained inside another loop.</p>
+<h3>Off-by-one error</h3>
+<p>An error in which a loop executes one too many or one too few times.</p>
+<hr>
+<h1>62. Summary</h1>
+<p>This week introduced iteration, one of the central ideas in programming.</p>
+<p>Java provides three major loop constructs:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">while</span></code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span></code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">do</span>-<span class="kw">while</span></code></pre></div>
+<p>A <code>while</code> loop is commonly used when the number of repetitions is not known in advance.</p>
+<p>A <code>for</code> loop is commonly used when repetition can naturally be expressed using a counter.</p>
+<p>A <code>do-while</code> loop guarantees that its body executes at least once.</p>
+<p>Many algorithms use standard loop patterns such as:</p>
+<ul><li>counters</li><li>accumulators</li><li>maximum/minimum tracking</li><li>sentinel processing</li><li>input validation</li><li>nested iteration</li></ul>
+<p>When reasoning about a loop, always ask:</p>
+<ol><li>What is initialized?</li><li>What condition controls repetition?</li><li>What happens during each iteration?</li><li>What changes after each iteration?</li><li>Why will the loop eventually stop?</li></ol>
+<p>The goal is not merely to memorize Java syntax.</p>
+<p>The deeper goal is to learn how to describe and reason about <strong>repeated computation</strong>.</p>
+<hr>
+<h1>63. End-of-week practice problems</h1>
+<h3>Problem 1</h3>
+<p>Print all integers from 100 down to 1.</p>
+<h3>Problem 2</h3>
+<p>Print all multiples of 7 from 7 through 140.</p>
+<h3>Problem 3</h3>
+<p>Calculate the sum of all integers from 1 through <code>n</code>, where <code>n</code> is entered by the user.</p>
+<h3>Problem 4</h3>
+<p>Calculate <code>n!</code>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5! = 5 × 4 × 3 × 2 × 1 = 120</code></pre></div>
+<h3>Problem 5</h3>
+<p>Ask for ten exam scores and report the highest and lowest scores.</p>
+<h3>Problem 6</h3>
+<p>Read integers until the user enters <code>-1</code>. Count how many entered values are even and how many are odd.</p>
+<h3>Problem 7</h3>
+<p>Determine whether a positive integer is prime.</p>
+<h3>Problem 8</h3>
+<p>Count how many digits occur in an integer.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Input: 782941
+Output: 6 digits</code></pre></div>
+<h3>Problem 9</h3>
+<p>Calculate the sum of the digits of an integer.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Input: 7829
+Output: 26</code></pre></div>
+<h3>Problem 10</h3>
+<p>Use nested loops to print:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>*****
+****
+***
+**
+*</code></pre></div>
+<h3>Problem 11</h3>
+<p>Simulate rolling two dice 10,000 times. Count how many times their sum equals 7.</p>
+<h3>Problem 12</h3>
+<p>Write a simple menu-driven calculator that repeatedly lets the user choose addition, subtraction, multiplication, or division until the user chooses to quit.</p>
+<hr>
+<h1>64. Looking ahead</h1>
+<p>So far, our programs have placed most of their logic inside the <code>main</code> method.</p>
+<p>As programs grow, this becomes difficult to manage.</p>
+<p>Next week we will study <strong>methods and program decomposition</strong>.</p>
+<p>Instead of writing one long program, we will begin organizing programs into smaller reusable pieces.</p>
+<p>For example, rather than repeatedly writing code to determine whether a number is prime, we will eventually be able to write something conceptually like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (isPrime(number)) {
+    ...
+}</code></pre></div>
+<p>This transition-from individual statements and loops to reusable operations-is an important step toward object-oriented programming.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

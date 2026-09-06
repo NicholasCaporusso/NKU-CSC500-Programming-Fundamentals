@@ -1,0 +1,1589 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 14: trees and core data-structure concepts</h2>
+<h3>Topics</h3>
+<ul><li>Hierarchical data</li><li>Tree terminology</li><li>Binary trees</li><li>Binary search trees</li><li>Recursive tree algorithms</li><li>Tree traversals</li><li>Searching and insertion in binary search trees</li><li>Time complexity of tree operations</li><li>Balanced versus unbalanced trees</li><li>Introduction to heaps and priority queues</li><li>Choosing between lists, maps, sets, and trees</li></ul>
+<hr>
+<h1>1. Why study trees?</h1>
+<p>Until now, most of the data structures we have studied have been <strong>linear</strong>.</p>
+<p>Examples include:</p>
+<ul><li>Arrays</li><li>ArrayLists</li><li>Linked lists</li><li>Stacks</li><li>Queues</li></ul>
+<p>These structures organize data in a sequence.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 → 20 → 30 → 40</code></pre></div>
+<p>Each item has a clear position before or after another item.</p>
+<p>Many real-world problems, however, are not naturally linear.</p>
+<p>Consider:</p>
+<ul><li>A computer file system</li><li>An organizational chart</li><li>A family tree</li><li>A university course prerequisite structure</li><li>The HTML elements in a web page</li><li>Categories and subcategories in an online store</li></ul>
+<p>These structures are naturally <strong>hierarchical</strong>.</p>
+<p>A tree is a data structure designed to represent hierarchical relationships.</p>
+<hr>
+<h1>2. A first example of a tree</h1>
+<p>Consider the following structure:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          50
+        /    \
+      30      70
+     /  \    /  \
+   20   40  60   80</code></pre></div>
+<p>This structure contains seven values.</p>
+<p>Unlike a linked list, one element may connect to multiple elements.</p>
+<p>The value <code>50</code> is at the top.</p>
+<p>Below it are <code>30</code> and <code>70</code>.</p>
+<p>Below <code>30</code> are <code>20</code> and <code>40</code>.</p>
+<p>Below <code>70</code> are <code>60</code> and <code>80</code>.</p>
+<p>This particular tree is called a <strong>binary tree</strong> because each node has at most two children.</p>
+<hr>
+<h1>3. Basic tree terminology</h1>
+<p>Trees have their own vocabulary.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          A
+        /   \
+       B     C
+      / \     \
+     D   E     F</code></pre></div>
+<h2>Node</h2>
+<p>Each element in the tree is called a <strong>node</strong>.</p>
+<p>The nodes above are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A, B, C, D, E, F</code></pre></div>
+<p>A node usually stores:</p>
+<ol><li>Some data</li><li>References to other nodes</li></ol>
+<hr>
+<h2>Edge</h2>
+<p>A connection between two nodes is called an <strong>edge</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A → B
+A → C
+B → D
+B → E
+C → F</code></pre></div>
+<hr>
+<h2>Root</h2>
+<p>The top node is called the <strong>root</strong>.</p>
+<p>In this tree:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A</code></pre></div>
+<p>is the root.</p>
+<p>A tree has exactly one root.</p>
+<hr>
+<h2>Parent</h2>
+<p>If one node directly connects downward to another node, the first node is the <strong>parent</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>B</code></pre></div>
+<p>is the parent of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>D and E</code></pre></div>
+<hr>
+<h2>Child</h2>
+<p>A node directly below another node is called a <strong>child</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>B and C</code></pre></div>
+<p>are children of <code>A</code>.</p>
+<hr>
+<h2>Siblings</h2>
+<p>Nodes with the same parent are called <strong>siblings</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>B and C</code></pre></div>
+<p>are siblings.</p>
+<p>Similarly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>D and E</code></pre></div>
+<p>are siblings.</p>
+<hr>
+<h2>Leaf</h2>
+<p>A node with no children is called a <strong>leaf node</strong>.</p>
+<p>In our example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>D
+E
+F</code></pre></div>
+<p>are leaves.</p>
+<hr>
+<h2>Internal node</h2>
+<p>A node that has at least one child is sometimes called an <strong>internal node</strong>.</p>
+<p>In our example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B
+C</code></pre></div>
+<p>are internal nodes.</p>
+<hr>
+<h1>4. Subtrees</h1>
+<p>Every node in a tree can itself be considered the root of a smaller tree.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          A
+        /   \
+       B     C
+      / \
+     D   E</code></pre></div>
+<p>The tree rooted at <code>B</code> is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      B
+     / \
+    D   E</code></pre></div>
+<p>This is called a <strong>subtree</strong> of the original tree.</p>
+<p>This idea is extremely important.</p>
+<p>A tree is naturally recursive:</p>
+<blockquote>A tree consists of a node whose children are themselves trees.</blockquote>
+<p>This is why recursion is so commonly used when working with trees.</p>
+<hr>
+<h1>5. Depth</h1>
+<p>The <strong>depth</strong> of a node is the number of edges between the root and that node.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          A
+        /   \
+       B     C
+      /
+     D</code></pre></div>
+<p>The depths are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A: depth 0
+B: depth 1
+C: depth 1
+D: depth 2</code></pre></div>
+<p>The root always has depth 0.</p>
+<hr>
+<h1>6. Height</h1>
+<p>The <strong>height</strong> of a tree is the length of the longest path from the root to a leaf.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          A
+        /   \
+       B     C
+      /
+     D
+    /
+   E</code></pre></div>
+<p>The longest root-to-leaf path is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A → B → D → E</code></pre></div>
+<p>There are three edges.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>height = 3</code></pre></div>
+<p>Height matters because the performance of many tree algorithms depends on it.</p>
+<hr>
+<h1>7. Binary trees</h1>
+<p>A <strong>binary tree</strong> is a tree in which every node has at most two children.</p>
+<p>The children are usually called:</p>
+<ul><li>left child</li><li>right child</li></ul>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>        10
+       /  \
+      5    20</code></pre></div>
+<p>A node might have:</p>
+<ul><li>zero children</li><li>one child</li><li>two children</li></ul>
+<p>All are valid in a binary tree.</p>
+<hr>
+<h1>8. Representing a binary tree in Java</h1>
+<p>A binary tree can be represented using objects.</p>
+<p>A simple node class might look like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">TreeNode</span> {
+    <span class="kw">int</span> value;
+    <span class="type">TreeNode</span> left;
+    <span class="type">TreeNode</span> right;
+
+    <span class="type">TreeNode</span>(<span class="kw">int</span> value) {
+        <span class="kw">this</span>.value = value;
+        <span class="kw">this</span>.left = <span class="lit">null</span>;
+        <span class="kw">this</span>.right = <span class="lit">null</span>;
+    }
+}</code></pre></div>
+<p>Each <code>TreeNode</code> contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> value;</code></pre></div>
+<p>which stores the data.</p>
+<p>It also contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeNode</span> left;
+<span class="type">TreeNode</span> right;</code></pre></div>
+<p>which are references to other nodes.</p>
+<hr>
+<h1>9. Creating a tree manually</h1>
+<p>Consider the tree:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>        50
+       /  \
+     30    70</code></pre></div>
+<p>We could create it like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeNode</span> root = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">50</span>);
+
+root.left = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">30</span>);
+root.right = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">70</span>);</code></pre></div>
+<p>The references now look approximately like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>root
+ |
+ v
+50
+/ \
+30 70</code></pre></div>
+<p>This is similar to the linked structures we studied previously.</p>
+<p>The important difference is that each node can contain <strong>two references</strong> instead of one.</p>
+<hr>
+<h1>10. Binary tree vs. binary search tree</h1>
+<p>These terms are related but not equivalent.</p>
+<p>A <strong>binary tree</strong> only requires:</p>
+<blockquote>Each node has at most two children.</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>       50
+      /  \
+    100   12</code></pre></div>
+<p>This is a valid binary tree.</p>
+<p>However, it is not a binary search tree.</p>
+<hr>
+<h1>11. Binary search trees</h1>
+<p>A <strong>binary search tree</strong>, or BST, is a binary tree with an additional ordering property.</p>
+<p>For every node:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>values in left subtree &lt; node value
+values in right subtree &gt; node value</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre></div>
+<p>This is a binary search tree.</p>
+<p>For the root <code>50</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20, 30, 40 &lt; 50</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60, 70, 80 &gt; 50</code></pre></div>
+<p>The same property is true recursively for every node.</p>
+<hr>
+<h1>12. Why the bst property is useful</h1>
+<p>Suppose we want to find <code>60</code>.</p>
+<p>Start at:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>50</code></pre></div>
+<p>Compare:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60 &gt; 50</code></pre></div>
+<p>Therefore, we know that <code>60</code>, if it exists, must be in the <strong>right subtree</strong>.</p>
+<p>Move to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>70</code></pre></div>
+<p>Now:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60 &lt; 70</code></pre></div>
+<p>Therefore move left.</p>
+<p>We reach:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60</code></pre></div>
+<p>The value has been found.</p>
+<p>Notice that we did not examine:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+30
+40
+80</code></pre></div>
+<p>The ordering of the tree allowed us to eliminate entire portions of the data.</p>
+<p>This is similar to the idea behind binary search on a sorted array.</p>
+<hr>
+<h1>13. Searching a binary search tree</h1>
+<p>A recursive search method can be written as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> contains(<span class="type">TreeNode</span> node, <span class="kw">int</span> target) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="lit">false</span>;
+    }
+
+    <span class="kw">if</span> (target == node.value) {
+        <span class="kw">return</span> <span class="lit">true</span>;
+    }
+
+    <span class="kw">if</span> (target &lt; node.value) {
+        <span class="kw">return</span> contains(node.left, target);
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> contains(node.right, target);
+    }
+}</code></pre></div>
+<p>There are three main cases.</p>
+<hr>
+<h2>Case 1: the node is null</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (node == <span class="lit">null</span>) {
+    <span class="kw">return</span> <span class="lit">false</span>;
+}</code></pre></div>
+<p>This means we reached an empty part of the tree.</p>
+<p>The target does not exist.</p>
+<hr>
+<h2>Case 2: we found the target</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (target == node.value) {
+    <span class="kw">return</span> <span class="lit">true</span>;
+}</code></pre></div>
+<p>Search is complete.</p>
+<hr>
+<h2>Case 3: decide which subtree to search</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (target &lt; node.value) {
+    <span class="kw">return</span> contains(node.left, target);
+}</code></pre></div>
+<p>Otherwise:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> contains(node.right, target);</code></pre></div>
+<p>We search only one subtree.</p>
+<hr>
+<h1>14. Tracing bst search</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre></div>
+<p>Search for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40</code></pre></div>
+<p>Step 1:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40 &lt; 50</code></pre></div>
+<p>Go left.</p>
+<p>Step 2:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40 &gt; 30</code></pre></div>
+<p>Go right.</p>
+<p>Step 3:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40 == 40</code></pre></div>
+<p>Found.</p>
+<p>Only three nodes were examined.</p>
+<hr>
+<h1>15. Iterative search</h1>
+<p>Search can also be implemented without recursion.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> contains(<span class="type">TreeNode</span> root, <span class="kw">int</span> target) {
+
+    <span class="type">TreeNode</span> current = root;
+
+    <span class="kw">while</span> (current != <span class="lit">null</span>) {
+
+        <span class="kw">if</span> (target == current.value) {
+            <span class="kw">return</span> <span class="lit">true</span>;
+        }
+
+        <span class="kw">if</span> (target &lt; current.value) {
+            current = current.left;
+        } <span class="kw">else</span> {
+            current = current.right;
+        }
+    }
+
+    <span class="kw">return</span> <span class="lit">false</span>;
+}</code></pre></div>
+<p>Both recursive and iterative implementations are reasonable.</p>
+<p>Tree algorithms are frequently written recursively because the recursive structure of the code matches the recursive structure of the tree.</p>
+<hr>
+<h1>16. Inserting into a binary search tree</h1>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          50
+        /    \
+      30      70</code></pre></div>
+<p>We want to insert:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40</code></pre></div>
+<p>Compare <code>40</code> with <code>50</code>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40 &lt; 50</code></pre></div>
+<p>Go left.</p>
+<p>Now compare with <code>30</code>.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40 &gt; 30</code></pre></div>
+<p>Go right.</p>
+<p>The right child is empty.</p>
+<p>Therefore insert <code>40</code> there.</p>
+<p>Result:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          50
+        /    \
+      30      70
+        \
+         40</code></pre></div>
+<hr>
+<h1>17. Recursive bst insertion</h1>
+<p>One implementation is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">TreeNode</span> insert(<span class="type">TreeNode</span> node, <span class="kw">int</span> value) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="kw">new</span> <span class="type">TreeNode</span>(value);
+    }
+
+    <span class="kw">if</span> (value &lt; node.value) {
+        node.left = insert(node.left, value);
+    } <span class="kw">else</span> <span class="kw">if</span> (value &gt; node.value) {
+        node.right = insert(node.right, value);
+    }
+
+    <span class="kw">return</span> node;
+}</code></pre></div>
+<p>Notice the base case:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (node == <span class="lit">null</span>)</code></pre></div>
+<p>We have found the location where the new value belongs.</p>
+<hr>
+<h1>18. Building a binary search tree</h1>
+<p>Suppose we insert:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>50
+30
+70
+20
+40
+60
+80</code></pre></div>
+<p>in that order.</p>
+<p>The resulting tree is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre></div>
+<p>Insertion order matters.</p>
+<p>For example, consider inserting:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+30
+40
+50
+60
+70
+80</code></pre></div>
+<p>The tree becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+  \
+   30
+     \
+      40
+        \
+         50
+           \
+            60
+              \
+               70
+                 \
+                  80</code></pre></div>
+<p>This is technically still a binary search tree.</p>
+<p>But it behaves almost like a linked list.</p>
+<hr>
+<h1>19. Balanced trees</h1>
+<p>Consider this BST:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre></div>
+<p>Its height is small relative to the number of nodes.</p>
+<p>We informally call such a tree <strong>balanced</strong>.</p>
+<p>Compare that with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+  \
+   30
+     \
+      40
+        \
+         50
+           \
+            60</code></pre></div>
+<p>This tree is highly <strong>unbalanced</strong>.</p>
+<p>Why does this matter?</p>
+<p>Because tree height determines how many nodes we may need to visit.</p>
+<hr>
+<h1>20. Time complexity of bst search</h1>
+<p>Suppose a balanced BST contains approximately one million elements.</p>
+<p>A well-balanced search tree might require only around:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>log₂(1,000,000) ≈ 20</code></pre></div>
+<p>comparisons.</p>
+<p>Thus, search is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<p>when the tree is balanced.</p>
+<hr>
+<h1>21. Worst-case bst performance</h1>
+<p>If a BST becomes completely unbalanced:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10
+  \
+   20
+     \
+      30
+        \
+         40</code></pre></div>
+<p>searching could require visiting every node.</p>
+<p>Worst-case complexity becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Balanced BST:
+search ≈ O(log n)
+
+Highly unbalanced BST:
+search ≈ O(n)</code></pre></div>
+<p>The same general idea applies to insertion.</p>
+<hr>
+<h1>22. Tree traversal</h1>
+<p>Sometimes we do not want to search for one value.</p>
+<p>Instead, we want to visit <strong>every node</strong>.</p>
+<p>Visiting every node in a tree is called <strong>tree traversal</strong>.</p>
+<p>Several traversal orders are common.</p>
+<p>For binary trees, the three classic depth-first traversals are:</p>
+<ol><li>Preorder</li><li>Inorder</li><li>Postorder</li></ol>
+<hr>
+<h1>23. Inorder traversal</h1>
+<p>The inorder traversal visits nodes in this order:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LEFT
+NODE
+RIGHT</code></pre></div>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre></div>
+<p>The inorder traversal is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20 30 40 50 60 70 80</code></pre></div>
+<p>Notice something important:</p>
+<blockquote>Inorder traversal of a binary search tree visits values in sorted order.</blockquote>
+<hr>
+<h1>24. Recursive inorder traversal</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> inorder(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span>;
+    }
+
+    inorder(node.left);
+
+    <span class="type">System</span>.out.println(node.value);
+
+    inorder(node.right);
+}</code></pre></div>
+<p>This code is remarkably short.</p>
+<p>The recursive structure of the algorithm mirrors the structure of the tree.</p>
+<hr>
+<h1>25. Understanding the recursive call</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      30
+     /  \
+   20    40</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>inorder(node);</code></pre></div>
+<p>where <code>node</code> contains <code>30</code> causes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>inorder(20)
+print 30
+inorder(40)</code></pre></div>
+<p>The result is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20
+30
+40</code></pre></div>
+<hr>
+<h1>26. Preorder traversal</h1>
+<p>Preorder traversal visits:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NODE
+LEFT
+RIGHT</code></pre></div>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre></div>
+<p>the result is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>50 30 20 40 70 60 80</code></pre></div>
+<p>Implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> preorder(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.println(node.value);
+
+    preorder(node.left);
+    preorder(node.right);
+}</code></pre></div>
+<hr>
+<h1>27. Postorder traversal</h1>
+<p>Postorder traversal visits:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LEFT
+RIGHT
+NODE</code></pre></div>
+<p>For the same tree:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /  \    /  \
+    20   40  60   80</code></pre></div>
+<p>the result is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20 40 30 60 80 70 50</code></pre></div>
+<p>Implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> postorder(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span>;
+    }
+
+    postorder(node.left);
+    postorder(node.right);
+
+    <span class="type">System</span>.out.println(node.value);
+}</code></pre></div>
+<hr>
+<h1>28. Comparing traversals</h1>
+<p>A useful way to remember the three traversals is to ask:</p>
+<blockquote>When do we process the current node?</blockquote>
+<h3>Preorder</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NODE
+left
+right</code></pre></div>
+<p>The node is processed <strong>before</strong> its subtrees.</p>
+<hr>
+<h3>Inorder</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>left
+NODE
+right</code></pre></div>
+<p>The node is processed <strong>between</strong> its subtrees.</p>
+<hr>
+<h3>Postorder</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>left
+right
+NODE</code></pre></div>
+<p>The node is processed <strong>after</strong> its subtrees.</p>
+<hr>
+<h1>29. Why different traversals exist</h1>
+<p>Different traversal orders are useful for different problems.</p>
+<h3>Inorder</h3>
+<p>Useful for:</p>
+<ul><li>printing BST values in sorted order</li><li>processing values according to BST ordering</li></ul>
+<h3>Preorder</h3>
+<p>Useful for:</p>
+<ul><li>copying tree structure</li><li>serializing certain tree representations</li><li>processing a parent before its children</li></ul>
+<h3>Postorder</h3>
+<p>Useful for:</p>
+<ul><li>deleting a tree</li><li>computing properties from child nodes</li><li>processing children before their parent</li></ul>
+<hr>
+<h1>30. Recursive tree problems</h1>
+<p>Many useful tree algorithms follow the same general pattern:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">ReturnType</span> solve(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> baseValue;
+    }
+
+    <span class="type">ReturnType</span> leftResult = solve(node.left);
+    <span class="type">ReturnType</span> rightResult = solve(node.right);
+
+    <span class="kw">return</span> combine(node, leftResult, rightResult);
+}</code></pre></div>
+<p>This pattern appears repeatedly in computer science.</p>
+<hr>
+<h1>31. Counting nodes</h1>
+<p>Suppose we want to count the number of nodes in a tree.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>number of nodes =
+1
++ number of nodes in left subtree
++ number of nodes in right subtree</code></pre></div>
+<p>Implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countNodes(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">1</span>
+        + countNodes(node.left)
+        + countNodes(node.right);
+}</code></pre></div>
+<hr>
+<h1>32. Counting leaves</h1>
+<p>A leaf has:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>node.left == <span class="lit">null</span></code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>node.right == <span class="lit">null</span></code></pre></div>
+<p>Implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countLeaves(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">if</span> (node.left == <span class="lit">null</span> &amp;&amp; node.right == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> countLeaves(node.left)
+        + countLeaves(node.right);
+}</code></pre></div>
+<hr>
+<h1>33. Finding the sum of all values</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sum(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> node.value
+        + sum(node.left)
+        + sum(node.right);
+}</code></pre></div>
+<p>Again:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sum of tree =
+root value
++ sum of left subtree
++ sum of right subtree</code></pre></div>
+<hr>
+<h1>34. Finding the height</h1>
+<p>We can define the height recursively.</p>
+<p>One common definition is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> height(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> -<span class="num">1</span>;
+    }
+
+    <span class="kw">int</span> leftHeight = height(node.left);
+    <span class="kw">int</span> rightHeight = height(node.right);
+
+    <span class="kw">return</span> <span class="num">1</span> + <span class="type">Math</span>.max(leftHeight, rightHeight);
+}</code></pre></div>
+<p>Why <code>-1</code> for an empty tree?</p>
+<p>Because then a leaf has height:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 + max(-1, -1)
+= 0</code></pre></div>
+<p>which matches the definition that a leaf has height zero.</p>
+<p>Some textbooks use slightly different height conventions.</p>
+<p>The important thing is to be consistent.</p>
+<hr>
+<h1>35. Finding minimum and maximum in a bst</h1>
+<p>Because of the BST ordering property:</p>
+<blockquote>The smallest value is the leftmost node.</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>           50
+         /    \
+       30      70
+      /
+    20</code></pre></div>
+<p>Minimum:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20</code></pre></div>
+<p>Implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> findMin(<span class="type">TreeNode</span> root) {
+
+    <span class="kw">if</span> (root == <span class="lit">null</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(<span class="str">"Tree is empty"</span>);
+    }
+
+    <span class="type">TreeNode</span> current = root;
+
+    <span class="kw">while</span> (current.left != <span class="lit">null</span>) {
+        current = current.left;
+    }
+
+    <span class="kw">return</span> current.value;
+}</code></pre></div>
+<p>Similarly:</p>
+<blockquote>The maximum value is the rightmost node.</blockquote>
+<hr>
+<h1>36. Removing values from a bst</h1>
+<p>Deletion from a BST is more complicated than insertion.</p>
+<p>There are three cases.</p>
+<p>Suppose we want to remove a node.</p>
+<h3>Case 1: the node is a leaf</h3>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>    30
+   /
+ 20</code></pre></div>
+<p>Removing <code>20</code> is easy.</p>
+<p>Simply remove the reference.</p>
+<hr>
+<h3>Case 2: the node has one child</h3>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>    30
+      \
+       40</code></pre></div>
+<p>If we remove <code>30</code>, its child <code>40</code> can take its place.</p>
+<hr>
+<h3>Case 3: the node has two children</h3>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      30
+     /  \
+   20    40</code></pre></div>
+<p>This is more complicated.</p>
+<p>We typically replace the node with either:</p>
+<ul><li>the largest value in its left subtree, or</li><li>the smallest value in its right subtree</li></ul>
+<p>These are called the:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>inorder predecessor</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>inorder successor</code></pre></div>
+<p>respectively.</p>
+<p>For CSC500, understanding the three cases is more important than memorizing the full deletion implementation.</p>
+<hr>
+<h1>37. A more complete bst class</h1>
+<p>Instead of exposing raw <code>TreeNode</code> objects to users of our code, we can create a class representing the entire data structure.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BinarySearchTree</span> {
+
+    <span class="kw">private</span> <span class="type">TreeNode</span> root;
+
+    <span class="kw">public</span> <span class="type">BinarySearchTree</span>() {
+        root = <span class="lit">null</span>;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> add(<span class="kw">int</span> value) {
+        root = insert(root, value);
+    }
+
+    <span class="kw">private</span> <span class="type">TreeNode</span> insert(<span class="type">TreeNode</span> node, <span class="kw">int</span> value) {
+
+        <span class="kw">if</span> (node == <span class="lit">null</span>) {
+            <span class="kw">return</span> <span class="kw">new</span> <span class="type">TreeNode</span>(value);
+        }
+
+        <span class="kw">if</span> (value &lt; node.value) {
+            node.left = insert(node.left, value);
+        } <span class="kw">else</span> <span class="kw">if</span> (value &gt; node.value) {
+            node.right = insert(node.right, value);
+        }
+
+        <span class="kw">return</span> node;
+    }
+
+    <span class="kw">public</span> <span class="kw">boolean</span> contains(<span class="kw">int</span> value) {
+        <span class="kw">return</span> contains(root, value);
+    }
+
+    <span class="kw">private</span> <span class="kw">boolean</span> contains(<span class="type">TreeNode</span> node, <span class="kw">int</span> value) {
+
+        <span class="kw">if</span> (node == <span class="lit">null</span>) {
+            <span class="kw">return</span> <span class="lit">false</span>;
+        }
+
+        <span class="kw">if</span> (value == node.value) {
+            <span class="kw">return</span> <span class="lit">true</span>;
+        }
+
+        <span class="kw">if</span> (value &lt; node.value) {
+            <span class="kw">return</span> contains(node.left, value);
+        }
+
+        <span class="kw">return</span> contains(node.right, value);
+    }
+}</code></pre></div>
+<p>This demonstrates an important object-oriented design principle:</p>
+<blockquote>Hide implementation details behind a public interface.</blockquote>
+<p>Users of <code>BinarySearchTree</code> do not need to manipulate nodes directly.</p>
+<p>They simply call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">BinarySearchTree</span> tree = <span class="kw">new</span> <span class="type">BinarySearchTree</span>();
+
+tree.add(<span class="num">50</span>);
+tree.add(<span class="num">30</span>);
+tree.add(<span class="num">70</span>);
+
+<span class="type">System</span>.out.println(tree.contains(<span class="num">30</span>));</code></pre></div>
+<hr>
+<h1>38. Abstract data types revisited</h1>
+<p>Recall the distinction between an <strong>abstract data type</strong> and an implementation.</p>
+<p>An abstract data type describes:</p>
+<blockquote>What operations are available?</blockquote>
+<p>An implementation describes:</p>
+<blockquote>How are those operations carried out?</blockquote>
+<p>For example, a Set might provide:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add
+remove
+contains
+size</code></pre></div>
+<p>A set could potentially be implemented using:</p>
+<ul><li>a list</li><li>a hash table</li><li>a binary search tree</li></ul>
+<p>The user does not necessarily need to know which implementation is being used.</p>
+<hr>
+<h1>39. Java's tree-based collections</h1>
+<p>Java contains tree-based collection implementations.</p>
+<p>One example is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeSet</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">TreeSet</span>;
+
+<span class="type">TreeSet</span>&lt;<span class="type">Integer</span>&gt; numbers = <span class="kw">new</span> <span class="type">TreeSet</span>&lt;&gt;();
+
+numbers.add(<span class="num">50</span>);
+numbers.add(<span class="num">20</span>);
+numbers.add(<span class="num">70</span>);
+numbers.add(<span class="num">30</span>);
+
+<span class="type">System</span>.out.println(numbers);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[20, 30, 50, 70]</code></pre></div>
+<p>A <code>TreeSet</code> maintains elements in sorted order.</p>
+<p>Java also provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeMap</span></code></pre></div>
+<p>which stores key-value pairs while maintaining keys in sorted order.</p>
+<hr>
+<h1>40. Treeset vs. HashSet</h1>
+<p>We previously encountered:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashSet</span></code></pre></div>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeSet</span></code></pre></div>
+<p>Both implement the general Set abstraction.</p>
+<p>But they make different tradeoffs.</p>
+<h3>HashSet</h3>
+<p>Typical:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add:      O(1)
+contains: O(1)
+remove:   O(1)</code></pre></div>
+<p>Elements are not maintained in sorted order.</p>
+<hr>
+<h3>Treeset</h3>
+<p>Typical:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add:      O(log n)
+contains: O(log n)
+remove:   O(log n)</code></pre></div>
+<p>Elements are maintained in sorted order.</p>
+<p>Therefore:</p>
+<blockquote>There is rarely one "best" data structure.</blockquote>
+<p>The correct structure depends on what operations the program needs.</p>
+<hr>
+<h1>41. Treemap vs. HashMap</h1>
+<p>A similar comparison exists between:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span></code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeMap</span></code></pre></div>
+<p>A <code>HashMap</code> is usually chosen when fast key lookup is the priority.</p>
+<p>A <code>TreeMap</code> is useful when keys must remain sorted.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeMap</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; scores = <span class="kw">new</span> <span class="type">TreeMap</span>&lt;&gt;();
+
+scores.put(<span class="str">"Charlie"</span>, <span class="num">85</span>);
+scores.put(<span class="str">"Alice"</span>, <span class="num">92</span>);
+scores.put(<span class="str">"Bob"</span>, <span class="num">88</span>);
+
+<span class="type">System</span>.out.println(scores);</code></pre></div>
+<p>The keys appear in sorted order:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Alice
+Bob
+Charlie</code></pre></div>
+<hr>
+<h1>42. Another important tree: the heap</h1>
+<p>A <strong>heap</strong> is another type of binary tree.</p>
+<p>However, it follows a different rule than a binary search tree.</p>
+<p>A common type is a <strong>min-heap</strong>.</p>
+<p>In a min-heap:</p>
+<blockquote>Every parent is less than or equal to its children.</blockquote>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          10
+        /    \
+      20      15
+     /  \    /
+   40   30  25</code></pre></div>
+<p>Notice:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 &lt; 20
+10 &lt; 15
+
+20 &lt; 40
+20 &lt; 30
+
+15 &lt; 25</code></pre></div>
+<p>However, this is <strong>not</strong> a BST.</p>
+<p>For example, <code>15</code> appears on the right of <code>10</code>, which is fine, but the entire tree does not follow BST ordering between arbitrary subtrees.</p>
+<hr>
+<h1>43. Min-heaps</h1>
+<p>A min-heap provides very quick access to the smallest element.</p>
+<p>The smallest element is always at the root.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          5
+        /   \
+      10     8
+     / \
+   20   15</code></pre></div>
+<p>Minimum:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5</code></pre></div>
+<p>A <strong>max-heap</strong> works in the opposite direction.</p>
+<p>The largest value appears at the root.</p>
+<hr>
+<h1>44. Priority queues</h1>
+<p>A heap is commonly used to implement a <strong>priority queue</strong>.</p>
+<p>A normal queue follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>first in, first out</code></pre></div>
+<p>A priority queue instead removes the element with the highest priority.</p>
+<p>Example:</p>
+<p>Suppose an emergency room contains patients with priorities:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Patient A: priority 4
+Patient B: priority 1
+Patient C: priority 3
+Patient D: priority 2</code></pre></div>
+<p>The patients would not necessarily be processed according to arrival order.</p>
+<p>They would be processed according to priority.</p>
+<hr>
+<h1>45. Java priorityqueue</h1>
+<p>Java provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">PriorityQueue</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">PriorityQueue</span>;
+
+<span class="type">PriorityQueue</span>&lt;<span class="type">Integer</span>&gt; pq = <span class="kw">new</span> <span class="type">PriorityQueue</span>&lt;&gt;();
+
+pq.add(<span class="num">40</span>);
+pq.add(<span class="num">10</span>);
+pq.add(<span class="num">30</span>);
+pq.add(<span class="num">20</span>);
+
+<span class="type">System</span>.out.println(pq.remove());
+<span class="type">System</span>.out.println(pq.remove());
+<span class="type">System</span>.out.println(pq.remove());
+<span class="type">System</span>.out.println(pq.remove());</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10
+20
+30
+40</code></pre></div>
+<p>By default, Java's <code>PriorityQueue</code> behaves like a min-priority queue.</p>
+<hr>
+<h1>46. Priority queue complexity</h1>
+<p>A typical heap-based priority queue provides:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>peek minimum: O(1)
+
+insert:       O(log n)
+
+remove min:   O(log n)</code></pre></div>
+<p>This makes heaps particularly useful when we repeatedly need to determine the smallest or largest item.</p>
+<hr>
+<h1>47. Bst vs. heap</h1>
+<p>Students sometimes confuse BSTs and heaps because both can be represented as binary trees.</p>
+<p>They solve different problems.</p>
+<h3>Binary search tree</h3>
+<p>Designed primarily for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>searching for arbitrary values
+maintaining sorted ordering</code></pre></div>
+<p>Typical balanced complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>search: O(log n)
+insert: O(log n)</code></pre></div>
+<hr>
+<h3>Heap</h3>
+<p>Designed primarily for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>quickly finding the smallest or largest element</code></pre></div>
+<p>Typical:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>find min: O(1)
+insert: O(log n)
+remove min: O(log n)</code></pre></div>
+<p>Searching a heap for an arbitrary value is generally not efficient.</p>
+<hr>
+<h1>48. A broader data-structure comparison</h1>
+<p>We have now studied several important structures.</p>
+<table><thead><tr><th>Data Structure</th><th>Main Strength</th></tr></thead><tbody><tr><td>Array</td><td>Fast indexing</td></tr><tr><td>ArrayList</td><td>Flexible indexed sequence</td></tr><tr><td>Linked List</td><td>Dynamic linked structure</td></tr><tr><td>Stack</td><td>Last-in-first-out processing</td></tr><tr><td>Queue</td><td>First-in-first-out processing</td></tr><tr><td>HashSet</td><td>Fast membership testing</td></tr><tr><td>HashMap</td><td>Fast key-value lookup</td></tr><tr><td>BST</td><td>Ordered searching</td></tr><tr><td>Heap</td><td>Fast access to min/max</td></tr><tr><td>PriorityQueue</td><td>Priority-based processing</td></tr></tbody></table>
+<p>The key question is not:</p>
+<blockquote>Which data structure is best?</blockquote>
+<p>Instead ask:</p>
+<blockquote>Which data structure best supports the operations my program performs most frequently?</blockquote>
+<hr>
+<h1>49. Choosing a data structure</h1>
+<p>Suppose you need to store one million user IDs and repeatedly ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Does this ID exist?</code></pre></div>
+<p>A good choice might be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashSet</span></code></pre></div>
+<hr>
+<p>Suppose you need the IDs maintained in sorted order.</p>
+<p>A good choice might be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeSet</span></code></pre></div>
+<hr>
+<p>Suppose you repeatedly need to process jobs according to priority.</p>
+<p>A good choice might be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">PriorityQueue</span></code></pre></div>
+<hr>
+<p>Suppose you need frequent access by numerical index:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>items.get(i)</code></pre></div>
+<p>A good choice might be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span></code></pre></div>
+<hr>
+<h1>50. The importance of operations</h1>
+<p>When selecting a data structure, identify which operations matter.</p>
+<p>Possible operations include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>insert
+delete
+search
+access by index
+find minimum
+find maximum
+iterate in sorted order
+process oldest item
+process newest item</code></pre></div>
+<p>Different data structures optimize different operations.</p>
+<p>This idea is fundamental to computer science.</p>
+<hr>
+<h1>51. Common misconception: trees are always faster</h1>
+<p>Trees are not automatically faster than arrays or lists.</p>
+<p>For example, suppose you have only five values.</p>
+<p>The difference between:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<p>may be irrelevant.</p>
+<p>Tree structures also involve:</p>
+<ul><li>extra object references</li><li>more complex code</li><li>additional memory</li><li>potentially poor cache behavior</li></ul>
+<p>Data structures involve tradeoffs.</p>
+<hr>
+<h1>52. Common misconception: every binary tree is a bst</h1>
+<p>False.</p>
+<p>This is a binary tree:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      10
+     /  \
+   100   3</code></pre></div>
+<p>But it is not a binary search tree.</p>
+<p>A BST must satisfy the ordering property.</p>
+<hr>
+<h1>53. Common misconception: a bst is always o(log n)</h1>
+<p>False.</p>
+<p>A balanced BST gives approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<p>search.</p>
+<p>But an unbalanced tree can become:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10
+ \
+  20
+    \
+     30
+       \
+        40</code></pre></div>
+<hr>
+<h1>54. Common misconception: tree traversals are sorting algorithms</h1>
+<p>Inorder traversal of a BST produces values in sorted order.</p>
+<p>However, the traversal itself did not sort the values.</p>
+<p>The ordering was already established when the BST was constructed.</p>
+<p>The traversal simply visits nodes according to that ordering.</p>
+<hr>
+<h1>55. Example: building and traversing a bst</h1>
+<p>Suppose we insert:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>45
+20
+60
+10
+30
+50
+70
+25</code></pre></div>
+<p>The tree becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>             45
+           /    \
+         20      60
+        /  \    /  \
+      10   30  50   70
+           /
+          25</code></pre></div>
+<h3>Inorder</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 20 25 30 45 50 60 70</code></pre></div>
+<h3>Preorder</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>45 20 10 30 25 60 50 70</code></pre></div>
+<h3>Postorder</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 25 30 20 50 70 60 45</code></pre></div>
+<hr>
+<h1>56. Trace exercise</h1>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          40
+        /    \
+      20      60
+     /  \    /  \
+   10   30  50   70</code></pre></div>
+<p>Answer the following.</p>
+<h3>Question 1</h3>
+<p>What is the root?</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40</code></pre></div>
+<h3>Question 2</h3>
+<p>What are the leaves?</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10, 30, 50, 70</code></pre></div>
+<h3>Question 3</h3>
+<p>What is the height?</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2</code></pre></div>
+<p>using the edge-based definition.</p>
+<h3>Question 4</h3>
+<p>What is the inorder traversal?</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 20 30 40 50 60 70</code></pre></div>
+<h3>Question 5</h3>
+<p>What is the preorder traversal?</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40 20 10 30 60 50 70</code></pre></div>
+<h3>Question 6</h3>
+<p>What is the postorder traversal?</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 30 20 50 70 60 40</code></pre></div>
+<hr>
+<h1>57. Insertion exercise</h1>
+<p>Start with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          50
+        /    \
+      25      75</code></pre></div>
+<p>Insert:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60</code></pre></div>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60 &gt; 50</code></pre></div>
+<p>move right.</p>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60 &lt; 75</code></pre></div>
+<p>move left.</p>
+<p>Result:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          50
+        /    \
+      25      75
+             /
+            60</code></pre></div>
+<hr>
+<h1>58. Another insertion exercise</h1>
+<p>Starting with the same tree, insert:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>90</code></pre></div>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>90 &gt; 50</code></pre></div>
+<p>move right.</p>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>90 &gt; 75</code></pre></div>
+<p>move right.</p>
+<p>Result:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          50
+        /    \
+      25      75
+             / \
+            60  90</code></pre></div>
+<hr>
+<h1>59. Recursive reasoning exercise</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mystery(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">1</span> + mystery(node.left)
+             + mystery(node.right);
+}</code></pre></div>
+<p>What does this method compute?</p>
+<p>The answer is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>the number of nodes in the tree</code></pre></div>
+<p>Each non-null node contributes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1</code></pre></div>
+<p>plus the number of nodes in each subtree.</p>
+<hr>
+<h1>60. Another recursive reasoning exercise</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mystery(<span class="type">TreeNode</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> node.value
+         + mystery(node.left)
+         + mystery(node.right);
+}</code></pre></div>
+<p>This computes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>the sum of all values in the tree</code></pre></div>
+<hr>
+<h1>61. From concrete structures to general cs thinking</h1>
+<p>Trees demonstrate several important ideas that extend far beyond this course.</p>
+<h3>Recursion</h3>
+<p>Large problems are solved by applying the same logic to smaller subproblems.</p>
+<h3>Abstraction</h3>
+<p>Users interact with operations such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add
+contains
+remove</code></pre></div>
+<p>without needing to understand every implementation detail.</p>
+<h3>Algorithm analysis</h3>
+<p>The shape of a data structure affects performance.</p>
+<h3>Representation matters</h3>
+<p>The way data is organized can dramatically change the efficiency of algorithms.</p>
+<hr>
+<h1>62. Preview of more advanced trees</h1>
+<p>There are many tree structures beyond what we cover in CSC500.</p>
+<p>Examples include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>AVL trees
+Red-black trees
+B-trees
+B+ trees
+tries
+expression trees
+syntax trees
+decision trees
+heaps</code></pre></div>
+<p>You do not need to implement these structures in this course.</p>
+<p>However, you should understand why they exist:</p>
+<blockquote>Different tree structures enforce different properties in order to support particular operations efficiently.</blockquote>
+<p>For example, Java's <code>TreeMap</code> and <code>TreeSet</code> use a self-balancing tree internally rather than a simple unbalanced BST.</p>
+<hr>
+<h1>63. Where trees appear in computer science</h1>
+<p>Trees appear throughout computing.</p>
+<h3>Compilers</h3>
+<p>Programming expressions are represented using <strong>syntax trees</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3 + 4 * 5</code></pre></div>
+<p>can be represented conceptually as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>        +
+       / \
+      3   *
+         / \
+        4   5</code></pre></div>
+<hr>
+<h3>File systems</h3>
+<p>Directories form a hierarchical structure:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Documents
+├── CSC500
+│   ├── assignments
+│   └── lectures
+└── Personal
+    ├── photos
+    └── taxes</code></pre></div>
+<hr>
+<h3>Databases</h3>
+<p>Many database indexes use tree structures such as B-trees.</p>
+<hr>
+<h3>Artificial intelligence</h3>
+<p>Trees appear in:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>decision trees
+game search
+planning</code></pre></div>
+<hr>
+<h3>Networking</h3>
+<p>Trees can represent routing and hierarchical naming.</p>
+<hr>
+<h3>Web browsers</h3>
+<p>HTML is represented internally as a tree called the Document Object Model, or DOM.</p>
+<hr>
+<h1>64. Week 14 programming example</h1>
+<p>Below is a small complete BST implementation.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BinarySearchTree</span> {
+
+    <span class="kw">private</span> <span class="kw">static</span> <span class="kw">class</span> <span class="type">TreeNode</span> {
+
+        <span class="kw">int</span> value;
+        <span class="type">TreeNode</span> left;
+        <span class="type">TreeNode</span> right;
+
+        <span class="type">TreeNode</span>(<span class="kw">int</span> value) {
+            <span class="kw">this</span>.value = value;
+        }
+    }
+
+    <span class="kw">private</span> <span class="type">TreeNode</span> root;
+
+    <span class="kw">public</span> <span class="kw">void</span> add(<span class="kw">int</span> value) {
+        root = add(root, value);
+    }
+
+    <span class="kw">private</span> <span class="type">TreeNode</span> add(<span class="type">TreeNode</span> node, <span class="kw">int</span> value) {
+
+        <span class="kw">if</span> (node == <span class="lit">null</span>) {
+            <span class="kw">return</span> <span class="kw">new</span> <span class="type">TreeNode</span>(value);
+        }
+
+        <span class="kw">if</span> (value &lt; node.value) {
+            node.left = add(node.left, value);
+        } <span class="kw">else</span> <span class="kw">if</span> (value &gt; node.value) {
+            node.right = add(node.right, value);
+        }
+
+        <span class="kw">return</span> node;
+    }
+
+    <span class="kw">public</span> <span class="kw">boolean</span> contains(<span class="kw">int</span> value) {
+        <span class="kw">return</span> contains(root, value);
+    }
+
+    <span class="kw">private</span> <span class="kw">boolean</span> contains(<span class="type">TreeNode</span> node, <span class="kw">int</span> value) {
+
+        <span class="kw">if</span> (node == <span class="lit">null</span>) {
+            <span class="kw">return</span> <span class="lit">false</span>;
+        }
+
+        <span class="kw">if</span> (value == node.value) {
+            <span class="kw">return</span> <span class="lit">true</span>;
+        }
+
+        <span class="kw">if</span> (value &lt; node.value) {
+            <span class="kw">return</span> contains(node.left, value);
+        }
+
+        <span class="kw">return</span> contains(node.right, value);
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> printInOrder() {
+        printInOrder(root);
+    }
+
+    <span class="kw">private</span> <span class="kw">void</span> printInOrder(<span class="type">TreeNode</span> node) {
+
+        <span class="kw">if</span> (node == <span class="lit">null</span>) {
+            <span class="kw">return</span>;
+        }
+
+        printInOrder(node.left);
+
+        <span class="type">System</span>.out.println(node.value);
+
+        printInOrder(node.right);
+    }
+}</code></pre></div>
+<p>Example usage:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Main</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+
+        <span class="type">BinarySearchTree</span> tree =
+            <span class="kw">new</span> <span class="type">BinarySearchTree</span>();
+
+        tree.add(<span class="num">50</span>);
+        tree.add(<span class="num">30</span>);
+        tree.add(<span class="num">70</span>);
+        tree.add(<span class="num">20</span>);
+        tree.add(<span class="num">40</span>);
+        tree.add(<span class="num">60</span>);
+        tree.add(<span class="num">80</span>);
+
+        <span class="type">System</span>.out.println(
+            tree.contains(<span class="num">60</span>)
+        );
+
+        tree.printInOrder();
+    }
+}</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>true
+
+20
+30
+40
+50
+60
+70
+80</code></pre></div>
+<hr>
+<h1>65. Lab activity</h1>
+<h2>Part 1 - build a bst</h2>
+<p>Implement a <code>BinarySearchTree</code> storing integers.</p>
+<p>Your class should support:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">void</span> add(<span class="kw">int</span> value)
+
+<span class="kw">boolean</span> contains(<span class="kw">int</span> value)
+
+<span class="kw">void</span> printInOrder()</code></pre></div>
+<hr>
+<h2>Part 2 - add recursive operations</h2>
+<p>Add methods:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> size()
+
+<span class="kw">int</span> sum()
+
+<span class="kw">int</span> height()
+
+<span class="kw">int</span> countLeaves()</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(tree.size());
+<span class="type">System</span>.out.println(tree.height());</code></pre></div>
+<hr>
+<h2>Part 3 - add minimum and maximum</h2>
+<p>Implement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> minimum()
+
+<span class="kw">int</span> maximum()</code></pre></div>
+<p>Do not traverse the entire tree.</p>
+<p>Use the BST ordering property.</p>
+<hr>
+<h2>Part 4 - compare tree shapes</h2>
+<p>Insert these values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>50 30 70 20 40 60 80</code></pre></div>
+<p>Measure the tree height.</p>
+<p>Then build another tree using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 20 30 40 50 60 70</code></pre></div>
+<p>Measure the height.</p>
+<p>Discuss why the heights differ.</p>
+<hr>
+<h1>66. Challenge exercise</h1>
+<p>Implement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> countGreaterThan(<span class="kw">int</span> value)</code></pre></div>
+<p>which returns the number of values in the tree greater than a given number.</p>
+<p>For example:</p>
+<p>If the tree contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20 30 40 50 60 70 80</code></pre></div>
+<p>then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countGreaterThan(<span class="num">50</span>)</code></pre></div>
+<p>should return:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3</code></pre></div>
+<p>because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>60
+70
+80</code></pre></div>
+<p>are greater than 50.</p>
+<p>Try to use the BST property to avoid unnecessary work.</p>
+<hr>
+<h1>67. Discussion question</h1>
+<p>Suppose you need to store student records indexed by student ID.</p>
+<p>Which would you choose?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArrayList
+HashMap
+TreeMap</code></pre></div>
+<p>There is not necessarily one universally correct answer.</p>
+<p>Ask:</p>
+<ul><li>Do we need access by position?</li><li>Do we frequently search by ID?</li><li>Do the IDs need to remain sorted?</li><li>Do we need to find ranges of IDs?</li><li>How much data will we store?</li></ul>
+<p>The operations determine the appropriate data structure.</p>
+<hr>
+<h1>68. Complexity summary</h1>
+<p>You should know the following approximate complexities.</p>
+<table><thead><tr><th>Structure / Operation</th><th>Typical Complexity</th></tr></thead><tbody><tr><td>ArrayList access by index</td><td>O(1)</td></tr><tr><td>ArrayList search</td><td>O(n)</td></tr><tr><td>HashMap lookup</td><td>O(1) average</td></tr><tr><td>HashSet membership</td><td>O(1) average</td></tr><tr><td>Balanced BST search</td><td>O(log n)</td></tr><tr><td>Balanced BST insertion</td><td>O(log n)</td></tr><tr><td>Unbalanced BST search</td><td>O(n) worst case</td></tr><tr><td>Heap find minimum</td><td>O(1)</td></tr><tr><td>Heap insertion</td><td>O(log n)</td></tr><tr><td>Heap remove minimum</td><td>O(log n)</td></tr><tr><td>Tree traversal</td><td>O(n)</td></tr></tbody></table>
+<p>A complete traversal must visit every node, so traversal is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>regardless of whether the tree is balanced.</p>
+<hr>
+<h1>69. Key takeaways</h1>
+<p>By the end of this week, you should understand the following ideas.</p>
+<h3>Trees represent hierarchical data.</h3>
+<p>Unlike lists, trees are not linear.</p>
+<h3>Binary trees have at most two children per node.</h3>
+<p>The children are conventionally called left and right.</p>
+<h3>Binary search trees add an ordering rule.</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>left &lt; node &lt; right</code></pre></div>
+<p>This rule enables efficient searching.</p>
+<h3>Recursive algorithms are natural for trees.</h3>
+<p>A tree contains smaller trees inside itself.</p>
+<h3>Traversals visit all nodes systematically.</h3>
+<p>Know:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>preorder
+inorder
+postorder</code></pre></div>
+<h3>Inorder traversal of a bst produces sorted values.</h3>
+<p>This follows from the BST ordering property.</p>
+<h3>Tree performance depends on tree height.</h3>
+<p>Balanced:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<p>Potentially unbalanced:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<h3>Heaps solve a different problem from bsts.</h3>
+<p>Heaps are particularly useful for priority queues.</p>
+<h3>Data structures are about tradeoffs.</h3>
+<p>The best structure depends on the operations your program needs.</p>
+<hr>
+<h1>70. What you should be able to do</h1>
+<p>After completing Week 14, you should be able to:</p>
+<ol><li>Explain what a tree data structure represents.</li><li>Identify roots, parents, children, siblings, leaves, depth, and height.</li><li>Explain the difference between a binary tree and a binary search tree.</li><li>Represent binary-tree nodes using Java objects and references.</li><li>Trace BST insertion and search.</li><li>Implement basic BST insertion and search.</li><li>Perform preorder, inorder, and postorder traversals.</li><li>Write simple recursive algorithms on trees.</li><li>Explain why a balanced BST can support O(log n) search.</li><li>Explain why an unbalanced BST can degrade to O(n).</li><li>Explain the basic purpose of a heap.</li><li>Use Java's <code>PriorityQueue</code>.</li><li>Compare trees with lists, hash tables, stacks, and queues.</li><li>Select a reasonable data structure based on required operations.</li></ol>
+<hr>
+<h1>71. End-of-lecture check</h1>
+<p>Without looking at the notes, answer the following.</p>
+<h3>1.</h3>
+<p>What property distinguishes a BST from an ordinary binary tree?</p>
+<h3>2.</h3>
+<p>What traversal visits a BST in sorted order?</p>
+<h3>3.</h3>
+<p>What is the typical search complexity of a balanced BST?</p>
+<h3>4.</h3>
+<p>What is the worst-case search complexity of an unbalanced BST?</p>
+<h3>5.</h3>
+<p>Why is recursion particularly natural for tree algorithms?</p>
+<h3>6.</h3>
+<p>What is the primary purpose of a heap?</p>
+<h3>7.</h3>
+<p>Which Java structure would you likely use if you repeatedly need to remove the smallest element?</p>
+<h3>8.</h3>
+<p>Which would you choose if you need extremely fast membership tests but do not care about sorted ordering?</p>
+<h3>9.</h3>
+<p>Which would you choose if you want set elements maintained in sorted order?</p>
+<h3>10.</h3>
+<p>Why can the order in which values are inserted into a basic BST matter?</p>
+<hr>
+<h1>72. Answers to end-of-lecture check</h1>
+<h3>1.</h3>
+<p>A BST requires the ordering property:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>left values &lt; node value &lt; right values</code></pre></div>
+<h3>2.</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Inorder traversal</code></pre></div>
+<h3>3.</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<h3>4.</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<h3>5.</h3>
+<p>Because each subtree is itself a tree, so the same algorithm can naturally be applied recursively to smaller subtrees.</p>
+<h3>6.</h3>
+<p>To provide efficient access to the minimum or maximum-priority element.</p>
+<h3>7.</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">PriorityQueue</span></code></pre></div>
+<h3>8.</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashSet</span></code></pre></div>
+<h3>9.</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">TreeSet</span></code></pre></div>
+<h3>10.</h3>
+<p>Insertion order determines the shape of a basic BST. A poor insertion order can create a highly unbalanced tree, causing operations that would normally be approximately O(log n) to degrade toward O(n).</p>
+<hr>
+<h1>73. Looking ahead</h1>
+<p>In the next part of CSC500, we will move from learning individual programming constructs and data structures toward integrating them into larger software systems.</p>
+<p>The important question will increasingly become:</p>
+<blockquote>Given a new problem, how do I choose the right abstractions, classes, algorithms, and data structures to build a clear and efficient solution?</blockquote>
+<p>That ability-rather than memorizing any particular Java method-is one of the main skills needed for success in graduate computer science.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

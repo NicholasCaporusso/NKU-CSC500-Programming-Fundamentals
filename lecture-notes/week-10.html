@@ -1,0 +1,1446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 10: recursion and algorithmic thinking</h2>
+<h3>Learning objectives</h3>
+<p>By the end of this week, you should be able to:</p>
+<ul><li>Explain what recursion is and when it is useful.</li><li>Identify the base case and recursive case of a recursive method.</li><li>Trace recursive method calls using the call stack.</li><li>Write simple recursive methods in Java.</li><li>Compare recursive and iterative solutions to the same problem.</li><li>Recognize common errors in recursive programs.</li><li>Use recursion to solve problems involving numbers, strings, arrays, and search.</li><li>Understand how recursion supports broader algorithmic thinking.</li></ul>
+<hr>
+<h1>1. What is recursion?</h1>
+<p>A method is <strong>recursive</strong> if it calls itself, either directly or indirectly.</p>
+<p>Consider the mathematical definition of factorial:</p>
+<div class="math-block"><pre>n! = n × (n-1) × (n-2) × ·s × 1</pre></div>
+<p>For example:</p>
+<div class="math-block"><pre>5! = 5 × 4 × 3 × 2 × 1 = 120</pre></div>
+<p>Factorial can also be defined recursively:</p>
+<div class="math-block"><pre>n! =
+\begin{cases}
+1 &amp; if  n = 0 \\
+n × (n-1)! &amp; if  n &gt; 0
+\end{cases}</pre></div>
+<p>This definition says:</p>
+<ul><li>We already know the answer for <code>0!</code>.</li><li>To find <code>n!</code>, we reduce the problem to a smaller version of the same problem.</li></ul>
+<p>That idea is the essence of recursion.</p>
+<p>In Java:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorial(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(<span class="num">4</span>)</code></pre></div>
+<p>conceptually produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(4)
+= 4 * factorial(3)
+= 4 * 3 * factorial(2)
+= 4 * 3 * 2 * factorial(1)
+= 4 * 3 * 2 * 1 * factorial(0)
+= 4 * 3 * 2 * 1 * 1
+= 24</code></pre></div>
+<hr>
+<h1>2. The two essential parts of recursion</h1>
+<p>Almost every recursive algorithm needs two components.</p>
+<h2>2.1 base case</h2>
+<p>The <strong>base case</strong> is a condition for which the method can return an answer immediately without making another recursive call.</p>
+<p>In factorial:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (n == <span class="num">0</span>) {
+    <span class="kw">return</span> <span class="num">1</span>;
+}</code></pre></div>
+<p>Without a base case, recursion does not stop.</p>
+<h2>2.2 recursive case</h2>
+<p>The <strong>recursive case</strong> reduces the original problem to a smaller problem of the same form.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> n * factorial(n - <span class="num">1</span>);</code></pre></div>
+<p>The important idea is that:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(n)</code></pre></div>
+<p>depends on:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(n - 1)</code></pre></div>
+<p>and <code>n - 1</code> is smaller than <code>n</code>.</p>
+<p>A well-designed recursive method therefore has three properties:</p>
+<ol><li>A base case exists.</li><li>Each recursive call moves toward the base case.</li><li>The recursive result is used to solve the current problem.</li></ol>
+<hr>
+<h1>3. A first recursive example</h1>
+<p>Consider counting down from a positive number.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> countdown(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"Blastoff!"</span>);
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.println(n);
+    countdown(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(<span class="num">3</span>);</code></pre></div>
+<p>prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3
+2
+1
+Blastoff!</code></pre></div>
+<p>The sequence of method calls is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(3)
+    countdown(2)
+        countdown(1)
+            countdown(0)</code></pre></div>
+<p>The final call does not recurse because it satisfies the base case.</p>
+<hr>
+<h1>4. The call stack</h1>
+<p>To understand recursion, you need to understand the <strong>call stack</strong>.</p>
+<p>Whenever Java calls a method, information about that method call is placed on the stack.</p>
+<p>This information includes things such as:</p>
+<ul><li>parameter values,</li><li>local variables,</li><li>where execution should return after the method finishes.</li></ul>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorial(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>When we call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(<span class="num">3</span>)</code></pre></div>
+<p>the stack grows approximately like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(3)
+factorial(2)
+factorial(1)
+factorial(0)</code></pre></div>
+<p>At the deepest point:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(0)</code></pre></div>
+<p>returns <code>1</code>.</p>
+<p>Then the stack begins to unwind.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(1) returns 1 * 1 = 1
+factorial(2) returns 2 * 1 = 2
+factorial(3) returns 3 * 2 = 6</code></pre></div>
+<p>There are therefore two conceptual stages of recursion:</p>
+<h3>Descending</h3>
+<p>The program repeatedly makes smaller recursive calls.</p>
+<h3>Unwinding</h3>
+<p>The recursive calls return in reverse order.</p>
+<hr>
+<h1>5. Recursion before and after the recursive call</h1>
+<p>The location of code relative to the recursive call matters.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> example(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.println(n);
+    example(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>example(<span class="num">3</span>);</code></pre></div>
+<p>prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3
+2
+1</code></pre></div>
+<p>Now move the print statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> example(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    example(n - <span class="num">1</span>);
+    <span class="type">System</span>.out.println(n);
+}</code></pre></div>
+<p>The result becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1
+2
+3</code></pre></div>
+<p>Why?</p>
+<p>In the second version, printing happens while the recursive calls are <strong>returning</strong>.</p>
+<p>Trace:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>example(3)
+    example(2)
+        example(1)
+            example(0)
+        print 1
+    print 2
+print 3</code></pre></div>
+<p>This ability to perform operations during the unwinding stage is one of the most powerful aspects of recursion.</p>
+<hr>
+<h1>6. Recursive sum</h1>
+<p>Suppose we want to calculate:</p>
+<div class="math-block"><pre>1 + 2 + 3 + ·s + n</pre></div>
+<p>An iterative solution is straightforward:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sum(<span class="kw">int</span> n) {
+    <span class="kw">int</span> total = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
+        total += i;
+    }
+
+    <span class="kw">return</span> total;
+}</code></pre></div>
+<p>We can also define the problem recursively:</p>
+<div class="math-block"><pre>sum(n) = n + sum(n-1)</pre></div>
+<p>with:</p>
+<div class="math-block"><pre>sum(0) = 0</pre></div>
+<p>Java implementation:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sum(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> n + sum(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sum(<span class="num">4</span>)</code></pre></div>
+<p>we get:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4 + sum(3)
+4 + 3 + sum(2)
+4 + 3 + 2 + sum(1)
+4 + 3 + 2 + 1 + sum(0)
+4 + 3 + 2 + 1 + 0
+10</code></pre></div>
+<hr>
+<h1>7. Recursive thinking</h1>
+<p>Writing recursive programs requires a slightly different mindset from writing loops.</p>
+<p>When designing an iterative solution, you often ask:</p>
+<blockquote>How do I perform every step?</blockquote>
+<p>With recursion, a more useful question is:</p>
+<blockquote>If I could already solve a smaller version of this problem, how could I use that solution to solve the current problem?</blockquote>
+<p>For example, imagine we somehow already know how to compute:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(4)</code></pre></div>
+<p>Then computing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(5)</code></pre></div>
+<p>is easy:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5 * factorial(4)</code></pre></div>
+<p>You do not need to mentally work through every deeper recursive call while writing the method.</p>
+<p>You assume that the recursive call correctly solves the smaller problem.</p>
+<p>This assumption is sometimes called the <strong>recursive leap of faith</strong>.</p>
+<hr>
+<h1>8. Recursion on strings</h1>
+<p>Recursion is not limited to arithmetic.</p>
+<p>Suppose we want to print the characters of a string one at a time.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printChars(<span class="type">String</span> s) {
+    <span class="kw">if</span> (s.length() == <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.println(s.charAt(<span class="num">0</span>));
+    printChars(s.substring(<span class="num">1</span>));
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printChars(<span class="str">"CAT"</span>);</code></pre></div>
+<p>produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C
+A
+T</code></pre></div>
+<p>The recursive calls are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printChars("CAT")
+printChars("AT")
+printChars("T")
+printChars("")</code></pre></div>
+<p>The problem gets smaller because the string becomes shorter with each call.</p>
+<hr>
+<h1>9. Reversing a string recursively</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> reverse(<span class="type">String</span> s) {
+    <span class="kw">if</span> (s.length() &lt;= <span class="num">1</span>) {
+        <span class="kw">return</span> s;
+    }
+
+    <span class="kw">return</span> reverse(s.substring(<span class="num">1</span>)) + s.charAt(<span class="num">0</span>);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>reverse(<span class="str">"DOG"</span>)</code></pre></div>
+<p>works as follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>reverse("DOG")
+= reverse("OG") + "D"
+
+reverse("OG")
+= reverse("G") + "O"
+
+reverse("G")
+= "G"</code></pre></div>
+<p>Now the calls unwind:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>reverse("G") = "G"
+
+reverse("OG")
+= "G" + "O"
+= "GO"
+
+reverse("DOG")
+= "GO" + "D"
+= "GOD"</code></pre></div>
+<p>Notice again that the important work happens while the recursive calls return.</p>
+<hr>
+<h1>10. Recursion with arrays</h1>
+<p>Arrays require a slightly different approach.</p>
+<p>A recursive method usually needs an index to indicate which portion of the array remains to be processed.</p>
+<p>Suppose we want to calculate the sum of an array.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumArray(<span class="kw">int</span>[] values, <span class="kw">int</span> index) {
+    <span class="kw">if</span> (index == values.length) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> values[index] + sumArray(values, index + <span class="num">1</span>);
+}</code></pre></div>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] values = {<span class="num">5</span>, <span class="num">8</span>, <span class="num">2</span>};</code></pre></div>
+<p>calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(values, <span class="num">0</span>)</code></pre></div>
+<p>produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5 + sumArray(values, 1)
+5 + 8 + sumArray(values, 2)
+5 + 8 + 2 + sumArray(values, 3)
+5 + 8 + 2 + 0
+15</code></pre></div>
+<p>The array itself never gets smaller.</p>
+<p>Instead, the <strong>remaining portion of the problem</strong> becomes smaller because the index moves forward.</p>
+<hr>
+<h1>11. Finding the maximum recursively</h1>
+<p>Suppose we want to find the largest element in an array.</p>
+<p>One recursive approach is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span>[] values, <span class="kw">int</span> index) {
+    <span class="kw">if</span> (index == values.length - <span class="num">1</span>) {
+        <span class="kw">return</span> values[index];
+    }
+
+    <span class="kw">int</span> maxOfRest = max(values, index + <span class="num">1</span>);
+
+    <span class="kw">if</span> (values[index] &gt; maxOfRest) {
+        <span class="kw">return</span> values[index];
+    }
+
+    <span class="kw">return</span> maxOfRest;
+}</code></pre></div>
+<p>Think about the statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> maxOfRest = max(values, index + <span class="num">1</span>);</code></pre></div>
+<p>We are saying:</p>
+<blockquote>Assume that the recursive method can correctly find the maximum of everything after the current position.</blockquote>
+<p>Then we only need to compare that answer with the current element.</p>
+<p>This is a good example of recursive problem decomposition.</p>
+<hr>
+<h1>12. Recursion and searching</h1>
+<p>One particularly important recursive algorithm is <strong>binary search</strong>.</p>
+<p>Binary search works on a sorted collection.</p>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 7, 12, 18, 25, 31, 42]</code></pre></div>
+<p>and want to find <code>25</code>.</p>
+<p>Instead of examining every element, binary search examines the middle element.</p>
+<p>Middle:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>18</code></pre></div>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>25 &gt; 18</code></pre></div>
+<p>we can ignore the entire left half.</p>
+<p>Now search only:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[25, 31, 42]</code></pre></div>
+<p>The problem gets approximately half as large after each step.</p>
+<hr>
+<h1>13. Recursive binary search</h1>
+<p>A recursive implementation might look like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> binarySearch(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target,
+        <span class="kw">int</span> low,
+        <span class="kw">int</span> high) {
+
+    <span class="kw">if</span> (low &gt; high) {
+        <span class="kw">return</span> -<span class="num">1</span>;
+    }
+
+    <span class="kw">int</span> mid = low + (high - low) / <span class="num">2</span>;
+
+    <span class="kw">if</span> (values[mid] == target) {
+        <span class="kw">return</span> mid;
+    }
+
+    <span class="kw">if</span> (target &lt; values[mid]) {
+        <span class="kw">return</span> binarySearch(values, target, low, mid - <span class="num">1</span>);
+    }
+
+    <span class="kw">return</span> binarySearch(values, target, mid + <span class="num">1</span>, high);
+}</code></pre></div>
+<p>We might call it like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> index = binarySearch(values, <span class="num">25</span>, <span class="num">0</span>, values.length - <span class="num">1</span>);</code></pre></div>
+<p>There are two base-case outcomes:</p>
+<h3>Target found</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (values[mid] == target) {
+    <span class="kw">return</span> mid;
+}</code></pre></div>
+<h3>Search range becomes empty</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (low &gt; high) {
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</code></pre></div>
+<p>The recursive call always searches a smaller interval.</p>
+<hr>
+<h1>14. Why binary search matters</h1>
+<p>Compare linear search and binary search.</p>
+<p>A linear search might examine:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 element
+2 elements
+3 elements
+...
+n elements</code></pre></div>
+<p>In the worst case, it examines all <code>n</code> elements.</p>
+<p>Binary search repeatedly cuts the problem approximately in half.</p>
+<p>For 1,000 elements:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1000
+500
+250
+125
+62
+31
+15
+7
+3
+1</code></pre></div>
+<p>Only about 10 reductions are necessary.</p>
+<p>For 1,000,000 elements, only about 20 reductions are necessary.</p>
+<p>We will formalize this comparison using <strong>Big-O notation</strong> next week.</p>
+<p>For now, the key observation is:</p>
+<blockquote>Different algorithms can solve the same problem with dramatically different amounts of work.</blockquote>
+<p>This is the beginning of algorithm analysis.</p>
+<hr>
+<h1>15. Recursion versus iteration</h1>
+<p>Many problems can be solved using either loops or recursion.</p>
+<p>Factorial with iteration:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorialIterative(<span class="kw">int</span> n) {
+    <span class="kw">int</span> result = <span class="num">1</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">2</span>; i &lt;= n; i++) {
+        result *= i;
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+<p>Factorial with recursion:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorialRecursive(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> n * factorialRecursive(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>Both compute the same result.</p>
+<p>The important question is not:</p>
+<blockquote>Which one is always better?</blockquote>
+<p>Instead ask:</p>
+<blockquote>Which one expresses the structure of this particular problem more clearly?</blockquote>
+<hr>
+<h1>16. Advantages of recursion</h1>
+<p>Recursion can make certain algorithms much easier to express.</p>
+<p>It is especially natural when the problem itself has a recursive structure.</p>
+<p>Examples include:</p>
+<ul><li>tree traversal,</li><li>directory traversal,</li><li>divide-and-conquer algorithms,</li><li>binary search,</li><li>searching mazes,</li><li>processing nested structures,</li><li>generating permutations,</li><li>exploring graphs,</li><li>parsing programming languages.</li></ul>
+<p>Later in computer science, recursion appears frequently.</p>
+<hr>
+<h1>17. Disadvantages of recursion</h1>
+<p>Recursion also has costs.</p>
+<p>Every recursive call requires another stack frame.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(<span class="num">1000000</span>)</code></pre></div>
+<p>This creates a huge number of nested method calls.</p>
+<p>Eventually Java will run out of call-stack space.</p>
+<p>The program may throw:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>StackOverflowError</code></pre></div>
+<p>Iteration typically uses less stack memory.</p>
+<p>For simple repetitive calculations, a loop may therefore be preferable.</p>
+<hr>
+<h1>18. Infinite recursion</h1>
+<p>One of the most common recursion errors is failing to move toward the base case.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> countdown(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.println(n);
+    countdown(n);
+}</code></pre></div>
+<p>The recursive call is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(n);</code></pre></div>
+<p>But <code>n</code> never changes.</p>
+<p>If we call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(<span class="num">5</span>)</code></pre></div>
+<p>the program repeatedly calls:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(5)
+countdown(5)
+countdown(5)
+...</code></pre></div>
+<p>Eventually it crashes with a <code>StackOverflowError</code>.</p>
+<p>The correct call is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>countdown(n - <span class="num">1</span>);</code></pre></div>
+<hr>
+<h1>19. A base case can exist and still be unreachable</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> countdown(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    countdown(n + <span class="num">1</span>);
+}</code></pre></div>
+<p>There is technically a base case.</p>
+<p>However, if <code>n</code> starts at <code>5</code>, the sequence becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5
+6
+7
+8
+9
+...</code></pre></div>
+<p>The calls move away from the base case.</p>
+<p>The correct question is therefore not merely:</p>
+<blockquote>Does the method have a base case?</blockquote>
+<p>You must also ask:</p>
+<blockquote>Does every recursive call make progress toward it?</blockquote>
+<hr>
+<h1>20. Input preconditions</h1>
+<p>Consider factorial again:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorial(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>What happens if we call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(-<span class="num">3</span>);</code></pre></div>
+<p>The sequence becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>factorial(-3)
+factorial(-4)
+factorial(-5)
+...</code></pre></div>
+<p>It never reaches zero.</p>
+<p>One solution is to validate the input:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorial(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt; <span class="num">0</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"Factorial requires a nonnegative integer."</span>);
+    }
+
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>This connects recursion with ideas from previous weeks about defensive programming and exceptions.</p>
+<hr>
+<h1>21. A common mistake: trying to follow everything at once</h1>
+<p>Students often find recursion confusing because they mentally try to execute every recursive call simultaneously.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> n * factorial(n - <span class="num">1</span>);</code></pre></div>
+<p>A better approach when writing recursive code is:</p>
+<ol><li>Identify the base case.</li><li>Assume the recursive call works correctly for a smaller input.</li><li>Determine how to use the smaller answer to solve the current problem.</li></ol>
+<p>For factorial:</p>
+<blockquote>If <code>factorial(n - 1)</code> correctly gives me <code>(n - 1)!</code>, then multiplying it by <code>n</code> gives me <code>n!</code>.</blockquote>
+<p>This style of reasoning becomes extremely important in data structures.</p>
+<hr>
+<h1>22. Recursive definitions</h1>
+<p>Many structures in computer science are naturally recursive.</p>
+<p>A list can be thought of as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>an item followed by another list</code></pre></div>
+<p>A directory can contain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>files and other directories</code></pre></div>
+<p>A tree contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a node and smaller subtrees</code></pre></div>
+<p>An arithmetic expression might contain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>numbers and smaller expressions</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>(3 + (4 * 5))</code></pre></div>
+<p>The expression contains another expression:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>(4 * 5)</code></pre></div>
+<p>Recursive data structures naturally lead to recursive algorithms.</p>
+<hr>
+<h1>23. Example: palindrome checking</h1>
+<p>A palindrome reads the same forward and backward.</p>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>racecar
+level
+madam</code></pre></div>
+<p>Think recursively.</p>
+<p>A string is a palindrome if:</p>
+<ol><li>It has zero or one characters, or</li><li>Its first and last characters match, and the middle portion is also a palindrome.</li></ol>
+<p>Java:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isPalindrome(<span class="type">String</span> s) {
+    <span class="kw">if</span> (s.length() &lt;= <span class="num">1</span>) {
+        <span class="kw">return</span> <span class="lit">true</span>;
+    }
+
+    <span class="kw">if</span> (s.charAt(<span class="num">0</span>) != s.charAt(s.length() - <span class="num">1</span>)) {
+        <span class="kw">return</span> <span class="lit">false</span>;
+    }
+
+    <span class="kw">return</span> isPalindrome(
+        s.substring(<span class="num">1</span>, s.length() - <span class="num">1</span>)
+    );
+}</code></pre></div>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>racecar</code></pre></div>
+<p>the recursive decomposition is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>racecar
+ aceca
+  cec
+   e</code></pre></div>
+<p>Each smaller problem has exactly the same form as the original.</p>
+<hr>
+<h1>24. Example: count occurrences in an array</h1>
+<p>Suppose we want to count how many times <code>target</code> appears.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> count(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target,
+        <span class="kw">int</span> index) {
+
+    <span class="kw">if</span> (index == values.length) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">int</span> countInRest =
+        count(values, target, index + <span class="num">1</span>);
+
+    <span class="kw">if</span> (values[index] == target) {
+        <span class="kw">return</span> <span class="num">1</span> + countInRest;
+    }
+
+    <span class="kw">return</span> countInRest;
+}</code></pre></div>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] values = {<span class="num">4</span>, <span class="num">7</span>, <span class="num">4</span>, <span class="num">2</span>, <span class="num">4</span>};</code></pre></div>
+<p>calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>count(values, <span class="num">4</span>, <span class="num">0</span>)</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3</code></pre></div>
+<hr>
+<h1>25. Example: recursive power</h1>
+<p>We want to calculate:</p>
+<div class="math-block"><pre>base<sup>exponent</sup></pre></div>
+<p>For nonnegative exponents:</p>
+<div class="math-block"><pre>x<sup>0</sup> = 1</pre></div>
+<p>and:</p>
+<div class="math-block"><pre>x<sup>n</sup> = x × x<sup>n-1</sup></pre></div>
+<p>Java:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">long</span> power(<span class="kw">long</span> base, <span class="kw">int</span> exponent) {
+    <span class="kw">if</span> (exponent &lt; <span class="num">0</span>) {
+        <span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(
+            <span class="str">"Exponent must be nonnegative."</span>);
+    }
+
+    <span class="kw">if</span> (exponent == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> base * power(base, exponent - <span class="num">1</span>);
+}</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>power(2, 4)
+
+2 * power(2, 3)
+2 * 2 * power(2, 2)
+2 * 2 * 2 * power(2, 1)
+2 * 2 * 2 * 2 * power(2, 0)
+2 * 2 * 2 * 2 * 1
+
+16</code></pre></div>
+<hr>
+<h1>26. A more efficient recursive power</h1>
+<p>There is another way to compute powers.</p>
+<p>Suppose:</p>
+<div class="math-block"><pre>2<sup>8</sup></pre></div>
+<p>Instead of calculating:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2 × 2 × 2 × 2 × 2 × 2 × 2 × 2</code></pre></div>
+<p>notice:</p>
+<div class="math-block"><pre>2<sup>8</sup> = 2<sup>4</sup> × 2<sup>4</sup></pre></div>
+<p>and:</p>
+<div class="math-block"><pre>2<sup>4</sup> = 2<sup>2</sup> × 2<sup>2</sup></pre></div>
+<p>This gives the idea:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">long</span> fastPower(<span class="kw">long</span> base, <span class="kw">int</span> exponent) {
+    <span class="kw">if</span> (exponent == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">long</span> half = fastPower(base, exponent / <span class="num">2</span>);
+
+    <span class="kw">if</span> (exponent % <span class="num">2</span> == <span class="num">0</span>) {
+        <span class="kw">return</span> half * half;
+    }
+
+    <span class="kw">return</span> base * half * half;
+}</code></pre></div>
+<p>This example introduces an important algorithmic principle:</p>
+<blockquote>A problem does not always need to become smaller by only one unit.</blockquote>
+<p>Sometimes we can reduce it dramatically.</p>
+<p>This idea will appear again in divide-and-conquer algorithms.</p>
+<hr>
+<h1>27. Fibonacci numbers</h1>
+<p>The Fibonacci sequence begins:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0, 1, 1, 2, 3, 5, 8, 13, 21, ...</code></pre></div>
+<p>It can be defined recursively:</p>
+<div class="math-block"><pre>F(0)=0</pre></div>
+<div class="math-block"><pre>F(1)=1</pre></div>
+<div class="math-block"><pre>F(n)=F(n-1)+F(n-2)</pre></div>
+<p>A direct Java implementation is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">long</span> fibonacci(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">if</span> (n == <span class="num">1</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> fibonacci(n - <span class="num">1</span>) + fibonacci(n - <span class="num">2</span>);
+}</code></pre></div>
+<p>This code closely matches the mathematical definition.</p>
+<p>However, it has an important problem.</p>
+<hr>
+<h1>28. Not all recursive solutions are efficient</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>fibonacci(5)</code></pre></div>
+<p>It calls:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>fibonacci(4)
+fibonacci(3)</code></pre></div>
+<p>But <code>fibonacci(4)</code> itself calls:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>fibonacci(3)
+fibonacci(2)</code></pre></div>
+<p>We calculate <code>fibonacci(3)</code> multiple times.</p>
+<p>The call structure resembles:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>                 fib(5)
+               /        \
+           fib(4)       fib(3)
+          /     \       /    \
+      fib(3)  fib(2) fib(2) fib(1)
+      ...</code></pre></div>
+<p>The same subproblems are repeatedly recomputed.</p>
+<p>This is a crucial lesson:</p>
+<blockquote>A recursive solution can be correct and still be a poor algorithm.</blockquote>
+<p>Correctness and efficiency are separate questions.</p>
+<hr>
+<h1>29. Iterative fibonacci</h1>
+<p>An iterative version avoids repeated work:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">long</span> fibonacciIterative(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">long</span> previous = <span class="num">0</span>;
+    <span class="kw">long</span> current = <span class="num">1</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">2</span>; i &lt;= n; i++) {
+        <span class="kw">long</span> next = previous + current;
+        previous = current;
+        current = next;
+    }
+
+    <span class="kw">return</span> current;
+}</code></pre></div>
+<p>The iterative version is far more efficient than the naive recursive version.</p>
+<p>We will develop tools for formally describing this difference in Week 11.</p>
+<p>For now:</p>
+<blockquote>Elegant code is not automatically efficient code.</blockquote>
+<hr>
+<h1>30. Recursion as problem decomposition</h1>
+<p>Recursion is one example of a larger idea:</p>
+<h2>Problem decomposition</h2>
+<p>Take a difficult problem and express it using smaller versions of the same problem.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sum of 10 values</code></pre></div>
+<p>can become:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>first value + sum of remaining 9 values</code></pre></div>
+<p>Binary search turns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>search 1000 values</code></pre></div>
+<p>into approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>search 500 values</code></pre></div>
+<p>A tree problem may become:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>solve the left subtree
+solve the right subtree
+combine the answers</code></pre></div>
+<p>Thinking in terms of smaller subproblems is one of the central ideas of algorithms.</p>
+<hr>
+<h1>31. A general recursive template</h1>
+<p>Many recursive methods have this structure:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">ReturnType</span> recursiveMethod(<span class="type">Input</span> input) {
+
+    <span class="kw">if</span> (baseCaseCondition) {
+        <span class="kw">return</span> baseCaseAnswer;
+    }
+
+    <span class="type">Input</span> smallerInput = makeProblemSmaller(input);
+
+    <span class="type">ReturnType</span> smallerAnswer =
+        recursiveMethod(smallerInput);
+
+    <span class="kw">return</span> combine(input, smallerAnswer);
+}</code></pre></div>
+<p>Not every recursive method fits this exact template, but it is a useful starting point.</p>
+<p>A second common form involves multiple recursive calls:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ReturnType</span> left =
+    recursiveMethod(smallerProblem1);
+
+<span class="type">ReturnType</span> right =
+    recursiveMethod(smallerProblem2);
+
+<span class="kw">return</span> combine(left, right);</code></pre></div>
+<p>This structure becomes especially important for trees and divide-and-conquer algorithms.</p>
+<hr>
+<h1>32. How to design a recursive method</h1>
+<p>When solving a recursive problem, use the following process.</p>
+<h2>Step 1: define exactly what the method means</h2>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(values, index)</code></pre></div>
+<p>means:</p>
+<blockquote>Return the sum of all array elements from <code>index</code> through the end of the array.</blockquote>
+<p>A precise method definition makes recursion much easier.</p>
+<h2>Step 2: find the smallest problem</h2>
+<p>For <code>sumArray</code>, the smallest remaining portion is an empty portion.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (index == values.length) {
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre></div>
+<h2>Step 3: make the problem smaller</h2>
+<p>Move forward one element:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(values, index + <span class="num">1</span>)</code></pre></div>
+<h2>Step 4: trust the recursive call</h2>
+<p>Assume:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(values, index + <span class="num">1</span>)</code></pre></div>
+<p>correctly computes the sum of everything after the current element.</p>
+<h2>Step 5: combine the answers</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> values[index] +
+       sumArray(values, index + <span class="num">1</span>);</code></pre></div>
+<hr>
+<h1>33. Tracing recursive code</h1>
+<p>When a recursive program behaves unexpectedly, trace it systematically.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mystery(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">2</span> + mystery(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>What does:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>mystery(<span class="num">4</span>)</code></pre></div>
+<p>return?</p>
+<p>Trace:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>mystery(4)
+= 2 + mystery(3)
+
+= 2 + 2 + mystery(2)
+
+= 2 + 2 + 2 + mystery(1)
+
+= 2 + 2 + 2 + 2 + mystery(0)
+
+= 2 + 2 + 2 + 2 + 0
+
+= 8</code></pre></div>
+<p>The method computes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2 × n</code></pre></div>
+<p>Tracing is an excellent way to understand unfamiliar recursive programs.</p>
+<hr>
+<h1>34. Another tracing exercise</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> mystery(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.print(n + <span class="str">" "</span>);
+    mystery(n - <span class="num">2</span>);
+    <span class="type">System</span>.out.print(n + <span class="str">" "</span>);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>mystery(<span class="num">5</span>);</code></pre></div>
+<p>prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5 3 1 1 3 5</code></pre></div>
+<p>Why?</p>
+<p>The first print statements happen while recursion moves downward.</p>
+<p>The second print statements happen while recursion unwinds.</p>
+<hr>
+<h1>35. Stack overflow</h1>
+<p>Java provides limited memory for the call stack.</p>
+<p>A recursive method that makes too many nested calls can cause:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>java.lang.StackOverflowError</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> forever() {
+    forever();
+}</code></pre></div>
+<p>This method has no base case.</p>
+<p>But even correct recursion can overflow the stack if the recursion becomes excessively deep.</p>
+<p>For example, recursively processing millions of array elements may be unsafe.</p>
+<p>This is one reason recursion is not always appropriate.</p>
+<hr>
+<h1>36. Recursion and Java memory</h1>
+<p>Recall that each method call receives its own local variables.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> test(<span class="kw">int</span> n) {
+    <span class="kw">int</span> x = n * <span class="num">10</span>;
+
+    <span class="kw">if</span> (n &gt; <span class="num">0</span>) {
+        test(n - <span class="num">1</span>);
+    }
+
+    <span class="type">System</span>.out.println(x);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>test(<span class="num">3</span>)</code></pre></div>
+<p>creates separate <code>x</code> values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>test(3): x = 30
+test(2): x = 20
+test(1): x = 10
+test(0): x = 0</code></pre></div>
+<p>When calls unwind, the output is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0
+10
+20
+30</code></pre></div>
+<p>Each call has its own stack frame and therefore its own version of <code>x</code>.</p>
+<hr>
+<h1>37. Recursion and object-oriented programming</h1>
+<p>Recursive methods can also appear inside classes.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">NumberUtils</span> {
+
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumDigits(<span class="kw">int</span> n) {
+        <span class="kw">if</span> (n &lt; <span class="num">10</span>) {
+            <span class="kw">return</span> n;
+        }
+
+        <span class="kw">return</span> n % <span class="num">10</span> + sumDigits(n / <span class="num">10</span>);
+    }
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">NumberUtils</span>.sumDigits(<span class="num">472</span>)</code></pre></div>
+<p>computes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2 + sumDigits(47)
+
+2 + 7 + sumDigits(4)
+
+2 + 7 + 4
+
+13</code></pre></div>
+<p>The key observations are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n % <span class="num">10</span></code></pre></div>
+<p>gets the last digit, while:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n / <span class="num">10</span></code></pre></div>
+<p>removes the last digit.</p>
+<p>Each recursive call therefore receives a smaller number.</p>
+<hr>
+<h1>38. Recursion and problem representation</h1>
+<p>Often, finding the right recursive solution depends on finding the right representation of the problem.</p>
+<p>Suppose we ask:</p>
+<blockquote>Find the sum of an array.</blockquote>
+<p>A method like this is difficult to recurse on:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(<span class="kw">int</span>[] values)</code></pre></div>
+<p>because the array never gets smaller.</p>
+<p>Instead, redefine the problem:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(<span class="kw">int</span>[] values, <span class="kw">int</span> index)</code></pre></div>
+<p>Now the meaning becomes:</p>
+<blockquote>Find the sum beginning at this position.</blockquote>
+<p>The index allows the remaining problem to shrink.</p>
+<p>This is an important algorithm-design technique:</p>
+<blockquote>Additional parameters can describe the part of the problem that remains.</blockquote>
+<p>Binary search similarly uses:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>low
+high</code></pre></div>
+<p>to identify the current search range.</p>
+<hr>
+<h1>39. Helper methods</h1>
+<p>Sometimes we do not want callers to supply the extra recursive parameters.</p>
+<p>We can hide them using a helper method.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumArray(<span class="kw">int</span>[] values) {
+    <span class="kw">return</span> sumArray(values, <span class="num">0</span>);
+}
+
+<span class="kw">private</span> <span class="kw">static</span> <span class="kw">int</span> sumArray(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> index) {
+
+    <span class="kw">if</span> (index == values.length) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> values[index] +
+           sumArray(values, index + <span class="num">1</span>);
+}</code></pre></div>
+<p>The caller writes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(values);</code></pre></div>
+<p>instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumArray(values, <span class="num">0</span>);</code></pre></div>
+<p>The private recursive helper handles the implementation details.</p>
+<p>This is also an example of encapsulation.</p>
+<hr>
+<h1>40. Recursive binary search with a helper</h1>
+<p>We can use the same pattern for binary search:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> binarySearch(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target) {
+
+    <span class="kw">return</span> binarySearch(
+        values,
+        target,
+        <span class="num">0</span>,
+        values.length - <span class="num">1</span>
+    );
+}
+
+<span class="kw">private</span> <span class="kw">static</span> <span class="kw">int</span> binarySearch(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target,
+        <span class="kw">int</span> low,
+        <span class="kw">int</span> high) {
+
+    <span class="kw">if</span> (low &gt; high) {
+        <span class="kw">return</span> -<span class="num">1</span>;
+    }
+
+    <span class="kw">int</span> mid = low + (high - low) / <span class="num">2</span>;
+
+    <span class="kw">if</span> (values[mid] == target) {
+        <span class="kw">return</span> mid;
+    }
+
+    <span class="kw">if</span> (target &lt; values[mid]) {
+        <span class="kw">return</span> binarySearch(
+            values,
+            target,
+            low,
+            mid - <span class="num">1</span>
+        );
+    }
+
+    <span class="kw">return</span> binarySearch(
+        values,
+        target,
+        mid + <span class="num">1</span>,
+        high
+    );
+}</code></pre></div>
+<p>The public method offers a simple interface.</p>
+<p>The private method contains the recursive state.</p>
+<hr>
+<h1>41. Recursion checklist</h1>
+<p>Before considering a recursive method complete, ask:</p>
+<h3>Correctness</h3>
+<ul><li>What exactly does this method promise to compute?</li><li>What is the base case?</li><li>Is the base-case answer correct?</li><li>Does every recursive call make the problem smaller?</li><li>Will every valid input eventually reach a base case?</li><li>Assuming the recursive call works, does the current method compute the correct answer?</li></ul>
+<h3>Safety</h3>
+<ul><li>What inputs are valid?</li><li>Could invalid input cause infinite recursion?</li><li>Could the recursion become extremely deep?</li></ul>
+<h3>Efficiency</h3>
+<ul><li>How many recursive calls are made?</li><li>Does the method repeatedly solve the same subproblem?</li><li>Would iteration be simpler?</li><li>Is recursion natural for the structure of the problem?</li></ul>
+<hr>
+<h1>42. Common recursive patterns</h1>
+<p>There are several recurring patterns worth recognizing.</p>
+<h2>Pattern 1: reduce by one</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>solve(n)
+    → solve(n - <span class="num">1</span>)</code></pre></div>
+<p>Examples:</p>
+<ul><li>factorial,</li><li>sum from 1 to n,</li><li>processing an array one element at a time.</li></ul>
+<h2>Pattern 2: reduce the input size</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>solve(string)
+    → solve(smaller substring)</code></pre></div>
+<p>Examples:</p>
+<ul><li>reversing a string,</li><li>palindrome checking.</li></ul>
+<h2>Pattern 3: divide the problem</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>solve(n)
+    → solve(n / <span class="num">2</span>)</code></pre></div>
+<p>Examples:</p>
+<ul><li>binary search,</li><li>fast exponentiation.</li></ul>
+<h2>Pattern 4: multiple recursive subproblems</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>solve(problem)
+    → solve(part1) + solve(part2)</code></pre></div>
+<p>Examples:</p>
+<ul><li>Fibonacci,</li><li>tree traversal,</li><li>merge sort,</li><li>divide-and-conquer algorithms.</li></ul>
+<p>These patterns will recur throughout computer science.</p>
+<hr>
+<h1>43. Recursion is not magic</h1>
+<p>A recursive call is still just a normal method call.</p>
+<p>The computer does not "understand recursion" as a special concept.</p>
+<p>It simply:</p>
+<ol><li>calls a method,</li><li>creates a stack frame,</li><li>executes the method,</li><li>possibly calls another method,</li><li>waits for that call to return,</li><li>continues execution.</li></ol>
+<p>Recursion is powerful because the method happens to call another instance of itself.</p>
+<hr>
+<h1>44. Algorithmic thinking</h1>
+<p>This week is not only about learning recursive syntax.</p>
+<p>The larger objective is learning to think algorithmically.</p>
+<p>When given a problem, ask:</p>
+<ul><li>What is the input?</li><li>What is the output?</li><li>What special cases exist?</li><li>Can I break the problem into smaller subproblems?</li><li>What information must I keep track of?</li><li>What guarantees that the algorithm eventually stops?</li><li>How much work does the algorithm perform?</li><li>Are there multiple ways to solve the problem?</li><li>What are the tradeoffs among those solutions?</li></ul>
+<p>These questions are central to computer science.</p>
+<hr>
+<h1>45. Worked example: sum of digits</h1>
+<p>Problem:</p>
+<blockquote>Write a recursive method that computes the sum of the digits of a nonnegative integer.</blockquote>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>472 → 4 + 7 + 2 → 13</code></pre></div>
+<p>First observe:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">472</span> % <span class="num">10</span></code></pre></div>
+<p>is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">472</span> / <span class="num">10</span></code></pre></div>
+<p>is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>47</code></pre></div>
+<p>So:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumDigits(472)</code></pre></div>
+<p>can be expressed as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2 + sumDigits(47)</code></pre></div>
+<p>The base case occurs when the number has only one digit.</p>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumDigits(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt; <span class="num">10</span>) {
+        <span class="kw">return</span> n;
+    }
+
+    <span class="kw">return</span> n % <span class="num">10</span> + sumDigits(n / <span class="num">10</span>);
+}</code></pre></div>
+<p>Trace:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sumDigits(472)
+= 2 + sumDigits(47)
+
+= 2 + 7 + sumDigits(4)
+
+= 2 + 7 + 4
+
+= 13</code></pre></div>
+<hr>
+<h1>46. Worked example: count a character</h1>
+<p>Problem:</p>
+<blockquote>Count how many times a particular character occurs in a string.</blockquote>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"banana", 'a'</code></pre></div>
+<p>should return:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3</code></pre></div>
+<p>Solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countChar(
+        <span class="type">String</span> s,
+        <span class="kw">char</span> target) {
+
+    <span class="kw">if</span> (s.isEmpty()) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">int</span> countInRest =
+        countChar(s.substring(<span class="num">1</span>), target);
+
+    <span class="kw">if</span> (s.charAt(<span class="num">0</span>) == target) {
+        <span class="kw">return</span> <span class="num">1</span> + countInRest;
+    }
+
+    <span class="kw">return</span> countInRest;
+}</code></pre></div>
+<p>A more compact version is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countChar(
+        <span class="type">String</span> s,
+        <span class="kw">char</span> target) {
+
+    <span class="kw">if</span> (s.isEmpty()) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">int</span> current =
+        s.charAt(<span class="num">0</span>) == target ? <span class="num">1</span> : <span class="num">0</span>;
+
+    <span class="kw">return</span> current +
+           countChar(s.substring(<span class="num">1</span>), target);
+}</code></pre></div>
+<hr>
+<h1>47. Worked example: is an array sorted?</h1>
+<p>Problem:</p>
+<blockquote>Determine recursively whether an array is sorted in nondecreasing order.</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 5, 5, 9, 12]</code></pre></div>
+<p>is sorted.</p>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 8, 4, 10]</code></pre></div>
+<p>is not.</p>
+<p>Recursive idea:</p>
+<ul><li>Compare the current element with the next one.</li><li>If they are out of order, return <code>false</code>.</li><li>Otherwise ask whether the remainder of the array is sorted.</li></ul>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isSorted(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> index) {
+
+    <span class="kw">if</span> (index &gt;= values.length - <span class="num">1</span>) {
+        <span class="kw">return</span> <span class="lit">true</span>;
+    }
+
+    <span class="kw">if</span> (values[index] &gt; values[index + <span class="num">1</span>]) {
+        <span class="kw">return</span> <span class="lit">false</span>;
+    }
+
+    <span class="kw">return</span> isSorted(values, index + <span class="num">1</span>);
+}</code></pre></div>
+<hr>
+<h1>48. Worked example: decimal to binary</h1>
+<p>Recursion can reveal structure in number systems.</p>
+<p>Suppose we want to print the binary representation of a positive integer.</p>
+<p>Repeated division by 2 gives:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>13 / 2 = 6 remainder 1
+6  / 2 = 3 remainder 0
+3  / 2 = 1 remainder 1
+1  / 2 = 0 remainder 1</code></pre></div>
+<p>The remainders appear in reverse order.</p>
+<p>Recursion naturally handles this reversal.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printBinary(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt; <span class="num">2</span>) {
+        <span class="type">System</span>.out.print(n);
+        <span class="kw">return</span>;
+    }
+
+    printBinary(n / <span class="num">2</span>);
+    <span class="type">System</span>.out.print(n % <span class="num">2</span>);
+}</code></pre></div>
+<p>Calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>printBinary(<span class="num">13</span>);</code></pre></div>
+<p>prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1101</code></pre></div>
+<p>This is a good example of using the <strong>unwinding phase</strong> of recursion.</p>
+<hr>
+<h1>49. In-class code-tracing exercise</h1>
+<p>Without running the program, determine the output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> puzzle(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.print(n + <span class="str">" "</span>);
+    puzzle(n / <span class="num">2</span>);
+    <span class="type">System</span>.out.print(n + <span class="str">" "</span>);
+}</code></pre></div>
+<p>Call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>puzzle(<span class="num">8</span>);</code></pre></div>
+<p>Try to draw the stack before checking the answer.</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>8 4 2 1 1 2 4 8</code></pre></div>
+<hr>
+<h1>50. In-class design exercise</h1>
+<p>Write a recursive method:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> product(<span class="kw">int</span>[] values, <span class="kw">int</span> index)</code></pre></div>
+<p>that returns the product of all elements from <code>index</code> to the end.</p>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] values = {<span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>};</code></pre></div>
+<p>calling:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>product(values, <span class="num">0</span>)</code></pre></div>
+<p>should return:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>24</code></pre></div>
+<p>Think about the base case carefully.</p>
+<p>The correct identity value for multiplication is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1</code></pre></div>
+<p>not:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0</code></pre></div>
+<p>One solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> product(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> index) {
+
+    <span class="kw">if</span> (index == values.length) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> values[index] *
+           product(values, index + <span class="num">1</span>);
+}</code></pre></div>
+<hr>
+<h1>51. In-class design exercise: find a value</h1>
+<p>Write a recursive method that returns whether a target exists in an array.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> contains(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target,
+        <span class="kw">int</span> index)</code></pre></div>
+<p>One solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> contains(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target,
+        <span class="kw">int</span> index) {
+
+    <span class="kw">if</span> (index == values.length) {
+        <span class="kw">return</span> <span class="lit">false</span>;
+    }
+
+    <span class="kw">if</span> (values[index] == target) {
+        <span class="kw">return</span> <span class="lit">true</span>;
+    }
+
+    <span class="kw">return</span> contains(
+        values,
+        target,
+        index + <span class="num">1</span>
+    );
+}</code></pre></div>
+<p>Notice that this method can stop early as soon as it finds the target.</p>
+<hr>
+<h1>52. Recursion vs. loops: practical guidelines</h1>
+<p>Prefer a loop when:</p>
+<ul><li>the operation is naturally repetitive,</li><li>the data structure is linear,</li><li>recursion adds no conceptual clarity,</li><li>very deep recursion might occur.</li></ul>
+<p>Consider recursion when:</p>
+<ul><li>the problem is naturally defined in terms of smaller versions of itself,</li><li>the data structure is recursive,</li><li>the problem divides into subproblems,</li><li>the recursive formulation closely matches the conceptual solution.</li></ul>
+<p>Neither technique is inherently superior.</p>
+<p>Good programmers know both.</p>
+<hr>
+<h1>53. Preview: why recursion matters for data structures</h1>
+<p>Next we will study algorithms and data structures in greater depth.</p>
+<p>Recursion will become particularly useful for trees.</p>
+<p>Imagine a binary tree:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>        8
+       / \
+      3   10
+     / \    \
+    1   6    14</code></pre></div>
+<p>To process the entire tree, we can think recursively:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>process current node
+process left subtree
+process right subtree</code></pre></div>
+<p>Each subtree is itself another tree.</p>
+<p>That is why recursion is such a natural fit.</p>
+<p>You do not need to understand trees yet. The important point is that recursive programming is preparation for the data structures that follow.</p>
+<hr>
+<h1>54. Summary</h1>
+<p>The central ideas from this week are:</p>
+<h3>Recursion</h3>
+<p>A recursive method calls itself on a smaller version of the problem.</p>
+<h3>Base case</h3>
+<p>The condition that stops recursion.</p>
+<h3>Recursive case</h3>
+<p>The part of the method that reduces the problem.</p>
+<h3>Progress</h3>
+<p>Every recursive call must move toward a base case.</p>
+<h3>Call stack</h3>
+<p>Each recursive call creates a separate method invocation that waits for deeper calls to return.</p>
+<h3>Unwinding</h3>
+<p>After the base case returns, pending recursive calls complete in reverse order.</p>
+<h3>Recursive thinking</h3>
+<p>Assume the smaller recursive problem can be solved correctly, then determine how its result helps solve the current problem.</p>
+<h3>Algorithmic thinking</h3>
+<p>Different correct solutions may require very different amounts of computational work.</p>
+<hr>
+<h1>55. Key vocabulary</h1>
+<p>You should be able to explain the following terms:</p>
+<ul><li>recursion</li><li>recursive method</li><li>base case</li><li>recursive case</li><li>call stack</li><li>stack frame</li><li>stack overflow</li><li>recursive call</li><li>unwinding</li><li>iteration</li><li>problem decomposition</li><li>subproblem</li><li>binary search</li><li>divide and conquer</li><li>precondition</li><li>algorithm</li></ul>
+<hr>
+<h1>56. Review questions</h1>
+<ol><li>What two components must every recursive method have?</li></ol>
+<ol><li>What happens if a recursive method has no base case?</li></ol>
+<ol><li>Why is simply having a base case not enough?</li></ol>
+<ol><li>What does the Java call stack store?</li></ol>
+<ol><li>What happens during the unwinding phase of recursion?</li></ol>
+<ol><li>What is the output?</li></ol>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> f(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.print(n + <span class="str">" "</span>);
+    f(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>f(<span class="num">4</span>);</code></pre></div>
+<ol><li>What is the output if the print statement is moved after the recursive call?</li></ol>
+<ol><li>What is wrong with:</li></ol>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sum(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> n + sum(n);
+}</code></pre></div>
+<ol><li>Why can naive recursive Fibonacci be inefficient?</li></ol>
+<ol><li>Why is binary search a good example of recursive problem decomposition?</li></ol>
+<ol><li>What additional parameter might you use to recursively process an array?</li></ol>
+<ol><li>When might iteration be preferable to recursion?</li></ol>
+<ol><li>What is <code>StackOverflowError</code>?</li></ol>
+<ol><li>What does it mean for a recursive call to make progress?</li></ol>
+<ol><li>Why will recursive algorithms be especially useful when we study trees?</li></ol>
+<hr>
+<h1>57. Practice problems</h1>
+<h3>Problem 1 - sum</h3>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumTo(<span class="kw">int</span> n)</code></pre></div>
+<p>that recursively computes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 + 2 + ... + n</code></pre></div>
+<hr>
+<h3>Problem 2 - even numbers</h3>
+<p>Write a recursive method that counts the number of even integers in an array.</p>
+<hr>
+<h3>Problem 3 - minimum</h3>
+<p>Write a recursive method that finds the minimum element in an integer array.</p>
+<hr>
+<h3>Problem 4 - character removal</h3>
+<p>Write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> removeChar(
+        <span class="type">String</span> s,
+        <span class="kw">char</span> target)</code></pre></div>
+<p>that recursively removes all occurrences of <code>target</code>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>removeChar("banana", 'a')</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"bnn"</code></pre></div>
+<hr>
+<h3>Problem 5 - palindrome</h3>
+<p>Write a recursive method that determines whether a string is a palindrome.</p>
+<hr>
+<h3>Problem 6 - digit count</h3>
+<p>Write a recursive method that determines how many digits a positive integer contains.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>digitCount(5278)</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4</code></pre></div>
+<hr>
+<h3>Problem 7 - array search</h3>
+<p>Write a recursive method that returns the index of the first occurrence of a target in an array, or <code>-1</code> if it does not occur.</p>
+<hr>
+<h3>Problem 8 - binary representation</h3>
+<p>Write a recursive method that returns, rather than prints, the binary representation of a positive integer as a <code>String</code>.</p>
+<hr>
+<h1>58. Suggested lab</h1>
+<h2>Recursive utilities</h2>
+<p>Create a class called:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">RecursiveUtils</span></code></pre></div>
+<p>Implement the following methods recursively:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorial(<span class="kw">int</span> n)
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumDigits(<span class="kw">int</span> n)
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> reverse(<span class="type">String</span> s)
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isPalindrome(<span class="type">String</span> s)
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumArray(<span class="kw">int</span>[] values)
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countOccurrences(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target)
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isSorted(<span class="kw">int</span>[] values)
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> binarySearch(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target)</code></pre></div>
+<p>For every method:</p>
+<ul><li>identify the base case,</li><li>identify how the problem becomes smaller,</li><li>test normal cases,</li><li>test boundary cases,</li><li>test invalid input where appropriate.</li></ul>
+<p>Do not use loops inside the recursive implementations unless specifically instructed.</p>
+<hr>
+<h1>59. Suggested homework</h1>
+<h2>Part a - code tracing</h2>
+<p>Trace five provided recursive methods by hand. For each one, show:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>method calls
+parameter values
+return values
+final result</code></pre></div>
+<h2>Part b - implementation</h2>
+<p>Implement:</p>
+<ul><li>recursive multiplication using repeated addition,</li><li>recursive array maximum,</li><li>recursive count of a character,</li><li>recursive palindrome checking,</li><li>recursive binary search.</li></ul>
+<h2>Part C - comparison</h2>
+<p>Choose one problem that can be solved with both iteration and recursion.</p>
+<p>Write both implementations and briefly answer:</p>
+<ul><li>Which implementation is easier to understand?</li><li>Which implementation uses less call-stack memory?</li><li>Which more directly reflects the structure of the problem?</li><li>Which would you choose in production code, and why?</li></ul>
+<hr>
+<h1>60. Takeaway</h1>
+<p>The most important idea from recursion is not the syntax of calling a method from itself.</p>
+<p>It is this:</p>
+<blockquote>A difficult problem can often be solved by reducing it to one or more smaller instances of the same problem.</blockquote>
+<p>That principle is one of the foundations of algorithms, data structures, and computer science.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

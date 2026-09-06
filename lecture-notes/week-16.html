@@ -1,0 +1,1616 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 16: integration and transition to graduate computer science</h2>
+<h2>1. Week 16 overview</h2>
+<p>This final week has a different purpose from the previous weeks.</p>
+<p>Throughout the semester, we have studied individual programming concepts:</p>
+<ul><li>variables and expressions</li><li>conditionals</li><li>loops</li><li>methods</li><li>arrays and strings</li><li>classes and objects</li><li>inheritance and polymorphism</li><li>exceptions and file I/O</li><li>recursion</li><li>algorithm analysis</li><li>searching and sorting</li><li>lists</li><li>stacks and queues</li><li>sets and maps</li><li>trees</li></ul>
+<p>The goal this week is to put these ideas together.</p>
+<p>A competent programmer does not solve problems by asking:</p>
+<blockquote>"Which Java feature should I use?"</blockquote>
+<p>Instead, a programmer asks:</p>
+<blockquote>"What is the structure of this problem, and what abstractions, algorithms, and data structures are appropriate for solving it?"</blockquote>
+<p>That transition-from writing individual pieces of code to reasoning about computational problems-is one of the most important steps in preparing for graduate study in computer science.</p>
+<hr>
+<h1>2. Learning objectives</h1>
+<p>By the end of this week, students should be able to:</p>
+<ol><li>Decompose a nontrivial problem into smaller computational components.</li><li>Identify appropriate classes, methods, and data structures for a problem.</li><li>Distinguish between an interface or abstraction and its implementation.</li><li>Compare alternative algorithms using time-complexity reasoning.</li><li>Read unfamiliar Java code and explain its behavior.</li><li>Evaluate code for correctness, readability, modularity, and efficiency.</li><li>Explain relationships among major topics studied throughout CSC500.</li><li>Approach unfamiliar programming problems systematically.</li><li>Recognize the programming skills expected in subsequent computer science courses.</li><li>Develop a plan for independently learning new programming concepts.</li></ol>
+<hr>
+<h1>3. From programming syntax to computational problem solving</h1>
+<p>At the beginning of the semester, programming problems often looked like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = scanner.nextInt();
+
+<span class="kw">if</span> (x &gt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Positive"</span>);
+}</code></pre></div>
+<p>The main challenge was understanding syntax.</p>
+<p>Later, we wrote programs involving classes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Student</span> {
+    <span class="kw">private</span> <span class="type">String</span> name;
+    <span class="kw">private</span> <span class="kw">double</span> gpa;
+
+    <span class="kw">public</span> <span class="type">Student</span>(<span class="type">String</span> name, <span class="kw">double</span> gpa) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.gpa = gpa;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getName() {
+        <span class="kw">return</span> name;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> getGpa() {
+        <span class="kw">return</span> gpa;
+    }
+}</code></pre></div>
+<p>Eventually, our programs included collections:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Student</span>&gt; students = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>and algorithms:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Student</span> student : students) {
+    <span class="kw">if</span> (student.getGpa() &gt; highestGpa) {
+        highestGpa = student.getGpa();
+    }
+}</code></pre></div>
+<p>The important observation is that the Java syntax is no longer the most difficult part.</p>
+<p>The difficult questions are now:</p>
+<ul><li>What information should the program represent?</li><li>Which objects should exist?</li><li>Which data structures should store the information?</li><li>Which algorithms should operate on it?</li><li>How should responsibilities be divided among classes?</li><li>How efficient does the solution need to be?</li><li>How can we determine whether the program is correct?</li></ul>
+<p>These are computer science questions rather than Java syntax questions.</p>
+<hr>
+<h1>4. A general problem-solving process</h1>
+<p>When given a programming problem, resist the temptation to immediately begin writing code.</p>
+<p>Instead, use the following process.</p>
+<h2>Step 1: understand the problem</h2>
+<p>Determine:</p>
+<ul><li>What are the inputs?</li><li>What outputs are required?</li><li>What rules constrain the solution?</li><li>What unusual cases can occur?</li><li>How large might the input become?</li></ul>
+<p>Suppose we are asked to build a system that stores student records and allows users to:</p>
+<ul><li>add a student</li><li>remove a student</li><li>find a student by ID</li><li>list all students</li><li>calculate average GPA</li></ul>
+<p>Before coding, we should determine what information a student record contains.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+-------
+student ID
+name
+GPA
+major</code></pre></div>
+<hr>
+<h2>Step 2: identify the data</h2>
+<p>Ask:</p>
+<blockquote>What information must the program remember?</blockquote>
+<p>The student system must remember multiple student objects.</p>
+<p>Possible representations include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Student</span>[] students;</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Student</span>&gt; students;</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span>&lt;<span class="type">Integer</span>, <span class="type">Student</span>&gt; students;</code></pre></div>
+<p>Each representation has advantages and disadvantages.</p>
+<p>The correct choice depends on how the data will be used.</p>
+<hr>
+<h2>Step 3: identify the operations</h2>
+<p>Ask:</p>
+<blockquote>What must the program do with the data?</blockquote>
+<p>For the student system:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add
+remove
+search
+display
+calculate statistics</code></pre></div>
+<p>These operations often become methods.</p>
+<hr>
+<h2>Step 4: choose appropriate abstractions</h2>
+<p>The system might contain:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+StudentDatabase
+Main</code></pre></div>
+<p><code>Student</code> represents one student.</p>
+<p><code>StudentDatabase</code> manages a collection of students.</p>
+<p><code>Main</code> handles user interaction.</p>
+<p>This division is preferable to putting the entire program inside one very large <code>main</code> method.</p>
+<hr>
+<h2>Step 5: select algorithms and data structures</h2>
+<p>Suppose students are stored in an <code>ArrayList</code>.</p>
+<p>Finding a student by ID may require searching through the entire list.</p>
+<p>Worst-case complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>If the system frequently searches by student ID, a <code>HashMap</code> may be more appropriate.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span>&lt;<span class="type">Integer</span>, <span class="type">Student</span>&gt; students;</code></pre></div>
+<p>Average lookup time is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>The important lesson is:</p>
+<blockquote>Data-structure choices influence algorithm performance.</blockquote>
+<hr>
+<h2>Step 6: consider edge cases</h2>
+<p>Examples:</p>
+<ul><li>What happens if the database is empty?</li><li>What happens if a student ID does not exist?</li><li>What happens if the same ID is added twice?</li><li>What happens if GPA is outside the range 0.0–4.0?</li></ul>
+<p>Professional programs must consider invalid and unusual situations.</p>
+<hr>
+<h2>Step 7: implement incrementally</h2>
+<p>Do not write the entire system before testing anything.</p>
+<p>Instead:</p>
+<ol><li>Implement <code>Student</code>.</li><li>Test <code>Student</code>.</li><li>Implement adding students.</li><li>Test adding students.</li><li>Implement searching.</li><li>Test searching.</li><li>Add file input/output.</li><li>Test file operations.</li></ol>
+<p>Small steps make bugs easier to locate.</p>
+<hr>
+<h1>5. Review: the fundamental programming building blocks</h1>
+<p>Almost every program we write is constructed from a small number of concepts.</p>
+<h2>Variables</h2>
+<p>Variables represent program state.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> score = <span class="num">95</span>;
+<span class="kw">double</span> average = <span class="num">87.4</span>;
+<span class="kw">boolean</span> passed = <span class="lit">true</span>;</code></pre></div>
+<p>A useful conceptual model is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>variable = name associated with a value</code></pre></div>
+<hr>
+<h2>Selection</h2>
+<p>Selection allows programs to make decisions.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    grade = <span class="str">'A'</span>;
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+    grade = <span class="str">'B'</span>;
+} <span class="kw">else</span> {
+    grade = <span class="str">'C'</span>;
+}</code></pre></div>
+<p>The fundamental question is:</p>
+<blockquote>Which path through the program should execute?</blockquote>
+<hr>
+<h2>Iteration</h2>
+<p>Loops repeat computation.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="type">System</span>.out.println(values[i]);
+}</code></pre></div>
+<p>The fundamental question is:</p>
+<blockquote>Which computation must be repeated?</blockquote>
+<hr>
+<h2>Methods</h2>
+<p>Methods create reusable units of computation.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">if</span> (a &gt; b) {
+        <span class="kw">return</span> a;
+    }
+
+    <span class="kw">return</span> b;
+}</code></pre></div>
+<p>Methods allow us to separate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>what a computation does</code></pre></div>
+<p>from</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>how the computation works</code></pre></div>
+<hr>
+<h1>6. Review: objects and abstraction</h1>
+<p>Object-oriented programming allows programs to model systems as interacting objects.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BankAccount</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> balance;
+
+    <span class="kw">public</span> <span class="type">BankAccount</span>(<span class="kw">double</span> initialBalance) {
+        balance = initialBalance;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> deposit(<span class="kw">double</span> amount) {
+        balance += amount;
+    }
+
+    <span class="kw">public</span> <span class="kw">double</span> getBalance() {
+        <span class="kw">return</span> balance;
+    }
+}</code></pre></div>
+<p>Users of the class do not need to know exactly how the balance is stored.</p>
+<p>They interact with the object through its methods.</p>
+<p>This is an example of <strong>abstraction</strong>.</p>
+<p>The user thinks:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>deposit $100</code></pre></div>
+<p>rather than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>modify a particular memory location containing a floating-point value</code></pre></div>
+<p>Good abstraction hides unnecessary implementation details.</p>
+<hr>
+<h1>7. Encapsulation</h1>
+<p>Encapsulation protects internal program state.</p>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">double</span> balance;</code></pre></div>
+<p>instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">double</span> balance;</code></pre></div>
+<p>Why?</p>
+<p>Because with public state, another part of the program could write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>account.balance = -<span class="num">1000000</span>;</code></pre></div>
+<p>With encapsulation, the class controls how state changes.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> withdraw(<span class="kw">double</span> amount) {
+    <span class="kw">if</span> (amount &gt; <span class="num">0</span> &amp;&amp; amount &lt;= balance) {
+        balance -= amount;
+    }
+}</code></pre></div>
+<p>The class is responsible for preserving its own valid state.</p>
+<hr>
+<h1>8. Composition vs. inheritance</h1>
+<p>One important design decision is deciding how classes relate to one another.</p>
+<h2>Inheritance</h2>
+<p>Inheritance represents an <strong>is-a</strong> relationship.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Animal</span> {
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+}</code></pre></div>
+<p>A dog <strong>is an</strong> animal.</p>
+<hr>
+<h2>Composition</h2>
+<p>Composition represents a <strong>has-a</strong> relationship.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Car</span> {
+    <span class="kw">private</span> <span class="type">Engine</span> engine;
+}</code></pre></div>
+<p>A car <strong>has an</strong> engine.</p>
+<p>In many software systems, composition is simpler and more flexible than inheritance.</p>
+<p>Do not use inheritance merely to reuse code.</p>
+<p>Inheritance should represent a genuine conceptual relationship.</p>
+<hr>
+<h1>9. Polymorphism</h1>
+<p>Suppose we define:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">Shape</span> {
+    <span class="kw">double</span> area();
+}</code></pre></div>
+<p>Two classes implement the interface.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Circle</span> <span class="kw">implements</span> <span class="type">Shape</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> radius;
+
+    <span class="kw">public</span> <span class="type">Circle</span>(<span class="kw">double</span> radius) {
+        <span class="kw">this</span>.radius = radius;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> area() {
+        <span class="kw">return</span> <span class="type">Math</span>.PI * radius * radius;
+    }
+}</code></pre></div>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Rectangle</span> <span class="kw">implements</span> <span class="type">Shape</span> {
+
+    <span class="kw">private</span> <span class="kw">double</span> width;
+    <span class="kw">private</span> <span class="kw">double</span> height;
+
+    <span class="kw">public</span> <span class="type">Rectangle</span>(<span class="kw">double</span> width, <span class="kw">double</span> height) {
+        <span class="kw">this</span>.width = width;
+        <span class="kw">this</span>.height = height;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">double</span> area() {
+        <span class="kw">return</span> width * height;
+    }
+}</code></pre></div>
+<p>We can now write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Shape</span>&gt; shapes = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+shapes.add(<span class="kw">new</span> <span class="type">Circle</span>(<span class="num">5</span>));
+shapes.add(<span class="kw">new</span> <span class="type">Rectangle</span>(<span class="num">4</span>, <span class="num">6</span>));</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Shape</span> shape : shapes) {
+    <span class="type">System</span>.out.println(shape.area());
+}</code></pre></div>
+<p>The loop does not need to ask whether the object is a circle or rectangle.</p>
+<p>Each object knows how to calculate its own area.</p>
+<p>That is polymorphism.</p>
+<hr>
+<h1>10. Interfaces and implementations</h1>
+<p>One of the most important ideas in computer science is the distinction between:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>what something does</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>how something does it</code></pre></div>
+<p>Consider the concept of a list.</p>
+<p>A list supports operations such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>add
+remove
+get
+size</code></pre></div>
+<p>But there are multiple implementations.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArrayList
+LinkedList</code></pre></div>
+<p>Both represent lists.</p>
+<p>However, they represent the data differently internally.</p>
+<p>This gives us two levels:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>List
+   ↓
+abstract behavior
+
+ArrayList / LinkedList
+   ↓
+concrete implementation</code></pre></div>
+<p>This same idea appears everywhere in computer science:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack
+Queue
+Set
+Map
+Tree
+Graph
+Database
+Network protocol
+File system</code></pre></div>
+<p>A major goal of computer science is learning how to reason about abstractions independently of their implementations.</p>
+<hr>
+<h1>11. Choosing a data structure</h1>
+<p>Suppose a program needs to store 1,000,000 usernames.</p>
+<p>Which data structure should we use?</p>
+<p>The answer depends on the operations.</p>
+<p>If we mostly access users by numeric position:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArrayList</code></pre></div>
+<p>may be appropriate.</p>
+<p>If we repeatedly ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"Does this username exist?"</code></pre></div>
+<p>then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>HashSet</code></pre></div>
+<p>may be better.</p>
+<p>If we associate each username with user information:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>HashMap&lt;String, User&gt;</code></pre></div>
+<p>may be appropriate.</p>
+<p>If order matters and we frequently manipulate elements near the beginning or middle, other structures may become relevant.</p>
+<p>A useful rule is:</p>
+<blockquote>Choose a data structure based on the operations the program performs most frequently.</blockquote>
+<hr>
+<h1>12. Review of major data structures</h1>
+<h2>Array</h2>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>index:  0   1   2   3   4
+value: 12  18   4  27   9</code></pre></div>
+<p>Advantages:</p>
+<ul><li>fast indexing</li><li>simple</li><li>memory efficient</li></ul>
+<p>Limitations:</p>
+<ul><li>fixed size</li><li>insertion may require shifting elements</li></ul>
+<hr>
+<h2>ArrayList</h2>
+<p>Provides a dynamically sized array.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();</code></pre></div>
+<p>Useful operations include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>names.add(<span class="str">"Alice"</span>);
+names.get(<span class="num">0</span>);
+names.remove(<span class="num">0</span>);
+names.size();</code></pre></div>
+<hr>
+<h2>Linked list</h2>
+<p>A linked list stores elements in nodes.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[Alice] → [Bob] → [Carlos] → null</code></pre></div>
+<p>Each node contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>data
+reference to next node</code></pre></div>
+<p>Unlike an array, nodes do not need to occupy consecutive memory positions.</p>
+<hr>
+<h2>Stack</h2>
+<p>A stack follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Last In, First Out</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>push A
+push B
+push C
+
+top
+ C
+ B
+ A</code></pre></div>
+<p>Removing produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>C</code></pre></div>
+<p>Common uses include:</p>
+<ul><li>function calls</li><li>expression evaluation</li><li>undo operations</li><li>depth-first search</li></ul>
+<hr>
+<h2>Queue</h2>
+<p>A queue follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>First In, First Out</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A → B → C</code></pre></div>
+<p>A is removed first.</p>
+<p>Common uses include:</p>
+<ul><li>job scheduling</li><li>task processing</li><li>simulations</li><li>breadth-first search</li></ul>
+<hr>
+<h2>Set</h2>
+<p>A set stores unique values.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>{Alice, Bob, Carlos}</code></pre></div>
+<p>Adding <code>"Alice"</code> again does not create a duplicate.</p>
+<p>Useful when the main question is:</p>
+<blockquote>Is this value present?</blockquote>
+<hr>
+<h2>Map</h2>
+<p>A map stores key-value pairs.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>student ID → Student
+username → User
+state → capital
+word → frequency</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; counts = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();</code></pre></div>
+<hr>
+<h2>Trees</h2>
+<p>Trees organize information hierarchically.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>          50
+        /    \
+      25      80
+     /  \    /  \
+   10   40  60   90</code></pre></div>
+<p>Trees appear in:</p>
+<ul><li>file systems</li><li>databases</li><li>compilers</li><li>search algorithms</li><li>artificial intelligence</li><li>hierarchical data</li></ul>
+<hr>
+<h1>13. Algorithmic thinking</h1>
+<p>Programming is not simply about expressing commands.</p>
+<p>It is about designing procedures for solving problems.</p>
+<p>An <strong>algorithm</strong> is a precise sequence of steps used to solve a problem.</p>
+<p>Consider finding a number in an array.</p>
+<p>One algorithm is linear search.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> linearSearch(<span class="kw">int</span>[] values, <span class="kw">int</span> target) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+        <span class="kw">if</span> (values[i] == target) {
+            <span class="kw">return</span> i;
+        }
+    }
+
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</code></pre></div>
+<p>In the worst case, every element must be examined.</p>
+<p>For <code>n</code> elements:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h1>14. Binary search</h1>
+<p>If the array is sorted, we can do much better.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3  8  12  19  25  31  40  52</code></pre></div>
+<p>Suppose we are searching for <code>40</code>.</p>
+<p>Instead of checking every number, binary search repeatedly eliminates half of the remaining possibilities.</p>
+<p>Possible sequence:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>19
+31
+40</code></pre></div>
+<p>This produces complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<p>For very large collections, the difference is enormous.</p>
+<p>For one billion elements:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>linear search:
+up to 1,000,000,000 comparisons
+
+binary search:
+approximately 30 comparisons</code></pre></div>
+<p>This illustrates why algorithm design matters.</p>
+<hr>
+<h1>15. Big-o: what it actually means</h1>
+<p>Big-O describes how the amount of work performed by an algorithm grows as input size grows.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>The loop executes approximately <code>n</code> times.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        <span class="type">System</span>.out.println(i + <span class="str">" "</span> + j);
+    }
+}</code></pre></div>
+<p>The inner operation occurs approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n × n</code></pre></div>
+<p>times.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<hr>
+<h1>16. Common complexity classes</h1>
+<p>Students should recognize these common categories:</p>
+<table><thead><tr><th>Complexity</th><th>Informal description</th></tr></thead><tbody><tr><td><code>O(1)</code></td><td>constant</td></tr><tr><td><code>O(log n)</code></td><td>logarithmic</td></tr><tr><td><code>O(n)</code></td><td>linear</td></tr><tr><td><code>O(n log n)</code></td><td>efficient sorting range</td></tr><tr><td><code>O(n²)</code></td><td>quadratic</td></tr><tr><td><code>O(2ⁿ)</code></td><td>exponential</td></tr></tbody></table>
+<p>Efficiency generally becomes worse as we move down the table.</p>
+<p>For small inputs, the difference may not matter.</p>
+<p>For large inputs, it can determine whether a program is practical.</p>
+<hr>
+<h1>17. Example: comparing two solutions</h1>
+<p>Suppose we want to determine whether an array contains duplicate values.</p>
+<h2>Approach 1: compare every pair</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> containsDuplicate(<span class="kw">int</span>[] values) {
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = i + <span class="num">1</span>; j &lt; values.length; j++) {
+            <span class="kw">if</span> (values[i] == values[j]) {
+                <span class="kw">return</span> <span class="lit">true</span>;
+            }
+        }
+    }
+
+    <span class="kw">return</span> <span class="lit">false</span>;
+}</code></pre></div>
+<p>Worst-case complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<hr>
+<h2>Approach 2: use a HashSet</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> containsDuplicate(<span class="kw">int</span>[] values) {
+
+    <span class="type">HashSet</span>&lt;<span class="type">Integer</span>&gt; seen = <span class="kw">new</span> <span class="type">HashSet</span>&lt;&gt;();
+
+    <span class="kw">for</span> (<span class="kw">int</span> value : values) {
+
+        <span class="kw">if</span> (seen.contains(value)) {
+            <span class="kw">return</span> <span class="lit">true</span>;
+        }
+
+        seen.add(value);
+    }
+
+    <span class="kw">return</span> <span class="lit">false</span>;
+}</code></pre></div>
+<p>Average complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>This example demonstrates an important relationship:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>better data structure
+        ↓
+better algorithm
+        ↓
+better performance</code></pre></div>
+<hr>
+<h1>18. Recursion revisited</h1>
+<p>Recursion occurs when a method solves a problem by solving a smaller version of the same problem.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> factorial(<span class="kw">int</span> n) {
+
+    <span class="kw">if</span> (n == <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>);
+}</code></pre></div>
+<p>A recursive algorithm needs:</p>
+<ol><li>a base case</li><li>progress toward the base case</li></ol>
+<p>Without a correct base case, recursion may never stop.</p>
+<hr>
+<h1>19. Recursion and data structures</h1>
+<p>Recursion becomes particularly natural when the data itself is recursive.</p>
+<p>Consider a binary tree.</p>
+<p>A tree contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>value
+left subtree
+right subtree</code></pre></div>
+<p>Therefore, tree algorithms often look recursive.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countNodes(<span class="type">Node</span> node) {
+
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">1</span>
+        + countNodes(node.left)
+        + countNodes(node.right);
+}</code></pre></div>
+<p>The structure of the algorithm mirrors the structure of the data.</p>
+<p>This pattern appears frequently in computer science.</p>
+<hr>
+<h1>20. Correctness before efficiency</h1>
+<p>Students sometimes become overly concerned about writing the fastest possible algorithm.</p>
+<p>A better priority is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Correctness
+2. Clarity
+3. Efficiency</code></pre></div>
+<p>A fast program that produces incorrect results is not useful.</p>
+<p>Start by designing a correct solution.</p>
+<p>Then determine whether performance needs improvement.</p>
+<hr>
+<h1>21. Reading code as a graduate student</h1>
+<p>Graduate courses will frequently give you code that you did not write.</p>
+<p>You must be able to read and reason about unfamiliar programs.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mystery(<span class="kw">int</span>[] values) {
+
+    <span class="kw">int</span> result = values[<span class="num">0</span>];
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; values.length; i++) {
+        <span class="kw">if</span> (values[i] &gt; result) {
+            result = values[i];
+        }
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+<p>Do not begin by asking:</p>
+<blockquote>What does the variable <code>result</code> mean?</blockquote>
+<p>Instead, trace the algorithm.</p>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>values = [4, 9, 2, 7]</code></pre></div>
+<p>Execution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>result = 4
+
+compare 9 with 4
+result = 9
+
+compare 2 with 9
+result = 9
+
+compare 7 with 9
+result = 9</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>mystery returns the maximum value in the array</code></pre></div>
+<hr>
+<h1>22. Code-tracing exercise</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mystery2(<span class="kw">int</span>[] values) {
+
+    <span class="kw">int</span> count = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+
+        <span class="kw">for</span> (<span class="kw">int</span> j = i + <span class="num">1</span>; j &lt; values.length; j++) {
+
+            <span class="kw">if</span> (values[i] == values[j]) {
+                count++;
+            }
+        }
+    }
+
+    <span class="kw">return</span> count;
+}</code></pre></div>
+<p>Questions:</p>
+<ol><li>What does this method calculate?</li><li>What is its time complexity?</li><li>What happens with the input:</li></ol>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 5, 3, 7, 5]</code></pre></div>
+<ol><li>Could a different data structure make the computation more efficient?</li></ol>
+<hr>
+<h1>23. Debugging as a systematic process</h1>
+<p>A beginner often debugs like this:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Change something.
+Run the program.
+Change something else.
+Run it again.</code></pre></div>
+<p>This is inefficient.</p>
+<p>Instead, debugging should be hypothesis-driven.</p>
+<p>Suppose your program produces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Expected: 42
+Actual: 0</code></pre></div>
+<p>Ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Where could the incorrect value have first appeared?</code></pre></div>
+<p>Inspect intermediate values.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"DEBUG total = "</span> + total);</code></pre></div>
+<p>or use a debugger.</p>
+<p>A systematic debugging process is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Reproduce the bug.
+2. Identify where the incorrect behavior first appears.
+3. Develop a hypothesis.
+4. Test the hypothesis.
+5. Fix the cause.
+6. Verify the fix.
+7. Test related cases.</code></pre></div>
+<hr>
+<h1>24. Types of errors</h1>
+<h2>Syntax errors</h2>
+<p>The program does not compile.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span></code></pre></div>
+<p>Missing semicolon.</p>
+<hr>
+<h2>Runtime errors</h2>
+<p>The program compiles but crashes while running.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] values = <span class="kw">new</span> <span class="kw">int</span>[<span class="num">5</span>];
+
+<span class="type">System</span>.out.println(values[<span class="num">10</span>]);</code></pre></div>
+<p>This produces an exception.</p>
+<hr>
+<h2>Logic errors</h2>
+<p>The program runs but produces incorrect results.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> average = total / count;</code></pre></div>
+<p>If both variables are integers, integer division may produce an incorrect result.</p>
+<p>Logic errors are frequently the hardest errors to locate.</p>
+<hr>
+<h1>25. Testing</h1>
+<p>Testing is not simply running the program once.</p>
+<p>Good testing includes multiple categories.</p>
+<p>Suppose we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> max(<span class="kw">int</span>[] values)</code></pre></div>
+<p>We should test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>normal case:
+[3, 8, 2, 6]
+
+maximum first:
+[9, 4, 2]
+
+maximum last:
+[1, 3, 10]
+
+negative values:
+[-10, -2, -7]
+
+single element:
+[5]</code></pre></div>
+<p>And we should decide what happens for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[]</code></pre></div>
+<p>Testing should deliberately explore boundaries and unusual conditions.</p>
+<hr>
+<h1>26. Invariants</h1>
+<p>An invariant is something that should always remain true at a particular point in a program.</p>
+<p>For a bank account:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>balance &gt;= 0</code></pre></div>
+<p>might be an invariant.</p>
+<p>For a sorted collection:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>values[i] &lt;= values[i + 1]</code></pre></div>
+<p>must remain true.</p>
+<p>Thinking in terms of invariants is important because advanced CS courses often require reasoning about whether algorithms are correct.</p>
+<hr>
+<h1>27. A larger integrated example</h1>
+<p>Consider the following problem.</p>
+<blockquote>Create a library system that stores books and supports adding books, borrowing books, returning books, searching by ISBN, and displaying all available books.</blockquote>
+<p>We begin by identifying concepts.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Book
+Library</code></pre></div>
+<hr>
+<h2>Book class</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Book</span> {
+
+    <span class="kw">private</span> <span class="type">String</span> isbn;
+    <span class="kw">private</span> <span class="type">String</span> title;
+    <span class="kw">private</span> <span class="type">String</span> author;
+    <span class="kw">private</span> <span class="kw">boolean</span> borrowed;
+
+    <span class="kw">public</span> <span class="type">Book</span>(<span class="type">String</span> isbn, <span class="type">String</span> title, <span class="type">String</span> author) {
+        <span class="kw">this</span>.isbn = isbn;
+        <span class="kw">this</span>.title = title;
+        <span class="kw">this</span>.author = author;
+        <span class="kw">this</span>.borrowed = <span class="lit">false</span>;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getIsbn() {
+        <span class="kw">return</span> isbn;
+    }
+
+    <span class="kw">public</span> <span class="type">String</span> getTitle() {
+        <span class="kw">return</span> title;
+    }
+
+    <span class="kw">public</span> <span class="kw">boolean</span> isBorrowed() {
+        <span class="kw">return</span> borrowed;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> borrow() {
+        borrowed = <span class="lit">true</span>;
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> returnBook() {
+        borrowed = <span class="lit">false</span>;
+    }
+}</code></pre></div>
+<hr>
+<h1>28. Choosing the collection</h1>
+<p>One possibility:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">ArrayList</span>&lt;<span class="type">Book</span>&gt; books;</code></pre></div>
+<p>Searching for an ISBN would require:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>A better choice may be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">HashMap</span>&lt;<span class="type">String</span>, <span class="type">Book</span>&gt; books;</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">Book</span> findBook(<span class="type">String</span> isbn) {
+    <span class="kw">return</span> books.get(isbn);
+}</code></pre></div>
+<p>Average lookup complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>The data structure is chosen based on the application's operations.</p>
+<hr>
+<h1>29. Library class</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">HashMap</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Library</span> {
+
+    <span class="kw">private</span> <span class="type">HashMap</span>&lt;<span class="type">String</span>, <span class="type">Book</span>&gt; books;
+
+    <span class="kw">public</span> <span class="type">Library</span>() {
+        books = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> addBook(<span class="type">Book</span> book) {
+        books.put(book.getIsbn(), book);
+    }
+
+    <span class="kw">public</span> <span class="type">Book</span> findBook(<span class="type">String</span> isbn) {
+        <span class="kw">return</span> books.get(isbn);
+    }
+
+    <span class="kw">public</span> <span class="kw">boolean</span> borrowBook(<span class="type">String</span> isbn) {
+
+        <span class="type">Book</span> book = books.get(isbn);
+
+        <span class="kw">if</span> (book == <span class="lit">null</span> || book.isBorrowed()) {
+            <span class="kw">return</span> <span class="lit">false</span>;
+        }
+
+        book.borrow();
+        <span class="kw">return</span> <span class="lit">true</span>;
+    }
+}</code></pre></div>
+<p>Notice how multiple course topics appear together:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>classes
+objects
+encapsulation
+methods
+references
+HashMap
+conditionals
+algorithmic efficiency</code></pre></div>
+<p>Real software rarely uses concepts in isolation.</p>
+<hr>
+<h1>30. Separation of responsibilities</h1>
+<p>Suppose we also create:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LibraryApp</code></pre></div>
+<p>Its responsibility could be user interaction.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>LibraryApp
+   ↓
+reads commands from the user
+
+Library
+   ↓
+manages books
+
+Book
+   ↓
+represents one book</code></pre></div>
+<p>This separation makes the program easier to:</p>
+<ul><li>understand</li><li>test</li><li>maintain</li><li>extend</li></ul>
+<p>One class should not be responsible for everything.</p>
+<hr>
+<h1>31. What makes code "good"?</h1>
+<p>A program can produce the correct answer and still be poorly designed.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> doStuff(<span class="type">ArrayList</span>&lt;<span class="type">Integer</span>&gt; a) {</code></pre></div>
+<p>Compare with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> calculateAverage(<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; scores) {</code></pre></div>
+<p>The second version communicates intent much more clearly.</p>
+<p>Good code is written for humans as well as computers.</p>
+<hr>
+<h1>32. Characteristics of good code</h1>
+<p>Good programs generally have:</p>
+<h3>Meaningful names</h3>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>studentCount</code></pre></div>
+<p>instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x</code></pre></div>
+<hr>
+<h3>Small, focused methods</h3>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>calculateAverage()
+findStudent()
+saveFile()</code></pre></div>
+<p>instead of one 300-line method.</p>
+<hr>
+<h3>Appropriate abstraction</h3>
+<p>The caller should not need to understand unnecessary implementation details.</p>
+<hr>
+<h3>Limited duplication</h3>
+<p>If the same code appears repeatedly, consider creating a method.</p>
+<hr>
+<h3>Clear class responsibilities</h3>
+<p>A class should have a coherent purpose.</p>
+<hr>
+<h3>Appropriate data structures</h3>
+<p>Do not automatically use an <code>ArrayList</code> for every collection.</p>
+<hr>
+<h3>Tests</h3>
+<p>Important behaviors should be verified.</p>
+<hr>
+<h1>33. Refactoring</h1>
+<p>Refactoring means changing the internal organization of code without changing its external behavior.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(name + <span class="str">": A"</span>);
+}
+
+<span class="kw">if</span> (score &gt;= <span class="num">80</span> &amp;&amp; score &lt; <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(name + <span class="str">": B"</span>);
+}</code></pre></div>
+<p>Repeated grading logic might be moved into:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">char</span> calculateGrade(<span class="kw">int</span> score)</code></pre></div>
+<p>Refactoring improves program structure while preserving correctness.</p>
+<p>Professional programming involves frequent refactoring.</p>
+<hr>
+<h1>34. Programming is managing complexity</h1>
+<p>Why do we need:</p>
+<ul><li>methods?</li><li>classes?</li><li>interfaces?</li><li>data structures?</li><li>abstraction?</li><li>encapsulation?</li></ul>
+<p>Because large programs become too complex for a person to understand all at once.</p>
+<p>Programming techniques allow us to divide complexity into manageable pieces.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Large problem
+     ↓
+system
+     ↓
+classes
+     ↓
+methods
+     ↓
+statements</code></pre></div>
+<p>At each level, we focus only on the information relevant to that level.</p>
+<hr>
+<h1>35. What changes in graduate computer science?</h1>
+<p>CSC500 emphasizes learning to program.</p>
+<p>Future courses may assume that programming is already a tool you can use.</p>
+<p>Instead of asking:</p>
+<blockquote>Can you write a loop?</blockquote>
+<p>a graduate course may ask:</p>
+<blockquote>Implement and experimentally compare three graph-search algorithms.</blockquote>
+<p>Instead of asking:</p>
+<blockquote>Can you create a class?</blockquote>
+<p>a graduate course may ask:</p>
+<blockquote>Design a modular architecture for a distributed application.</blockquote>
+<p>Instead of asking:</p>
+<blockquote>Can you use an array?</blockquote>
+<p>a graduate course may ask:</p>
+<blockquote>Determine which representation provides the appropriate asymptotic performance.</blockquote>
+<p>The programming language becomes a means rather than the subject itself.</p>
+<hr>
+<h1>36. Skills graduate courses may assume</h1>
+<p>Students should be comfortable doing the following independently.</p>
+<h2>Reading documentation</h2>
+<p>You will frequently encounter a Java class or library you have never used.</p>
+<p>You should be able to read documentation and determine:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>What does this class do?
+How do I create an object?
+Which methods are available?
+What parameters are required?
+What does each method return?
+What exceptions can occur?</code></pre></div>
+<hr>
+<h2>Reading existing code</h2>
+<p>You may receive hundreds or thousands of lines of code written by someone else.</p>
+<p>You must learn to navigate unfamiliar systems.</p>
+<hr>
+<h2>Debugging independently</h2>
+<p>Instructors may not identify the exact line containing your bug.</p>
+<p>You must develop systematic debugging strategies.</p>
+<hr>
+<h2>Learning new languages</h2>
+<p>Java will not necessarily be the only language you encounter.</p>
+<p>You may eventually use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Python
+C
+C++
+JavaScript
+SQL
+R
+Go
+Rust</code></pre></div>
+<p>The goal of CSC500 is therefore not simply:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>learn Java</code></pre></div>
+<p>It is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>learn programming using Java</code></pre></div>
+<p>Once programming concepts are understood, learning another programming language becomes much easier.</p>
+<hr>
+<h1>37. What transfers between programming languages?</h1>
+<p>Syntax changes.</p>
+<p>For example, Java:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>Python:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>for i in range(10):
+    print(i)</code></pre></div>
+<p>The syntax is different.</p>
+<p>The underlying concept is the same:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>iteration</code></pre></div>
+<p>Likewise, languages may use different syntax for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>conditionals
+functions
+classes
+collections
+exceptions</code></pre></div>
+<p>but the computational concepts transfer.</p>
+<hr>
+<h1>38. The most important habit: decomposition</h1>
+<p>Consider the problem:</p>
+<blockquote>Read one million transaction records from a file and report the ten customers with the highest total spending.</blockquote>
+<p>A beginner may see one enormous problem.</p>
+<p>An experienced programmer sees several smaller problems:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Read transactions.
+2. Parse each record.
+3. Associate spending with customers.
+4. Accumulate totals.
+5. Identify the ten largest totals.
+6. Display results.</code></pre></div>
+<p>Each piece can be solved separately.</p>
+<p>This ability to decompose problems is more valuable than memorizing syntax.</p>
+<hr>
+<h1>39. An integrated design exercise</h1>
+<p>Consider the following specification:</p>
+<blockquote>Design a package-delivery system. Each package has a tracking number, destination, weight, and status. The system must add packages, update package status, locate a package by tracking number, list all packages with a particular status, and calculate the total weight of packages awaiting delivery.</blockquote>
+<p>Before writing code, answer:</p>
+<h3>Question 1</h3>
+<p>What classes might exist?</p>
+<p>Possible answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Package
+DeliverySystem</code></pre></div>
+<p>Perhaps:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>DeliveryStatus enum</code></pre></div>
+<hr>
+<h3>Question 2</h3>
+<p>What should <code>Package</code> contain?</p>
+<p>Possible fields:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> trackingNumber;
+<span class="type">String</span> destination;
+<span class="kw">double</span> weight;
+<span class="type">DeliveryStatus</span> status;</code></pre></div>
+<hr>
+<h3>Question 3</h3>
+<p>What collection should store packages?</p>
+<p>An <code>ArrayList&lt;Package&gt;</code> might work.</p>
+<p>However, packages are frequently located using tracking numbers.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">HashMap</span>&lt;<span class="type">String</span>, <span class="type">Package</span>&gt;</code></pre></div>
+<p>may be more appropriate.</p>
+<hr>
+<h3>Question 4</h3>
+<p>What is the complexity of locating a package?</p>
+<p>With an array list:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>With a hash map:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>average O(1)</code></pre></div>
+<hr>
+<h3>Question 5</h3>
+<p>What design should handle package status?</p>
+<p>An enum might be appropriate:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">enum</span> <span class="type">DeliveryStatus</span> {
+    RECEIVED,
+    IN_TRANSIT,
+    OUT_FOR_DELIVERY,
+    DELIVERED
+}</code></pre></div>
+<p>Using an enum is preferable to arbitrary strings such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="str">"delivered"</span>
+<span class="str">"Delivered"</span>
+<span class="str">"DELIVERED"</span>
+<span class="str">"done"</span></code></pre></div>
+<hr>
+<h1>40. Design before coding</h1>
+<p>A useful workflow for larger assignments is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Read the specification.
+2. Identify nouns.
+3. Identify verbs.
+4. Identify data relationships.
+5. Identify important operations.
+6. Select data structures.
+7. sketch classes.
+8. Design method signatures.
+9. Consider edge cases.
+10. Implement.
+11. Test.
+12. Refactor.</code></pre></div>
+<p>Nouns often suggest:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>classes
+objects
+data</code></pre></div>
+<p>Verbs often suggest:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>methods
+operations
+algorithms</code></pre></div>
+<p>This is not a rigid rule, but it is a useful starting point.</p>
+<hr>
+<h1>41. Don't optimize too early</h1>
+<p>Suppose you are processing 30 student records.</p>
+<p>Whether your algorithm requires:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>30 operations</code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>900 operations</code></pre></div>
+<p>may not matter.</p>
+<p>For 30 million records, the difference may matter enormously.</p>
+<p>Optimization decisions should consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>input size
+frequency of operation
+memory constraints
+required response time
+code complexity</code></pre></div>
+<p>The theoretically fastest algorithm is not automatically the best engineering choice.</p>
+<hr>
+<h1>42. Time-space tradeoffs</h1>
+<p>Algorithms often trade memory for speed.</p>
+<p>The duplicate detection example demonstrates this.</p>
+<p>Nested loops use little additional memory:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>space: O(1)
+time: O(n²)</code></pre></div>
+<p>Using a <code>HashSet</code> requires additional storage:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>space: O(n)
+time: O(n)</code></pre></div>
+<p>We use more memory to reduce runtime.</p>
+<p>This is called a <strong>time-space tradeoff</strong>.</p>
+<p>Such tradeoffs appear throughout computer science.</p>
+<hr>
+<h1>43. How to approach an unfamiliar problem</h1>
+<p>When you encounter a difficult assignment, use this checklist:</p>
+<h3>Understand</h3>
+<p>Can I explain the problem in my own words?</p>
+<h3>Examples</h3>
+<p>Can I manually solve a small example?</p>
+<h3>Inputs</h3>
+<p>What information is provided?</p>
+<h3>Outputs</h3>
+<p>What must be produced?</p>
+<h3>Data</h3>
+<p>What information must be stored?</p>
+<h3>Structure</h3>
+<p>Which classes or data structures might represent that information?</p>
+<h3>Algorithm</h3>
+<p>What steps produce the result?</p>
+<h3>Complexity</h3>
+<p>How expensive are those steps?</p>
+<h3>Edge cases</h3>
+<p>What unusual inputs might break the solution?</p>
+<h3>Testing</h3>
+<p>How will I know the program is correct?</p>
+<hr>
+<h1>44. How to get unstuck</h1>
+<p>Every programmer gets stuck.</p>
+<p>A productive sequence is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Read the error message carefully.
+2. Identify the smallest failing example.
+3. Trace the program state.
+4. Check assumptions.
+5. Consult documentation.
+6. Simplify the problem.
+7. Test one component independently.
+8. Explain the problem aloud.</code></pre></div>
+<p>A powerful technique is explaining your program line-by-line to another person-or even to an empty chair.</p>
+<p>Often the mistake becomes obvious while explaining it.</p>
+<hr>
+<h1>45. Error messages are information</h1>
+<p>Do not treat compiler messages and exceptions as enemies.</p>
+<p>They are diagnostic information.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>NullPointerException</code></pre></div>
+<p>Instead of asking:</p>
+<blockquote>Why does Java hate my program?</blockquote>
+<p>Ask:</p>
+<blockquote>Which reference is null at this location, and why?</blockquote>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>ArrayIndexOutOfBoundsException</code></pre></div>
+<p>Ask:</p>
+<blockquote>Which index did I attempt to access, and what was the array length?</blockquote>
+<p>Programming becomes easier when error messages are treated as evidence.</p>
+<hr>
+<h1>46. Reading apis instead of memorizing them</h1>
+<p>No professional programmer memorizes every Java method.</p>
+<p>Suppose you need to determine whether a <code>HashMap</code> contains a key.</p>
+<p>You might not remember whether the method is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>hasKey
+contains
+containsKey
+findKey</code></pre></div>
+<p>This is not a serious problem.</p>
+<p>Look at the Java API documentation.</p>
+<p>The important skill is recognizing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>I need a map operation that determines whether a key exists.</code></pre></div>
+<p>Then documentation provides the exact syntax.</p>
+<hr>
+<h1>47. Libraries are part of programming</h1>
+<p>One sign of programming maturity is becoming comfortable using existing libraries.</p>
+<p>Instead of implementing everything from scratch:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Collections</span>.sort(values);</code></pre></div>
+<p>may be appropriate.</p>
+<p>Using libraries is not cheating.</p>
+<p>Software development is built on layers of existing abstractions.</p>
+<p>However, a computer scientist should still understand the principles behind important algorithms and data structures.</p>
+<hr>
+<h1>48. Programming and computer science are not identical</h1>
+<p>Programming is an important part of computer science, but computer science is broader.</p>
+<p>Computer science includes topics such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>algorithms
+data structures
+computer architecture
+operating systems
+databases
+networks
+artificial intelligence
+machine learning
+cybersecurity
+distributed systems
+theory of computation
+programming languages
+software engineering
+graphics
+human-computer interaction</code></pre></div>
+<p>Programming provides the language through which many of these ideas are explored.</p>
+<hr>
+<h1>49. Looking ahead: data structures and algorithms</h1>
+<p>A future data-structures or algorithms course may examine topics such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>balanced search trees
+heaps
+priority queues
+graphs
+breadth-first search
+depth-first search
+shortest paths
+minimum spanning trees
+divide-and-conquer
+dynamic programming
+greedy algorithms
+hashing
+advanced sorting</code></pre></div>
+<p>The concepts from CSC500 provide the foundation.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>recursion
+      ↓
+tree traversal
+      ↓
+graph traversal
+      ↓
+advanced algorithms</code></pre></div>
+<hr>
+<h1>50. Looking ahead: databases</h1>
+<p>Concepts from CSC500 also connect to databases.</p>
+<p>A Java map:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">Integer</span>, <span class="type">Student</span>&gt;</code></pre></div>
+<p>associates keys with records.</p>
+<p>A database similarly manages structured records that can be located, updated, inserted, and removed.</p>
+<p>Concepts such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>data representation
+searching
+indexing
+efficiency
+abstraction</code></pre></div>
+<p>continue to matter.</p>
+<hr>
+<h1>51. Looking ahead: operating systems</h1>
+<p>Concepts such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>queues
+stacks
+memory
+processes
+scheduling
+resource management</code></pre></div>
+<p>will appear in operating systems.</p>
+<p>For example, a scheduler may use a queue of processes waiting for CPU time.</p>
+<hr>
+<h1>52. Looking ahead: artificial intelligence</h1>
+<p>AI and machine learning programs still depend on basic programming skills.</p>
+<p>You will use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>loops
+arrays
+objects
+maps
+trees
+graphs
+algorithms
+libraries</code></pre></div>
+<p>More advanced mathematics and algorithms are built on top of the programming foundations learned here.</p>
+<hr>
+<h1>53. Looking ahead: software engineering</h1>
+<p>Software engineering expands many ideas introduced in this course:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>classes
+interfaces
+testing
+modularity
+abstraction
+code organization
+version control
+team development
+design</code></pre></div>
+<p>Instead of hundreds of lines of code, systems may contain millions of lines of code.</p>
+<p>Managing complexity becomes the central problem.</p>
+<hr>
+<h1>54. A final code-analysis problem</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">HashMap</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt;
+    countWords(<span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; words) {
+
+    <span class="type">HashMap</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; counts = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+    <span class="kw">for</span> (<span class="type">String</span> word : words) {
+
+        <span class="kw">if</span> (counts.containsKey(word)) {
+            counts.put(word, counts.get(word) + <span class="num">1</span>);
+        } <span class="kw">else</span> {
+            counts.put(word, <span class="num">1</span>);
+        }
+    }
+
+    <span class="kw">return</span> counts;
+}</code></pre></div>
+<p>Students should now be able to explain:</p>
+<h3>What does the method do?</h3>
+<p>It calculates the frequency of each word.</p>
+<hr>
+<h3>What data structure is used?</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>HashMap</code></pre></div>
+<hr>
+<h3>Why is a map appropriate?</h3>
+<p>Each word can serve as a key and its frequency as the associated value.</p>
+<hr>
+<h3>What is approximately the average runtime?</h3>
+<p>There are <code>n</code> words.</p>
+<p>Each hash-map operation is approximately constant time on average.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h3>What programming concepts appear?</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>method
+parameter
+return value
+generic types
+ArrayList
+HashMap
+enhanced for loop
+conditional
+object references
+algorithm analysis</code></pre></div>
+<p>This is what integration means.</p>
+<hr>
+<h1>55. Final comprehensive exercise</h1>
+<p>Design an application for managing a university course.</p>
+<p>The system should support:</p>
+<ul><li>adding students</li><li>removing students</li><li>recording assignment scores</li><li>calculating student averages</li><li>calculating the class average</li><li>finding a student by ID</li><li>ranking students by average</li><li>saving data to a file</li><li>loading data from a file</li></ul>
+<p>Before writing code, develop:</p>
+<ol><li>A list of classes.</li><li>The fields for each class.</li><li>Important methods.</li><li>Appropriate collections.</li><li>At least three edge cases.</li><li>Expected time complexity of student lookup.</li><li>A testing strategy.</li></ol>
+<p>Possible classes might include:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student
+Assignment
+Course
+Gradebook</code></pre></div>
+<p>There is no single perfect design.</p>
+<p>The goal is to justify your design decisions.</p>
+<hr>
+<h1>56. Questions to ask about any program</h1>
+<p>By the end of CSC500, you should be able to examine a program using several perspectives.</p>
+<h2>Correctness</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Does it produce the correct result?</code></pre></div>
+<h2>Design</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Is the program organized appropriately?</code></pre></div>
+<h2>Data</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Are appropriate data structures being used?</code></pre></div>
+<h2>Algorithms</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Are the operations implemented sensibly?</code></pre></div>
+<h2>Efficiency</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>How does performance scale with input size?</code></pre></div>
+<h2>Readability</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Can another programmer understand the program?</code></pre></div>
+<h2>Reliability</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>What happens when input is invalid or unusual?</code></pre></div>
+<h2>Testability</h2>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Can individual components be tested independently?</code></pre></div>
+<p>These questions distinguish programming maturity from simply producing code that compiles.</p>
+<hr>
+<h1>57. What you should now be able to do</h1>
+<p>After completing CSC500, you should be capable of receiving a problem you have not previously seen and performing the following process:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Problem
+  ↓
+Understand requirements
+  ↓
+Identify data
+  ↓
+Choose data structures
+  ↓
+Design classes and methods
+  ↓
+Develop algorithms
+  ↓
+Analyze basic complexity
+  ↓
+Implement
+  ↓
+Test
+  ↓
+Debug
+  ↓
+Refactor</code></pre></div>
+<p>This process is more important than memorizing any particular Java keyword.</p>
+<hr>
+<h1>58. Habits to continue developing</h1>
+<h2>Write code regularly</h2>
+<p>Programming is a skill.</p>
+<p>Reading programming books alone is not enough.</p>
+<p>You improve by writing, debugging, modifying, and explaining code.</p>
+<hr>
+<h2>Read other people's code</h2>
+<p>Reading unfamiliar code develops a different skill than writing your own.</p>
+<p>Both are important.</p>
+<hr>
+<h2>Ask why</h2>
+<p>Instead of only learning:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>HashMap lookup is fast</code></pre></div>
+<p>ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Why is it fast?</code></pre></div>
+<p>Instead of only learning:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>binary search is O(log n)</code></pre></div>
+<p>ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Why does repeatedly dividing the search space in half lead to logarithmic complexity?</code></pre></div>
+<p>Computer science is built on understanding why techniques work.</p>
+<hr>
+<h2>Predict before running</h2>
+<p>Before executing a program, ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>What do I think this program will do?</code></pre></div>
+<p>Then run it.</p>
+<p>If your prediction differs from the result, investigate why.</p>
+<p>This develops precise reasoning.</p>
+<hr>
+<h2>Trace algorithms by hand</h2>
+<p>For algorithms and data structures, draw diagrams.</p>
+<p>For arrays:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>index:
+0  1  2  3</code></pre></div>
+<p>For linked lists:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A → B → C</code></pre></div>
+<p>For trees:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>      A
+     / \
+    B   C</code></pre></div>
+<p>Visual representations often make algorithms easier to understand.</p>
+<hr>
+<h1>59. Five principles to remember</h1>
+<p>If you remember only five ideas from CSC500, remember these.</p>
+<h2>Principle 1: decompose problems</h2>
+<p>Large problems are solved by dividing them into smaller problems.</p>
+<hr>
+<h2>Principle 2: choose representations carefully</h2>
+<p>The way data is represented strongly influences how easily and efficiently a problem can be solved.</p>
+<hr>
+<h2>Principle 3: use abstraction</h2>
+<p>Hide unnecessary details and reason at the appropriate level.</p>
+<hr>
+<h2>Principle 4: think about efficiency</h2>
+<p>A solution that works for 10 elements may not work for 10 million.</p>
+<hr>
+<h2>Principle 5: test your assumptions</h2>
+<p>Programs often fail because the programmer assumed something that was not actually true.</p>
+<hr>
+<h1>60. Final concept map</h1>
+<p>The major ideas of CSC500 connect as follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>                    PROGRAMMING
+                         |
+        -----------------------------------
+        |                |                |
+   CONTROL FLOW       DATA           ABSTRACTION
+        |                |                |
+   if / loops       arrays/lists       methods
+                         |             classes
+                         |           interfaces
+                         |
+                  DATA STRUCTURES
+                         |
+        ---------------------------------
+        |        |        |       |      |
+      lists    stacks   queues   maps   trees
+                         |
+                         |
+                    ALGORITHMS
+                         |
+          --------------------------
+          |                        |
+      CORRECTNESS              EFFICIENCY
+                                   |
+                                  Big-O
+                                   |
+                        ----------------------
+                        |          |         |
+                       O(1)       O(n)      O(n²)</code></pre></div>
+<p>These topics should not be viewed as separate chapters.</p>
+<p>They are parts of one system of computational thinking.</p>
+<hr>
+<h1>61. End-of-course reflection</h1>
+<p>Ask yourself:</p>
+<h3>Programming</h3>
+<p>Can I write a program containing several classes without being given the complete structure?</p>
+<h3>Objects</h3>
+<p>Can I decide what belongs in a class?</p>
+<h3>Data structures</h3>
+<p>Can I explain why I would choose a list, stack, queue, set, map, or tree?</p>
+<h3>Algorithms</h3>
+<p>Can I write a clear sequence of computational steps to solve a new problem?</p>
+<h3>Complexity</h3>
+<p>Can I identify whether a simple algorithm is approximately <code>O(1)</code>, <code>O(log n)</code>, <code>O(n)</code>, or <code>O(n²)</code>?</p>
+<h3>Debugging</h3>
+<p>Can I systematically locate a bug instead of changing code randomly?</p>
+<h3>Independence</h3>
+<p>Can I read documentation and learn how to use an unfamiliar Java class?</p>
+<p>If your answer is yes to most of these questions, you have developed the foundation necessary to continue into more advanced computer science coursework.</p>
+<hr>
+<h1>62. Closing perspective</h1>
+<p>The most important thing you learned in this course is not Java.</p>
+<p>Java gave us a language in which to practice computational thinking.</p>
+<p>The deeper skills are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>breaking problems apart
+representing information
+designing abstractions
+constructing algorithms
+reasoning about correctness
+analyzing efficiency
+testing assumptions
+debugging systematically
+learning independently</code></pre></div>
+<p>Programming languages will change.</p>
+<p>Libraries will change.</p>
+<p>Frameworks will change.</p>
+<p>The underlying ideas remain.</p>
+<p>When you encounter an unfamiliar technology in a future course, do not begin with:</p>
+<blockquote>"I have never seen this before."</blockquote>
+<p>Begin with:</p>
+<blockquote>"Which concepts that I already understand are present here?"</blockquote>
+<p>That is one of the transitions from beginner programmer to computer scientist.</p>
+<hr>
+<h1>63. Suggested in-class activities</h1>
+<h2>Activity 1 - code reading</h2>
+<p>Give students an unfamiliar Java method of approximately 20–30 lines.</p>
+<p>Ask them to identify:</p>
+<ul><li>inputs</li><li>output</li><li>important variables</li><li>data structures</li><li>algorithm</li><li>expected complexity</li></ul>
+<p>Do not allow them to run the code initially.</p>
+<p>They must reason about it first.</p>
+<hr>
+<h2>Activity 2 - data-structure selection</h2>
+<p>For each scenario, students select a data structure and justify the choice.</p>
+<h3>Scenario a</h3>
+<p>Store browser history where the most recently visited page should be retrieved first.</p>
+<p>Likely answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Stack</code></pre></div>
+<h3>Scenario b</h3>
+<p>Process customer-support requests in arrival order.</p>
+<p>Likely answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Queue</code></pre></div>
+<h3>Scenario C</h3>
+<p>Determine whether a username has already been registered.</p>
+<p>Likely answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>HashSet</code></pre></div>
+<h3>Scenario D</h3>
+<p>Find account information given an account number.</p>
+<p>Likely answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>HashMap</code></pre></div>
+<h3>Scenario e</h3>
+<p>Represent the directory structure on a computer.</p>
+<p>Likely answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Tree</code></pre></div>
+<hr>
+<h2>Activity 3 - complexity identification</h2>
+<p>Determine the approximate complexity of each fragment.</p>
+<h3>A</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> values[<span class="num">0</span>];</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<h3>B</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> value : values) {
+    <span class="type">System</span>.out.println(value);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<h3>C</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> x : values) {
+    <span class="kw">for</span> (<span class="kw">int</span> y : values) {
+        <span class="type">System</span>.out.println(x + y);
+    }
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<h3>D</h3>
+<p>Repeatedly divide a sorted search range in half.</p>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<hr>
+<h2>Activity 4 - architecture exercise</h2>
+<p>Give students the following system:</p>
+<blockquote>Design a movie-streaming application that stores users, movies, ratings, and watch histories.</blockquote>
+<p>In small groups, ask students to identify:</p>
+<ul><li>classes</li><li>relationships</li><li>collections</li><li>method responsibilities</li><li>likely search operations</li><li>potential performance concerns</li></ul>
+<p>Have groups compare their designs.</p>
+<p>Emphasize that multiple reasonable designs may exist.</p>
+<hr>
+<h1>64. Suggested final review questions</h1>
+<ol><li>What is the difference between a class and an object?</li><li>Why are instance variables typically private?</li><li>What is polymorphism?</li><li>What is the difference between composition and inheritance?</li><li>What is the difference between an interface and an implementation?</li><li>When would an <code>ArrayList</code> be appropriate?</li><li>When would a <code>HashMap</code> be preferable?</li><li>How does a stack differ from a queue?</li><li>Why are recursive algorithms useful for trees?</li><li>What conditions must a recursive method have?</li><li>What is the difference between linear search and binary search?</li><li>Why does binary search require sorted data?</li><li>What does <code>O(n)</code> mean?</li><li>What does <code>O(n²)</code> mean?</li><li>Why can the choice of data structure affect algorithm complexity?</li><li>What is an edge case?</li><li>What is the difference between a runtime error and a logic error?</li><li>Why should large programs be divided into classes and methods?</li><li>What makes code maintainable?</li><li>What should you do when you encounter a programming concept you have never seen before?</li></ol>
+<hr>
+<h1>65. Week 16 takeaways</h1>
+<p>Students should leave CSC500 understanding that programming is not primarily about memorizing syntax.</p>
+<p>A mature approach to programming asks:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>What problem am I solving?
+
+What information must I represent?
+
+What abstraction should represent it?
+
+Which data structure best supports the required operations?
+
+What algorithm will produce the result?
+
+Is the algorithm correct?
+
+How efficient is it?
+
+How will I test it?
+
+How will another programmer understand it?</code></pre></div>
+<p>Those questions will continue to appear throughout the Master's program.</p>
+<p>The specific technologies may change.</p>
+<p>The reasoning skills will not.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

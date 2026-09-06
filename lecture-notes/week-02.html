@@ -1,0 +1,1538 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 2: decisions and boolean logic</h2>
+<h2>Learning objectives</h2>
+<p>By the end of this week, you should be able to:</p>
+<ul><li>Explain why programs need decision-making.</li><li>Write Boolean expressions using relational and logical operators.</li><li>Use <code>if</code>, <code>if-else</code>, and <code>if-else-if</code> statements.</li><li>Write nested conditional statements.</li><li>Understand short-circuit evaluation.</li><li>Compare primitive values correctly.</li><li>Compare strings correctly using <code>.equals()</code>.</li><li>Identify common errors involving conditionals.</li><li>Use conditionals to validate input.</li><li>Trace the execution of programs containing branches.</li><li>Translate English-language rules into Java Boolean expressions.</li></ul>
+<hr>
+<h1>1. Programs need to make decisions</h1>
+<p>So far, the programs we have written execute statements sequentially.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+<span class="kw">int</span> y = <span class="num">20</span>;
+<span class="kw">int</span> sum = x + y;
+<span class="type">System</span>.out.println(sum);</code></pre></div>
+<p>Every statement executes in order.</p>
+<p>Real programs are usually more interesting because they behave differently depending on the situation.</p>
+<p>For example:</p>
+<ul><li>If a student's grade is at least 60, display <code>"Pass"</code>.</li><li>If the temperature is below freezing, display a warning.</li><li>If a password is incorrect, deny access.</li><li>If a bank account does not contain enough money, reject a withdrawal.</li><li>If a user is 18 or older, allow access to an adult-only feature.</li></ul>
+<p>This ability is called <strong>selection</strong>, <strong>branching</strong>, or <strong>decision-making</strong>.</p>
+<p>A program evaluates a condition and chooses which code to execute.</p>
+<p>Conceptually:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Is the condition true?
+
+       yes
+        |
+        v
+do something
+
+       no
+        |
+        v
+do something else</code></pre></div>
+<p>In Java, decisions are primarily expressed using the <code>if</code> statement.</p>
+<hr>
+<h1>2. Boolean values</h1>
+<p>A decision requires a condition.</p>
+<p>A condition must ultimately evaluate to one of two values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">true</span></code></pre></div>
+<p>or</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">false</span></code></pre></div>
+<p>Java has a primitive data type specifically for these values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span></code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> isRaining = <span class="lit">true</span>;
+<span class="kw">boolean</span> isLoggedIn = <span class="lit">false</span>;</code></pre></div>
+<p>A Boolean variable can be used directly inside an <code>if</code> statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (isRaining) {
+    <span class="type">System</span>.out.println(<span class="str">"Take an umbrella."</span>);
+}</code></pre></div>
+<p>If <code>isRaining</code> is <code>true</code>, the message is printed.</p>
+<p>If it is <code>false</code>, the body of the <code>if</code> statement is skipped.</p>
+<hr>
+<h1>3. Boolean expressions</h1>
+<p>Most Boolean values are not typed directly as <code>true</code> or <code>false</code>.</p>
+<p>Instead, we create Boolean expressions.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">25</span>;
+
+<span class="kw">boolean</span> adult = age &gt;= <span class="num">18</span>;</code></pre></div>
+<p>The expression</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span></code></pre></div>
+<p>evaluates to either <code>true</code> or <code>false</code>.</p>
+<p>Because <code>age</code> is 25:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">25</span> &gt;= <span class="num">18</span></code></pre></div>
+<p>is true.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>adult</code></pre></div>
+<p>contains the value:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">true</span></code></pre></div>
+<hr>
+<h1>4. Relational operators</h1>
+<p>Java provides relational operators for comparing values.</p>
+<table><thead><tr><th>Operator</th><th>Meaning</th><th>Example</th></tr></thead><tbody><tr><td><code>==</code></td><td>equal to</td><td><code>x == 10</code></td></tr><tr><td><code>!=</code></td><td>not equal to</td><td><code>x != 10</code></td></tr><tr><td><code>&lt;</code></td><td>less than</td><td><code>x &lt; 10</code></td></tr><tr><td><code>&gt;</code></td><td>greater than</td><td><code>x &gt; 10</code></td></tr><tr><td><code>&lt;=</code></td><td>less than or equal to</td><td><code>x &lt;= 10</code></td></tr><tr><td><code>&gt;=</code></td><td>greater than or equal to</td><td><code>x &gt;= 10</code></td></tr></tbody></table>
+<p>Examples:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">15</span>;
+
+<span class="type">System</span>.out.println(x &gt; <span class="num">10</span>);   <span class="cmt">// true</span>
+<span class="type">System</span>.out.println(x &lt; <span class="num">10</span>);   <span class="cmt">// false</span>
+<span class="type">System</span>.out.println(x == <span class="num">15</span>);  <span class="cmt">// true</span>
+<span class="type">System</span>.out.println(x != <span class="num">20</span>);  <span class="cmt">// true</span></code></pre></div>
+<hr>
+<h1>5. A very important mistake: <code>=</code> vs <code>==</code></h1>
+<p>Beginning programmers frequently confuse:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>=</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>==</code></pre></div>
+<p>They mean completely different things.</p>
+<p>The single equals sign:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>=</code></pre></div>
+<p>means <strong>assignment</strong>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = <span class="num">5</span>;</code></pre></div>
+<p>This means:</p>
+<blockquote>Store the value 5 in variable <code>x</code>.</blockquote>
+<p>The double equals sign:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>==</code></pre></div>
+<p>means <strong>comparison</strong>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x == <span class="num">5</span></code></pre></div>
+<p>This means:</p>
+<blockquote>Is the value stored in <code>x</code> equal to 5?</blockquote>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">10</span>;
+
+<span class="kw">if</span> (x == <span class="num">10</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"x is 10"</span>);
+}</code></pre></div>
+<p>The expression:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x == <span class="num">10</span></code></pre></div>
+<p>asks a question.</p>
+<p>It does not change <code>x</code>.</p>
+<hr>
+<h1>6. The basic <code>if</code> statement</h1>
+<p>The syntax of an <code>if</code> statement is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (condition) {
+    statements;
+}</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> temperature = <span class="num">30</span>;
+
+<span class="kw">if</span> (temperature &lt; <span class="num">32</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Warning: freezing temperature."</span>);
+}</code></pre></div>
+<p>The program asks:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Is temperature &lt; 32?</code></pre></div>
+<p>If the answer is true, the body executes.</p>
+<p>If the answer is false, the body is skipped.</p>
+<hr>
+<h1>7. Understanding control flow</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">20</span>;
+
+<span class="type">System</span>.out.println(<span class="str">"Starting program"</span>);
+
+<span class="kw">if</span> (age &gt;= <span class="num">18</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Adult"</span>);
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Ending program"</span>);</code></pre></div>
+<p>Execution proceeds as follows:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Starting program
+        |
+        v
+Is age &gt;= 18?
+      /   \
+    true  false
+     |      |
+  Adult     |
+      \    /
+       v
+Ending program</code></pre></div>
+<p>Because <code>age</code> is 20, the output is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Starting program
+Adult
+Ending program</code></pre></div>
+<p>If <code>age</code> were 15:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">15</span>;</code></pre></div>
+<p>the output would be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Starting program
+Ending program</code></pre></div>
+<hr>
+<h1>8. Blocks and braces</h1>
+<p>The braces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>{
+}</code></pre></div>
+<p>define a block of statements.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Excellent"</span>);
+    <span class="type">System</span>.out.println(<span class="str">"You earned an A."</span>);
+    <span class="type">System</span>.out.println(<span class="str">"Great work!"</span>);
+}</code></pre></div>
+<p>All three statements belong to the <code>if</code>.</p>
+<p>Although Java allows braces to be omitted when the body contains exactly one statement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>)
+    <span class="type">System</span>.out.println(<span class="str">"Excellent"</span>);</code></pre></div>
+<p>we will generally use braces.</p>
+<p>Preferred style:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Excellent"</span>);
+}</code></pre></div>
+<p>This reduces bugs and makes code easier to modify.</p>
+<hr>
+<h1>9. The <code>if-else</code> statement</h1>
+<p>Sometimes we want exactly one of two alternatives.</p>
+<p>Syntax:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (condition) {
+    statementsIfTrue;
+} <span class="kw">else</span> {
+    statementsIfFalse;
+}</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> score = <span class="num">75</span>;
+
+<span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Pass"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Fail"</span>);
+}</code></pre></div>
+<p>Because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">75</span> &gt;= <span class="num">60</span></code></pre></div>
+<p>is true, the output is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Pass</code></pre></div>
+<p>Exactly one branch executes.</p>
+<hr>
+<h1>10. Tracing an <code>if-else</code></h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> balance = <span class="num">500</span>;
+<span class="kw">int</span> withdrawal = <span class="num">700</span>;
+
+<span class="kw">if</span> (withdrawal &lt;= balance) {
+    balance = balance - withdrawal;
+    <span class="type">System</span>.out.println(<span class="str">"Withdrawal approved."</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Insufficient funds."</span>);
+}</code></pre></div>
+<p>Evaluate the condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>withdrawal &lt;= balance</code></pre></div>
+<p>Substitute the values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">700</span> &lt;= <span class="num">500</span></code></pre></div>
+<p>The expression is false.</p>
+<p>Therefore Java skips the first branch and executes the <code>else</code> branch:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Insufficient funds.</code></pre></div>
+<p>The value of <code>balance</code> remains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>500</code></pre></div>
+<hr>
+<h1>11. Multiple alternatives with <code>else if</code></h1>
+<p>Many decisions involve more than two possibilities.</p>
+<p>Consider letter grades:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>90–100  A
+80–89   B
+70–79   C
+60–69   D
+below 60 F</code></pre></div>
+<p>We can write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">70</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"C"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"D"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"F"</span>);
+}</code></pre></div>
+<p>Java evaluates conditions from top to bottom.</p>
+<p>As soon as one condition is true, its branch executes and the rest are skipped.</p>
+<hr>
+<h1>12. Why order matters</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> score = <span class="num">95</span>;</code></pre></div>
+<p>Consider this incorrect code:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"D"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">70</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"C"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+}</code></pre></div>
+<p>What happens?</p>
+<p>The first condition is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>score &gt;= <span class="num">60</span></code></pre></div>
+<p>For a score of 95, that condition is true.</p>
+<p>Therefore Java prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>D</code></pre></div>
+<p>and skips the rest.</p>
+<p>The correct ordering is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">70</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"C"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"D"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"F"</span>);
+}</code></pre></div>
+<p>When ranges overlap, order matters.</p>
+<hr>
+<h1>13. Conditions that represent ranges</h1>
+<p>Suppose we want to determine whether:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x is between 1 and 10</code></pre></div>
+<p>Mathematically we might write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 &lt;= x &lt;= 10</code></pre></div>
+<p>Java does <strong>not</strong> allow chained comparisons like this.</p>
+<p>This is invalid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (<span class="num">1</span> &lt;= x &lt;= <span class="num">10</span>) {</code></pre></div>
+<p>Instead, we must write two comparisons and combine them:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x &gt;= <span class="num">1</span> &amp;&amp; x &lt;= <span class="num">10</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"x is between 1 and 10."</span>);
+}</code></pre></div>
+<p>This introduces logical operators.</p>
+<hr>
+<h1>14. Logical operators</h1>
+<p>Java has three major logical operators:</p>
+<table><thead><tr><th>Operator</th><th>Name</th><th>Meaning</th></tr></thead><tbody><tr><td><code>&amp;&amp;</code></td><td>AND</td><td>both conditions must be true</td></tr><tr><td>`</td><td></td><td>`</td><td>OR</td><td>at least one condition must be true</td></tr><tr><td><code>!</code></td><td>NOT</td><td>reverses a Boolean value</td></tr></tbody></table>
+<hr>
+<h1>15. Logical and: <code>&amp;&amp;</code></h1>
+<p>The expression:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A &amp;&amp; B</code></pre></div>
+<p>is true only when both <code>A</code> and <code>B</code> are true.</p>
+<p>Truth table:</p>
+<table><thead><tr><th>A</th><th>B</th><th>A &amp;&amp; B</th></tr></thead><tbody><tr><td>false</td><td>false</td><td>false</td></tr><tr><td>false</td><td>true</td><td>false</td></tr><tr><td>true</td><td>false</td><td>false</td></tr><tr><td>true</td><td>true</td><td>true</td></tr></tbody></table>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">25</span>;
+<span class="kw">boolean</span> hasTicket = <span class="lit">true</span>;
+
+<span class="kw">if</span> (age &gt;= <span class="num">18</span> &amp;&amp; hasTicket) {
+    <span class="type">System</span>.out.println(<span class="str">"Entry allowed."</span>);
+}</code></pre></div>
+<p>Both requirements must be satisfied.</p>
+<hr>
+<h1>16. Using and for ranges</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> score = <span class="num">85</span>;</code></pre></div>
+<p>We want to determine whether the score is between 80 and 89 inclusive.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">80</span> &amp;&amp; score &lt;= <span class="num">89</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Grade B"</span>);
+}</code></pre></div>
+<p>Another common version is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">80</span> &amp;&amp; score &lt; <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Grade B"</span>);
+}</code></pre></div>
+<p>Both comparisons must be true.</p>
+<hr>
+<h1>17. Logical or: <code>||</code></h1>
+<p>The expression:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A || B</code></pre></div>
+<p>is true if at least one condition is true.</p>
+<p>Truth table:</p>
+<table><thead><tr><th>A</th><th>B</th><th>A \</th><th>\</th><th>B</th></tr></thead><tbody><tr><td>false</td><td>false</td><td>false</td></tr><tr><td>false</td><td>true</td><td>true</td></tr><tr><td>true</td><td>false</td><td>true</td></tr><tr><td>true</td><td>true</td><td>true</td></tr></tbody></table>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> isWeekend = <span class="lit">true</span>;
+<span class="kw">boolean</span> isHoliday = <span class="lit">false</span>;
+
+<span class="kw">if</span> (isWeekend || isHoliday) {
+    <span class="type">System</span>.out.println(<span class="str">"Office is closed."</span>);
+}</code></pre></div>
+<p>The office is closed if either condition is true.</p>
+<hr>
+<h1>18. And vs or</h1>
+<p>Suppose a student may register for a course only if:</p>
+<ul><li>the student completed the prerequisite, <strong>and</strong></li><li>the student has no registration hold.</li></ul>
+<p>We need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (completedPrerequisite &amp;&amp; !hasHold) {
+    <span class="type">System</span>.out.println(<span class="str">"Registration allowed."</span>);
+}</code></pre></div>
+<p>Now suppose a student receives a discount if:</p>
+<ul><li>the student is under 18, <strong>or</strong></li><li>the student is 65 or older.</li></ul>
+<p>We need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &lt; <span class="num">18</span> || age &gt;= <span class="num">65</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Discount applies."</span>);
+}</code></pre></div>
+<p>A useful translation rule is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>"and"  → &amp;&amp;
+"or"   → ||
+"not"  → !</code></pre></div>
+<p>But always think about the actual logic rather than mechanically replacing English words.</p>
+<hr>
+<h1>19. Logical not: <code>!</code></h1>
+<p>The NOT operator reverses a Boolean value.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>!<span class="lit">true</span></code></pre></div>
+<p>becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">false</span></code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>!<span class="lit">false</span></code></pre></div>
+<p>becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">true</span></code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> loggedIn = <span class="lit">false</span>;
+
+<span class="kw">if</span> (!loggedIn) {
+    <span class="type">System</span>.out.println(<span class="str">"Please log in."</span>);
+}</code></pre></div>
+<p>Read:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>!loggedIn</code></pre></div>
+<p>as:</p>
+<blockquote>not logged in</blockquote>
+<hr>
+<h1>20. Boolean variables make code easier to read</h1>
+<p>Instead of writing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">18</span> &amp;&amp; age &lt;= <span class="num">65</span> &amp;&amp; hasLicense &amp;&amp; !licenseSuspended) {
+    <span class="type">System</span>.out.println(<span class="str">"Eligible"</span>);
+}</code></pre></div>
+<p>we can sometimes introduce meaningful variables:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> validAge = age &gt;= <span class="num">18</span> &amp;&amp; age &lt;= <span class="num">65</span>;
+<span class="kw">boolean</span> validLicense = hasLicense &amp;&amp; !licenseSuspended;
+
+<span class="kw">if</span> (validAge &amp;&amp; validLicense) {
+    <span class="type">System</span>.out.println(<span class="str">"Eligible"</span>);
+}</code></pre></div>
+<p>The second version can be easier to understand.</p>
+<p>A good variable name can explain the meaning of a condition.</p>
+<hr>
+<h1>21. Operator precedence</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span> &amp;&amp; citizen || hasVisa</code></pre></div>
+<p>Java applies operators according to precedence rules.</p>
+<p>A simplified ordering for the operators we have seen is:</p>
+<ol><li>Arithmetic operations</li><li>Relational operators</li><li><code>!</code></li><li><code>&amp;&amp;</code></li><li><code>||</code></li></ol>
+<p>However, complicated Boolean expressions can become difficult to read.</p>
+<p>Prefer parentheses when they clarify intent:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>(age &gt;= <span class="num">18</span> &amp;&amp; citizen) || hasVisa</code></pre></div>
+<p>Even if the parentheses are not technically required, they improve readability.</p>
+<hr>
+<h1>22. Short-circuit evaluation</h1>
+<p>Java uses <strong>short-circuit evaluation</strong> for <code>&amp;&amp;</code> and <code>||</code>.</p>
+<p>This means Java may not evaluate the second part of a Boolean expression if the result is already known.</p>
+<p>Consider AND:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A &amp;&amp; B</code></pre></div>
+<p>If <code>A</code> is false, the entire expression must be false.</p>
+<p>Java therefore does not need to evaluate <code>B</code>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> denominator = <span class="num">0</span>;
+
+<span class="kw">if</span> (denominator != <span class="num">0</span> &amp;&amp; <span class="num">100</span> / denominator &gt; <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Condition satisfied."</span>);
+}</code></pre></div>
+<p>Java first evaluates:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>denominator != <span class="num">0</span></code></pre></div>
+<p>This is false.</p>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>false AND anything</code></pre></div>
+<p>is false, Java stops.</p>
+<p>It never evaluates:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="num">100</span> / denominator</code></pre></div>
+<p>Therefore no divide-by-zero error occurs.</p>
+<hr>
+<h1>23. Short-circuit or</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A || B</code></pre></div>
+<p>If <code>A</code> is true, the entire expression must be true.</p>
+<p>Java does not need to evaluate <code>B</code>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (isAdmin || hasPermission()) {
+    ...
+}</code></pre></div>
+<p>If <code>isAdmin</code> is already true, Java does not call:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>hasPermission()</code></pre></div>
+<p>This behavior becomes especially important later when expressions include method calls.</p>
+<hr>
+<h1>24. Nested <code>if</code> statements</h1>
+<p>An <code>if</code> statement may contain another <code>if</code> statement.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> age = <span class="num">25</span>;
+<span class="kw">boolean</span> hasTicket = <span class="lit">true</span>;
+
+<span class="kw">if</span> (age &gt;= <span class="num">18</span>) {
+    <span class="kw">if</span> (hasTicket) {
+        <span class="type">System</span>.out.println(<span class="str">"Entry allowed."</span>);
+    }
+}</code></pre></div>
+<p>The inner condition is checked only if:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span></code></pre></div>
+<p>is true.</p>
+<p>This is called a <strong>nested conditional</strong>.</p>
+<hr>
+<h1>25. Nested conditions vs combined conditions</h1>
+<p>The previous example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">18</span>) {
+    <span class="kw">if</span> (hasTicket) {
+        <span class="type">System</span>.out.println(<span class="str">"Entry allowed."</span>);
+    }
+}</code></pre></div>
+<p>can also be written as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">18</span> &amp;&amp; hasTicket) {
+    <span class="type">System</span>.out.println(<span class="str">"Entry allowed."</span>);
+}</code></pre></div>
+<p>These versions produce the same result.</p>
+<p>When the logic is simple, the combined version is usually cleaner.</p>
+<p>Nested conditions are useful when additional decisions occur only inside a particular branch.</p>
+<hr>
+<h1>26. Example: login system</h1>
+<p>Suppose a system checks both username and password.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> correctUsername = <span class="str">"alice"</span>;
+<span class="type">String</span> correctPassword = <span class="str">"secret123"</span>;
+
+<span class="type">String</span> username = <span class="str">"alice"</span>;
+<span class="type">String</span> password = <span class="str">"secret123"</span>;
+
+<span class="kw">if</span> (username.equals(correctUsername)) {
+    <span class="kw">if</span> (password.equals(correctPassword)) {
+        <span class="type">System</span>.out.println(<span class="str">"Login successful."</span>);
+    } <span class="kw">else</span> {
+        <span class="type">System</span>.out.println(<span class="str">"Incorrect password."</span>);
+    }
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Unknown username."</span>);
+}</code></pre></div>
+<p>The nested structure allows us to provide different messages depending on which check failed.</p>
+<hr>
+<h1>27. Comparing strings</h1>
+<p>This is an extremely important Java rule.</p>
+<p>Do <strong>not</strong> normally compare strings using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>==</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> name = <span class="str">"Alice"</span>;
+
+<span class="kw">if</span> (name == <span class="str">"Alice"</span>) {</code></pre></div>
+<p>may appear to work in some cases, but it does not mean what beginning programmers usually think it means.</p>
+<p>For strings, use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>.equals()</code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (name.equals(<span class="str">"Alice"</span>)) {
+    <span class="type">System</span>.out.println(<span class="str">"Hello Alice"</span>);
+}</code></pre></div>
+<p>Why?</p>
+<p>For primitive values such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>
+<span class="kw">double</span>
+<span class="kw">char</span>
+<span class="kw">boolean</span></code></pre></div>
+<p><code>==</code> compares values.</p>
+<p>For objects such as <code>String</code>, <code>==</code> compares object references.</p>
+<p>We will explore references and objects in much greater detail when we study object-oriented programming.</p>
+<p>For now, remember:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;
+
+<span class="kw">if</span> (x == <span class="num">5</span>) {</code></pre></div>
+<p>but:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> name = <span class="str">"Alice"</span>;
+
+<span class="kw">if</span> (name.equals(<span class="str">"Alice"</span>)) {</code></pre></div>
+<hr>
+<h1>28. Case-insensitive string comparison</h1>
+<p>Sometimes capitalization should not matter.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> answer = <span class="str">"YES"</span>;
+
+<span class="kw">if</span> (answer.equalsIgnoreCase(<span class="str">"yes"</span>)) {
+    <span class="type">System</span>.out.println(<span class="str">"You answered yes."</span>);
+}</code></pre></div>
+<p>This treats:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>yes
+YES
+Yes
+yEs</code></pre></div>
+<p>as equivalent.</p>
+<hr>
+<h1>29. Comparing <code>char</code> values</h1>
+<p>Characters are primitive values, so they can be compared with <code>==</code>.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">char</span> grade = <span class="str">'A'</span>;
+
+<span class="kw">if</span> (grade == <span class="str">'A'</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Excellent."</span>);
+}</code></pre></div>
+<p>Remember:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="str">'A'</span></code></pre></div>
+<p>is a <code>char</code>.</p>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="str">"A"</span></code></pre></div>
+<p>is a <code>String</code>.</p>
+<hr>
+<h1>30. Floating-point comparisons</h1>
+<p>Be cautious when comparing <code>double</code> values with <code>==</code>.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> result = <span class="num">0.1</span> + <span class="num">0.2</span>;
+
+<span class="type">System</span>.out.println(result);</code></pre></div>
+<p>Because computers represent many decimal values approximately, <code>result</code> may not be represented internally as exactly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0.3</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (result == <span class="num">0.3</span>) {</code></pre></div>
+<p>can be unreliable.</p>
+<p>Instead, compare using a small tolerance:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> tolerance = <span class="num">0.000001</span>;
+
+<span class="kw">if</span> (<span class="type">Math</span>.abs(result - <span class="num">0.3</span>) &lt; tolerance) {
+    <span class="type">System</span>.out.println(<span class="str">"Approximately equal."</span>);
+}</code></pre></div>
+<p>We will revisit numerical precision later.</p>
+<hr>
+<h1>31. Input validation</h1>
+<p>One important use of conditionals is checking whether user input is valid.</p>
+<p>Suppose a percentage must be between 0 and 100.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+<span class="type">System</span>.out.print(<span class="str">"Enter percentage: "</span>);
+<span class="kw">double</span> percentage = input.nextDouble();
+
+<span class="kw">if</span> (percentage &gt;= <span class="num">0</span> &amp;&amp; percentage &lt;= <span class="num">100</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Valid percentage."</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Invalid percentage."</span>);
+}</code></pre></div>
+<p>This is called <strong>validation</strong>.</p>
+<p>Programs should not assume that every input is valid.</p>
+<hr>
+<h1>32. Example: age validation</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(<span class="str">"Enter age: "</span>);
+<span class="kw">int</span> age = input.nextInt();
+
+<span class="kw">if</span> (age &lt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Invalid age."</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (age &lt; <span class="num">13</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Child"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (age &lt; <span class="num">20</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Teenager"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Adult"</span>);
+}</code></pre></div>
+<p>Notice that after checking:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &lt; <span class="num">0</span></code></pre></div>
+<p>we do not need to repeat:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">0</span></code></pre></div>
+<p>in the next condition.</p>
+<p>If Java reaches:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">else</span> <span class="kw">if</span> (age &lt; <span class="num">13</span>)</code></pre></div>
+<p>we already know that:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">0</span></code></pre></div>
+<p>because otherwise the first branch would have executed.</p>
+<p>Understanding what is already known at each branch is an important programming skill.</p>
+<hr>
+<h1>33. Mutually exclusive conditions</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+}
+
+<span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+}</code></pre></div>
+<p>If:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>score = <span class="num">95</span></code></pre></div>
+<p>both conditions are true.</p>
+<p>The program prints:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B</code></pre></div>
+<p>This is because these are two independent <code>if</code> statements.</p>
+<p>If we want exactly one grade, we need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+}</code></pre></div>
+<p>This distinction is important.</p>
+<p>Use multiple independent <code>if</code> statements when multiple conditions may legitimately trigger.</p>
+<p>Use an <code>if-else-if</code> chain when the alternatives are mutually exclusive.</p>
+<hr>
+<h1>34. Example: independent conditions</h1>
+<p>Suppose we examine weather conditions.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (temperature &lt; <span class="num">32</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Freezing warning."</span>);
+}
+
+<span class="kw">if</span> (windSpeed &gt; <span class="num">40</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"High wind warning."</span>);
+}
+
+<span class="kw">if</span> (snowing) {
+    <span class="type">System</span>.out.println(<span class="str">"Snow warning."</span>);
+}</code></pre></div>
+<p>It is entirely possible that all three warnings should appear.</p>
+<p>Therefore independent <code>if</code> statements are appropriate.</p>
+<hr>
+<h1>35. Example: mutually exclusive categories</h1>
+<p>Suppose we classify temperature:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (temperature &lt; <span class="num">32</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Freezing"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (temperature &lt; <span class="num">60</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Cold"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (temperature &lt; <span class="num">80</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Mild"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Hot"</span>);
+}</code></pre></div>
+<p>Only one category should appear.</p>
+<p>Therefore an <code>if-else-if</code> chain is appropriate.</p>
+<hr>
+<h1>36. Common error: incorrect range logic</h1>
+<p>Suppose we want:</p>
+<blockquote>age must be between 18 and 65.</blockquote>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">18</span> || age &lt;= <span class="num">65</span>) {</code></pre></div>
+<p>Why is this incorrect?</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age = <span class="num">10</span></code></pre></div>
+<p>The first condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span></code></pre></div>
+<p>is false.</p>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &lt;= <span class="num">65</span></code></pre></div>
+<p>is true.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">false</span> || <span class="lit">true</span></code></pre></div>
+<p>becomes true.</p>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age = <span class="num">90</span></code></pre></div>
+<p>The first condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span></code></pre></div>
+<p>is true.</p>
+<p>Therefore the entire expression is true.</p>
+<p>Almost every possible age passes the test.</p>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">18</span> &amp;&amp; age &lt;= <span class="num">65</span>) {</code></pre></div>
+<p>Both boundaries must be satisfied simultaneously.</p>
+<hr>
+<h1>37. Common error: impossible conditions</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &lt; <span class="num">18</span> &amp;&amp; age &gt; <span class="num">65</span>) {</code></pre></div>
+<p>Can this ever be true?</p>
+<p>No.</p>
+<p>A number cannot simultaneously be:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>less than 18</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>greater than 65</code></pre></div>
+<p>The programmer probably intended:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &lt; <span class="num">18</span> || age &gt; <span class="num">65</span>) {</code></pre></div>
+<p>This means the age lies outside the interval from 18 through 65.</p>
+<hr>
+<h1>38. Inside vs outside a range</h1>
+<p>Suppose we have:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>18 &lt;= age &lt;= 65</code></pre></div>
+<p>Inside the range:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span> &amp;&amp; age &lt;= <span class="num">65</span></code></pre></div>
+<p>Outside the range:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &lt; <span class="num">18</span> || age &gt; <span class="num">65</span></code></pre></div>
+<p>This pattern occurs frequently.</p>
+<p>General rule:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>inside a range → AND
+outside a range → OR</code></pre></div>
+<hr>
+<h1>39. De morgan's laws</h1>
+<p>Logical expressions can often be rewritten.</p>
+<p>Two important identities are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>!(A &amp;&amp; B) = !A || !B</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>!(A || B) = !A &amp;&amp; !B</code></pre></div>
+<p>These are known as <strong>De Morgan's Laws</strong>.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>!(age &gt;= <span class="num">18</span> &amp;&amp; age &lt;= <span class="num">65</span>)</code></pre></div>
+<p>means:</p>
+<blockquote>It is not true that age is between 18 and 65.</blockquote>
+<p>This is equivalent to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &lt; <span class="num">18</span> || age &gt; <span class="num">65</span></code></pre></div>
+<p>You do not need to memorize formal logic notation immediately, but these relationships become useful when designing and simplifying conditions.</p>
+<hr>
+<h1>40. The dangling <code>else</code></h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x &gt; <span class="num">0</span>)
+    <span class="kw">if</span> (y &gt; <span class="num">0</span>)
+        <span class="type">System</span>.out.println(<span class="str">"Both positive"</span>);
+    <span class="kw">else</span>
+        <span class="type">System</span>.out.println(<span class="str">"What does this else belong to?"</span>);</code></pre></div>
+<p>Without braces, this is difficult to read.</p>
+<p>Java associates an <code>else</code> with the nearest unmatched <code>if</code>.</p>
+<p>To remove ambiguity, use braces:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x &gt; <span class="num">0</span>) {
+    <span class="kw">if</span> (y &gt; <span class="num">0</span>) {
+        <span class="type">System</span>.out.println(<span class="str">"Both positive"</span>);
+    } <span class="kw">else</span> {
+        <span class="type">System</span>.out.println(<span class="str">"x is positive, but y is not."</span>);
+    }
+}</code></pre></div>
+<p>Again, using braces consistently prevents many problems.</p>
+<hr>
+<h1>41. Indentation does not determine program structure</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">60</span>)
+    <span class="type">System</span>.out.println(<span class="str">"Pass"</span>);
+    <span class="type">System</span>.out.println(<span class="str">"Congratulations"</span>);</code></pre></div>
+<p>A human reader might think both statements belong to the <code>if</code>.</p>
+<p>Java does not.</p>
+<p>Without braces, only the first statement belongs to the <code>if</code>.</p>
+<p>Java sees:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Pass"</span>);
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Congratulations"</span>);</code></pre></div>
+<p>Therefore <code>"Congratulations"</code> prints regardless of the score.</p>
+<p>Indentation is for humans.</p>
+<p>Braces determine program structure.</p>
+<hr>
+<h1>42. A complete example: shipping cost</h1>
+<p>Suppose shipping costs are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Order under $25       → $7.99
+$25 through $49.99    → $4.99
+$50 or more           → free</code></pre></div>
+<p>Java:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> orderTotal = <span class="num">42.50</span>;
+<span class="kw">double</span> shipping;
+
+<span class="kw">if</span> (orderTotal &gt;= <span class="num">50</span>) {
+    shipping = <span class="num">0.0</span>;
+} <span class="kw">else</span> <span class="kw">if</span> (orderTotal &gt;= <span class="num">25</span>) {
+    shipping = <span class="num">4.99</span>;
+} <span class="kw">else</span> {
+    shipping = <span class="num">7.99</span>;
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Shipping: $"</span> + shipping);</code></pre></div>
+<p>Notice that we do not need:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>orderTotal &gt;= <span class="num">25</span> &amp;&amp; orderTotal &lt; <span class="num">50</span></code></pre></div>
+<p>for the second condition.</p>
+<p>Why?</p>
+<p>If Java reaches the second condition, we already know:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>orderTotal &lt; <span class="num">50</span></code></pre></div>
+<p>because otherwise the first branch would have executed.</p>
+<hr>
+<h1>43. Example: leap year</h1>
+<p>A leap year provides an excellent Boolean logic exercise.</p>
+<p>A year is a leap year if:</p>
+<ul><li>it is divisible by 400, or</li><li>it is divisible by 4 but not divisible by 100.</li></ul>
+<p>We can express this as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> leapYear =
+        year % <span class="num">400</span> == <span class="num">0</span> ||
+        (year % <span class="num">4</span> == <span class="num">0</span> &amp;&amp; year % <span class="num">100</span> != <span class="num">0</span>);</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (leapYear) {
+    <span class="type">System</span>.out.println(<span class="str">"Leap year"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Not a leap year"</span>);
+}</code></pre></div>
+<p>This example demonstrates why parentheses and Boolean variables can make complex conditions easier to understand.</p>
+<hr>
+<h1>44. Example: triangle validation</h1>
+<p>Suppose three values represent the lengths of triangle sides.</p>
+<p>For three positive lengths <code>a</code>, <code>b</code>, and <code>c</code> to form a triangle:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>a + b &gt; c
+a + c &gt; b
+b + c &gt; a</code></pre></div>
+<p>All three conditions must be true:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> validTriangle =
+        a &gt; <span class="num">0</span> &amp;&amp;
+        b &gt; <span class="num">0</span> &amp;&amp;
+        c &gt; <span class="num">0</span> &amp;&amp;
+        a + b &gt; c &amp;&amp;
+        a + c &gt; b &amp;&amp;
+        b + c &gt; a;
+
+<span class="kw">if</span> (validTriangle) {
+    <span class="type">System</span>.out.println(<span class="str">"Valid triangle"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Invalid triangle"</span>);
+}</code></pre></div>
+<p>This is a useful example of translating a mathematical definition into code.</p>
+<hr>
+<h1>45. Example: maximum of two numbers</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> a = <span class="num">17</span>;
+<span class="kw">int</span> b = <span class="num">42</span>;
+
+<span class="kw">int</span> maximum;
+
+<span class="kw">if</span> (a &gt; b) {
+    maximum = a;
+} <span class="kw">else</span> {
+    maximum = b;
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Maximum: "</span> + maximum);</code></pre></div>
+<p>This demonstrates that conditionals can determine values, not just print messages.</p>
+<hr>
+<h1>46. Maximum of three numbers</h1>
+<p>One approach:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> a = <span class="num">17</span>;
+<span class="kw">int</span> b = <span class="num">42</span>;
+<span class="kw">int</span> c = <span class="num">23</span>;
+
+<span class="kw">int</span> maximum = a;
+
+<span class="kw">if</span> (b &gt; maximum) {
+    maximum = b;
+}
+
+<span class="kw">if</span> (c &gt; maximum) {
+    maximum = c;
+}
+
+<span class="type">System</span>.out.println(<span class="str">"Maximum: "</span> + maximum);</code></pre></div>
+<p>Notice that we use two independent <code>if</code> statements.</p>
+<p>Each asks whether the current candidate is larger than the maximum found so far.</p>
+<p>This pattern will appear again when we study arrays and algorithms.</p>
+<hr>
+<h1>47. The conditional operator</h1>
+<p>Java also contains a compact conditional operator:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>condition ? valueIfTrue : valueIfFalse</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> result = score &gt;= <span class="num">60</span> ? <span class="str">"Pass"</span> : <span class="str">"Fail"</span>;</code></pre></div>
+<p>This is equivalent to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> result;
+
+<span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+    result = <span class="str">"Pass"</span>;
+} <span class="kw">else</span> {
+    result = <span class="str">"Fail"</span>;
+}</code></pre></div>
+<p>The conditional operator is sometimes called the <strong>ternary operator</strong> because it has three operands.</p>
+<p>For now, use it only for simple situations.</p>
+<p>Do not turn complicated decision logic into deeply nested ternary expressions.</p>
+<hr>
+<h1>48. Writing good conditions</h1>
+<p>Prefer conditions that are easy to read.</p>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (!(age &lt; <span class="num">18</span>)) {</code></pre></div>
+<p>consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">18</span>) {</code></pre></div>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (loggedIn == <span class="lit">true</span>) {</code></pre></div>
+<p>write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (loggedIn) {</code></pre></div>
+<p>Instead of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (loggedIn == <span class="lit">false</span>) {</code></pre></div>
+<p>write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (!loggedIn) {</code></pre></div>
+<p>Good programming is not just about making code work.</p>
+<p>Code should also communicate its meaning clearly to other programmers.</p>
+<hr>
+<h1>49. Avoid comparing booleans with <code>== true</code></h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> eligible = age &gt;= <span class="num">18</span>;</code></pre></div>
+<p>This works:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (eligible == <span class="lit">true</span>) {</code></pre></div>
+<p>But it is unnecessarily verbose.</p>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (eligible) {</code></pre></div>
+<p>Likewise:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (eligible == <span class="lit">false</span>) {</code></pre></div>
+<p>is better written:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (!eligible) {</code></pre></div>
+<hr>
+<h1>50. Translating requirements into conditions</h1>
+<p>One of the most important programming skills is converting an English requirement into precise Boolean logic.</p>
+<p>Example:</p>
+<blockquote>A customer gets free shipping if the order is at least $50.</blockquote>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>orderTotal &gt;= <span class="num">50</span></code></pre></div>
+<p>Example:</p>
+<blockquote>A student may take the course if they completed CSC500 and have graduate standing.</blockquote>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>completedCSC500 &amp;&amp; graduateStanding</code></pre></div>
+<p>Example:</p>
+<blockquote>A person qualifies for the discount if they are younger than 18 or at least 65.</blockquote>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &lt; <span class="num">18</span> || age &gt;= <span class="num">65</span></code></pre></div>
+<p>Example:</p>
+<blockquote>Access is allowed only when the password is correct and the account is not locked.</blockquote>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>passwordCorrect &amp;&amp; !accountLocked</code></pre></div>
+<p>Before writing an <code>if</code> statement, first make sure the condition itself correctly expresses the rule.</p>
+<hr>
+<h1>51. Condition table technique</h1>
+<p>When logic becomes confusing, make a table.</p>
+<p>Suppose access requires:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>valid password AND active account</code></pre></div>
+<table><thead><tr><th>Valid password</th><th>Active account</th><th>Access</th></tr></thead><tbody><tr><td>false</td><td>false</td><td>deny</td></tr><tr><td>false</td><td>true</td><td>deny</td></tr><tr><td>true</td><td>false</td><td>deny</td></tr><tr><td>true</td><td>true</td><td>allow</td></tr></tbody></table>
+<p>This immediately shows that the correct operator is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>&amp;&amp;</code></pre></div>
+<p>For a condition such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>student OR senior discount</code></pre></div>
+<table><thead><tr><th>Student</th><th>Senior</th><th>Discount</th></tr></thead><tbody><tr><td>false</td><td>false</td><td>no</td></tr><tr><td>false</td><td>true</td><td>yes</td></tr><tr><td>true</td><td>false</td><td>yes</td></tr><tr><td>true</td><td>true</td><td>yes</td></tr></tbody></table>
+<p>This corresponds to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>||</code></pre></div>
+<p>Truth tables are useful debugging tools.</p>
+<hr>
+<h1>52. Tracing conditional code</h1>
+<p>You should be able to determine the output of code without running it.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">8</span>;
+<span class="kw">int</span> y = <span class="num">3</span>;
+
+<span class="kw">if</span> (x &gt; <span class="num">5</span>) {
+    y = y + <span class="num">2</span>;
+}
+
+<span class="kw">if</span> (y &gt; <span class="num">4</span>) {
+    x = x - <span class="num">3</span>;
+} <span class="kw">else</span> {
+    x = x + <span class="num">3</span>;
+}
+
+<span class="type">System</span>.out.println(x);
+<span class="type">System</span>.out.println(y);</code></pre></div>
+<p>Trace:</p>
+<p>Initial values:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 8
+y = 3</code></pre></div>
+<p>First condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x &gt; <span class="num">5</span>
+<span class="num">8</span> &gt; <span class="num">5</span> → <span class="lit">true</span></code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>y = 5</code></pre></div>
+<p>Second condition:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>y &gt; <span class="num">4</span>
+<span class="num">5</span> &gt; <span class="num">4</span> → <span class="lit">true</span></code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = 5</code></pre></div>
+<p>Final output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5
+5</code></pre></div>
+<p>Tracing code manually is one of the best ways to develop programming intuition.</p>
+<hr>
+<h1>53. Debugging conditional logic</h1>
+<p>When a conditional program behaves incorrectly, ask:</p>
+<ol><li>What values do the variables actually contain?</li><li>What condition is being evaluated?</li><li>What does each comparison evaluate to?</li><li>Is the correct operator being used?</li><li>Should this be <code>&amp;&amp;</code> or <code>||</code>?</li><li>Are the boundary values correct?</li><li>Are conditions ordered properly?</li><li>Are these supposed to be independent <code>if</code> statements or an <code>if-else-if</code> chain?</li><li>Are braces placed correctly?</li><li>Are strings being compared with <code>.equals()</code>?</li></ol>
+<p>Printing intermediate values can help.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"age = "</span> + age);
+<span class="type">System</span>.out.println(<span class="str">"hasLicense = "</span> + hasLicense);
+<span class="type">System</span>.out.println(<span class="str">"condition = "</span> + (age &gt;= <span class="num">18</span> &amp;&amp; hasLicense));</code></pre></div>
+<p>This is a simple but effective debugging technique.</p>
+<hr>
+<h1>54. Boundary cases</h1>
+<p>Suppose admission requires:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age must be at least 18</code></pre></div>
+<p>Which operator should we use?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt; <span class="num">18</span></code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span></code></pre></div>
+<p>The phrase:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>at least 18</code></pre></div>
+<p>means:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span></code></pre></div>
+<p>A person who is exactly 18 qualifies.</p>
+<p>Boundary values frequently cause programming bugs.</p>
+<p>Whenever you write a condition, test values:</p>
+<ul><li>just below the boundary,</li><li>exactly at the boundary,</li><li>just above the boundary.</li></ul>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>score &gt;= <span class="num">60</span></code></pre></div>
+<p>test:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>59
+60
+61</code></pre></div>
+<hr>
+<h1>55. Boundary vocabulary</h1>
+<p>These phrases appear frequently in programming problems.</p>
+<table><thead><tr><th>English</th><th>Java</th></tr></thead><tbody><tr><td>greater than 10</td><td><code>x &gt; 10</code></td></tr><tr><td>at least 10</td><td><code>x &gt;= 10</code></td></tr><tr><td>no more than 10</td><td><code>x &lt;= 10</code></td></tr><tr><td>fewer than 10</td><td><code>x &lt; 10</code></td></tr><tr><td>exactly 10</td><td><code>x == 10</code></td></tr><tr><td>not 10</td><td><code>x != 10</code></td></tr><tr><td>from 1 through 10 inclusive</td><td><code>x &gt;= 1 &amp;&amp; x &lt;= 10</code></td></tr><tr><td>outside 1 through 10</td><td>`x &lt; 1</td><td></td><td>x &gt; 10`</td></tr></tbody></table>
+<p>Pay close attention to words such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>at least
+at most
+more than
+less than
+inclusive
+exclusive</code></pre></div>
+<hr>
+<h1>56. Example program: bmi classification</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">BMIClassifier</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter weight in kilograms: "</span>);
+        <span class="kw">double</span> weight = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter height in meters: "</span>);
+        <span class="kw">double</span> height = input.nextDouble();
+
+        <span class="kw">if</span> (weight &lt;= <span class="num">0</span> || height &lt;= <span class="num">0</span>) {
+            <span class="type">System</span>.out.println(<span class="str">"Invalid input."</span>);
+        } <span class="kw">else</span> {
+            <span class="kw">double</span> bmi = weight / (height * height);
+
+            <span class="type">System</span>.out.printf(<span class="str">"BMI: %.1f%n"</span>, bmi);
+
+            <span class="kw">if</span> (bmi &lt; <span class="num">18.5</span>) {
+                <span class="type">System</span>.out.println(<span class="str">"Underweight"</span>);
+            } <span class="kw">else</span> <span class="kw">if</span> (bmi &lt; <span class="num">25.0</span>) {
+                <span class="type">System</span>.out.println(<span class="str">"Normal range"</span>);
+            } <span class="kw">else</span> <span class="kw">if</span> (bmi &lt; <span class="num">30.0</span>) {
+                <span class="type">System</span>.out.println(<span class="str">"Overweight"</span>);
+            } <span class="kw">else</span> {
+                <span class="type">System</span>.out.println(<span class="str">"Obesity range"</span>);
+            }
+        }
+
+        input.close();
+    }
+}</code></pre></div>
+<p>Important observations:</p>
+<ul><li>Invalid input is checked first.</li><li>The BMI is calculated only if the input is valid.</li><li>Categories are checked from smallest boundary upward.</li><li>We take advantage of what previous conditions have already established.</li></ul>
+<hr>
+<h1>57. Example program: simple calculator</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Calculator</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter first number: "</span>);
+        <span class="kw">double</span> x = input.nextDouble();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter operator (+, -, *, /): "</span>);
+        <span class="type">String</span> operator = input.next();
+
+        <span class="type">System</span>.out.print(<span class="str">"Enter second number: "</span>);
+        <span class="kw">double</span> y = input.nextDouble();
+
+        <span class="kw">if</span> (operator.equals(<span class="str">"+"</span>)) {
+            <span class="type">System</span>.out.println(x + y);
+        } <span class="kw">else</span> <span class="kw">if</span> (operator.equals(<span class="str">"-"</span>)) {
+            <span class="type">System</span>.out.println(x - y);
+        } <span class="kw">else</span> <span class="kw">if</span> (operator.equals(<span class="str">"*"</span>)) {
+            <span class="type">System</span>.out.println(x * y);
+        } <span class="kw">else</span> <span class="kw">if</span> (operator.equals(<span class="str">"/"</span>)) {
+            <span class="kw">if</span> (y != <span class="num">0</span>) {
+                <span class="type">System</span>.out.println(x / y);
+            } <span class="kw">else</span> {
+                <span class="type">System</span>.out.println(<span class="str">"Cannot divide by zero."</span>);
+            }
+        } <span class="kw">else</span> {
+            <span class="type">System</span>.out.println(<span class="str">"Unknown operator."</span>);
+        }
+
+        input.close();
+    }
+}</code></pre></div>
+<p>This program demonstrates:</p>
+<ul><li>string comparison,</li><li>an <code>if-else-if</code> chain,</li><li>nested decisions,</li><li>input validation.</li></ul>
+<hr>
+<h1>58. Example program: loan eligibility</h1>
+<p>Suppose a simplified lending system has the following rules:</p>
+<p>A person qualifies if:</p>
+<ul><li>age is at least 18,</li><li>annual income is at least $30,000,</li><li>credit score is at least 650.</li></ul>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> eligible =
+        age &gt;= <span class="num">18</span> &amp;&amp;
+        income &gt;= <span class="num">30000</span> &amp;&amp;
+        creditScore &gt;= <span class="num">650</span>;
+
+<span class="kw">if</span> (eligible) {
+    <span class="type">System</span>.out.println(<span class="str">"Basic eligibility requirements satisfied."</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Eligibility requirements not satisfied."</span>);
+}</code></pre></div>
+<p>Now suppose we want specific explanations:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &lt; <span class="num">18</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Applicant must be at least 18."</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (income &lt; <span class="num">30000</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Income requirement not satisfied."</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (creditScore &lt; <span class="num">650</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Credit score requirement not satisfied."</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Basic eligibility requirements satisfied."</span>);
+}</code></pre></div>
+<p>Both versions are valid.</p>
+<p>Which one is better depends on what the program needs to accomplish.</p>
+<hr>
+<h1>59. Boolean logic is the foundation of algorithms</h1>
+<p>Conditional logic may initially look like a small syntax topic.</p>
+<p>It is not.</p>
+<p>Nearly every important algorithm depends on making decisions.</p>
+<p>For example:</p>
+<p>Searching:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (currentValue == target) {</code></pre></div>
+<p>Sorting:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (leftValue &gt; rightValue) {</code></pre></div>
+<p>Binary search:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (target &lt; middleValue) {</code></pre></div>
+<p>Linked structures:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (current == <span class="lit">null</span>) {</code></pre></div>
+<p>Trees:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (key &lt; node.key) {</code></pre></div>
+<p>Graph algorithms:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (!visited[neighbor]) {</code></pre></div>
+<p>Object-oriented programs:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (account.isActive()) {</code></pre></div>
+<p>Learning to construct and reason about conditions precisely is therefore a fundamental computer science skill.</p>
+<hr>
+<h1>60. Common mistakes summary</h1>
+<h2>Mistake 1: using <code>=</code> instead of <code>==</code></h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x = <span class="num">5</span></code></pre></div>
+<p>when you intend comparison.</p>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x == <span class="num">5</span></code></pre></div>
+<hr>
+<h2>Mistake 2: comparing strings with <code>==</code></h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>name == <span class="str">"Alice"</span></code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>name.equals(<span class="str">"Alice"</span>)</code></pre></div>
+<hr>
+<h2>Mistake 3: using or for an inside range</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span> || age &lt;= <span class="num">65</span></code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span> &amp;&amp; age &lt;= <span class="num">65</span></code></pre></div>
+<hr>
+<h2>Mistake 4: using and for an outside range</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &lt; <span class="num">18</span> &amp;&amp; age &gt; <span class="num">65</span></code></pre></div>
+<p>Correct:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &lt; <span class="num">18</span> || age &gt; <span class="num">65</span></code></pre></div>
+<hr>
+<h2>Mistake 5: incorrect ordering</h2>
+<p>Incorrect:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">60</span>) {
+    ...
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">70</span>) {
+    ...
+}</code></pre></div>
+<p>Higher thresholds should usually be tested first when using this style.</p>
+<hr>
+<h2>Mistake 6: missing braces</h2>
+<p>Avoid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (condition)
+    statement1;
+    statement2;</code></pre></div>
+<p>Prefer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (condition) {
+    statement1;
+    statement2;
+}</code></pre></div>
+<hr>
+<h2>Mistake 7: confusing independent decisions with alternatives</h2>
+<p>Independent:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (...) {
+}
+
+<span class="kw">if</span> (...) {
+}</code></pre></div>
+<p>Mutually exclusive:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (...) {
+} <span class="kw">else</span> <span class="kw">if</span> (...) {
+} <span class="kw">else</span> {
+}</code></pre></div>
+<hr>
+<h1>61. Practice: predict the result</h1>
+<h3>Problem 1</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">7</span>;
+
+<span class="kw">if</span> (x &gt; <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A</code></pre></div>
+<hr>
+<h3>Problem 2</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">7</span>;
+
+<span class="kw">if</span> (x &gt; <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+}
+
+<span class="kw">if</span> (x &gt; <span class="num">6</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A
+B</code></pre></div>
+<hr>
+<h3>Problem 3</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> score = <span class="num">83</span>;
+
+<span class="kw">if</span> (score &gt;= <span class="num">90</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"A"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">80</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"B"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (score &gt;= <span class="num">70</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"C"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"F"</span>);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>B</code></pre></div>
+<hr>
+<h3>Problem 4</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">5</span>;
+
+<span class="kw">if</span> (x &gt; <span class="num">0</span> &amp;&amp; x &lt; <span class="num">10</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Inside"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Outside"</span>);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Inside</code></pre></div>
+<hr>
+<h1>62. Practice: write the condition</h1>
+<p>Write a Java Boolean expression for each statement.</p>
+<h3>A.</h3>
+<p><code>temperature</code> is below zero.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>temperature &lt; <span class="num">0</span></code></pre></div>
+<h3>B.</h3>
+<p><code>score</code> is at least 70.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>score &gt;= <span class="num">70</span></code></pre></div>
+<h3>C.</h3>
+<p><code>age</code> is between 18 and 65 inclusive.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">18</span> &amp;&amp; age &lt;= <span class="num">65</span></code></pre></div>
+<h3>D.</h3>
+<p><code>x</code> is outside the range 10 through 20.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>x &lt; <span class="num">10</span> || x &gt; <span class="num">20</span></code></pre></div>
+<h3>E.</h3>
+<p>The user is an administrator or a manager.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>isAdmin || isManager</code></pre></div>
+<h3>F.</h3>
+<p>The account is active and not locked.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>isActive &amp;&amp; !isLocked</code></pre></div>
+<hr>
+<h1>63. In-class exercise: ticket pricing</h1>
+<p>A movie theater charges:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Under age 5       Free
+Age 5–12          $8
+Age 13–64         $12
+Age 65 or older   $7</code></pre></div>
+<p>Write a Java program that asks for a customer's age and displays the ticket price.</p>
+<p>Possible solution:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &lt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Invalid age."</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (age &lt; <span class="num">5</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Free"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (age &lt;= <span class="num">12</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"$8"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (age &lt;= <span class="num">64</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"$12"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"$7"</span>);
+}</code></pre></div>
+<p>Discussion question:</p>
+<p>Why do we not need to write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>age &gt;= <span class="num">5</span> &amp;&amp; age &lt;= <span class="num">12</span></code></pre></div>
+<p>for the second pricing category?</p>
+<p>Because reaching that branch already tells us that <code>age &gt;= 5</code>.</p>
+<hr>
+<h1>64. In-class exercise: password rules</h1>
+<p>Suppose a password is acceptable when:</p>
+<ul><li>its length is at least 8 characters,</li><li>and it is not equal to <code>"password"</code>.</li></ul>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">String</span> password = input.next();
+
+<span class="kw">boolean</span> validLength = password.length() &gt;= <span class="num">8</span>;
+<span class="kw">boolean</span> notCommonPassword = !password.equals(<span class="str">"password"</span>);
+
+<span class="kw">if</span> (validLength &amp;&amp; notCommonPassword) {
+    <span class="type">System</span>.out.println(<span class="str">"Password accepted."</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"Password rejected."</span>);
+}</code></pre></div>
+<p>This exercise connects Boolean logic with methods that return values.</p>
+<hr>
+<h1>65. In-class exercise: point location</h1>
+<p>Given coordinates:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">double</span> x;
+<span class="kw">double</span> y;</code></pre></div>
+<p>determine whether a point is:</p>
+<ul><li>Quadrant I,</li><li>Quadrant II,</li><li>Quadrant III,</li><li>Quadrant IV,</li><li>or on an axis.</li></ul>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (x &gt; <span class="num">0</span> &amp;&amp; y &gt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Quadrant I"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (x &lt; <span class="num">0</span> &amp;&amp; y &gt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Quadrant II"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (x &lt; <span class="num">0</span> &amp;&amp; y &lt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Quadrant III"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (x &gt; <span class="num">0</span> &amp;&amp; y &lt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(<span class="str">"Quadrant IV"</span>);
+} <span class="kw">else</span> {
+    <span class="type">System</span>.out.println(<span class="str">"On an axis"</span>);
+}</code></pre></div>
+<p>This is a useful exercise for practicing combinations of Boolean conditions.</p>
+<hr>
+<h1>66. Challenge exercise: date validation</h1>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> month;
+<span class="kw">int</span> day;</code></pre></div>
+<p>determine whether the month is valid:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>month &gt;= <span class="num">1</span> &amp;&amp; month &lt;= <span class="num">12</span></code></pre></div>
+<p>Then determine whether the day is valid.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>January    31
+February   28
+March      31
+April      30
+...</code></pre></div>
+<p>Ignore leap years initially.</p>
+<p>This problem demonstrates that real-world validation frequently requires nested decision logic.</p>
+<hr>
+<h1>67. Mental model for conditionals</h1>
+<p>When reading an <code>if</code> statement, do not think:</p>
+<blockquote>Java somehow understands my intention.</blockquote>
+<p>Think mechanically.</p>
+<p>For:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> (score &gt;= <span class="num">80</span> &amp;&amp; attendance &gt;= <span class="num">75</span>) {</code></pre></div>
+<p>Java performs approximately this reasoning:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1. Retrieve score.
+2. Compare score with 80.
+3. Produce true or false.
+4. If necessary, retrieve attendance.
+5. Compare attendance with 75.
+6. Produce true or false.
+7. Combine the Boolean values using AND.
+8. If the final result is true, execute the block.
+9. Otherwise skip the block.</code></pre></div>
+<p>Computers execute precise instructions.</p>
+<p>They do not infer what a programmer intended to write.</p>
+<hr>
+<h1>68. Key takeaways</h1>
+<p>A Boolean expression evaluates to:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">true</span></code></pre></div>
+<p>or:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="lit">false</span></code></pre></div>
+<p>The major comparison operators are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>==
+!=
+&lt;
+&gt;
+&lt;=
+&gt;=</code></pre></div>
+<p>The major logical operators are:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>&amp;&amp;
+||
+!</code></pre></div>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span></code></pre></div>
+<p>for a conditional action.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> / <span class="kw">else</span></code></pre></div>
+<p>for two alternatives.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">if</span> / <span class="kw">else</span> <span class="kw">if</span> / <span class="kw">else</span></code></pre></div>
+<p>for multiple mutually exclusive alternatives.</p>
+<p>Use independent <code>if</code> statements when multiple conditions may all need to execute.</p>
+<p>Use:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>.equals()</code></pre></div>
+<p>rather than <code>==</code> to compare strings.</p>
+<p>For ranges:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>inside → &amp;&amp;
+outside → ||</code></pre></div>
+<p>Test boundary values carefully.</p>
+<p>Use braces consistently.</p>
+<p>Most importantly, learn to translate requirements into precise Boolean expressions.</p>
+<hr>
+<h1>69. Suggested lab</h1>
+<h2>Eligibility checker</h2>
+<p>Write a Java program that determines whether a student is eligible to register for a graduate course.</p>
+<p>Ask the user for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>GPA
+number of completed credits
+whether prerequisite was completed
+whether the student has an academic hold</code></pre></div>
+<p>The student is eligible if:</p>
+<ul><li>GPA is at least 3.0,</li><li>completed credits are at least 12,</li><li>the prerequisite has been completed,</li><li>and there is no academic hold.</li></ul>
+<p>The program should provide a useful explanation when the student is not eligible.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Enter GPA: 3.4
+Enter completed credits: 15
+Prerequisite completed? true
+Academic hold? false
+
+Student is eligible to register.</code></pre></div>
+<p>Another run:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Enter GPA: 2.7
+Enter completed credits: 15
+Prerequisite completed? true
+Academic hold? false
+
+Student is not eligible.
+Reason: GPA must be at least 3.0.</code></pre></div>
+<h3>Extension</h3>
+<p>Rather than stopping after the first failed requirement, display every failed requirement.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Student is not eligible.
+
+Reasons:
+- GPA must be at least 3.0.
+- Prerequisite has not been completed.</code></pre></div>
+<p>This requires recognizing that the validation checks should be independent rather than one <code>if-else-if</code> chain.</p>
+<hr>
+<h1>70. Suggested homework problems</h1>
+<h3>Problem 1 - number classification</h3>
+<p>Read an integer and report whether it is:</p>
+<ul><li>positive, negative, or zero,</li><li>even or odd.</li></ul>
+<hr>
+<h3>Problem 2 - largest of three</h3>
+<p>Read three numbers and display the largest.</p>
+<p>Handle equal values correctly.</p>
+<hr>
+<h3>Problem 3 - grade calculator</h3>
+<p>Read a numerical score from 0 through 100.</p>
+<p>Reject invalid scores.</p>
+<p>For valid scores, assign:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>90–100 A
+80–89  B
+70–79  C
+60–69  D
+0–59   F</code></pre></div>
+<hr>
+<h3>Problem 4 - shipping calculator</h3>
+<p>Read an order amount.</p>
+<p>Use the following rules:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>under $25       $7.99
+$25–49.99       $4.99
+$50–99.99       $2.99
+$100 or more    free</code></pre></div>
+<p>Display:</p>
+<ul><li>subtotal,</li><li>shipping,</li><li>final total.</li></ul>
+<hr>
+<h3>Problem 5 - triangle classifier</h3>
+<p>Read three side lengths.</p>
+<p>First determine whether they form a valid triangle.</p>
+<p>If they do, classify the triangle as:</p>
+<ul><li>equilateral,</li><li>isosceles,</li><li>scalene.</li></ul>
+<hr>
+<h3>Problem 6 - login simulation</h3>
+<p>Store a valid username and password in variables.</p>
+<p>Ask the user for both.</p>
+<p>Display:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Login successful</code></pre></div>
+<p>only if both are correct.</p>
+<p>Provide separate messages for:</p>
+<ul><li>unknown username,</li><li>incorrect password.</li></ul>
+<hr>
+<h3>Problem 7 - leap year</h3>
+<p>Read a year and determine whether it is a leap year.</p>
+<p>Use the standard leap-year rules.</p>
+<hr>
+<h1>71. Preparation for week 3</h1>
+<p>Next week we introduce <strong>loops</strong>.</p>
+<p>Conditionals allow a program to ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Should this code execute?</code></pre></div>
+<p>Loops allow a program to ask:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Should this code execute again?</code></pre></div>
+<p>For example, instead of writing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+<span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+<span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+<span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+<span class="type">System</span>.out.println(<span class="str">"Hello"</span>);</code></pre></div>
+<p>we will be able to write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (...) {
+    <span class="type">System</span>.out.println(<span class="str">"Hello"</span>);
+}</code></pre></div>
+<p>Conditionals and loops together form the fundamental control structures from which most algorithms are built.</p>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>

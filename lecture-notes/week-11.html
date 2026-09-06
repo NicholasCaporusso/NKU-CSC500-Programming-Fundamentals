@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lecture-notes.css">
+  <title>CSC500 - Programming fundamentals</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+<h1>CSC500 - Programming fundamentals</h1>
+<h2>Week 11: algorithm analysis, searching, and sorting</h2>
+<h2>1. Overview</h2>
+<p>Up to this point in the course, we have mostly asked:</p>
+<blockquote>Can we write a program that solves the problem?</blockquote>
+<p>This week, we introduce a second question:</p>
+<blockquote>How efficiently does the program solve the problem?</blockquote>
+<p>Two programs can produce exactly the same output but behave very differently as the amount of input data grows.</p>
+<p>For a collection containing 10 elements, those differences may not matter. For a collection containing 10 million elements, they can matter enormously.</p>
+<p>This week introduces three closely related topics:</p>
+<ol><li><strong>Algorithm analysis</strong></li><li><strong>Searching</strong></li><li><strong>Sorting</strong></li></ol>
+<p>Our main goal is not to memorize algorithms. The goal is to learn how to compare alternative solutions and reason about their performance.</p>
+<hr>
+<h1>2. Learning objectives</h1>
+<p>By the end of this week, you should be able to:</p>
+<ul><li>explain what an algorithm is;</li><li>distinguish an algorithm from a particular Java implementation;</li><li>identify the input size of a problem;</li><li>count important operations in simple algorithms;</li><li>explain why we focus on growth rate rather than exact running time;</li><li>interpret common Big-O complexity classes;</li><li>analyze simple loops and nested loops;</li><li>implement linear search;</li><li>explain and implement binary search;</li><li>explain why binary search requires sorted data;</li><li>compare linear search and binary search;</li><li>implement selection sort;</li><li>implement insertion sort;</li><li>reason about the time complexity of simple searching and sorting algorithms;</li><li>recognize that different algorithms can solve the same problem with dramatically different efficiency.</li></ul>
+<hr>
+<h1>Part I - algorithms and efficiency</h1>
+<h2>3. What is an algorithm?</h2>
+<p>An <strong>algorithm</strong> is a precise sequence of steps for solving a problem.</p>
+<p>Consider the problem:</p>
+<blockquote>Find the largest number in an array.</blockquote>
+<p>One algorithm is:</p>
+<ol><li>Assume the first element is the largest.</li><li>Examine every remaining element.</li><li>Whenever a larger element is found, remember it.</li><li>After all elements have been examined, return the remembered value.</li></ol>
+<p>In Java:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> findMax(<span class="kw">int</span>[] values) {
+    <span class="kw">int</span> max = values[<span class="num">0</span>];
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; values.length; i++) {
+        <span class="kw">if</span> (values[i] &gt; max) {
+            max = values[i];
+        }
+    }
+
+    <span class="kw">return</span> max;
+}</code></pre></div>
+<p>The algorithm is the general procedure.</p>
+<p>The Java code is one <strong>implementation</strong> of that algorithm.</p>
+<p>The distinction matters because the same algorithm could be implemented in Java, Python, C++, or another language.</p>
+<hr>
+<h1>4. What does it mean for an algorithm to be efficient?</h1>
+<p>There are several types of efficiency.</p>
+<p>Two especially important ones are:</p>
+<ul><li><strong>time efficiency</strong> - how much computation an algorithm performs;</li><li><strong>space efficiency</strong> - how much additional memory an algorithm uses.</li></ul>
+<p>In this course, we will focus primarily on time efficiency.</p>
+<p>Suppose two algorithms solve the same problem.</p>
+<p>Algorithm A performs roughly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n operations</code></pre></div>
+<p>Algorithm B performs roughly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n² operations</code></pre></div>
+<p>For small values of <code>n</code>, both might seem fast.</p>
+<p>If:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n = 10</code></pre></div>
+<p>then approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Algorithm A: 10 operations
+Algorithm B: 100 operations</code></pre></div>
+<p>That is not a major difference.</p>
+<p>But if:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n = 1,000,000</code></pre></div>
+<p>then approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Algorithm A: 1,000,000 operations
+Algorithm B: 1,000,000,000,000 operations</code></pre></div>
+<p>The difference becomes enormous.</p>
+<p>This is why computer scientists study how algorithms behave as the size of their input increases.</p>
+<hr>
+<h1>5. Input size</h1>
+<p>When analyzing an algorithm, we usually represent the size of its input using the variable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n</code></pre></div>
+<p>For an array:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] values;</code></pre></div>
+<p>we usually define:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n = values.length</code></pre></div>
+<p>If the array contains 100 elements, then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n = 100</code></pre></div>
+<p>If it contains 1 million elements:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n = 1,000,000</code></pre></div>
+<p>Not every problem measures input size in exactly the same way.</p>
+<p>Examples:</p>
+<table><thead><tr><th>Problem</th><th>Possible meaning of <code>n</code></th></tr></thead><tbody><tr><td>Searching an array</td><td>Number of elements</td></tr><tr><td>Sorting a list</td><td>Number of elements</td></tr><tr><td>Processing a string</td><td>Number of characters</td></tr><tr><td>Processing a file</td><td>Number of records</td></tr><tr><td>Working with a graph</td><td>Number of vertices and/or edges</td></tr></tbody></table>
+<p>Before analyzing an algorithm, always ask:</p>
+<blockquote>What does <code>n</code> represent?</blockquote>
+<hr>
+<h1>6. Counting operations</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="type">System</span>.out.println(values[i]);
+}</code></pre></div>
+<p>If the array contains <code>n</code> elements, the body of the loop executes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n times</code></pre></div>
+<p>We therefore say the amount of work grows approximately in proportion to <code>n</code>.</p>
+<p>Now consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; values.length; j++) {
+        <span class="type">System</span>.out.println(values[i] + <span class="str">" "</span> + values[j]);
+    }
+}</code></pre></div>
+<p>The outer loop runs <code>n</code> times.</p>
+<p>For every outer-loop iteration, the inner loop also runs <code>n</code> times.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n × n = n²</code></pre></div>
+<p>The body executes approximately <code>n²</code> times.</p>
+<p>This difference is one of the most important patterns to recognize in algorithm analysis.</p>
+<hr>
+<h1>7. Exact runtime is usually the wrong measure</h1>
+<p>We could measure an algorithm using a stopwatch.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Program A took 0.27 seconds.
+Program B took 0.31 seconds.</code></pre></div>
+<p>But this tells us relatively little about the algorithms themselves.</p>
+<p>Actual execution time depends on:</p>
+<ul><li>processor speed;</li><li>memory;</li><li>operating system;</li><li>Java version;</li><li>compiler and JVM optimizations;</li><li>other programs running on the machine;</li><li>characteristics of the particular input.</li></ul>
+<p>Instead, we want a machine-independent way to describe how computational effort grows.</p>
+<p>This leads us to <strong>asymptotic analysis</strong> and <strong>Big-O notation</strong>.</p>
+<hr>
+<h1>Part II - big-o notation</h1>
+<h2>8. The basic idea</h2>
+<p>Big-O notation describes how the amount of work performed by an algorithm grows as the input size grows.</p>
+<p>Suppose an algorithm performs:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3n + 5</code></pre></div>
+<p>operations.</p>
+<p>As <code>n</code> becomes very large, the <code>3n</code> term dominates the constant <code>5</code>.</p>
+<p>We therefore classify the algorithm as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>Read this as:</p>
+<blockquote>Big-O of n</blockquote>
+<p>or:</p>
+<blockquote>Order n</blockquote>
+<p>The important idea is that we focus on the <strong>growth rate</strong>.</p>
+<hr>
+<h1>9. Ignore constant factors</h1>
+<p>Suppose one algorithm performs:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5n</code></pre></div>
+<p>operations.</p>
+<p>Another performs:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>100n</code></pre></div>
+<p>Both are classified as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>Why?</p>
+<p>Because doubling <code>n</code> approximately doubles the work for both algorithms.</p>
+<p>Their growth pattern is the same.</p>
+<p>This does <strong>not</strong> mean constants never matter in real programs.</p>
+<p>It means Big-O deliberately ignores them so that we can reason about scalability.</p>
+<hr>
+<h1>10. Ignore lower-order terms</h1>
+<p>Suppose the number of operations is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4n² + 7n + 12</code></pre></div>
+<p>For very large <code>n</code>, the <code>n²</code> term dominates.</p>
+<p>So we classify the algorithm as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>Similarly:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n + 10       → O(n)
+
+3n² + n      → O(n²)
+
+7            → O(1)
+
+n³ + n² + n → O(n³)</code></pre></div>
+<hr>
+<h1>11. Common complexity classes</h1>
+<p>You should become familiar with the following growth rates.</p>
+<h2>O(1) - constant time</h2>
+<p>The amount of work does not grow with the input size.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> first = values[<span class="num">0</span>];</code></pre></div>
+<p>Accessing an array element by index takes roughly the same amount of time whether the array contains 10 elements or 10 million.</p>
+<p>Another example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">return</span> values[values.length - <span class="num">1</span>];</code></pre></div>
+<p>Complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<hr>
+<h2>O(log n) - logarithmic time</h2>
+<p>The problem gets significantly smaller after each operation.</p>
+<p>Binary search is the most important example we will study.</p>
+<p>For binary search, each step eliminates approximately half of the remaining possibilities.</p>
+<p>Complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<p>Logarithmic algorithms scale extremely well.</p>
+<hr>
+<h2>O(n) - linear time</h2>
+<p>The amount of work increases proportionally with the input size.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> value : values) {
+    <span class="type">System</span>.out.println(value);
+}</code></pre></div>
+<p>Complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>If the input doubles, the amount of work roughly doubles.</p>
+<hr>
+<h2>O(n log n)</h2>
+<p>Many efficient sorting algorithms have this complexity.</p>
+<p>Examples include:</p>
+<ul><li>merge sort;</li><li>heapsort;</li><li>average-case quicksort.</li></ul>
+<p>We will encounter these algorithms later in computer science courses.</p>
+<p>For now, recognize that:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n log n)</code></pre></div>
+<p>grows substantially more slowly than:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<hr>
+<h2>O(n²) - quadratic time</h2>
+<p>Quadratic behavior often appears when we process all pairs of input elements.</p>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        <span class="cmt">// constant-time work</span>
+    }
+}</code></pre></div>
+<p>Complexity:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>Selection sort and insertion sort have quadratic worst-case behavior.</p>
+<hr>
+<h2>O(2ⁿ) - exponential time</h2>
+<p>The amount of work roughly doubles whenever <code>n</code> increases by 1.</p>
+<p>These algorithms become impractical very quickly.</p>
+<p>Certain naive recursive algorithms can exhibit exponential behavior.</p>
+<hr>
+<h1>12. Comparing growth rates</h1>
+<p>Consider these values:</p>
+<table><thead><tr><th>n</th><th>log₂ n</th><th>n</th><th>n log₂ n</th><th>n²</th></tr></thead><tbody><tr><td>10</td><td>~3</td><td>10</td><td>~33</td><td>100</td></tr><tr><td>100</td><td>~7</td><td>100</td><td>~664</td><td>10,000</td></tr><tr><td>1,000</td><td>~10</td><td>1,000</td><td>~9,966</td><td>1,000,000</td></tr><tr><td>1,000,000</td><td>~20</td><td>1,000,000</td><td>~20,000,000</td><td>1,000,000,000,000</td></tr></tbody></table>
+<p>Notice how slowly logarithmic growth increases.</p>
+<p>For one million elements:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>log₂(1,000,000) ≈ 20</code></pre></div>
+<p>This fact explains the power of binary search.</p>
+<hr>
+<h1>Part III - analyzing Java code</h1>
+<h2>13. Sequential statements</h2>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = values[<span class="num">0</span>];
+
+<span class="kw">for</span> (<span class="kw">int</span> value : values) {
+    <span class="type">System</span>.out.println(value);
+}</code></pre></div>
+<p>The first statement is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<p>The loop is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>Together:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1) + O(n)</code></pre></div>
+<p>The dominant term is <code>n</code>.</p>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h1>14. Consecutive loops</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> value : values) {
+    <span class="type">System</span>.out.println(value);
+}
+
+<span class="kw">for</span> (<span class="kw">int</span> value : values) {
+    <span class="type">System</span>.out.println(value * <span class="num">2</span>);
+}</code></pre></div>
+<p>Each loop runs <code>n</code> times.</p>
+<p>Total work:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n + n = 2n</code></pre></div>
+<p>Ignore the constant factor:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>A common mistake is to assume that two loops always mean <code>O(n²)</code>.</p>
+<p>They do not.</p>
+<p>Nested loops multiply.</p>
+<p>Consecutive loops add.</p>
+<hr>
+<h1>15. Nested loops</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        <span class="type">System</span>.out.println(i + <span class="str">", "</span> + j);
+    }
+}</code></pre></div>
+<p>The outer loop executes <code>n</code> times.</p>
+<p>For each iteration, the inner loop executes <code>n</code> times.</p>
+<p>Total:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n × n = n²</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<hr>
+<h1>16. A triangular nested loop</h1>
+<p>What about:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; i; j++) {
+        <span class="type">System</span>.out.println(i + <span class="str">", "</span> + j);
+    }
+}</code></pre></div>
+<p>The number of iterations is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0 + 1 + 2 + 3 + ... + (n - 1)</code></pre></div>
+<p>This sum is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n(n - 1) / 2</code></pre></div>
+<p>which is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n² / 2</code></pre></div>
+<p>Ignoring constants and lower-order terms:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>The inner loop does not need to execute exactly <code>n</code> times for the overall algorithm to be quadratic.</p>
+<hr>
+<h1>Part IV - searching</h1>
+<h2>17. The search problem</h2>
+<p>A common computational problem is:</p>
+<blockquote>Given a collection of values and a target, determine whether the target appears in the collection.</blockquote>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Array:
+[14, 8, 21, 5, 17]
+
+Target:
+21</code></pre></div>
+<p>A search algorithm should determine that <code>21</code> appears in the array.</p>
+<p>It may return:</p>
+<ul><li><code>true</code> or <code>false</code>;</li><li>the index where the element occurs;</li><li>the element itself.</li></ul>
+<p>We will use the convention of returning the index and returning <code>-1</code> if the element is not found.</p>
+<hr>
+<h1>18. Linear search</h1>
+<p>The simplest searching algorithm is <strong>linear search</strong>.</p>
+<p>The idea:</p>
+<ol><li>Start with the first element.</li><li>Compare it to the target.</li><li>If it matches, return its index.</li><li>Otherwise examine the next element.</li><li>Continue until the target is found or the array ends.</li></ol>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Array:
+[12, 7, 19, 4, 25]
+
+Target:
+19</code></pre></div>
+<p>Search:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>12 → not 19
+ 7 → not 19
+19 → found</code></pre></div>
+<p>The answer is index:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2</code></pre></div>
+<hr>
+<h1>19. Linear search in Java</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> linearSearch(<span class="kw">int</span>[] values, <span class="kw">int</span> target) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+        <span class="kw">if</span> (values[i] == target) {
+            <span class="kw">return</span> i;
+        }
+    }
+
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] numbers = {<span class="num">12</span>, <span class="num">7</span>, <span class="num">19</span>, <span class="num">4</span>, <span class="num">25</span>};
+
+<span class="kw">int</span> index = linearSearch(numbers, <span class="num">19</span>);
+
+<span class="type">System</span>.out.println(index);</code></pre></div>
+<p>Output:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2</code></pre></div>
+<hr>
+<h1>20. Analyzing linear search</h1>
+<p>Suppose the array contains <code>n</code> elements.</p>
+<h3>Best case</h3>
+<p>The target is the first element.</p>
+<p>Only one comparison is required.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<h3>Worst case</h3>
+<p>The target is:</p>
+<ul><li>the last element; or</li><li>not present at all.</li></ul>
+<p>We must inspect all <code>n</code> elements.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<h3>Average case</h3>
+<p>On average, we examine some constant fraction of the array.</p>
+<p>That is still linear growth.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>When we state the complexity of linear search, we commonly say:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h1>21. Does linear search require sorted data?</h1>
+<p>No.</p>
+<p>Linear search works on:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[8, 17, 2, 91, 4]</code></pre></div>
+<p>and also on:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 4, 8, 17, 91]</code></pre></div>
+<p>Its advantage is simplicity.</p>
+<p>Its disadvantage is that it may have to examine every element.</p>
+<hr>
+<h1>Part V - binary search</h1>
+<h2>22. The key idea</h2>
+<p>Suppose we want to find the number <code>73</code> in the following sorted array:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[4, 11, 19, 27, 32, 45, 58, 66, 73, 81, 90]</code></pre></div>
+<p>A linear search would start at the beginning.</p>
+<p>Binary search does something smarter.</p>
+<p>It looks near the middle.</p>
+<p>Suppose the middle value is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>45</code></pre></div>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>73 &gt; 45</code></pre></div>
+<p>and the array is sorted, we know that <code>73</code> cannot appear anywhere to the left of <code>45</code>.</p>
+<p>We can immediately discard approximately half of the array.</p>
+<p>That is the crucial insight.</p>
+<hr>
+<h1>23. Binary search procedure</h1>
+<p>Given a sorted array:</p>
+<ol><li>Identify the middle element.</li><li>Compare the middle element with the target.</li><li>If they are equal, we are done.</li><li>If the target is smaller, search only the left half.</li><li>If the target is larger, search only the right half.</li><li>Repeat.</li></ol>
+<p>Each comparison removes approximately half of the remaining search space.</p>
+<hr>
+<h1>24. Binary search example</h1>
+<p>Search for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>31</code></pre></div>
+<p>in:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 7, 12, 18, 22, 27, 31, 36, 42, 49, 55]</code></pre></div>
+<p>First range:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 7, 12, 18, 22, 27, 31, 36, 42, 49, 55]
+                    ^
+                   27</code></pre></div>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>31 &gt; 27</code></pre></div>
+<p>discard the left half.</p>
+<p>Remaining:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[31, 36, 42, 49, 55]
+         ^
+        42</code></pre></div>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>31 &lt; 42</code></pre></div>
+<p>discard the right half.</p>
+<p>Remaining:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[31, 36]
+ ^
+31</code></pre></div>
+<p>Found.</p>
+<p>We searched an 11-element array in only three comparisons.</p>
+<hr>
+<h1>25. Binary search in Java</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> binarySearch(<span class="kw">int</span>[] values, <span class="kw">int</span> target) {
+    <span class="kw">int</span> low = <span class="num">0</span>;
+    <span class="kw">int</span> high = values.length - <span class="num">1</span>;
+
+    <span class="kw">while</span> (low &lt;= high) {
+        <span class="kw">int</span> mid = low + (high - low) / <span class="num">2</span>;
+
+        <span class="kw">if</span> (values[mid] == target) {
+            <span class="kw">return</span> mid;
+        } <span class="kw">else</span> <span class="kw">if</span> (target &lt; values[mid]) {
+            high = mid - <span class="num">1</span>;
+        } <span class="kw">else</span> {
+            low = mid + <span class="num">1</span>;
+        }
+    }
+
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</code></pre></div>
+<p>Three variables define the current search region:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>low
+high
+mid</code></pre></div>
+<p>At all times, if the target exists, it must be between:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>low and high</code></pre></div>
+<hr>
+<h1>26. Why use this formula for <code>mid</code>?</h1>
+<p>You may see:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> mid = (low + high) / <span class="num">2</span>;</code></pre></div>
+<p>For many beginner programs, this works.</p>
+<p>A safer version is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> mid = low + (high - low) / <span class="num">2</span>;</code></pre></div>
+<p>The second version avoids possible integer overflow when <code>low</code> and <code>high</code> are very large.</p>
+<p>The important conceptual point is simply that <code>mid</code> represents the middle of the current search interval.</p>
+<hr>
+<h1>27. Binary search requires sorted data</h1>
+<p>Binary search relies on statements like:</p>
+<blockquote>Since the target is greater than the middle value, it cannot be in the left half.</blockquote>
+<p>That reasoning only works if the values are ordered.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[40, 2, 99, 7, 15]</code></pre></div>
+<p>Suppose the middle value is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>99</code></pre></div>
+<p>and we are looking for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>40</code></pre></div>
+<p>Because <code>40 &lt; 99</code>, binary search might discard the right side.</p>
+<p>But the relative position of <code>40</code> tells us nothing useful because the array is not sorted.</p>
+<p>Therefore:</p>
+<blockquote><strong>Binary search requires sorted data.</strong></blockquote>
+<p>This is a precondition of the algorithm.</p>
+<hr>
+<h1>28. Why is binary search o(log n)?</h1>
+<p>Suppose an array contains:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1,024 elements</code></pre></div>
+<p>Each comparison approximately halves the remaining data:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1024
+512
+256
+128
+64
+32
+16
+8
+4
+2
+1</code></pre></div>
+<p>It takes roughly 10 halvings.</p>
+<p>Why?</p>
+<p>Because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2¹⁰ = 1024</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>log₂(1024) = 10</code></pre></div>
+<p>In general, the number of times we can repeatedly divide <code>n</code> by 2 is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>log₂ n</code></pre></div>
+<p>So binary search runs in:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<hr>
+<h1>29. Linear search vs. binary search</h1>
+<table><thead><tr><th>Property</th><th>Linear Search</th><th>Binary Search</th></tr></thead><tbody><tr><td>Requires sorted data?</td><td>No</td><td>Yes</td></tr><tr><td>Worst-case complexity</td><td>O(n)</td><td>O(log n)</td></tr><tr><td>Easy to implement?</td><td>Very</td><td>Moderately</td></tr><tr><td>Works on unsorted arrays?</td><td>Yes</td><td>No</td></tr><tr><td>Eliminates half each step?</td><td>No</td><td>Yes</td></tr></tbody></table>
+<p>For one million elements:</p>
+<h3>Linear search</h3>
+<p>Potentially:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1,000,000 comparisons</code></pre></div>
+<h3>Binary search</h3>
+<p>Approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>20 comparisons</code></pre></div>
+<p>This is an enormous difference.</p>
+<hr>
+<h1>30. But sorting has a cost</h1>
+<p>Suppose your data is not already sorted.</p>
+<p>You cannot simply say:</p>
+<blockquote>Binary search is faster, so always use binary search.</blockquote>
+<p>You might first have to sort the data.</p>
+<p>That sorting process itself takes time.</p>
+<p>If you need to search only once, sorting first may not be worthwhile.</p>
+<p>If you need to search the same dataset thousands of times, sorting once and then using binary search repeatedly may be extremely beneficial.</p>
+<p>Algorithm choice depends on the larger context.</p>
+<p>This is an important principle:</p>
+<blockquote>The fastest individual operation does not always produce the best overall solution.</blockquote>
+<hr>
+<h1>Part VI - sorting</h1>
+<h2>31. What is sorting?</h2>
+<p>Sorting means rearranging data according to some ordering.</p>
+<p>For numbers:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Before:
+[7, 2, 9, 1, 5]
+
+After:
+[1, 2, 5, 7, 9]</code></pre></div>
+<p>For strings:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Before:
+["pear", "apple", "orange"]
+
+After:
+["apple", "orange", "pear"]</code></pre></div>
+<p>Sorting is useful because organized data is often easier to:</p>
+<ul><li>search;</li><li>display;</li><li>compare;</li><li>group;</li><li>analyze.</li></ul>
+<p>Many computer science problems involve sorting either directly or indirectly.</p>
+<hr>
+<h1>Part VII - selection sort</h1>
+<h2>32. Selection sort idea</h2>
+<p>Selection sort repeatedly chooses the smallest remaining value.</p>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[29, 10, 14, 37, 13]</code></pre></div>
+<p>We divide the array conceptually into:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sorted region | unsorted region</code></pre></div>
+<p>Initially:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>| 29 10 14 37 13</code></pre></div>
+<p>Find the smallest element:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10</code></pre></div>
+<p>Swap it with the first position:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 | 29 14 37 13</code></pre></div>
+<p>Now find the smallest value in the remaining unsorted region:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>13</code></pre></div>
+<p>Swap:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 13 | 14 37 29</code></pre></div>
+<p>Continue:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 13 14 | 37 29</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10 13 14 29 | 37</code></pre></div>
+<p>Finished.</p>
+<hr>
+<h1>33. Selection sort in Java</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> selectionSort(<span class="kw">int</span>[] values) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length - <span class="num">1</span>; i++) {
+
+        <span class="kw">int</span> minIndex = i;
+
+        <span class="kw">for</span> (<span class="kw">int</span> j = i + <span class="num">1</span>; j &lt; values.length; j++) {
+            <span class="kw">if</span> (values[j] &lt; values[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        <span class="kw">int</span> temp = values[i];
+        values[i] = values[minIndex];
+        values[minIndex] = temp;
+    }
+}</code></pre></div>
+<hr>
+<h1>34. Understanding selection sort</h1>
+<p>The variable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>i</code></pre></div>
+<p>represents the position we are currently filling.</p>
+<p>The variable:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>minIndex</code></pre></div>
+<p>stores the location of the smallest value found so far.</p>
+<p>The inner loop searches the unsorted region.</p>
+<p>Then we swap the smallest value into position <code>i</code>.</p>
+<hr>
+<h1>35. Tracing selection sort</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[6, 3, 8, 2, 5]</code></pre></div>
+<h3>Pass 1</h3>
+<p>Find smallest among:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>6 3 8 2 5</code></pre></div>
+<p>Smallest:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2</code></pre></div>
+<p>Swap with <code>6</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 3, 8, 6, 5]</code></pre></div>
+<h3>Pass 2</h3>
+<p>Search:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3 8 6 5</code></pre></div>
+<p>Smallest:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3</code></pre></div>
+<p>Already in correct position.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 3, 8, 6, 5]</code></pre></div>
+<h3>Pass 3</h3>
+<p>Search:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>8 6 5</code></pre></div>
+<p>Smallest:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>5</code></pre></div>
+<p>Swap:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 3, 5, 6, 8]</code></pre></div>
+<h3>Pass 4</h3>
+<p>Search:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>6 8</code></pre></div>
+<p>Smallest:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>6</code></pre></div>
+<p>Finished:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 3, 5, 6, 8]</code></pre></div>
+<hr>
+<h1>36. Complexity of selection sort</h1>
+<p>The first pass examines approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n elements</code></pre></div>
+<p>The second examines approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n - 1</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n - 2</code></pre></div>
+<p>and so on.</p>
+<p>Total comparisons are approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n + (n - 1) + (n - 2) + ... + 1</code></pre></div>
+<p>which is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n² / 2</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>Notice something interesting:</p>
+<p>Even if the array is already sorted, selection sort still searches the remaining unsorted region on every pass.</p>
+<p>Its best and worst cases are therefore both quadratic in terms of comparisons.</p>
+<hr>
+<h1>Part VIII - insertion sort</h1>
+<h2>37. The basic idea</h2>
+<p>Insertion sort works similarly to the way people often organize playing cards in their hands.</p>
+<p>Imagine you receive cards one at a time.</p>
+<p>You keep the cards already in your hand sorted.</p>
+<p>Whenever you receive a new card, you move it left until it reaches the correct position.</p>
+<p>That is essentially insertion sort.</p>
+<hr>
+<h1>38. Insertion sort example</h1>
+<p>Start with:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[7, 4, 5, 2]</code></pre></div>
+<p>Treat the first value as already sorted:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>7 | 4 5 2</code></pre></div>
+<p>Insert <code>4</code> into the sorted portion:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4 7 | 5 2</code></pre></div>
+<p>Insert <code>5</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>4 5 7 | 2</code></pre></div>
+<p>Insert <code>2</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>2 4 5 7</code></pre></div>
+<p>Done.</p>
+<hr>
+<h1>39. Insertion sort in Java</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> insertionSort(<span class="kw">int</span>[] values) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; values.length; i++) {
+
+        <span class="kw">int</span> current = values[i];
+        <span class="kw">int</span> j = i - <span class="num">1</span>;
+
+        <span class="kw">while</span> (j &gt;= <span class="num">0</span> &amp;&amp; values[j] &gt; current) {
+            values[j + <span class="num">1</span>] = values[j];
+            j--;
+        }
+
+        values[j + <span class="num">1</span>] = current;
+    }
+}</code></pre></div>
+<hr>
+<h1>40. Understanding the code</h1>
+<p>Suppose:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 7, 9, 4, 8]</code></pre></div>
+<p>and:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>current = <span class="num">4</span>;</code></pre></div>
+<p>The left portion is already sorted:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 7, 9]</code></pre></div>
+<p>We need to insert <code>4</code>.</p>
+<p>Compare with <code>9</code>.</p>
+<p>Shift <code>9</code> right:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 7, 9, 9, 8]</code></pre></div>
+<p>Compare with <code>7</code>.</p>
+<p>Shift <code>7</code> right:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 7, 7, 9, 8]</code></pre></div>
+<p>Compare with <code>3</code>.</p>
+<p>Since:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>3 &lt; 4</code></pre></div>
+<p>stop shifting.</p>
+<p>Insert <code>4</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 4, 7, 9, 8]</code></pre></div>
+<p>The sorted region has grown by one element.</p>
+<hr>
+<h1>41. Complexity of insertion sort</h1>
+<p>In the worst case, the array may be in reverse order:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[5, 4, 3, 2, 1]</code></pre></div>
+<p>Each new value may need to move across nearly the entire sorted portion.</p>
+<p>The number of operations grows approximately as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1 + 2 + 3 + ... + (n - 1)</code></pre></div>
+<p>Therefore the worst-case complexity is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>However, insertion sort has an interesting advantage.</p>
+<p>Suppose the array is already sorted:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[1, 2, 3, 4, 5]</code></pre></div>
+<p>The inner loop does almost no work.</p>
+<p>The algorithm can finish in approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>in the best case.</p>
+<p>Insertion sort can therefore perform quite well on small or nearly sorted datasets.</p>
+<hr>
+<h1>42. Selection sort vs. insertion sort</h1>
+<table><thead><tr><th>Property</th><th>Selection Sort</th><th>Insertion Sort</th></tr></thead><tbody><tr><td>Worst case</td><td>O(n²)</td><td>O(n²)</td></tr><tr><td>Best case</td><td>O(n²)</td><td>O(n)</td></tr><tr><td>Main idea</td><td>Repeatedly select minimum</td><td>Insert each item into sorted region</td></tr><tr><td>Data movement</td><td>Relatively few swaps</td><td>Potentially many shifts</td></tr><tr><td>Good for teaching?</td><td>Yes</td><td>Yes</td></tr><tr><td>Used for huge datasets?</td><td>Usually no</td><td>Usually no</td></tr></tbody></table>
+<p>The important point is not that one is universally better.</p>
+<p>The important point is that algorithms have different performance characteristics.</p>
+<hr>
+<h1>Part IX - why do we study slow sorting algorithms?</h1>
+<h2>43. A reasonable question</h2>
+<p>If selection sort is <code>O(n²)</code>, and faster sorting algorithms exist, why study it?</p>
+<p>Because simple algorithms help us understand important concepts:</p>
+<ul><li>nested loops;</li><li>invariants;</li><li>swapping;</li><li>partitioning data into processed and unprocessed regions;</li><li>algorithm analysis;</li><li>comparison of alternative strategies.</li></ul>
+<p>Selection sort and insertion sort are conceptually manageable enough that we can understand every operation.</p>
+<p>Later, more sophisticated sorting algorithms build on similar reasoning.</p>
+<hr>
+<h1>44. Java already knows how to sort</h1>
+<p>In normal Java programs, we often use a library method instead of implementing a sorting algorithm ourselves.</p>
+<p>For arrays:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Arrays</span>;
+
+<span class="kw">int</span>[] numbers = {<span class="num">7</span>, <span class="num">2</span>, <span class="num">9</span>, <span class="num">1</span>, <span class="num">5</span>};
+
+<span class="type">Arrays</span>.sort(numbers);</code></pre></div>
+<p>For lists:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">ArrayList</span>;
+<span class="kw">import</span> java.util.<span class="type">Collections</span>;
+
+<span class="type">ArrayList</span>&lt;<span class="type">Integer</span>&gt; numbers = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+numbers.add(<span class="num">7</span>);
+numbers.add(<span class="num">2</span>);
+numbers.add(<span class="num">9</span>);
+
+<span class="type">Collections</span>.sort(numbers);</code></pre></div>
+<p>Why implement sorting ourselves in this class?</p>
+<p>Because our goal is not merely to produce a sorted array.</p>
+<p>Our goal is to understand how algorithms work.</p>
+<p>This distinction appears throughout computer science:</p>
+<blockquote>In application development, use good libraries.  
+In computer science education, understand what those libraries are doing conceptually.</blockquote>
+<hr>
+<h1>Part X - empirical analysis</h1>
+<h2>45. Theory and experiment</h2>
+<p>Big-O gives us a theoretical model.</p>
+<p>We can also measure algorithms experimentally.</p>
+<p>For example:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">long</span> start = <span class="type">System</span>.nanoTime();
+
+selectionSort(values);
+
+<span class="kw">long</span> end = <span class="type">System</span>.nanoTime();
+
+<span class="kw">long</span> elapsed = end - start;
+
+<span class="type">System</span>.out.println(elapsed);</code></pre></div>
+<p>This produces an empirical measurement of running time.</p>
+<p>But individual measurements can be noisy.</p>
+<p>To perform a meaningful experiment, we might:</p>
+<ol><li>Generate arrays of different sizes.</li><li>Run the algorithm several times.</li><li>Average the measurements.</li><li>Compare how runtime changes as <code>n</code> increases.</li></ol>
+<hr>
+<h1>46. An experiment</h1>
+<p>Suppose we time selection sort using arrays of increasing size.</p>
+<p>Imagine we observe:</p>
+<table><thead><tr><th>n</th><th>Approximate time</th></tr></thead><tbody><tr><td>1,000</td><td>2 ms</td></tr><tr><td>2,000</td><td>8 ms</td></tr><tr><td>4,000</td><td>32 ms</td></tr><tr><td>8,000</td><td>128 ms</td></tr></tbody></table>
+<p>Notice what happens when <code>n</code> doubles:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1,000 → 2,000</code></pre></div>
+<p>Runtime increases by approximately four times.</p>
+<p>Why?</p>
+<p>Because:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>(2n)² = 4n²</code></pre></div>
+<p>This behavior is consistent with an:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>algorithm.</p>
+<hr>
+<h1>47. Experimental evidence does not replace analysis</h1>
+<p>Suppose an algorithm appears fast when tested on:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n = 100</code></pre></div>
+<p>That does not prove it scales well.</p>
+<p>Likewise, benchmarking can be influenced by:</p>
+<ul><li>JVM startup;</li><li>garbage collection;</li><li>caching;</li><li>processor scheduling;</li><li>other applications;</li><li>input distribution.</li></ul>
+<p>We therefore use both:</p>
+<p><strong>theoretical analysis</strong></p>
+<p>and</p>
+<p><strong>experimental measurement</strong></p>
+<p>to understand algorithms.</p>
+<hr>
+<h1>Part XI - important distinctions</h1>
+<h2>48. Best case, worst case, and average case</h2>
+<p>The same algorithm may require different amounts of work for different inputs.</p>
+<h3>Linear search</h3>
+<p>Array:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[7, 4, 9, 3, 8]</code></pre></div>
+<p>Searching for <code>7</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>best case</code></pre></div>
+<p>One comparison.</p>
+<p>Searching for <code>100</code>:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>worst case</code></pre></div>
+<p>Every element must be checked.</p>
+<p>We therefore sometimes describe:</p>
+<ul><li>best-case complexity;</li><li>worst-case complexity;</li><li>average-case complexity.</li></ul>
+<p>Unless otherwise specified, introductory discussions of Big-O frequently focus on the worst-case upper growth rate.</p>
+<hr>
+<h1>49. Big-o is not a stopwatch</h1>
+<p>If algorithm A is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>and algorithm B is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<p>that does not guarantee A is faster for every possible input size.</p>
+<p>For very small <code>n</code>, constants and implementation details can dominate.</p>
+<p>Big-O tells us primarily how algorithms behave as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>n becomes large.</code></pre></div>
+<hr>
+<h1>50. Big-o describes growth, not exact work</h1>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    doSomething();
+}</code></pre></div>
+<p>Suppose <code>doSomething()</code> takes 500 machine instructions.</p>
+<p>The loop might really involve something like:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>500n</code></pre></div>
+<p>operations.</p>
+<p>But:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>500n</code></pre></div>
+<p>still has linear growth.</p>
+<p>So we write:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h1>Part XII - worked examples</h1>
+<h2>51. Example 1</h2>
+<p>What is the complexity?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(values[<span class="num">0</span>]);</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<hr>
+<h1>52. Example 2</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="type">System</span>.out.println(values[i]);
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h1>53. Example 3</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; values.length; j++) {
+        <span class="type">System</span>.out.println(values[i] + values[j]);
+    }
+}</code></pre></div>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<hr>
+<h1>54. Example 4</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="type">System</span>.out.println(values[i]);
+}
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="type">System</span>.out.println(values[i] * <span class="num">2</span>);
+}</code></pre></div>
+<p>The first loop:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>The second loop:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>Total:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n + n)</code></pre></div>
+<p>which becomes:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<hr>
+<h1>55. Example 5</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; <span class="num">10</span>; j++) {
+        <span class="type">System</span>.out.println(values[i]);
+    }
+}</code></pre></div>
+<p>The outer loop runs <code>n</code> times.</p>
+<p>The inner loop always runs exactly 10 times.</p>
+<p>Total:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>10n</code></pre></div>
+<p>Ignore the constant:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<p>A nested loop does <strong>not automatically mean O(n²)</strong>.</p>
+<p>The number of iterations matters.</p>
+<hr>
+<h1>56. Example 6</h1>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> n = values.length;
+
+<span class="kw">while</span> (n &gt; <span class="num">1</span>) {
+    n = n / <span class="num">2</span>;
+}</code></pre></div>
+<p>Every iteration halves <code>n</code>.</p>
+<p>The number of iterations is approximately:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>log₂ n</code></pre></div>
+<p>Therefore:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<p>This same pattern appears in binary search.</p>
+<hr>
+<h1>Part XIII - common mistakes</h1>
+<h2>57. Mistake: "every loop is o(n)"</h2>
+<p>No.</p>
+<p>Consider:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">100</span>; i++) {
+    ...
+}</code></pre></div>
+<p>This always performs 100 iterations regardless of the size of the input.</p>
+<p>Therefore, relative to input size <code>n</code>, it is:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<hr>
+<h1>58. Mistake: "two loops mean o(n²)"</h1>
+<p>Not necessarily.</p>
+<p>Consecutive loops:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (...) {
+}
+
+<span class="kw">for</span> (...) {
+}</code></pre></div>
+<p>often give:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n + n) = O(n)</code></pre></div>
+<p>Nested loops:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (...) {
+    <span class="kw">for</span> (...) {
+    }
+}</code></pre></div>
+<p>often give:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<hr>
+<h1>59. Mistake: binary search works on any array</h1>
+<p>False.</p>
+<p>Binary search requires:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>sorted data</code></pre></div>
+<p>Without sorting, comparing the target with the middle value tells us nothing about which half can safely be discarded.</p>
+<hr>
+<h1>60. Mistake: o(n²) means exactly n² operations</h1>
+<p>False.</p>
+<p>Big-O describes a growth class.</p>
+<p>An algorithm performing:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>0.5n² + 20n + 7</code></pre></div>
+<p>is still:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<hr>
+<h1>61. Mistake: faster big-o always means faster for every input</h1>
+<p>False.</p>
+<p>For small data, implementation details may matter more.</p>
+<p>Big-O is primarily a statement about scalability.</p>
+<hr>
+<h1>Part XIV - a broader view of algorithm choice</h1>
+<h2>62. Algorithms encode tradeoffs</h2>
+<p>Suppose you have a million unsorted records and need to search them once.</p>
+<p>Linear search may be completely reasonable.</p>
+<p>Suppose you have the same million records and need to search them one million times.</p>
+<p>Now it may be worthwhile to:</p>
+<ol><li>sort the records;</li><li>perform repeated binary searches.</li></ol>
+<p>Later in computer science, you will encounter data structures that provide even more sophisticated tradeoffs.</p>
+<p>Examples include:</p>
+<ul><li>hash tables;</li><li>balanced search trees;</li><li>heaps;</li><li>graphs.</li></ul>
+<p>An important skill in computer science is not merely knowing algorithms.</p>
+<p>It is knowing:</p>
+<blockquote>Which algorithm or data structure is appropriate for this situation?</blockquote>
+<hr>
+<h1>Part XV - in-class exercises</h1>
+<h2>Exercise 1: count the work</h2>
+<p>Determine the Big-O complexity.</p>
+<h3>A</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = values[<span class="num">0</span>];</code></pre></div>
+<h3>B</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="type">System</span>.out.println(values[i]);
+}</code></pre></div>
+<h3>C</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; values.length; j++) {
+        <span class="type">System</span>.out.println(values[i] * values[j]);
+    }
+}</code></pre></div>
+<h3>D</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length; i++) {
+    <span class="type">System</span>.out.println(values[i]);
+}
+
+<span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; values.length; j++) {
+    <span class="type">System</span>.out.println(values[j]);
+}</code></pre></div>
+<h3>Answers</h3>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>A: O(1)
+B: O(n)
+C: O(n²)
+D: O(n)</code></pre></div>
+<hr>
+<h1>Exercise 2: trace linear search</h1>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[18, 5, 11, 23, 7, 31]</code></pre></div>
+<p>Trace a linear search for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>23</code></pre></div>
+<p>Questions:</p>
+<ol><li>Which indices are examined?</li><li>How many comparisons occur?</li><li>What index is returned?</li></ol>
+<p>Answer:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>Indices: 0, 1, 2, 3
+Comparisons: 4
+Return value: 3</code></pre></div>
+<hr>
+<h1>Exercise 3: trace binary search</h1>
+<p>Given:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[4, 8, 13, 17, 22, 29, 35, 41, 48, 53, 60]</code></pre></div>
+<p>Search for:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>41</code></pre></div>
+<p>Record the values of:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>low
+high
+mid
+values[mid]</code></pre></div>
+<p>after each iteration.</p>
+<hr>
+<h1>Exercise 4: find the precondition</h1>
+<p>Why does this algorithm not always work?</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> search(<span class="kw">int</span>[] values, <span class="kw">int</span> target) {
+    <span class="kw">int</span> low = <span class="num">0</span>;
+    <span class="kw">int</span> high = values.length - <span class="num">1</span>;
+
+    <span class="kw">while</span> (low &lt;= high) {
+        <span class="kw">int</span> mid = (low + high) / <span class="num">2</span>;
+
+        <span class="kw">if</span> (values[mid] == target) {
+            <span class="kw">return</span> mid;
+        }
+
+        <span class="kw">if</span> (target &lt; values[mid]) {
+            high = mid - <span class="num">1</span>;
+        } <span class="kw">else</span> {
+            low = mid + <span class="num">1</span>;
+        }
+    }
+
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</code></pre></div>
+<p>Answer:</p>
+<p>The algorithm assumes that:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>values is sorted</code></pre></div>
+<p>That is a <strong>precondition</strong>.</p>
+<hr>
+<h1>Exercise 5: trace selection sort</h1>
+<p>Trace selection sort on:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[9, 4, 7, 2, 6]</code></pre></div>
+<p>Write the complete array after every outer-loop iteration.</p>
+<p>Expected sequence:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[2, 4, 7, 9, 6]
+[2, 4, 7, 9, 6]
+[2, 4, 6, 9, 7]
+[2, 4, 6, 7, 9]</code></pre></div>
+<hr>
+<h1>Exercise 6: trace insertion sort</h1>
+<p>Trace insertion sort on:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[8, 3, 6, 4, 7]</code></pre></div>
+<p>Write the array after every insertion.</p>
+<p>Expected progression:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>[3, 8, 6, 4, 7]
+[3, 6, 8, 4, 7]
+[3, 4, 6, 8, 7]
+[3, 4, 6, 7, 8]</code></pre></div>
+<hr>
+<h1>Part XVI - suggested lab</h1>
+<h2>63. Searching and sorting experiment</h2>
+<p>Write a Java program that compares searching and sorting algorithms.</p>
+<h3>Part 1</h3>
+<p>Create arrays containing random integers.</p>
+<p>Test sizes such as:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>1,000
+5,000
+10,000
+20,000</code></pre></div>
+<h3>Part 2</h3>
+<p>Implement:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>linearSearch()
+binarySearch()
+selectionSort()
+insertionSort()</code></pre></div>
+<h3>Part 3</h3>
+<p>Measure execution time using:</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code><span class="type">System</span>.nanoTime()</code></pre></div>
+<h3>Part 4</h3>
+<p>Compare:</p>
+<ul><li>linear search on unsorted data;</li><li>binary search on sorted data;</li><li>selection sort;</li><li>insertion sort.</li></ul>
+<h3>Part 5</h3>
+<p>Write a short analysis answering:</p>
+<ol><li>How does runtime change as array size increases?</li><li>Which observations agree with the theoretical Big-O analysis?</li><li>When does binary search noticeably outperform linear search?</li><li>How do selection sort and insertion sort compare?</li><li>Why should individual timing measurements be interpreted cautiously?</li></ol>
+<hr>
+<h1>Part XVII - concept check</h1>
+<h2>64. Short questions</h2>
+<h3>Question 1</h3>
+<p>What does <code>n</code> normally represent when analyzing an array algorithm?</p>
+<p><strong>Answer:</strong> The number of elements in the array.</p>
+<h3>Question 2</h3>
+<p>What does Big-O describe?</p>
+<p><strong>Answer:</strong> How the computational work of an algorithm grows as input size increases.</p>
+<h3>Question 3</h3>
+<p>What is the complexity of accessing <code>values[5]</code>?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(1)</code></pre></div>
+<h3>Question 4</h3>
+<p>What is the worst-case complexity of linear search?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<h3>Question 5</h3>
+<p>What is the complexity of binary search?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(log n)</code></pre></div>
+<h3>Question 6</h3>
+<p>What condition must hold before binary search can be used?</p>
+<p><strong>Answer:</strong> The collection must be sorted according to the ordering used by the search.</p>
+<h3>Question 7</h3>
+<p>What is the worst-case complexity of selection sort?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<h3>Question 8</h3>
+<p>What is the worst-case complexity of insertion sort?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n²)</code></pre></div>
+<h3>Question 9</h3>
+<p>What is insertion sort's best-case complexity on an already sorted array?</p>
+<p><strong>Answer:</strong></p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n)</code></pre></div>
+<h3>Question 10</h3>
+<p>Do two consecutive O(n) loops produce O(n²)?</p>
+<p><strong>Answer:</strong> No.</p>
+<div class="code-block"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg></button><pre class="code"><code>O(n) + O(n) = O(2n) = O(n)</code></pre></div>
+<hr>
+<h1>Part XVIII - key takeaways</h1>
+<p>The most important ideas from this week are:</p>
+<ol><li><strong>Correctness is not the only property of a program that matters.</strong></li></ol>
+<p>We also care about efficiency.</p>
+<ol><li><strong>Big-O describes growth.</strong></li></ol>
+<p>It tells us how the amount of computational work changes as the input becomes larger.</p>
+<ol><li><strong>Constant factors and lower-order terms are ignored in asymptotic analysis.</strong></li></ol>
+<p>For example:</p>
+<p>``<code>text 5n + 20 → O(n) </code>``</p>
+<ol><li><strong>Linear search is O(n).</strong></li></ol>
+<p>It may need to examine every item.</p>
+<ol><li><strong>Binary search is O(log n).</strong></li></ol>
+<p>It repeatedly removes half of the remaining search space.</p>
+<ol><li><strong>Binary search requires sorted data.</strong></li></ol>
+<ol><li><strong>Selection sort is O(n²).</strong></li></ol>
+<ol><li><strong>Insertion sort is O(n²) in the worst case but O(n) in the best case.</strong></li></ol>
+<ol><li><strong>Algorithm choice depends on context.</strong></li></ol>
+<p>The best solution depends on the size and organization of the data and on what operations will be performed.</p>
+<ol><li><strong>Efficiency becomes increasingly important as data grows.</strong></li></ol>
+<p>A solution that is perfectly acceptable for 100 values may be unusable for 100 million values.</p>
+<hr>
+<h1>Part XIX - looking ahead</h1>
+<p>This week we compared algorithms that operate on arrays.</p>
+<p>Next, we will begin examining a deeper question:</p>
+<blockquote>How should data itself be organized?</blockquote>
+<p>Arrays provide one way to store collections, but they are not always ideal.</p>
+<p>We will introduce <strong>dynamic data structures</strong>, including lists and linked structures, and examine how the organization of data affects the efficiency of operations such as:</p>
+<ul><li>insertion;</li><li>deletion;</li><li>searching;</li><li>traversal.</li></ul>
+<p>This leads to one of the central themes of computer science:</p>
+<blockquote>Algorithms and data structures must be designed together.</blockquote>
+    </article>
+  </div>
+  <script src="lecture-notes.js"></script>
+</body>
+</html>
