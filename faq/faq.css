@@ -62,6 +62,7 @@ select, .toolbar button { border: 1px solid #bdc8d6; border-radius: 10px; backgr
 .faq-answer pre { background: var(--code); color: #e5e7eb; padding: 15px 17px; border-radius: 11px; overflow-x: auto; font: .9rem/1.55 Consolas, "Liberation Mono", monospace; }
 .faq-answer pre code { background: transparent; padding: 0; color: inherit; }
 .faq-answer hr { border: 0; border-top: 1px solid var(--line); margin: 1.5rem 0; }
+mark.search-hit { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 .08em; }
 .faq-answer table { width: 100%; border-collapse: collapse; margin: 1em 0; }
 .faq-answer th, .faq-answer td { border: 1px solid var(--line); padding: .5rem .7rem; text-align: left; vertical-align: top; }
 .faq-answer th { background: var(--wash); }
