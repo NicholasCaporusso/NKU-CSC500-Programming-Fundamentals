@@ -40,6 +40,8 @@ h3 { font-size: 1.2rem; }
 select, .toolbar button { border: 1px solid #bdc8d6; border-radius: 10px; background: #fff; padding: 11px 13px; color: var(--ink); font: 700 .9rem "Trebuchet MS", sans-serif; cursor: pointer; }
 .toolbar button:hover, select:hover { border-color: var(--accent); }
 .result-count { grid-column: 1 / -1; color: var(--muted); font: .9rem "Trebuchet MS", sans-serif; }
+.search-help { grid-column: 1 / -1; color: var(--muted); font: .82rem "Trebuchet MS", sans-serif; }
+.search-help code { font-family: Consolas, monospace; background: var(--wash); padding: .12em .35em; border-radius: 4px; }
 
 .faq-shell { padding: 18px; }
 .faq-list { display: grid; gap: 10px; }

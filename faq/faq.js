@@ -85,11 +85,19 @@
   }
 
   function refresh() {
-    var term = (search.value || '').toLowerCase().trim();
+    var query = (search.value || '').toLowerCase().trim();
+    var phrases = [];
+    var phrasePattern = /"([^"]+)"/g;
+    var phraseMatch;
+    while ((phraseMatch = phrasePattern.exec(query))) phrases.push(phraseMatch[1].trim());
+    var terms = query.replace(phrasePattern, ' ').match(/\S+/g) || [];
     var wanted = scope.value === 'current' ? currentWeek : 'all';
     var shown = 0;
     entries.forEach(function (entry) {
-      var visible = (wanted === 'all' || entry.card.dataset.week === wanted) && (!term || entry.card.dataset.search.indexOf(term) !== -1);
+      var text = entry.card.dataset.search;
+      var matchesPhrase = phrases.every(function (phrase) { return phrase && text.indexOf(phrase) !== -1; });
+      var termMatch = !terms.length || terms.some(function (term) { return text.indexOf(term) !== -1; });
+      var visible = (wanted === 'all' || entry.card.dataset.week === wanted) && (!query || (matchesPhrase && termMatch));
       entry.card.hidden = !visible; if (visible) shown++;
     });
     count.textContent = shown + ' result' + (shown === 1 ? '' : 's'); empty.hidden = shown !== 0;
