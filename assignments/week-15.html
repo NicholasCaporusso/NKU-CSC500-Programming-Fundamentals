@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 15</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 15: Putting It All Together — Software Design</h2>
+      <div class="intro">
+<p>There are <strong>50 assignments</strong>, with exactly <strong>10 assignments at each difficulty level</strong>.</p>
+<p>Unless an assignment explicitly asks for implementation, students may submit design diagrams, class/API descriptions, pseudocode, complexity analyses, test plans, or written explanations as appropriate. When implementation is requested, use Java.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Before You Code</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Requirements analysis</span><span class="badge topic-badge">software design vs. programming</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Before You Code as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A neighborhood bakery wants a small program that tracks its daily products. Each product has a name, price, quantity available, and unique product code. Employees need to add products, find a product by code, record a sale, and determine whether a product is sold out.</p>
+<p>Do <strong>not</strong> write Java code.</p>
+<ol><li>Identify at least six requirements.</li><li>Identify four assumptions that would need clarification before implementation.</li><li>Identify the important nouns in the problem.</li><li>Identify the important actions.</li><li>Propose two or three candidate classes.</li><li>In 3–5 sentences, explain why immediately writing Java statements would be premature.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: Give Every Class a Job</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Decomposition</span><span class="badge topic-badge">responsibilities</span><span class="badge topic-badge">Single Responsibility Principle</span><span class="badge topic-badge">cohesion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: Give Every Class a Job as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider these possible classes for a movie-theater application:</p>
+<ul><li><code>Movie</code></li><li><code>Showing</code></li><li><code>Ticket</code></li><li><code>Theater</code></li><li><code>TicketPrinter</code></li></ul>
+<p>The system must schedule showings, sell tickets, prevent sales after a showing is full, and print purchased tickets.</p>
+<p>For each class:</p>
+<ol><li>Write one sentence describing its primary responsibility.</li><li>List 2–4 pieces of state it might need.</li><li>List 2–4 methods that naturally belong to it.</li></ol>
+<p>Then identify one responsibility that <strong>should not</strong> belong to each class and explain why.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Protect the Gift Card</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Encapsulation</span><span class="badge topic-badge">meaningful operations</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">getters/setters</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Protect the Gift Card as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A gift card has:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">final</span> <span class="type">String</span> cardNumber;
+<span class="kw">private</span> <span class="kw">double</span> balance;</code></pre></div>
+<p>Design its public API.</p>
+<p>Requirements:</p>
+<ul><li>the card number cannot change;</li><li>the balance cannot become negative;</li><li>money can be added;</li><li>purchases can reduce the balance only when sufficient funds exist.</li></ul>
+<p>Specify:</p>
+<ol><li>constructor parameters;</li><li>necessary getters;</li><li>meaningful modification methods;</li><li>methods or setters that should <strong>not</strong> exist;</li><li>at least three class invariants.</li></ol>
+<p>Explain how your API protects the object better than simply providing getters and setters for every field.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: Choose the Collection</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Arrays</span><span class="badge topic-badge">lists</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">maps</span><span class="badge topic-badge">stacks</span><span class="badge topic-badge">queues</span><span class="badge topic-badge">trees</span><span class="badge topic-badge">data-structure selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: Choose the Collection as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose the most appropriate starting data structure for each requirement. Use each choice only when it makes conceptual sense.</p>
+<ol><li>Store exactly 12 monthly electricity readings.</li><li>Store a growing playlist where song order matters.</li><li>Track unique coupon codes that have already been redeemed.</li><li>Retrieve a package using its tracking number.</li><li>Process customer-support requests in arrival order.</li><li>Implement an undo history.</li><li>Represent folders containing nested subfolders.</li><li>Store tasks that must be processed according to priority.</li></ol>
+<p>For each answer:</p>
+<ul><li>name the structure;</li><li>identify the operation or constraint that motivated your choice;</li><li>briefly explain why one plausible alternative is less suitable.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Interface or Implementation?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Interfaces</span><span class="badge topic-badge">implementations</span><span class="badge topic-badge">programming to an interface</span><span class="badge topic-badge">coupling</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Interface or Implementation? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> displayNames(<span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; names) {
+    <span class="cmt">// ...</span>
+}</code></pre></div>
+<p>Rewrite the method signature so it depends only on the behavior it actually needs, assuming the method simply iterates through the names.</p>
+<p>Then answer:</p>
+<ol><li>What is the interface/abstraction in your revised design?</li><li>What concrete implementation might the caller use?</li><li>Why is the revised method less coupled?</li><li>Give two different implementations that could be passed to it if appropriate.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: Is-A or Has-A?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Composition</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">class relationships</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: Is-A or Has-A? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each relationship, choose <strong>inheritance</strong>, <strong>composition</strong>, or <strong>neither</strong>.</p>
+<ol><li><code>ElectricCar</code> and <code>Car</code></li><li><code>Car</code> and <code>Battery</code></li><li><code>Library</code> and <code>Book</code></li><li><code>EBook</code> and <code>Book</code></li><li><code>Employee</code> and <code>Address</code></li><li><code>PasswordValidator</code> and <code>Password</code></li><li><code>ExpressShipment</code> and <code>Shipment</code></li><li><code>Order</code> and <code>OrderItem</code></li></ol>
+<p>For every answer, express the relationship as either:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>X is a Y</code></pre></div>
+<p>or:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>X has a Y</code></pre></div>
+<p>when possible.</p>
+<p>Explain any case where neither relationship is appropriate.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Name What the Code Means</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Readability</span><span class="badge topic-badge">naming</span><span class="badge topic-badge">magic numbers</span><span class="badge topic-badge">code smells</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Name What the Code Means as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Improve the following fragment without changing what it calculates:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> x = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">double</span> d : a) {
+    x += d;
+}
+
+<span class="kw">double</span> y = x / a.size();
+
+<span class="kw">if</span> (y &gt;= <span class="num">4.5</span>) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Preferred&quot;</span>);
+}</code></pre></div>
+<p>Assume <code>a</code> contains customer satisfaction ratings and <code>4.5</code> is the organization's threshold for preferred-service status.</p>
+<p>Your revision must:</p>
+<ul><li>replace vague names;</li><li>introduce a named constant where appropriate;</li><li>make the purpose of the computation obvious.</li></ul>
+<p>Then identify the code smells you corrected.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Design the Boundaries</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Testing</span><span class="badge topic-badge">normal cases</span><span class="badge topic-badge">boundary cases</span><span class="badge topic-badge">invalid cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Design the Boundaries as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A warehouse bin has a maximum weight of 100 kilograms.</p>
+<p>A method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> addPackage(<span class="kw">double</span> kilograms)</code></pre></div>
+<p>should reject nonpositive weights and reject a package if adding it would exceed the bin's capacity.</p>
+<p>Design a test table containing at least:</p>
+<ul><li>3 normal cases;</li><li>5 boundary cases;</li><li>4 invalid cases.</li></ul>
+<p>For each test specify:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>initial bin weight
+package weight
+expected result
+expected final bin weight</code></pre></div>
+<p>Do not implement the tests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Turn a Bug Report into Evidence</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Debugging</span><span class="badge topic-badge">reproducibility</span><span class="badge topic-badge">expected vs. actual behavior</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Turn a Bug Report into Evidence as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You receive this bug report:</p>
+<blockquote><p>&quot;Sometimes the shopping cart total is wrong.&quot;</p></blockquote>
+<p>Rewrite it as a reproducible debugging report.</p>
+<p>Your report must specify:</p>
+<ol><li>initial state;</li><li>exact sequence of actions;</li><li>input values;</li><li>expected result;</li><li>actual result;</li><li>relevant state you would inspect;</li><li>one initial hypothesis.</li></ol>
+<p>Explain why your report is more useful than the original description.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Learn an API from Documentation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Java API documentation</span><span class="badge topic-badge">unfamiliar classes</span><span class="badge topic-badge">method signatures</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Learn an API from Documentation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Using the official Java API documentation, investigate <code>java.util.ArrayDeque</code>.</p>
+<p>Without copying large sections of documentation, answer:</p>
+<ol><li>What interfaces does it implement that are relevant to queue/stack behavior?</li><li>How do you add an element at the front?</li><li>How do you add one at the back?</li><li>How do you inspect the first element without removing it?</li><li>How do you remove the last element?</li><li>What happens when certain removal operations are attempted on an empty deque?</li><li>Can it contain <code>null</code>?</li><li>Give one situation where you would choose it for queue behavior.</li><li>Give one situation where you would use it for stack behavior.</li></ol>
+<p>Include the method signatures you relied on.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Design a Pet-Adoption Registry</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Requirements</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">classes</span><span class="badge topic-badge">responsibilities</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Design a Pet-Adoption Registry as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design the core model for a pet-adoption registry.</p>
+<p>Requirements:</p>
+<ul><li>every animal has a unique shelter ID;</li><li>animals have names, species, and adoption status;</li><li>adopters have unique IDs;</li><li>an available animal can be adopted;</li><li>an animal cannot be adopted twice;</li><li>animals can be found by shelter ID;</li><li>adopters can be found by adopter ID.</li></ul>
+<p>Produce:</p>
+<ol><li>candidate classes;</li><li>the responsibility of each class;</li><li>important fields;</li><li>important public methods;</li><li>important invariants;</li><li>relationships between classes;</li><li>your proposed data structures.</li></ol>
+<p>Do not implement the system.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Refuse the Universal Setter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Encapsulation</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">APIs</span><span class="badge topic-badge">information hiding</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Refuse the Universal Setter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A beginner proposes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Thermostat</span> {
+    <span class="kw">private</span> <span class="kw">double</span> temperature;
+    <span class="kw">private</span> <span class="kw">double</span> minimum;
+    <span class="kw">private</span> <span class="kw">double</span> maximum;
+
+    <span class="kw">public</span> <span class="kw">void</span> setTemperature(<span class="kw">double</span> temperature) { ... }
+    <span class="kw">public</span> <span class="kw">void</span> setMinimum(<span class="kw">double</span> minimum) { ... }
+    <span class="kw">public</span> <span class="kw">void</span> setMaximum(<span class="kw">double</span> maximum) { ... }
+}</code></pre></div>
+<p>The invariant must always be:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>minimum &lt;= temperature &lt;= maximum</code></pre></div>
+<p>Redesign the API so callers cannot casually create an invalid thermostat.</p>
+<p>Provide:</p>
+<ul><li>constructor design;</li><li>public methods;</li><li>validation rules;</li><li>behavior when an invalid operation is requested.</li></ul>
+<p>Explain why your API is safer.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: List, Set, or Map?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Data structures</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">requirements</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: List, Set, or Map? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A music application must support:</p>
+<ul><li>finding a song by unique catalog ID very frequently;</li><li>checking whether a user has already liked a song;</li><li>displaying the user's listening history in chronological order.</li></ul>
+<p>Choose separate structures for these three responsibilities.</p>
+<p>For each structure:</p>
+<ol><li>declare an appropriate Java variable using an interface type;</li><li>select a concrete implementation;</li><li>justify the choice;</li><li>give the approximate complexity of the most important operation.</li></ol>
+<p>Explain why trying to use one collection for all three responsibilities may produce a weaker design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Find the Low-Cohesion Class</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Cohesion</span><span class="badge topic-badge">SRP</span><span class="badge topic-badge">decomposition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Find the Low-Cohesion Class as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>StoreManager
+- addProduct
+- removeProduct
+- calculateInventoryValue
+- printReceipt
+- authenticateEmployee
+- resizeProductImage
+- sendPromotionalEmail
+- saveInventory</code></pre></div>
+<p>Analyze the class.</p>
+<ol><li>Group the operations into coherent responsibilities.</li><li>Propose a better set of classes.</li><li>Give each class a one-sentence responsibility.</li><li>Explain which dependencies should exist between the classes.</li><li>Explain why your version has higher cohesion.</li></ol>
+<p>No Java implementation is required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Reduce Knowledge Between Classes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Coupling</span><span class="badge topic-badge">information hiding</span><span class="badge topic-badge">meaningful APIs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Reduce Knowledge Between Classes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A checkout UI currently determines whether a coupon can be applied by inspecting:</p>
+<ul><li>the coupon expiration date;</li><li>minimum order amount;</li><li>eligible product categories;</li><li>number of previous uses;</li><li>maximum usage count.</li></ul>
+<p>Design a better API so the UI does not need to know these rules.</p>
+<p>Specify:</p>
+<ul><li>which class should own coupon-validity rules;</li><li>the public method or methods the UI should call;</li><li>what information should remain private;</li><li>what result should be returned.</li></ul>
+<p>Explain how your design reduces coupling.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: One Source of Truth</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">DRY</span><span class="badge topic-badge">duplicated business rules</span><span class="badge topic-badge">refactoring</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: One Source of Truth as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A delivery service calculates a fuel surcharge in:</p>
+<ul><li>checkout;</li><li>invoice generation;</li><li>refund calculations;</li><li>administrative reports.</li></ul>
+<p>The same formula has been copied into all four places.</p>
+<p>Design a refactoring that establishes one authoritative representation of the rule.</p>
+<p>Your answer should include:</p>
+<ol><li>where the rule should live;</li><li>an appropriate method name and signature;</li><li>which values should become named constants;</li><li>how existing callers should use the new abstraction;</li><li>how you would verify that behavior was preserved.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: Design Tests for a Parking Garage</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Unit testing</span><span class="badge topic-badge">Arrange-Act-Assert</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">boundary testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: Design Tests for a Parking Garage as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A <code>ParkingGarage</code> has:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> enter(<span class="type">Vehicle</span> vehicle)
+<span class="kw">boolean</span> exit(<span class="type">Vehicle</span> vehicle)
+<span class="kw">boolean</span> isFull()
+<span class="kw">int</span> getVehicleCount()</code></pre></div>
+<p>Requirements:</p>
+<ul><li>capacity is fixed at construction;</li><li>capacity cannot be negative;</li><li>the same vehicle cannot enter twice;</li><li>a full garage rejects additional vehicles.</li></ul>
+<p>Design at least <strong>10 unit tests</strong>.</p>
+<p>Categorize each as:</p>
+<ul><li>normal;</li><li>boundary;</li><li>invalid.</li></ul>
+<p>For three tests, write Java/JUnit-style Arrange-Act-Assert code.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: Debug the Wrong Discount</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Evidence-based debugging</span><span class="badge topic-badge">debugger</span><span class="badge topic-badge">state inspection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: Debug the Wrong Discount as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program calculates a 20% discount for customers with at least 10 qualifying purchases. A customer with exactly 10 purchases receives no discount.</p>
+<p>Without immediately proposing a code change:</p>
+<ol><li>state the expected behavior;</li><li>state the actual behavior;</li><li>identify variables to inspect;</li><li>identify a useful breakpoint location;</li><li>describe how you would use step-over or step-into;</li><li>formulate two possible hypotheses;</li><li>state what evidence would support or reject each hypothesis.</li></ol>
+<p>Finish by describing the smallest regression test you would add after fixing the defect.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: A Small <code>main</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Separation of concerns</span><span class="badge topic-badge">composition root</span><span class="badge topic-badge">modularity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: A Small main as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A command-line recipe application needs:</p>
+<ul><li>recipe storage;</li><li>recipe searching;</li><li>a console menu;</li><li>input parsing;</li><li>application logic.</li></ul>
+<p>Design a class structure that keeps <code>main</code> small.</p>
+<p>Show pseudocode for <code>main</code> containing only the creation and connection of major objects and the command that starts the application.</p>
+<p>Then explain where each of these concerns belongs:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>console input
+recipe search
+recipe state
+data storage
+display formatting</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: API Detective — <code>Collections.binarySearch</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">API documentation</span><span class="badge topic-badge">preconditions</span><span class="badge topic-badge">algorithms</span><span class="badge topic-badge">interfaces</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: API Detective — Collections.binarySearch as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Use the Java API documentation to investigate <code>Collections.binarySearch</code>.</p>
+<p>Prepare a short technical note answering:</p>
+<ol><li>What kind of collection does the method accept?</li><li>What precondition involving ordering is important?</li><li>What does the return value mean when the key is found?</li><li>What does it mean when the key is absent?</li><li>How can a comparator affect the operation?</li><li>What design error could occur if a programmer ignores the documented ordering requirement?</li></ol>
+<p>Create a small original example involving product SKU codes to demonstrate correct use.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Design a Tool-Lending Library</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Requirements</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">OOP design</span><span class="badge topic-badge">collections</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Design a Tool-Lending Library as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a system for a community workshop that lends tools to members.</p>
+<p>Requirements:</p>
+<ul><li>tools and members have unique IDs;</li><li>a tool may be available or checked out;</li><li>a member may borrow at most five tools;</li><li>the system must quickly find a member or tool by ID;</li><li>a checked-out tool cannot be lent again;</li><li>returned tools become available;</li><li>the system can display all tools currently borrowed by one member.</li></ul>
+<p>Produce:</p>
+<ol><li>a requirements analysis;</li><li>candidate classes and responsibilities;</li><li>important APIs;</li><li>relationships;</li><li>invariants;</li><li>collection choices and justifications;</li><li>Big-O estimates for lookup, checkout, and listing a member's tools;</li><li>at least eight tests.</li></ol>
+<p>Do not write the complete implementation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Two Representations, One System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Multiple data structures</span><span class="badge topic-badge">consistency</span><span class="badge topic-badge">tradeoffs</span><span class="badge topic-badge">Big-O</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Two Representations, One System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A messaging application must:</p>
+<ul><li>retrieve messages quickly by unique message ID;</li><li>display messages in the exact order they were received.</li></ul>
+<p>Design a representation that maintains <strong>two data structures</strong>.</p>
+<p>Explain:</p>
+<ol><li>which structures you choose;</li><li>why each is needed;</li><li>which operations update both;</li><li>what invariants connect them;</li><li>what can go wrong if an update succeeds in one structure but not the other;</li><li>the approximate complexity of insertion, ID lookup, and chronological traversal.</li></ol>
+<p>Write pseudocode for a safe <code>addMessage</code> operation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Design an Interface for Notifications</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Interfaces</span><span class="badge topic-badge">implementations</span><span class="badge topic-badge">polymorphism</span><span class="badge topic-badge">low coupling</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Design an Interface for Notifications as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An application can deliver notifications through several mechanisms.</p>
+<p>Design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">NotificationChannel</span></code></pre></div>
+<p>and at least three conceptual implementations, such as console, file, or another non-network mechanism you can test locally.</p>
+<p>Then design a <code>NotificationService</code> that depends on the interface rather than a concrete implementation.</p>
+<p>Requirements:</p>
+<ul><li>client code should not need to know the implementation class;</li><li>the service should be easy to unit test;</li><li>implementations may be exchanged without modifying notification logic.</li></ul>
+<p>Provide class skeletons and explain how programming to the interface reduces coupling.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Refactor a Checkout Method</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Long methods</span><span class="badge topic-badge">extract method</span><span class="badge topic-badge">naming</span><span class="badge topic-badge">SRP</span><span class="badge topic-badge">refactoring</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Refactor a Checkout Method as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose <code>completePurchase()</code> currently performs all of these operations:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>validate cart
+validate customer
+calculate subtotal
+calculate discount
+calculate tax
+create order
+remove inventory
+format receipt
+print receipt</code></pre></div>
+<p>Create a refactoring plan.</p>
+<ol><li>Identify coherent methods to extract.</li><li>Decide which operations belong in the same class and which may belong elsewhere.</li><li>Give every proposed method an intention-revealing name.</li><li>Identify dependencies between components.</li><li>Explain how you would preserve observable behavior during the refactoring.</li><li>Identify tests you would run after each stage.</li></ol>
+<p>Provide pseudocode showing what the final high-level <code>completePurchase()</code> should look like.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Composition or Inheritance Under Changing Requirements</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Composition</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">design evolution</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Composition or Inheritance Under Changing Requirements as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are designing a document-export application.</p>
+<p>Initially there are:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>TextDocument
+SpreadsheetDocument</code></pre></div>
+<p>Both can be:</p>
+<ul><li>saved;</li><li>named;</li><li>exported.</li></ul>
+<p>Export formats include:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>PlainText
+CSV
+JSON</code></pre></div>
+<p>New export formats are expected later.</p>
+<p>Design two alternatives:</p>
+<ol><li>one relying heavily on inheritance;</li><li>one using composition/interfaces for export behavior.</li></ol>
+<p>Compare them in terms of:</p>
+<ul><li>is-a relationships;</li><li>coupling;</li><li>adding a new document type;</li><li>adding a new export format;</li><li>testing;</li><li>code reuse;</li><li>complexity.</li></ul>
+<p>Choose one and defend the decision.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Performance-Aware Inventory Search</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">data-structure selection</span><span class="badge topic-badge">premature optimization</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Performance-Aware Inventory Search as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A small craft shop currently has 40 products. It expects to grow to approximately 50,000 products.</p>
+<p>Operations:</p>
+<ul><li>search by unique product code: extremely frequent;</li><li>display every product: occasional;</li><li>add products: regular;</li><li>sort products by display name: once per daily report.</li></ul>
+<p>Compare at least two representations.</p>
+<p>For each, estimate the complexity of the major operations.</p>
+<p>Then recommend a design for:</p>
+<ol><li>the current 40-product system;</li><li>the expected 50,000-product system.</li></ol>
+<p>Explain whether you would implement the more scalable representation immediately or defer it, and justify the tradeoff.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Behavior, Not Representation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Testing</span><span class="badge topic-badge">information hiding</span><span class="badge topic-badge">implementation independence</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Behavior, Not Representation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a <code>TagCollection</code> abstraction that guarantees:</p>
+<ul><li>tags are unique;</li><li>tags can be added;</li><li>tags can be removed;</li><li>membership can be queried;</li><li>callers can inspect tags but cannot directly corrupt the collection.</li></ul>
+<p>Write at least eight tests that would remain valid whether the internal implementation used:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>HashSet
+ArrayList
+TreeSet</code></pre></div>
+<p>Then give three examples of <strong>bad tests</strong> that would depend unnecessarily on the private representation.</p>
+<p>Explain why behavior-focused tests make refactoring safer.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Debug an Interaction Bug</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Debugger</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">interacting objects</span><span class="badge topic-badge">hypotheses</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Debug an Interaction Bug as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A warehouse application contains:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ConsoleUI
+OrderService
+Inventory
+Order</code></pre></div>
+<p>A customer places an order for three units. The order records three units, but inventory decreases by six.</p>
+<p>Create a systematic debugging plan.</p>
+<p>Include:</p>
+<ul><li>a minimal reproducible case;</li><li>likely state to inspect;</li><li>breakpoint locations;</li><li>where you would step into methods;</li><li>how the call stack might reveal duplicate calls;</li><li>at least three competing hypotheses;</li><li>evidence that would distinguish the hypotheses.</li></ul>
+<p>Do not assume the cause before gathering evidence.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Learn <code>Comparator</code> from the API</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Java API documentation</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">unfamiliar APIs</span><span class="badge topic-badge">sorting</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Learn Comparator from the API as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Using Java API documentation, learn enough about <code>Comparator&lt;T&gt;</code> to design sorting behavior for:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Package</span> {
+    <span class="type">String</span> trackingNumber;
+    <span class="kw">double</span> weight;
+    <span class="kw">int</span> priority;
+}</code></pre></div>
+<p>Create:</p>
+<ol><li>a comparator by weight;</li><li>a comparator by priority;</li><li>a comparator that uses priority first and weight as a tie-breaker.</li></ol>
+<p>You may use documented comparator factory/default methods where appropriate.</p>
+<p>Then explain:</p>
+<ul><li>what a negative, zero, or positive comparison result represents;</li><li>why sorting behavior can be separated from the <code>Package</code> class;</li><li>how this design demonstrates abstraction.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Code Review a Hypothetical System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Code review</span><span class="badge topic-badge">cohesion</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">complexity</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Code Review a Hypothetical System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are told that a 1,500-line Java application has these properties:</p>
+<ul><li>most logic is in four methods;</li><li>many fields are public;</li><li>customer lookup scans an <code>ArrayList</code>;</li><li>customer IDs are unique;</li><li>several classes independently calculate shipping fees;</li><li>the UI modifies order-item lists directly;</li><li>all tests use only typical valid data;</li><li><code>main</code> contains the entire menu loop and business logic.</li></ul>
+<p>Write a structured code-review report.</p>
+<p>Identify at least <strong>10 design concerns</strong>.</p>
+<p>For each:</p>
+<ol><li>classify the concern;</li><li>explain the risk;</li><li>propose an improvement;</li><li>assign a priority: low, medium, or high.</li></ol>
+<p>Finish with the order in which you would address the issues and explain why.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Design a Hotel Room-Booking Core</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Full software design</span><span class="badge topic-badge">data structures</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">complexity</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Design a Hotel Room-Booking Core as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design—not necessarily fully implement—the core of a small hotel booking system.</p>
+<p>Requirements:</p>
+<ul><li>rooms have unique room numbers;</li><li>guests have unique IDs;</li><li>reservations have unique confirmation codes;</li><li>a room cannot have overlapping reservations;</li><li>reservations have arrival and departure dates;</li><li>reservations can be found frequently by confirmation code;</li><li>the system must list reservations for a room;</li><li>cancellation must preserve consistency;</li><li>invalid date ranges must be rejected.</li></ul>
+<p>Produce a design document containing:</p>
+<ol><li>clarified requirements and assumptions;</li><li>classes and responsibilities;</li><li>public APIs;</li><li>relationships;</li><li>important invariants;</li><li>collection choices;</li><li>interface/implementation decisions;</li><li>complexity of major operations;</li><li>normal, boundary, and invalid tests;</li><li>known design limitations.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Build a Print-Job Scheduler</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Queues</span><span class="badge topic-badge">priority queues</span><span class="badge topic-badge">API documentation</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Build a Print-Job Scheduler as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement a print-job scheduler.</p>
+<p>Each job contains:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>job ID
+owner
+page count
+priority
+submission sequence</code></pre></div>
+<p>Requirements:</p>
+<ul><li>higher-priority jobs normally print first;</li><li>jobs with equal priority must follow submission order;</li><li>job IDs are unique;</li><li>a job can be canceled by ID;</li><li>the next job can be inspected without removal.</li></ul>
+<p>Use Java API documentation to determine which library structures can support the design.</p>
+<p>Your submission must include:</p>
+<ul><li>class design;</li><li>chosen structures;</li><li>a comparator design;</li><li>API documentation findings;</li><li>Big-O analysis;</li><li>at least 10 tests;</li><li>discussion of the tradeoff introduced by supporting cancellation-by-ID.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Refactor Without Breaking Behavior</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Refactoring</span><span class="badge topic-badge">regression testing</span><span class="badge topic-badge">code smells</span><span class="badge topic-badge">information hiding</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Refactor Without Breaking Behavior as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create an intentionally poorly designed <strong>original</strong> program of approximately 100–150 lines for managing household chores.</p>
+<p>It must initially contain at least:</p>
+<ul><li>one long method;</li><li>duplicated business logic;</li><li>one public mutable collection;</li><li>vague names;</li><li>one magic value;</li><li>mixed display and domain logic.</li></ul>
+<p>First write tests that establish the existing observable behavior.</p>
+<p>Then refactor it so that:</p>
+<ul><li>responsibilities are clearer;</li><li>duplicated rules are centralized;</li><li>state is encapsulated;</li><li>names communicate intent;</li><li>coherent methods are extracted;</li><li>the same tests continue to pass.</li></ul>
+<p>Submit the before/after code and a refactoring log explaining each change.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Data-Structure Design Under Conflicting Requirements</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Lists</span><span class="badge topic-badge">maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">queues</span><span class="badge topic-badge">consistency</span><span class="badge topic-badge">tradeoffs</span><span class="badge topic-badge">Big-O</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Data-Structure Design Under Conflicting Requirements as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design the storage model for a package-distribution center.</p>
+<p>Requirements:</p>
+<ul><li>packages have unique tracking numbers;</li><li>lookup by tracking number is extremely frequent;</li><li>each loading dock processes packages FIFO;</li><li>the system tracks unique cities currently represented by waiting packages;</li><li>supervisors need an ordered history of processed packages;</li><li>deleting a canceled package before processing should be supported.</li></ul>
+<p>You may maintain multiple structures.</p>
+<p>For each requirement:</p>
+<ol><li>choose a representation;</li><li>justify it;</li><li>analyze complexity;</li><li>identify consistency risks between structures.</li></ol>
+<p>Then define system-wide invariants needed to keep the representations synchronized.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Replace Concrete Dependencies</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Programming to interfaces</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">dependency design</span><span class="badge topic-badge">testability</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Replace Concrete Dependencies as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A reporting component currently contains direct dependencies on:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>CsvFileReader
+ConsolePrinter
+ArrayList&lt;Record&gt;</code></pre></div>
+<p>Redesign it so the report-generation logic depends on abstractions instead of those specific implementation choices.</p>
+<p>Your design should allow:</p>
+<ul><li>records to come from different sources;</li><li>output to go to different destinations;</li><li>the internal collection implementation to change;</li><li>unit tests to supply fake/in-memory implementations.</li></ul>
+<p>Create appropriate Java interfaces and class skeletons.</p>
+<p>Then explain:</p>
+<ul><li>which dependencies were removed;</li><li>which dependencies remain necessary;</li><li>why the new design is easier to test;</li><li>whether every concrete class needed an interface, and why.</li></ul>
+<p>Avoid creating abstractions that have no clear purpose.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Design a Reliable Digital Wallet</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Invariants</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">exceptions</span><span class="badge topic-badge">meaningful APIs</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Design a Reliable Digital Wallet as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a <code>DigitalWallet</code> class.</p>
+<p>Requirements:</p>
+<ul><li>wallet ID is immutable;</li><li>balance can never be negative;</li><li>deposits must be positive;</li><li>withdrawals cannot exceed available funds;</li><li>every successful transaction receives a unique transaction ID;</li><li>callers can inspect transaction history but cannot modify it directly;</li><li>failed operations must leave the wallet unchanged.</li></ul>
+<p>Decide which failures should:</p>
+<ul><li>return a value indicating failure;</li><li>throw an exception.</li></ul>
+<p>Implement the class and a comprehensive test suite.</p>
+<p>Your explanation must identify every invariant and show which parts of the implementation protect it.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Find the Actual Bottleneck</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">performance reasoning</span><span class="badge topic-badge">optimization tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Find the Actual Bottleneck as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A data-processing application performs these operations for <code>n</code> records:</p>
+<ol><li>reads all records once;</li><li>for each record, linearly searches another collection of <code>n</code> entries;</li><li>appends the result to a list;</li><li>sorts the final list once.</li></ol>
+<p>Analyze the approximate overall growth.</p>
+<p>Then redesign the system assuming the second collection can be indexed by a unique key.</p>
+<p>Your submission must:</p>
+<ul><li>derive the original complexity;</li><li>derive the revised complexity;</li><li>identify the new data structure;</li><li>discuss additional memory cost;</li><li>explain when the optimization matters;</li><li>explain when the simpler design might still be preferable.</li></ul>
+<p>Use example sizes of <code>n = 100</code>, <code>10,000</code>, and <code>1,000,000</code> to support your reasoning qualitatively.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Debug a Corrupted State Bug</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Debugging</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">debugger</span><span class="badge topic-badge">state tracing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Debug a Corrupted State Bug as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A loyalty-points application occasionally produces a negative points balance even though the class is supposed to prohibit it.</p>
+<p>The bug appears only after several operations involving:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>earn points
+redeem points
+refund purchase
+expire points</code></pre></div>
+<p>Design a debugging investigation.</p>
+<p>Your report must include:</p>
+<ol><li>a strategy for finding a minimal reproducing sequence;</li><li>the invariant being violated;</li><li>state to inspect after every operation;</li><li>useful breakpoints;</li><li>situations where step-into is preferable to step-over;</li><li>use of the call stack;</li><li>at least four plausible hypotheses;</li><li>how you would falsify each hypothesis;</li><li>the regression tests you would add after discovering the cause.</li></ol>
+<p>The goal is to demonstrate evidence-based debugging, not to guess a likely faulty line.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Evaluate Two Competing Designs</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Design tradeoffs</span><span class="badge topic-badge">cohesion</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">maintainability</span><span class="badge topic-badge">efficiency</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Evaluate Two Competing Designs as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Two teams build a reading-list application.</p>
+<p><strong>Design A</strong></p>
+<ul><li>3 classes;</li><li>straightforward code;</li><li>linear search by ISBN;</li><li>250 expected books;</li><li>little abstraction.</li></ul>
+<p><strong>Design B</strong></p>
+<ul><li>14 classes;</li><li>6 interfaces;</li><li>keyed lookup;</li><li>repository abstraction;</li><li>interchangeable storage;</li><li>several configuration objects.</li></ul>
+<p>Both meet all current requirements.</p>
+<p>The application is expected to remain a personal desktop tool with fewer than 500 books.</p>
+<p>Write a design-review memorandum comparing the solutions on:</p>
+<ul><li>correctness;</li><li>readability;</li><li>cohesion;</li><li>coupling;</li><li>performance;</li><li>memory;</li><li>testability;</li><li>maintainability;</li><li>adaptability;</li><li>overengineering.</li></ul>
+<p>You may recommend A, B, or a third simplified design, but you must defend your recommendation using the actual requirements.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Learn and Integrate an Unfamiliar API</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">API documentation</span><span class="badge topic-badge">independent programming</span><span class="badge topic-badge">software design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Learn and Integrate an Unfamiliar API as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Using only official Java API documentation as your technical reference, investigate <code>java.time.LocalDate</code>.</p>
+<p>Design a library-loan component that needs to:</p>
+<ul><li>record checkout dates;</li><li>calculate due dates;</li><li>determine whether a loan is overdue;</li><li>calculate how many days overdue it is.</li></ul>
+<p>Identify the relevant <code>LocalDate</code> methods and any additional standard-library class needed for the day calculation.</p>
+<p>Then:</p>
+<ol><li>design the <code>Loan</code> API;</li><li>implement the date-related behavior;</li><li>write boundary tests;</li><li>explain how the documentation informed your design;</li><li>distinguish the behavior your <code>Loan</code> abstraction exposes from the underlying date-library implementation details.</li></ol>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Capstone Design — Community Food Pantry</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Integrated software design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Capstone Design — Community Food Pantry as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design the core of a community food-pantry management application.</p>
+<p>Requirements include:</p>
+<ul><li>donors can contribute inventory;</li><li>products have unique codes;</li><li>products may have expiration dates;</li><li>households have unique IDs;</li><li>distributions to households must be recorded;</li><li>inventory cannot become negative;</li><li>expired inventory must not be distributed;</li><li>product lookup by code is frequent;</li><li>the system can display distribution history;</li><li>the system can report products nearing expiration.</li></ul>
+<p>Produce a complete design package containing:</p>
+<ol><li>requirements and unresolved questions;</li><li>domain model;</li><li>class responsibilities;</li><li>public APIs;</li><li>composition/inheritance decisions;</li><li>data structures;</li><li>invariants;</li><li>information-hiding decisions;</li><li>complexity analysis;</li><li>exception/error-handling policy;</li><li>systematic testing plan;</li><li>likely debugging strategy;</li><li>project/package organization;</li><li>future limitations.</li></ol>
+<p>Defend every major design choice.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Implement a Parcel Locker System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">OOP</span><span class="badge topic-badge">data structures</span><span class="badge topic-badge">APIs</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">refactoring</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Implement a Parcel Locker System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement a parcel-locker application.</p>
+<p>Requirements:</p>
+<ul><li>every locker has a unique ID and size;</li><li>every parcel has a unique tracking number and required locker size;</li><li>one locker holds at most one parcel;</li><li>parcels waiting for a locker are processed in arrival order;</li><li>tracking-number lookup must be efficient;</li><li>collection removes a parcel from its locker;</li><li>invalid operations must not corrupt state.</li></ul>
+<p>Your project must include:</p>
+<ul><li>at least four meaningful classes;</li><li>appropriate interface types;</li><li>encapsulated collections;</li><li>documented invariants;</li><li>a small <code>main</code>;</li><li>at least 15 automated tests;</li><li>complexity analysis of major operations.</li></ul>
+<p>After implementation, perform one documented refactoring while preserving all tests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Design for Requirement Change</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Adaptability</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">refactoring</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Design for Requirement Change as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Version 1 of a shipping application supports only a flat shipping-price calculation.</p>
+<p>After release, requirements change. The application must support:</p>
+<ul><li>flat-rate shipping;</li><li>shipping based on package weight;</li><li>shipping based on destination zone;</li><li>promotional free shipping.</li></ul>
+<p>Design the system twice:</p>
+<ol><li>as you might reasonably design Version 1 without predicting all future requirements;</li><li>as you would refactor it after learning the Version 2 requirements.</li></ol>
+<p>Use interfaces and/or composition where they provide a clear benefit.</p>
+<p>Explain:</p>
+<ul><li>what changed;</li><li>what remained stable;</li><li>which original design choices made change easier or harder;</li><li>why trying to predict every future pricing rule in Version 1 might have been overengineering.</li></ul>
+<p>Implement the final design and tests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Multi-Index Catalog</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Multiple representations</span><span class="badge topic-badge">consistency</span><span class="badge topic-badge">maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">lists</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Multi-Index Catalog as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a digital-media catalog that must support:</p>
+<ul><li>unique lookup by item ID;</li><li>lookup of all items by creator;</li><li>lookup of all items containing a tag;</li><li>display in insertion order;</li><li>deletion of an item;</li><li>prevention of duplicate tags on an item.</li></ul>
+<p>A single collection is unlikely to serve all requirements efficiently.</p>
+<p>Design a multi-index representation.</p>
+<p>Your submission must:</p>
+<ol><li>identify every structure;</li><li>state the invariant connecting the structures;</li><li>provide pseudocode for atomic-looking <code>addItem</code> and <code>removeItem</code> operations;</li><li>analyze complexity of every lookup;</li><li>identify failure modes that could make indexes inconsistent;</li><li>propose tests specifically targeting synchronization bugs;</li><li>discuss whether the complexity of maintaining multiple indexes is justified.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Architectural Code-Smell Hunt</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Code review</span><span class="badge topic-badge">refactoring</span><span class="badge topic-badge">SRP</span><span class="badge topic-badge">cohesion</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">DRY</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Architectural Code-Smell Hunt as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Obtain or create an original Java program of at least 250 lines that you are permitted to modify.</p>
+<p>Perform a structured design review and identify at least <strong>15 findings</strong> across these categories:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>responsibilities
+cohesion
+coupling
+encapsulation
+information hiding
+names
+method design
+duplication
+magic values
+data structures
+complexity
+testability
+error handling
+main/application organization
+overengineering or under-design</code></pre></div>
+<p>Rank the findings by risk.</p>
+<p>Then refactor at least five of the highest-value issues.</p>
+<p>Requirements:</p>
+<ul><li>establish tests before risky refactoring;</li><li>preserve externally observable behavior;</li><li>document each change;</li><li>rerun tests after each stage.</li></ul>
+<p>Submit before/after code plus the review report.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Failure Investigation Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Systematic debugging</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">debugger</span><span class="badge topic-badge">interacting components</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Failure Investigation Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create or use a multi-class Java program containing a deliberately introduced bug whose cause is <strong>not</strong> located in the method where the incorrect output first appears.</p>
+<p>Examples of suitable categories include:</p>
+<ul><li>incorrect shared state;</li><li>duplicated method invocation;</li><li>wrong collection update;</li><li>aliasing/mutable-state exposure;</li><li>inconsistent indexes;</li><li>incorrect recursive result propagation.</li></ul>
+<p>Give a classmate only:</p>
+<ul><li>the program;</li><li>a reproducible failure report.</li></ul>
+<p>The investigator must produce:</p>
+<ol><li>expected vs. actual behavior;</li><li>a minimal reproduction;</li><li>hypotheses considered;</li><li>debugger breakpoints used;</li><li>relevant variable observations;</li><li>call-stack observations;</li><li>evidence that eliminated hypotheses;</li><li>root cause;</li><li>fix;</li><li>regression test.</li></ol>
+<p>The student who introduced the bug must evaluate whether the investigation actually found the root cause rather than merely masking the symptom.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Design a Service-Desk Ticket System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Queue</span><span class="badge topic-badge">priority processing</span><span class="badge topic-badge">maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">design tradeoffs</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Design a Service-Desk Ticket System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement a service-desk system.</p>
+<p>Tickets have:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>unique ticket ID
+customer ID
+priority
+creation time/order
+status
+description</code></pre></div>
+<p>Requirements:</p>
+<ul><li>tickets can be retrieved quickly by ID;</li><li>unresolved tickets are processed primarily by priority;</li><li>equal-priority tickets follow creation order;</li><li>resolved tickets must not be processed again;</li><li>customers can have multiple tickets;</li><li>the system can list unresolved tickets for one customer;</li><li>cancellation is possible before processing.</li></ul>
+<p>Use standard Java collections where appropriate.</p>
+<p>Your design report must explain:</p>
+<ul><li>why more than one structure may be useful;</li><li>synchronization invariants;</li><li>interface vs. implementation choices;</li><li>complexity of all major operations;</li><li>test strategy;</li><li>consequences if the workload grows by 100×.</li></ul>
+<p>Include at least 15 tests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: From Requirements to Defensible Design</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Design justification</span><span class="badge topic-badge">alternatives</span><span class="badge topic-badge">tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: From Requirements to Defensible Design as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a personal finance expense tracker.</p>
+<p>Requirements:</p>
+<ul><li>transactions have unique IDs;</li><li>each transaction has a date, amount, description, and category;</li><li>transactions can be found by ID;</li><li>users frequently display transactions chronologically;</li><li>users can calculate totals by category;</li><li>categories should not be duplicated unnecessarily;</li><li>invalid amounts/dates must be handled consistently.</li></ul>
+<p>Before implementation, propose <strong>two substantially different designs</strong>.</p>
+<p>Compare them using:</p>
+<ul><li>classes and responsibilities;</li><li>data structures;</li><li>APIs;</li><li>invariants;</li><li>coupling;</li><li>cohesion;</li><li>Big-O;</li><li>memory;</li><li>testability;</li><li>simplicity;</li><li>future modification cost.</li></ul>
+<p>Select one design.</p>
+<p>Then write a 750–1,000 word design defense explaining why it is more appropriate for the stated requirements—not why it is universally &quot;better.&quot;</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Independent API Integration Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Java API documentation</span><span class="badge topic-badge">unfamiliar libraries</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Independent API Integration Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Using official Java API documentation, independently learn enough about these APIs to build a small task-reminder engine:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>java.time.LocalDateTime
+java.time.Duration
+java.util.PriorityQueue
+java.util.Comparator</code></pre></div>
+<p>The engine must:</p>
+<ul><li>add reminders;</li><li>identify the next reminder;</li><li>process reminders in chronological order;</li><li>reject invalid reminder data;</li><li>calculate the time between two reminders;</li><li>preserve insertion order when two reminders have the same scheduled time.</li></ul>
+<p>Do not rely on a tutorial implementation.</p>
+<p>Submit:</p>
+<ol><li>a summary of the documentation you consulted;</li><li>important method signatures and their meaning;</li><li>your class design;</li><li>collection/comparator design;</li><li>implementation;</li><li>tests;</li><li>Big-O analysis;</li><li>explanation of at least two mistakes that misunderstanding the APIs could cause.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Week 15 Mini-Capstone — Design, Build, Test, Defend</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">All Week 15 topics</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Week 15 Mini-Capstone — Design, Build, Test, Defend as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose <strong>one</strong> of these domains:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>equipment-rental system
+small veterinary appointment system
+board-game lending system
+warehouse order-picking system
+volunteer scheduling system
+repair-shop work-order system</code></pre></div>
+<p>Your application must contain enough complexity to require multiple collaborating classes.</p>
+<h4>Phase 1 — Requirements</h4>
+<p>Write:</p>
+<ul><li>functional requirements;</li><li>assumptions;</li><li>invalid operations;</li><li>important boundary conditions.</li></ul>
+<h4>Phase 2 — Design</h4>
+<p>Identify:</p>
+<ul><li>classes;</li><li>responsibilities;</li><li>fields;</li><li>methods;</li><li>public APIs;</li><li>relationships;</li><li>invariants.</li></ul>
+<p>Explicitly discuss the Single Responsibility Principle, cohesion, and coupling.</p>
+<h4>Phase 3 — Data Structures</h4>
+<p>Use at least <strong>three conceptually different data structures</strong> where justified.</p>
+<p>For each:</p>
+<ul><li>state the requirement it supports;</li><li>state the important operations;</li><li>explain why you selected it;</li><li>estimate relevant Big-O costs.</li></ul>
+<p>Do not use additional structures merely to satisfy this requirement.</p>
+<h4>Phase 4 — Abstraction</h4>
+<p>Demonstrate:</p>
+<ul><li>encapsulation;</li><li>information hiding;</li><li>at least one meaningful interface/implementation distinction;</li><li>programming to an interface where appropriate.</li></ul>
+<p>Explain at least one place where you deliberately <strong>did not</strong> create an interface because it would add unnecessary complexity.</p>
+<h4>Phase 5 — Implementation</h4>
+<p>Implement the core system in Java.</p>
+<p>Requirements:</p>
+<ul><li>keep <code>main</code> small;</li><li>use intention-revealing names;</li><li>avoid duplicated business rules;</li><li>replace meaningful magic values with named constants;</li><li>protect object invariants.</li></ul>
+<h4>Phase 6 — Testing</h4>
+<p>Create at least <strong>20 automated tests</strong> covering:</p>
+<ul><li>normal behavior;</li><li>boundary behavior;</li><li>invalid behavior;</li><li>interactions between classes.</li></ul>
+<p>Tests should verify externally visible behavior rather than private representation.</p>
+<h4>Phase 7 — Debugging</h4>
+<p>Document one real defect encountered during development.</p>
+<p>Record:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>symptom
+reproduction steps
+expected state
+actual state
+hypotheses
+evidence collected
+debugger observations
+root cause
+fix
+regression test</code></pre></div>
+<h4>Phase 8 — Refactoring</h4>
+<p>After the system works, identify at least three structural improvements.</p>
+<p>Perform the refactorings while preserving externally visible behavior and rerunning the test suite.</p>
+<h4>Phase 9 — API Documentation</h4>
+<p>Use official Java API documentation to learn at least one standard-library class or interface that was not already familiar to you.</p>
+<p>Explain:</p>
+<ul><li>what you needed to learn;</li><li>which documentation details mattered;</li><li>how the API influenced your design.</li></ul>
+<h4>Phase 10 — Design Defense</h4>
+<p>Submit a final design defense answering:</p>
+<ol><li>Why do these classes exist?</li><li>Why does each responsibility belong where you placed it?</li><li>Which invariants are most important?</li><li>Why did you choose each major data structure?</li><li>Which components are most strongly coupled, and why?</li><li>Where does abstraction hide implementation details?</li><li>Where did you choose composition over inheritance?</li><li>What are the complexities of the major operations?</li><li>Which tests provide the strongest evidence of correctness?</li><li>What would become problematic if the workload increased by 100×?</li><li>What would you redesign if requirements changed significantly?</li><li>What did refactoring improve?</li><li>Which alternative design did you consider and reject?</li><li>Where did you deliberately favor simplicity over flexibility or performance?</li><li>What is the single most important design decision in the project, and why?</li></ol>
+<p>The goal is not merely to demonstrate that the application runs. The goal is to demonstrate that you can <strong>reason about the application as a software system</strong>.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-14.html">← Week 14</a><span></span></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

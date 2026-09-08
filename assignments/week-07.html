@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 7</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 7: Object-Oriented Design</h2>
+      <div class="intro">
+<p>These assignments practice designing Java programs as systems of collaborating objects. Unless an assignment explicitly asks only for analysis or design, write valid Java code and a small driver program that demonstrates the required behavior.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Class or Object?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Classes</span><span class="badge topic-badge">objects</span><span class="badge topic-badge">state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Class or Object? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider software for a bicycle-rental service.</p>
+<p>For each item below, classify it as either a <strong>class/type</strong>, a possible <strong>object/instance</strong>, or neither:</p>
+<ul><li><code>Bicycle</code></li><li>bicycle number 417</li><li><code>RentalStation</code></li><li>the station at 8th Street</li><li>hourly rental price</li><li><code>Customer</code></li><li>customer account 9281</li><li><code>rentBicycle()</code></li></ul>
+<p>Then answer:</p>
+<ol><li>What is the difference between a class and an object?</li><li>Give two additional possible objects for one of your classes.</li><li>Explain why those objects can have different state even though they belong to the same class.</li></ol>
+<p>No Java implementation is required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: State or Behavior?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">State</span><span class="badge topic-badge">behavior</span><span class="badge topic-badge">fields</span><span class="badge topic-badge">methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: State or Behavior? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A music-practice application represents a <code>PracticeSession</code>.</p>
+<p>The application needs to track:</p>
+<ul><li>instrument name,</li><li>duration in minutes,</li><li>date,</li><li>whether the session was completed,</li><li>marking a session complete,</li><li>determining whether a session lasted at least 30 minutes,</li><li>displaying the duration.</li></ul>
+<p>Separate these requirements into:</p>
+<ol><li><strong>state</strong>, and</li><li><strong>behavior</strong>.</li></ol>
+<p>Then propose appropriate Java field types and method signatures.</p>
+<p>Do not implement the methods.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Protect the Pet</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Encapsulation</span><span class="badge topic-badge">private fields</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Protect the Pet as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following class has poor encapsulation:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Pet</span> {
+    <span class="kw">public</span> <span class="type">String</span> name;
+    <span class="kw">public</span> <span class="kw">int</span> age;
+    <span class="kw">public</span> <span class="kw">double</span> weight;
+}</code></pre></div>
+<p>Redesign the class so that:</p>
+<ul><li>all fields are private;</li><li>age cannot become negative;</li><li>weight must be greater than zero;</li><li>outside code can read the pet's name, age, and weight;</li><li>outside code cannot arbitrarily replace the age or weight.</li></ul>
+<p>Provide appropriate constructors and public methods.</p>
+<p>Briefly explain how your design improves encapsulation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: Setter or Meaningful Operation?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Public interfaces</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">meaningful methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: Setter or Meaningful Operation? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A <code>ParkingMeter</code> currently exposes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>setMinutesRemaining(<span class="kw">int</span> minutes)</code></pre></div>
+<p>Suppose users are actually allowed to:</p>
+<ul><li>add purchased parking time;</li><li>check the remaining time;</li><li>determine whether the meter has expired.</li></ul>
+<p>Design a better public interface.</p>
+<p>Your answer must include:</p>
+<ol><li>proposed method signatures;</li><li>which fields should be private;</li><li>an explanation of why directly exposing <code>setMinutesRemaining()</code> may be undesirable.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Shared or Individual?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Instance fields</span><span class="badge topic-badge">static fields</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Shared or Individual? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A <code>GamePlayer</code> class needs these values:</p>
+<ul><li>player username;</li><li>player score;</li><li>player level;</li><li>number of players created;</li><li>maximum allowed username length.</li></ul>
+<p>For each value, decide whether it should be:</p>
+<ul><li>an instance field,</li><li>a static field, or</li><li>a <code>static final</code> constant.</li></ul>
+<p>Explain each decision in one sentence.</p>
+<p>Then write only the corresponding field declarations.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: Fixed Choices</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Enums</span><span class="badge topic-badge">fixed sets of values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: Fixed Choices as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A package-delivery application currently stores a parcel's delivery speed as a <code>String</code>.</p>
+<p>Valid possibilities are:</p>
+<ul><li>STANDARD</li><li>EXPRESS</li><li>OVERNIGHT</li><li>SAME_DAY</li></ul>
+<p>Create an appropriate Java <code>enum</code>.</p>
+<p>Then write a short program fragment that:</p>
+<ol><li>declares a variable of the enum type;</li><li>assigns one of its values;</li><li>uses <code>if</code> to check for <code>OVERNIGHT</code>;</li><li>uses <code>switch</code> to print a different description for each possible value.</li></ol>
+<p>Explain one advantage of the enum over arbitrary strings.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Has-a, Is-a, or Uses-a?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Composition</span><span class="badge topic-badge">dependency</span><span class="badge topic-badge">association</span><span class="badge topic-badge">has-a vs. is-a</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Has-a, Is-a, or Uses-a? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Classify each relationship as most naturally <strong>has-a</strong>, <strong>is-a</strong>, or <strong>uses-a/dependency</strong>:</p>
+<ol><li>A <code>Laptop</code> has a <code>Battery</code>.</li><li>A <code>PrinterService</code> temporarily receives a <code>Document</code> to print.</li><li>An <code>ElectricScooter</code> is a <code>Vehicle</code>.</li><li>A <code>Podcast</code> has episodes.</li><li>A <code>Chef</code> uses a <code>Recipe</code> while preparing food.</li></ol>
+<p>For each relationship, state whether composition would be reasonable.</p>
+<p>Do <strong>not</strong> implement inheritance; the purpose is only to recognize the relationships.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: What Does <code>null</code> Mean?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">References</span><span class="badge topic-badge">null</span><span class="badge topic-badge">NullPointerException</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: What Does null Mean? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Study this code:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Camera</span> camera = <span class="lit">null</span>;
+camera.takePhoto();</code></pre></div>
+<p>Answer:</p>
+<ol><li>What does the variable <code>camera</code> contain before the second statement?</li><li>Does a <code>Camera</code> object exist?</li><li>What happens when the second statement executes?</li><li>Why does it happen?</li></ol>
+<p>Then rewrite the fragment so <code>takePhoto()</code> executes only when a camera object is available.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Same Object?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">References</span><span class="badge topic-badge">reference assignment</span><span class="badge topic-badge">identity</span><span class="badge topic-badge">==</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Same Object? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Assume <code>Badge</code> has a constructor accepting a badge number.</p>
+<p>Trace:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Badge</span> a = <span class="kw">new</span> <span class="type">Badge</span>(<span class="num">42</span>);
+<span class="type">Badge</span> b = a;
+<span class="type">Badge</span> c = <span class="kw">new</span> <span class="type">Badge</span>(<span class="num">42</span>);</code></pre></div>
+<p>For each expression, predict whether it evaluates to <code>true</code> or <code>false</code>:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>a == b
+a == c
+b == c</code></pre></div>
+<p>Draw a simple reference diagram showing the variables and objects.</p>
+<p>Finally, explain why two objects containing the same badge number do not necessarily satisfy <code>==</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Package the Project</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Packages</span><span class="badge topic-badge">imports</span><span class="badge topic-badge">fully qualified names</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Package the Project as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are organizing a small gardening application containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Plant
+GardenBed
+WateringEvent
+GardenApp</code></pre></div>
+<p>Design a package structure with:</p>
+<ul><li>one package for domain/model classes;</li><li>one package for the application entry point.</li></ul>
+<p>Show the resulting directory structure and write the <code>package</code> declaration for each class.</p>
+<p>If <code>GardenApp</code> creates a <code>Plant</code>, show the necessary <code>import</code>.</p>
+<p>Explain what an import does and what it does <strong>not</strong> do.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Design a Locker</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Abstraction</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">public interface</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Design a Locker as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement a <code>Locker</code> class.</p>
+<p>A locker:</p>
+<ul><li>has a locker number;</li><li>can be occupied or empty;</li><li>can be assigned to a person's ID;</li><li>can be released;</li><li>should never be simultaneously empty and assigned to an ID.</li></ul>
+<p>Do not provide public setters for every field.</p>
+<p>Instead, design meaningful operations such as assignment and release.</p>
+<p>Document the invariant your class protects.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Shared Sensor</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Composition</span><span class="badge topic-badge">shared references</span><span class="badge topic-badge">mutation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Shared Sensor as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<ul><li><code>Sensor</code></li><li><code>DisplayPanel</code></li></ul>
+<p>A <code>Sensor</code> stores a measurement.</p>
+<p>Each <code>DisplayPanel</code> contains a reference to a <code>Sensor</code> and can display its current measurement.</p>
+<p>Create <strong>one</strong> sensor and two display panels that refer to that same sensor.</p>
+<p>Demonstrate that changing the measurement through the sensor is visible from both panels.</p>
+<p>Draw a reference diagram and explain why there is only one measurement object involved.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Derived File Size</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Essential state</span><span class="badge topic-badge">derived state</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Derived File Size as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a <code>DataFile</code> class that stores:</p>
+<ul><li>file name;</li><li>number of records;</li><li>bytes per record.</li></ul>
+<p>The total data size is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>number of records × bytes per record</code></pre></div>
+<p>Do <strong>not</strong> store the total size as a field.</p>
+<p>Implement a method that calculates it when requested.</p>
+<p>Protect reasonable invariants and explain why storing the total size separately could create inconsistent state.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: The Better Thermostat Interface</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Abstraction</span><span class="badge topic-badge">public interface</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: The Better Thermostat Interface as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A thermostat implementation exposes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>setHeatingRelay(<span class="kw">boolean</span> value)
+setCoolingRelay(<span class="kw">boolean</span> value)
+setRawSensorValue(<span class="kw">double</span> value)</code></pre></div>
+<p>Redesign the public interface from the perspective of a normal application using the thermostat.</p>
+<p>Possible operations might involve setting a target or asking about the current condition rather than manipulating implementation details.</p>
+<p>Provide:</p>
+<ul><li>proposed private state;</li><li>proposed public methods;</li><li>a short explanation distinguishing abstraction from encapsulation in your design.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Device Counter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Static fields</span><span class="badge topic-badge">instance fields</span><span class="badge topic-badge">static methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Device Counter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement a <code>Device</code> class containing:</p>
+<ul><li>an instance serial number;</li><li>an instance model name;</li><li>a static count of how many <code>Device</code> objects have been constructed.</li></ul>
+<p>Provide:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>getSerialNumber()
+getModelName()
+getDeviceCount()</code></pre></div>
+<p>Choose correctly between instance and static methods.</p>
+<p>Construct at least four devices and demonstrate that there are four independent device objects but only one shared count.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Enum-Powered Support Ticket</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Enums</span><span class="badge topic-badge">state</span><span class="badge topic-badge">behavior</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Enum-Powered Support Ticket as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">enum</span> <span class="type">TicketPriority</span></code></pre></div>
+<p>with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>LOW
+MEDIUM
+HIGH
+CRITICAL</code></pre></div>
+<p>Create a <code>SupportTicket</code> class containing a priority.</p>
+<p>Implement a method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>getResponseTargetHours()</code></pre></div>
+<p>that returns a response target based on priority.</p>
+<p>Use <code>switch</code> in the implementation.</p>
+<p>Explain why storing priority as several boolean fields would produce a weaker design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: Drone and Battery</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Composition</span><span class="badge topic-badge">has-a relationships</span><span class="badge topic-badge">responsibilities</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: Drone and Battery as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Drone
+Battery</code></pre></div>
+<p>A battery knows its remaining percentage.</p>
+<p>A drone <strong>has a</strong> battery and can report whether it has enough charge to launch. Define a reasonable minimum launch percentage as a constant.</p>
+<p>Decide which class should own:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>canLaunch()</code></pre></div>
+<p>and justify your choice.</p>
+<p>Fields should be private.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: Find the Responsibility</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Responsibilities</span><span class="badge topic-badge">cohesion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: Find the Responsibility as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A recipe-planning program proposes one class:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>RecipeManager</code></pre></div>
+<p>with these operations:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>addIngredient()
+calculateNutrition()
+saveUserPassword()
+resizeProfilePicture()
+calculatePreparationTime()
+changeRecipeTitle()</code></pre></div>
+<p>Analyze the design.</p>
+<ol><li>Which operations naturally belong together?</li><li>Which operations appear unrelated?</li><li>Propose a more cohesive set of classes.</li><li>Give each proposed class a one-sentence responsibility.</li></ol>
+<p>No implementation is required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: Optional Assignment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">null</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">design decisions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: Optional Assignment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a <code>WorkTask</code> class.</p>
+<p>A task has:</p>
+<ul><li>a title;</li><li>a priority;</li><li>optionally an assigned <code>TeamMember</code>.</li></ul>
+<p>An unassigned task is valid.</p>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>assignTo(...)
+unassign()
+isAssigned()</code></pre></div>
+<p>and one method that safely reports the assignee's name without causing a <code>NullPointerException</code>.</p>
+<p>Explain why <code>null</code> is meaningful in this design rather than necessarily representing an error.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: Package Name Collision</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Packages</span><span class="badge topic-badge">imports</span><span class="badge topic-badge">fully qualified class names</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: Package Name Collision as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose your application has:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>calendar.model.Event
+analytics.model.Event</code></pre></div>
+<p>and one class needs to work with both types.</p>
+<p>Write a small Java example demonstrating how fully qualified class names can distinguish them.</p>
+<p>Then organize these classes plus <code>DashboardApp</code> into a reasonable directory/package structure.</p>
+<p>Explain why packages can solve naming conflicts.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Makerspace Tool Checkout</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Candidate classes</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">collections</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Makerspace Tool Checkout as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a makerspace tool-checkout system.</p>
+<p>Requirements:</p>
+<ul><li>tools have an ID and description;</li><li>patrons have an ID and name;</li><li>a checkout connects a patron with a tool;</li><li>a tool cannot have two active checkouts simultaneously;</li><li>the system should track multiple tools.</li></ul>
+<p>Before coding:</p>
+<ol><li>identify candidate classes;</li><li>list state and behavior for each;</li><li>identify has-a relationships;</li><li>state important invariants.</li></ol>
+<p>Then implement the design.</p>
+<p>Do not copy the structure of a library example; make responsibility decisions based on these requirements.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Greenhouse Zones</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Composition</span><span class="badge topic-badge">collections of objects</span><span class="badge topic-badge">derived state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Greenhouse Zones as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a greenhouse model containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Greenhouse
+Zone</code></pre></div>
+<p>Each <code>Zone</code> stores:</p>
+<ul><li>a name;</li><li>current humidity percentage;</li><li>target humidity percentage.</li></ul>
+<p>A <code>Greenhouse</code> contains multiple zones.</p>
+<p>Provide operations that determine:</p>
+<ul><li>how many zones are below their humidity target;</li><li>the average current humidity;</li><li>whether every zone is within 5 percentage points of its target.</li></ul>
+<p>Do not store these results as fields.</p>
+<p>Explain why they are derived state.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Repair the Encapsulation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Encapsulation</span><span class="badge topic-badge">setters</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">tell-don't-manipulate</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Repair the Encapsulation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You inherit this design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">GiftCard</span> {
+    <span class="kw">public</span> <span class="kw">double</span> balance;
+
+    <span class="kw">public</span> <span class="kw">void</span> setBalance(<span class="kw">double</span> balance) {
+        <span class="kw">this</span>.balance = balance;
+    }
+}</code></pre></div>
+<p>Redesign the class so callers interact through domain operations.</p>
+<p>The class must support:</p>
+<ul><li>loading funds;</li><li>spending funds;</li><li>reading the current balance;</li><li>rejecting invalid operations.</li></ul>
+<p>Prevent a negative balance.</p>
+<p>Write a driver demonstrating valid and invalid operations.</p>
+<p>Explain why the revised design gives responsibility to the object that owns the data.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Conference Session Capacity</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Invariants</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">collections</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Conference Session Capacity as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Attendee
+ConferenceSession</code></pre></div>
+<p>A session has:</p>
+<ul><li>title;</li><li>positive capacity;</li><li>a collection of registered attendees.</li></ul>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>register(...)
+cancelRegistration(...)
+hasSpace()
+getRegistrationCount()</code></pre></div>
+<p>Requirements:</p>
+<ul><li><code>null</code> attendees cannot be registered;</li><li>the same object cannot be registered twice;</li><li>registrations cannot exceed capacity.</li></ul>
+<p>Identify the class invariant explicitly.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Reference Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Object identity</span><span class="badge topic-badge">shared references</span><span class="badge topic-badge">mutation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Reference Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a mutable <code>ScoreBoard</code> class and trace a program containing at least four reference variables where:</p>
+<ul><li>two variables refer to one object;</li><li>two separate objects initially contain equal scores;</li><li>one object is mutated through an alias;</li><li>several <code>==</code> comparisons are performed.</li></ul>
+<p>Before running the program, write down your predicted output.</p>
+<p>Then run it and explain every result using <strong>reference identity</strong>, not merely field values.</p>
+<p>Include a reference diagram.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Static Configuration Audit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Static vs. instance</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">design reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Static Configuration Audit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider a <code>Robot</code> class that needs:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>robotName
+batteryLevel
+distanceTravelled
+totalRobotsCreated
+maximumBatteryLevel
+defaultMovementSpeed
+currentMovementSpeed</code></pre></div>
+<p>For every value, choose among:</p>
+<ul><li>instance field;</li><li>static field;</li><li><code>static final</code> constant.</li></ul>
+<p>Then implement the class.</p>
+<p>Add at least one appropriate static method and two appropriate instance methods.</p>
+<p>Include a paragraph explaining why making all fields static would break the model.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Enum with Data — Shipping Container</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Enums with fields/methods</span><span class="badge topic-badge">constants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Enum with Data — Shipping Container as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">enum</span> <span class="type">ContainerSize</span></code></pre></div>
+<p>with several fixed sizes such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>SMALL
+MEDIUM
+LARGE
+EXTRA_LARGE</code></pre></div>
+<p>Each enum constant must contain a maximum weight.</p>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>getMaximumWeight()</code></pre></div>
+<p>Then create a <code>CargoContainer</code> whose size is represented by the enum and whose current cargo weight cannot exceed the limit associated with that size.</p>
+<p>The container must protect its invariant.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Cohesion Refactoring</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Cohesion</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">single responsibility</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Cohesion Refactoring as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A <code>PodcastEpisode</code> class currently:</p>
+<ul><li>stores title and duration;</li><li>marks whether playback is complete;</li><li>calculates advertising invoices;</li><li>writes application backups;</li><li>formats user passwords;</li><li>records playback progress.</li></ul>
+<p>Refactor this conceptual design.</p>
+<p>Your submission must include:</p>
+<ol><li>the problems in the original design;</li><li>proposed classes;</li><li>each class's responsibility;</li><li>relationships between the classes;</li><li>which dependencies are necessary and which should disappear.</li></ol>
+<p>Implement at least two of your proposed classes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Public Interface Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Abstraction</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">interface design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Public Interface Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a <code>VendingSlot</code> without exposing its internal representation.</p>
+<p>A caller should be able to:</p>
+<ul><li>ask whether an item is available;</li><li>purchase one item;</li><li>restock items;</li><li>read the item's price.</li></ul>
+<p>A caller should <strong>not</strong> be able to arbitrarily set:</p>
+<ul><li>inventory to a negative number;</li><li>price to a negative number.</li></ul>
+<p>First write the public interface as method signatures only.</p>
+<p>Then implement it.</p>
+<p>Finally, explain which details belong to the public abstraction and which belong to the private implementation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Package a Weather Station Project</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Packages</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">imports</span><span class="badge topic-badge">project organization</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Package a Weather Station Project as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a small project containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>WeatherStation
+Reading
+Sensor
+WeatherApp
+ReadingQuality</code></pre></div>
+<p>Use at least three packages, with sensible grouping.</p>
+<p><code>ReadingQuality</code> must be an enum.</p>
+<p>The application should create sensors, produce readings, and give those readings to a weather station.</p>
+<p>Submit:</p>
+<ol><li>directory structure;</li><li>package declarations;</li><li>imports;</li><li>Java implementation;</li><li>a short justification for the package organization.</li></ol>
+<p>Avoid creating packages that contain only arbitrary or unrelated classes.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Community Garden Plot System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">OOD process</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">collections</span><span class="badge topic-badge">enums</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Community Garden Plot System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a system for a community garden.</p>
+<p>Requirements:</p>
+<ul><li>gardeners have IDs and names;</li><li>the garden contains multiple plots;</li><li>each plot has a positive area;</li><li>a plot can be AVAILABLE, ASSIGNED, or CLOSED;</li><li>an available plot may be assigned to a gardener;</li><li>an assigned plot can later be released;</li><li>a closed plot cannot be assigned;</li><li>one gardener may hold multiple plots.</li></ul>
+<p>Before coding, produce:</p>
+<ol><li>candidate classes;</li><li>state and behavior;</li><li>relationships;</li><li>responsibilities;</li><li>invariants;</li><li>public interfaces.</li></ol>
+<p>Then implement the design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Bike-Share Station Network</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Shared objects</span><span class="badge topic-badge">references</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">collections</span><span class="badge topic-badge">responsibility assignment</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Bike-Share Station Network as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Model a bike-share network containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Bicycle
+Station
+Network</code></pre></div>
+<p>A bicycle must exist as one object even when it moves between stations.</p>
+<p>Implement operations for transferring a bicycle from one station to another.</p>
+<p>Requirements:</p>
+<ul><li>a bicycle cannot simultaneously be stored at two stations;</li><li>a station cannot exceed its capacity;</li><li>transferring an unknown bicycle fails;</li><li>the network contains multiple stations.</li></ul>
+<p>Pay special attention to object references.</p>
+<p>Explain why creating a new <code>Bicycle</code> during every transfer would be a poor model.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Appointment Scheduling Design</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Candidate classes</span><span class="badge topic-badge">responsibilities</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Appointment Scheduling Design as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a simplified appointment system for a tutoring center.</p>
+<p>Requirements:</p>
+<ul><li>tutors have names and specialties;</li><li>clients have IDs and names;</li><li>appointments connect one tutor and one client;</li><li>appointments have a fixed status;</li><li>cancelled appointments remain in the system;</li><li>an appointment must always have a tutor and client;</li><li>the center tracks many appointments.</li></ul>
+<p>Determine:</p>
+<ul><li>candidate classes;</li><li>appropriate enum(s);</li><li>has-a relationships;</li><li>invariants;</li><li>which object should perform cancellation;</li><li>which object should search the collection of appointments.</li></ul>
+<p>Implement your design and justify the responsibility assignment.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Eliminate Redundant State</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Derived state</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">refactoring</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Eliminate Redundant State as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You encounter a <code>Subscription</code> design containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>monthlyPrice
+numberOfMonths
+subtotal
+discountRate
+discountAmount
+finalPrice</code></pre></div>
+<p>Assume several of these values can be calculated from the others.</p>
+<p>Design a minimal representation that stores only essential state.</p>
+<p>Implement methods that calculate all appropriate derived values.</p>
+<p>Then demonstrate how the original design could become internally inconsistent if one input changed without all dependent fields being updated.</p>
+<p>Explain your revised design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Smart Irrigation Controller</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Abstraction</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">enums</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">static vs. instance</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Smart Irrigation Controller as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>IrrigationController
+MoistureSensor
+WateringZone</code></pre></div>
+<p>Each watering zone:</p>
+<ul><li>has a sensor;</li><li>has a target moisture;</li><li>can determine whether watering is needed.</li></ul>
+<p>Use an enum for the controller's operating mode.</p>
+<p>Use at least one legitimate class-wide constant.</p>
+<p>Your design must contain both static and instance members, and every use of <code>static</code> must be justified.</p>
+<p>Do not use <code>static</code> merely to make methods easier to call.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Design Review — God Class</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Cohesion</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">single responsibility</span><span class="badge topic-badge">refactoring</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Design Review — God Class as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A fictional application contains:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>EverythingManager</code></pre></div>
+<p>It:</p>
+<ul><li>manages employee shift records;</li><li>calculates payroll totals;</li><li>sends notifications;</li><li>stores printer settings;</li><li>creates inventory items;</li><li>generates inventory reports;</li><li>validates employee IDs;</li><li>controls user-interface menus.</li></ul>
+<p>Write a design review.</p>
+<p>Identify:</p>
+<ul><li>cohesion problems;</li><li>excessive responsibilities;</li><li>likely coupling problems;</li><li>reasonable class boundaries.</li></ul>
+<p>Propose a replacement design of at least four classes.</p>
+<p>For each class, describe:</p>
+<ul><li>purpose;</li><li>state;</li><li>behavior;</li><li>relationships.</li></ul>
+<p>Implement a representative subset showing how the classes collaborate.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Reference-Safe Team Roster</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">References</span><span class="badge topic-badge">collections</span><span class="badge topic-badge">identity</span><span class="badge topic-badge">null</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Reference-Safe Team Roster as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Player
+TeamRoster</code></pre></div>
+<p>A roster contains references to <code>Player</code> objects.</p>
+<p>Requirements:</p>
+<ul><li><code>null</code> cannot be added;</li><li>the exact same player object cannot appear twice;</li><li>two distinct player objects are allowed even if they happen to contain identical names;</li><li>removing a player must use reference identity for this assignment.</li></ul>
+<p>Construct test cases that clearly demonstrate the distinction between:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>a == b</code></pre></div>
+<p>and &quot;a and b contain similar data.&quot;</p>
+<p>Explain the consequences of this design choice.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Transit Pass State Machine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Enums</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">meaningful operations</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Transit Pass State Machine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a transit pass with states:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>NEW
+ACTIVE
+SUSPENDED
+EXPIRED</code></pre></div>
+<p>Outside code must not directly assign arbitrary states.</p>
+<p>Instead, provide meaningful operations such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>activate
+suspend
+restore
+expire</code></pre></div>
+<p>Define which transitions are legal.</p>
+<p>For example, you might decide an expired pass cannot become active again.</p>
+<p>Implement the rules inside the class and reject invalid transitions.</p>
+<p>Explain how encapsulation protects the state-transition invariant.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Multi-Package Media Archive</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Packages</span><span class="badge topic-badge">class relationships</span><span class="badge topic-badge">enums</span><span class="badge topic-badge">public interfaces</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Multi-Package Media Archive as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a media-archive application containing at least:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>MediaItem
+Creator
+Archive
+ArchiveEntry
+ArchiveApp</code></pre></div>
+<p>You may not use inheritance for this assignment.</p>
+<p>Use composition to model the relationships.</p>
+<p>Include an enum representing a fixed classification relevant to the archive.</p>
+<p>Organize the program into sensible packages and provide:</p>
+<ul><li>complete directory tree;</li><li>package declarations;</li><li>imports;</li><li>public interfaces;</li><li>implementation.</li></ul>
+<p>Explain why each class belongs in its chosen package.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Evaluate Two Designs</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">OOD evaluation</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">cohesion</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">responsibilities</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Evaluate Two Designs as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A parcel-tracking system has two proposed designs.</p>
+<p><strong>Design A:</strong> One <code>ParcelSystem</code> class stores all parcel, sender, destination, and tracking information in parallel arrays and performs every operation.</p>
+<p><strong>Design B:</strong> Several collaborating classes represent important concepts and use collections of objects.</p>
+<p>Without assuming Design B is automatically correct, compare the designs in terms of:</p>
+<ul><li>abstraction;</li><li>cohesion;</li><li>coupling;</li><li>responsibilities;</li><li>encapsulation;</li><li>invariants;</li><li>ability to represent relationships;</li><li>risk of inconsistent state;</li><li>understandability.</li></ul>
+<p>Propose your own final design and implement enough of it to demonstrate at least three objects collaborating.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Animal Shelter Management</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Full OOD process</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">enums</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">collections</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Animal Shelter Management as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement an animal-shelter system.</p>
+<p>Requirements:</p>
+<ul><li>animals have shelter IDs, names, and intake dates represented in a simple format of your choice;</li><li>adopters have IDs and names;</li><li>animals have a fixed adoption status;</li><li>an adoption connects one adopter with one animal;</li><li>an animal cannot participate in two active adoptions;</li><li>the shelter maintains collections of animals and adoption records;</li><li>adoption fees cannot be negative;</li><li>adopted animals remain represented in the system.</li></ul>
+<p>Before implementation, submit a design document identifying:</p>
+<ul><li>candidate classes;</li><li>rejected class candidates and why they were rejected;</li><li>responsibilities;</li><li>state;</li><li>behavior;</li><li>composition relationships;</li><li>invariants;</li><li>derived values;</li><li>enums;</li><li>any legitimate static members.</li></ul>
+<p>Implement and demonstrate the design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Co-Working Space Reservation System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">OOD</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">references</span><span class="badge topic-badge">enums</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Co-Working Space Reservation System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a co-working space model.</p>
+<p>The system contains:</p>
+<ul><li>members;</li><li>desks;</li><li>meeting spaces;</li><li>bookings.</li></ul>
+<p>Do <strong>not</strong> use inheritance; model the problem using the Week 7 tools.</p>
+<p>Your design must support:</p>
+<ul><li>fixed booking statuses;</li><li>positive hourly prices;</li><li>bookings connecting existing objects rather than copying their data;</li><li>cancellation;</li><li>calculating a booking cost from duration and price;</li><li>multiple bookings in the system.</li></ul>
+<p>Identify where <code>null</code> is valid, if anywhere.</p>
+<p>Include reference diagrams for one scenario in which several objects collaborate.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Refactor a Procedural Equipment Tracker</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">From procedural code to OOD</span><span class="badge topic-badge">objects vs. parallel arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Refactor a Procedural Equipment Tracker as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Imagine an equipment tracker currently uses:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span>[] equipmentIds;
+<span class="type">String</span>[] descriptions;
+<span class="kw">boolean</span>[] available;
+<span class="type">String</span>[] borrowerIds;</code></pre></div>
+<p>All operations are static methods in one application class.</p>
+<p>Redesign the system using objects.</p>
+<p>Your submission must:</p>
+<ol><li>identify weaknesses in the parallel-array design;</li><li>propose candidate classes;</li><li>assign responsibilities;</li><li>distinguish essential and derived state;</li><li>define invariants;</li><li>replace inappropriate static state;</li><li>implement the new system;</li><li>demonstrate multiple interacting objects.</li></ol>
+<p>Explain why your design is easier to reason about.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Shared Resource Identity</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Shared references</span><span class="badge topic-badge">identity</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Shared Resource Identity as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a scientific laboratory application containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Researcher
+Instrument
+Experiment
+Laboratory</code></pre></div>
+<p>Multiple experiments may refer to the same <code>Instrument</code> object.</p>
+<p>Requirements:</p>
+<ul><li>every experiment has one lead researcher;</li><li>every experiment uses at least one instrument;</li><li>no <code>null</code> instruments are allowed;</li><li>instruments have mutable calibration information;</li><li>recalibrating a shared instrument must be visible to every experiment referring to it.</li></ul>
+<p>Create a scenario demonstrating shared references.</p>
+<p>Draw the object graph before and after calibration and explain why copying instrument data into every experiment would create synchronization problems.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Digital Wallet Design</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Encapsulation</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">meaningful methods</span><span class="badge topic-badge">derived state</span><span class="badge topic-badge">enums</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Digital Wallet Design as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a simplified digital wallet.</p>
+<p>A wallet:</p>
+<ul><li>has an owner identifier;</li><li>contains transaction records;</li><li>supports adding and spending funds;</li><li>cannot spend more than its available amount;</li><li>records a fixed transaction type;</li><li>calculates its current amount from its transactions.</li></ul>
+<p>For this assignment, <strong>do not store the current balance as a separate field</strong>.</p>
+<p>Instead, derive it from transaction records.</p>
+<p>Design public methods that prevent callers from directly creating contradictory wallet state.</p>
+<p>Explain the tradeoff between calculating the balance and storing redundant state.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Campus Shuttle System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Multi-class design</span><span class="badge topic-badge">packages</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">static/instance</span><span class="badge topic-badge">enums</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Campus Shuttle System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a campus shuttle application—not a university registration application.</p>
+<p>Model at least:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Shuttle
+Stop
+Route
+Trip
+ShuttleSystem</code></pre></div>
+<p>Requirements:</p>
+<ul><li>routes contain ordered collections of stops;</li><li>trips refer to an existing route and shuttle;</li><li>trip status comes from an enum;</li><li>shuttle capacity must be positive;</li><li>passenger count cannot exceed capacity;</li><li>the system tracks multiple trips;</li><li>at least one sensible class-wide constant must exist;</li><li>all other proposed static members must be justified.</li></ul>
+<p>Organize the project into at least two packages.</p>
+<p>Provide a written design rationale before the Java implementation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Design Under Changing Requirements</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Abstraction</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">maintainability</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Design Under Changing Requirements as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design version 1 of a parcel-locker application with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Parcel
+Locker
+Recipient
+Pickup</code></pre></div>
+<p>After finishing your initial design, consider these new requirements:</p>
+<ul><li>the internal identifier format for parcels changes;</li><li>locker hardware reports occupancy differently;</li><li>recipients may now have several pickups;</li><li>pickup status gains another possible value.</li></ul>
+<p>Explain which classes must change.</p>
+<p>A strong design should prevent unrelated classes from depending directly on internal representation details.</p>
+<p>Refactor if necessary and explain how abstraction and encapsulation limit the effects of change.</p>
+<p>Implement enough code to demonstrate the revised design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: OOD Code Review and Reconstruction</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Cohesion</span><span class="badge topic-badge">coupling</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">static misuse</span><span class="badge topic-badge">redundant state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: OOD Code Review and Reconstruction as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create or analyze a deliberately poor Java program for an event-catering service containing at least these flaws:</p>
+<ul><li>public mutable fields;</li><li>unnecessary setters;</li><li>inappropriate static fields;</li><li>one low-cohesion class;</li><li>excessive coupling;</li><li>redundant derived state;</li><li>at least one poorly modeled relationship;</li><li>a value represented as a string that should be an enum.</li></ul>
+<p>First annotate every design problem.</p>
+<p>Then reconstruct the application using Week 7 design principles.</p>
+<p>For every major change, state which problem it solves.</p>
+<p>The final program must contain at least four collaborating classes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Build a Tool-Lending Cooperative</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Comprehensive object-oriented design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Build a Tool-Lending Cooperative as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement software for a neighborhood tool-lending cooperative.</p>
+<p>Requirements:</p>
+<ul><li>members join the cooperative;</li><li>the cooperative owns tools;</li><li>tools have a fixed condition classification;</li><li>members may check out available tools;</li><li>checkout records connect existing member and tool objects;</li><li>a tool cannot have multiple active checkouts;</li><li>returned tools remain in the system;</li><li>late fees are calculated from days late rather than stored redundantly;</li><li>invalid negative fees must be prevented;</li><li>the cooperative tracks many members, tools, and checkout records.</li></ul>
+<p>Before coding, follow a complete design process:</p>
+<ol><li>identify candidate classes;</li><li>reject unnecessary class candidates;</li><li>identify state;</li><li>identify behavior;</li><li>assign responsibilities;</li><li>identify has-a relationships;</li><li>identify invariants;</li><li>design public interfaces;</li><li>identify enum values;</li><li>determine static vs. instance members;</li><li>identify derived state;</li><li>choose package organization.</li></ol>
+<p>Submit the design rationale and implementation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Original Object-Oriented System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Comprehensive Week 7 synthesis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Original Object-Oriented System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose a problem domain <strong>not used in the lecture notes and not used in Assignments 1–49</strong>.</p>
+<p>Design and implement a small Java system containing at least <strong>five meaningful classes</strong>.</p>
+<p>Your system must demonstrate all of the following:</p>
+<ul><li>meaningful candidate-class selection;</li><li>state and behavior;</li><li>abstraction;</li><li>private implementation;</li><li>a clear public interface;</li><li>encapsulation;</li><li>meaningful operations instead of automatic setters;</li><li>focused class responsibilities;</li><li>high cohesion;</li><li>reasonable coupling;</li><li>at least two has-a relationships;</li><li>an object stored as a field;</li><li>a collection of objects;</li><li>shared object references;</li><li>deliberate handling of <code>null</code>;</li><li>correct reasoning about reference identity;</li><li>both instance and legitimately static members;</li><li>at least one <code>static final</code> constant;</li><li>at least one enum;</li><li>at least two explicitly documented class invariants;</li><li>at least one value calculated rather than redundantly stored;</li><li>multiple Java packages.</li></ul>
+<p>Before writing Java, submit a design containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Candidate classes
+Purpose of each class
+State owned by each class
+Behavior of each class
+Relationships
+Public interfaces
+Invariants
+Enums
+Static members
+Derived state
+Package organization</code></pre></div>
+<p>After implementation, write a short design defense answering:</p>
+<ol><li>Why does each class exist?</li><li>Why does each method belong to its chosen class?</li><li>Why are the relationships modeled as they are?</li><li>How does the design protect invalid state?</li><li>Where does the design use abstraction?</li><li>Where does it use encapsulation?</li><li>Which classes are coupled, and why is that coupling necessary?</li><li>What would be hardest to change in your design, and why?</li></ol>
+<p>The quality of the <strong>design reasoning</strong> is as important as whether the Java code compiles.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-06.html">← Week 6</a><a href="week-08.html">Week 8 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

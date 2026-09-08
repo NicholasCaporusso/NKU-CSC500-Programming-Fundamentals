@@ -1,0 +1,1200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 4</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 4: Methods and Program Decomposition</h2>
+      <div class="intro">
+<p><strong>Total assignments:</strong> 50<br>
+<strong>Difficulty scale:</strong> 1–5<br>
+<strong>Assignments per difficulty:</strong> 10</p>
+<p>Unless an assignment says otherwise:</p>
+<ul><li>Write Java methods as <code>public static</code> methods.</li><li>Use only concepts introduced through Week 4.</li><li>Give methods descriptive lower-camel-case names.</li><li>Do not place a method definition inside another method.</li><li>Keep <code>main</code> focused on coordinating the program rather than performing all calculations itself.</li><li>Where a method is supposed to calculate a value, return the value rather than printing it.</li><li>Test your methods with several inputs.</li></ul>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Fundamentals</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Print a Receipt Header</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">void methods</span><span class="badge topic-badge">zero parameters</span><span class="badge topic-badge">method definitions</span><span class="badge topic-badge">method calls</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Print a Receipt Header as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a method named:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>printReceiptHeader()</code></pre></div>
+<p>The method should take no parameters, return no value, and print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>====================
+     QUICK MART
+====================</code></pre></div>
+<p>Write a <code>main</code> method that calls <code>printReceiptHeader()</code> twice.</p>
+<p><strong>Requirements:</strong></p>
+<ol><li>Use <code>void</code> as the return type.</li><li>The method must have no parameters.</li><li>Do not duplicate the three <code>println</code> statements in <code>main</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: Personalized Badge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">arguments</span><span class="badge topic-badge">void methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: Personalized Badge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>printBadge(<span class="type">String</span> name)</code></pre></div>
+<p>The method should print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[ Visitor: NAME ]</code></pre></div>
+<p>where <code>NAME</code> is replaced by the argument.</p>
+<p>For example, an argument of <code>&quot;Nora&quot;</code> should cause:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[ Visitor: Nora ]</code></pre></div>
+<p>In <code>main</code>, call the method at least three times with different arguments.</p>
+<p>Then identify in a comment:</p>
+<ul><li>the parameter in the method definition, and</li><li>one argument in a method call.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Minutes to Seconds</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">value-returning methods</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">return types</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Minutes to Seconds as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>minutesToSeconds(<span class="kw">int</span> minutes)</code></pre></div>
+<p>that returns the corresponding number of seconds.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>2 minutes → 120 seconds</code></pre></div>
+<p>The method must <strong>return</strong> the result rather than print it.</p>
+<p>Demonstrate in <code>main</code> that the returned value can be assigned to an <code>int</code> variable and then printed.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: Add a Service Fee</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">multiple parameters</span><span class="badge topic-badge">arguments</span><span class="badge topic-badge">returned values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: Add a Service Fee as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>addServiceFee(<span class="kw">double</span> amount, <span class="kw">double</span> fee)</code></pre></div>
+<p>that returns <code>amount + fee</code>.</p>
+<p>In <code>main</code>, call it using:</p>
+<ol><li>two literal arguments,</li><li>two variables as arguments, and</li><li>at least one expression as an argument.</li></ol>
+<p>Add comments identifying which values are the arguments and which names are the parameters.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Is It Freezing?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">returned values</span><span class="badge topic-badge">conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Is It Freezing? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>isFreezing(<span class="kw">double</span> temperature)</code></pre></div>
+<p>that returns <code>true</code> when <code>temperature</code> is less than or equal to <code>32.0</code> and <code>false</code> otherwise.</p>
+<p>Use the method directly in an <code>if</code> statement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">if</span> (isFreezing(...)) {
+    ...
+}</code></pre></div>
+<p>Test temperatures below, at, and above the boundary.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: First Character</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">return types</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">String</span><span class="badge topic-badge">char</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: First Character as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Assume the caller supplies a nonempty string.</p>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>firstCharacter(<span class="type">String</span> text)</code></pre></div>
+<p>that returns the first character of <code>text</code>.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;Java&quot; → 'J'</code></pre></div>
+<p>Your method should return a <code>char</code>.</p>
+<p>Call it from <code>main</code> and store the result in a correctly typed variable.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Print a Repeated Symbol</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">void methods</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">loops</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Print a Repeated Symbol as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>printSymbols(<span class="kw">char</span> symbol, <span class="kw">int</span> count)</code></pre></div>
+<p>that prints <code>symbol</code> exactly <code>count</code> times on one line, followed by a newline.</p>
+<p>For example:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>printSymbols(<span class="str">'#'</span>, <span class="num">5</span>);</code></pre></div>
+<p>should print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>#####</code></pre></div>
+<p>Test the same method with at least three different symbols and counts.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Identify the Method Parts</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">anatomy of a method</span><span class="badge topic-badge">definitions versus calls</span><span class="badge topic-badge">parameters versus arguments</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Identify the Method Parts as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> increasePrice(<span class="kw">double</span> price, <span class="kw">double</span> amount) {
+    <span class="kw">double</span> updatedPrice = price + amount;
+    <span class="kw">return</span> updatedPrice;
+}</code></pre></div>
+<p>Answer the following in comments or Markdown:</p>
+<ol><li>What is the method name?</li><li>What is the return type?</li><li>How many parameters are there?</li><li>What are their names and types?</li><li>Which variable is local to the method?</li><li>What value does the <code>return</code> statement send to the caller?</li><li>Write a valid call using <code>15.50</code> and <code>2.25</code> as arguments.</li><li>Write a statement that stores the returned result.</li></ol>
+<p>Do not run the code until after making your predictions.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Print or Return?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">void</span><span class="badge topic-badge">return values</span><span class="badge topic-badge">printing versus returning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Print or Return? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each task below, decide whether the method should normally be <code>void</code> or value-returning:</p>
+<ul><li>display a warning message,</li><li>calculate the number of hours from a number of days,</li><li>determine whether a customer qualifies for a discount,</li><li>print a decorative border,</li><li>convert kilograms to grams.</li></ul>
+<p>For every task:</p>
+<ol><li>state your choice,</li><li>explain it in one sentence, and</li><li>write an appropriate method header.</li></ol>
+<p>Then fully implement any <strong>two</strong> of the five methods.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Scope Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">local variables</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">block scope</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Scope Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without compiling the code, determine which uses of <code>value</code>, <code>message</code>, and <code>i</code> are legal:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> inspect(<span class="kw">int</span> value) {
+    <span class="type">System</span>.out.println(value);
+
+    <span class="kw">if</span> (value &gt; <span class="num">0</span>) {
+        <span class="type">String</span> message = <span class="str">&quot;positive&quot;</span>;
+        <span class="type">System</span>.out.println(message);
+    }
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">3</span>; i++) {
+        <span class="type">System</span>.out.println(i);
+    }
+
+    <span class="cmt">// A: System.out.println(message);</span>
+    <span class="cmt">// B: System.out.println(i);</span>
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    inspect(<span class="num">4</span>);
+
+    <span class="cmt">// C: System.out.println(value);</span>
+}</code></pre></div>
+<p>For A, B, and C:</p>
+<ol><li>state whether uncommenting the statement would compile,</li><li>explain why using the concept of <strong>scope</strong>.</li></ol>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Shipping Weight Converter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">returned values</span><span class="badge topic-badge">method reuse</span><span class="badge topic-badge">expressions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Shipping Weight Converter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create two methods:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>poundsToOunces(<span class="kw">double</span> pounds)
+ouncesToGrams(<span class="kw">double</span> ounces)</code></pre></div>
+<p>The first converts pounds to ounces using:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1 pound = 16 ounces</code></pre></div>
+<p>The second converts ounces to grams using:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1 ounce = 28.3495 grams</code></pre></div>
+<p>Use the two methods together to convert pounds all the way to grams.</p>
+<p>Your conversion methods must not print anything.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Parking Charge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">conditional returns</span><span class="badge topic-badge">multiple execution paths</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Parking Charge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>parkingCharge(<span class="kw">int</span> hours)</code></pre></div>
+<p>using these rules:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1–2 hours    → $5.00
+3–5 hours    → $8.00
+6–10 hours   → $12.00
+more than 10 → $18.00</code></pre></div>
+<p>Assume <code>hours &gt;= 1</code>.</p>
+<p>Return the charge as a <code>double</code>.</p>
+<p>Test values near every category boundary.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Password Length Check</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">testing boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Password Length Check as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>hasAcceptableLength(<span class="type">String</span> password)</code></pre></div>
+<p>that returns <code>true</code> when the password contains from 8 through 20 characters, inclusive.</p>
+<p>Use the method in a condition to print either:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Length accepted</code></pre></div>
+<p>or:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Length rejected</code></pre></div>
+<p>Create a test table before running the program. Include at least the lengths:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>7, 8, 9, 19, 20, 21</code></pre></div>
+<p>Record expected and actual results.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Distance Traveled</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">calculation methods</span><span class="badge topic-badge">multiple parameters</span><span class="badge topic-badge">separation of calculation from output</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Distance Traveled as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>calculateDistance(<span class="kw">double</span> speed, <span class="kw">double</span> hours)</code></pre></div>
+<p>that returns:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>speed × hours</code></pre></div>
+<p><code>calculateDistance</code> must contain no <code>Scanner</code> and no output statements.</p>
+<p>Let <code>main</code>:</p>
+<ol><li>read a speed,</li><li>read a number of hours,</li><li>call the method,</li><li>print the result.</li></ol>
+<p>Explain briefly why separating calculation from I/O makes the method easier to reuse.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Admission Rule</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">multiple parameters</span><span class="badge topic-badge">named conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Admission Rule as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A museum gives free admission when a visitor is:</p>
+<ul><li>younger than 6, <strong>or</strong></li><li>at least 65.</li></ul>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>getsFreeAdmission(<span class="kw">int</span> age)</code></pre></div>
+<p>Then write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>printAdmissionStatus(<span class="type">String</span> name, <span class="kw">int</span> age)</code></pre></div>
+<p>The second method should call <code>getsFreeAdmission</code>.</p>
+<p>Test several ages, including both boundaries.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Argument Order Bug</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">argument order</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Argument Order Bug as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer wants to calculate how much money remains after a purchase:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> remainingMoney(<span class="kw">double</span> balance, <span class="kw">double</span> cost) {
+    <span class="kw">return</span> balance - cost;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">double</span> wallet = <span class="num">50.0</span>;
+    <span class="kw">double</span> purchase = <span class="num">18.0</span>;
+
+    <span class="kw">double</span> remaining = remainingMoney(purchase, wallet);
+    <span class="type">System</span>.out.println(remaining);
+}</code></pre></div>
+<p>The program compiles but produces the wrong result.</p>
+<p>Complete all of the following:</p>
+<ol><li>predict the current output,</li><li>identify the logic error,</li><li>correct the method call,</li><li>explain why the compiler cannot detect the programmer's intended argument order.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: Early-Return Printer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">early return</span><span class="badge topic-badge">void methods</span><span class="badge topic-badge">conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: Early-Return Printer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>printTicketNumber(<span class="kw">int</span> number)</code></pre></div>
+<p>Rules:</p>
+<ul><li>if <code>number &lt; 1</code>, return immediately without printing,</li><li>otherwise print:</li></ul>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Ticket #NUMBER</code></pre></div>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">return</span>;</code></pre></div>
+<p>for the invalid case.</p>
+<p>Test negative, zero, and positive inputs.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: Scope Repair</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">scope</span><span class="badge topic-badge">information flow</span><span class="badge topic-badge">return values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: Scope Repair as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following design is invalid:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> computeCost(<span class="kw">double</span> price, <span class="kw">int</span> quantity) {
+    <span class="kw">double</span> cost = price * quantity;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    computeCost(<span class="num">7.5</span>, <span class="num">4</span>);
+    <span class="type">System</span>.out.println(cost);
+}</code></pre></div>
+<p>Do <strong>not</strong> make <code>cost</code> global.</p>
+<p>Instead:</p>
+<ol><li>explain why <code>main</code> cannot access <code>cost</code>,</li><li>redesign <code>computeCost</code> so the information crosses the method boundary correctly,</li><li>update <code>main</code>,</li><li>identify which variables belong to which method scope.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: Primitive Copy Experiment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">primitive pass-by-value</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">tracing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: Primitive Copy Experiment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Predict the output before running:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> modify(<span class="kw">int</span> a) {
+    a = a * <span class="num">3</span>;
+    <span class="type">System</span>.out.println(<span class="str">&quot;Inside: &quot;</span> + a);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> a = <span class="num">7</span>;
+    modify(a);
+    <span class="type">System</span>.out.println(<span class="str">&quot;Outside: &quot;</span> + a);
+}</code></pre></div>
+<p>Then:</p>
+<ol><li>run the program,</li><li>compare the result with your prediction,</li><li>draw a small diagram showing the value copied from <code>main</code> into <code>modify</code>,</li><li>explain why the two variables named <code>a</code> are separate variables.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: Movie Runtime Formatter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">parameters</span><span class="badge topic-badge">void versus returning methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: Movie Runtime Formatter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>wholeHours(<span class="kw">int</span> totalMinutes)
+remainingMinutes(<span class="kw">int</span> totalMinutes)
+printRuntime(<span class="kw">int</span> totalMinutes)</code></pre></div>
+<p>For <code>135</code> total minutes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>2 hours 15 minutes</code></pre></div>
+<p><code>wholeHours</code> and <code>remainingMinutes</code> should return values.</p>
+<p><code>printRuntime</code> should display the final result and should call the other two methods.</p>
+<p><code>main</code> should only supply a runtime and call <code>printRuntime</code>.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Delivery Eligibility</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">method composition</span><span class="badge topic-badge">conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Delivery Eligibility as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A delivery service accepts an order only when:</p>
+<ul><li>the distance is at most 15 miles, and</li><li>the order total is at least $20.</li></ul>
+<p>Write focused methods that answer the relevant questions rather than putting the complete Boolean expression directly in <code>main</code>.</p>
+<p>Your final program should be readable at a high level, such as determining whether an order can be delivered and then displaying the result.</p>
+<p>Test all meaningful combinations of qualifying and nonqualifying inputs.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Electricity Bill Calculator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">conditional logic</span><span class="badge topic-badge">calculation versus output</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Electricity Bill Calculator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Use the following simplified pricing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>First 100 kWh      $0.12 per kWh
+Additional kWh     $0.18 per kWh</code></pre></div>
+<p>Design a program using at least:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>calculateEnergyCharge(...)
+calculateBill(...)
+printBill(...)</code></pre></div>
+<p>Add a fixed account fee of <code>$6.50</code>.</p>
+<p>Requirements:</p>
+<ul><li>calculation methods return values,</li><li>output occurs separately,</li><li><code>main</code> communicates the high-level workflow,</li><li>test consumption below, exactly at, and above 100 kWh.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Three-Stage Number Transformation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">nested calls</span><span class="badge topic-badge">returned values</span><span class="badge topic-badge">tracing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Three-Stage Number Transformation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write three value-returning methods with distinct responsibilities:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>increaseByFour(<span class="kw">int</span> n)
+triple(<span class="kw">int</span> n)
+subtractTwo(<span class="kw">int</span> n)</code></pre></div>
+<p>Use them to calculate:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>subtractTwo(triple(increaseByFour(n)))</code></pre></div>
+<p>For at least two starting values:</p>
+<ol><li>predict the result manually,</li><li>trace the calls from the inside outward,</li><li>show the order in which calls return,</li><li>verify the result by running the program.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Shipping Quote</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">multiple methods</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">data flow</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Shipping Quote as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A package shipping program uses:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>weight &lt;= 2 kg       → $4.50
+weight &lt;= 5 kg       → $7.50
+weight &lt;= 10 kg      → $12.00
+weight &gt; 10 kg       → $18.00</code></pre></div>
+<p>An additional <code>$6.00</code> remote-area surcharge applies when the destination is remote.</p>
+<p>Design methods with separate responsibilities for:</p>
+<ul><li>determining the base shipping charge,</li><li>determining whether the surcharge applies,</li><li>calculating the final charge,</li><li>displaying the quote.</li></ul>
+<p>Do not let the base-charge method print anything.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Diagnose Five Method Errors</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">return types</span><span class="badge topic-badge">arguments</span><span class="badge topic-badge">scope</span><span class="badge topic-badge">initialization</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Diagnose Five Method Errors as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Each fragment contains a different method-related problem.</p>
+<h4>A</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> eligible(<span class="kw">int</span> age) {
+    <span class="kw">if</span> (age &gt;= <span class="num">18</span>) {
+        <span class="kw">return</span> <span class="lit">true</span>;
+    }
+}</code></pre></div>
+<h4>B</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> label() {
+    <span class="kw">return</span> <span class="str">&quot;ready&quot;</span>;
+}</code></pre></div>
+<h4>C</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> announce(<span class="type">String</span> text) {
+    <span class="type">System</span>.out.println(text);
+}
+
+<span class="type">String</span> result = announce(<span class="str">&quot;Go&quot;</span>);</code></pre></div>
+<h4>D</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> show(<span class="kw">int</span> count) {
+    <span class="type">System</span>.out.println(count);
+}
+
+show();</code></pre></div>
+<h4>E</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> compute(<span class="kw">int</span> x) {
+    <span class="kw">int</span> answer;
+
+    <span class="kw">if</span> (x &gt; <span class="num">0</span>) {
+        answer = x * <span class="num">2</span>;
+    }
+
+    <span class="kw">return</span> answer;
+}</code></pre></div>
+<p>For each:</p>
+<ol><li>identify the error,</li><li>classify it as a compilation or design/logic problem,</li><li>explain why it occurs,</li><li>provide a corrected version.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Event Ticket Price</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">conditional returns</span><span class="badge topic-badge">method design</span><span class="badge topic-badge">boundary testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Event Ticket Price as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ticketPrice(<span class="kw">int</span> age, <span class="kw">boolean</span> weekend)</code></pre></div>
+<p>Pricing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Age under 12       $8
+Age 12–59          $14
+Age 60+            $10
+Weekend surcharge  $3</code></pre></div>
+<p>The method must return the complete ticket price.</p>
+<p>Then create a separate output method to display the price.</p>
+<p>Prepare a boundary test table that includes ages:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>11, 12, 59, 60</code></pre></div>
+<p>with both weekday and weekend cases represented.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Call-Stack Trace</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">execution flow</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">stack frames</span><span class="badge topic-badge">local variables</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Call-Stack Trace as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running the code:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> adjust(<span class="kw">int</span> x) {
+    <span class="kw">int</span> result = x - <span class="num">1</span>;
+    <span class="kw">return</span> result;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> combine(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">int</span> left = adjust(a);
+    <span class="kw">int</span> right = adjust(b);
+    <span class="kw">return</span> left + right;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> finish(<span class="kw">int</span> n) {
+    <span class="kw">return</span> combine(n, n + <span class="num">2</span>) * <span class="num">2</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> answer = finish(<span class="num">5</span>);
+    <span class="type">System</span>.out.println(answer);
+}</code></pre></div>
+<p>Produce a complete trace showing:</p>
+<ol><li>each method call,</li><li>parameter values,</li><li>local-variable values,</li><li>each returned value,</li><li>the call stack whenever a new method is entered,</li><li>the final output.</li></ol>
+<p>Only run the program after completing the trace.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Refactor a Monolithic Fuel-Cost Program</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">refactoring</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">method responsibilities</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Refactor a Monolithic Fuel-Cost Program as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Start from this monolithic workflow:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>read miles driven
+read vehicle miles-per-gallon
+read fuel price per gallon
+calculate gallons required
+calculate trip fuel cost
+print trip summary</code></pre></div>
+<p>Design and implement a decomposed version.</p>
+<p>Your solution must contain separate methods for at least:</p>
+<ul><li>gallons required,</li><li>fuel cost,</li><li>output.</li></ul>
+<p>Before coding, create:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Method | Parameters | Return Type | Responsibility</code></pre></div>
+<p>for every method you plan to write.</p>
+<p>Calculation methods may not read input or print output.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Smallest of Three</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">method reuse</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">conditional methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Smallest of Three as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>smallerOfTwo(<span class="kw">int</span> a, <span class="kw">int</span> b)</code></pre></div>
+<p>Then use that method to implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>smallestOfThree(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> c)</code></pre></div>
+<p>The second method must reuse the first rather than duplicate its comparison logic.</p>
+<p>Test cases should include:</p>
+<ul><li>first value smallest,</li><li>second value smallest,</li><li>third value smallest,</li><li>equal values,</li><li>negative values.</li></ul>
+<p>Explain how method reuse reduces duplicated logic.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Testing a Range Classifier</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">boundary cases</span><span class="badge topic-badge">Boolean methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Testing a Range Classifier as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>isComfortableTemperature(<span class="kw">double</span> temperature)</code></pre></div>
+<p>which returns <code>true</code> for temperatures from <code>68.0</code> through <code>76.0</code>, inclusive.</p>
+<p>Before implementing it, construct a test table with at least eight cases.</p>
+<p>Your tests must include:</p>
+<ul><li>below the lower boundary,</li><li>exactly the lower boundary,</li><li>just above it,</li><li>an ordinary middle value,</li><li>just below the upper boundary,</li><li>exactly the upper boundary,</li><li>above the upper boundary.</li></ul>
+<p>After implementation, record actual results and indicate whether each test passed.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Loan Payment Eligibility System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">method composition</span><span class="badge topic-badge">explicit data flow</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Loan Payment Eligibility System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A simplified lender approves an application when all of the following are true:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>monthly income &gt;= $3,000
+existing monthly debt &lt;= $1,200
+requested monthly payment &lt;= 30% of monthly income</code></pre></div>
+<p>Design the program as several focused methods.</p>
+<p>At minimum, separate:</p>
+<ul><li>checking the income requirement,</li><li>checking the debt requirement,</li><li>calculating the maximum allowed payment,</li><li>making the final approval decision,</li><li>displaying the decision.</li></ul>
+<p><code>main</code> should read like a high-level description of the process.</p>
+<p>Include boundary tests for every rule.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Multi-Method Restaurant Bill</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">nested calls</span><span class="badge topic-badge">return values</span><span class="badge topic-badge">reuse</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Multi-Method Restaurant Bill as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A restaurant bill has:</p>
+<ul><li>food subtotal,</li><li>sales tax of 7%,</li><li>optional fixed delivery fee of <code>$4.00</code>,</li><li>customer-selected gratuity percentage.</li></ul>
+<p>Design focused methods for:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>tax calculation
+gratuity calculation
+delivery fee
+final total
+formatted output</code></pre></div>
+<p>The final-total method should obtain some of its information by calling other calculation methods.</p>
+<p>Do not duplicate tax or gratuity formulas.</p>
+<p>Demonstrate at least one nested method call.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Analyze a Pass-by-Value Puzzle</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">primitive pass-by-value</span><span class="badge topic-badge">local variables</span><span class="badge topic-badge">tracing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Analyze a Pass-by-Value Puzzle as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> transform(<span class="kw">int</span> x) {
+    x = x + <span class="num">4</span>;
+    <span class="kw">return</span> x * <span class="num">2</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> alter(<span class="kw">int</span> x) {
+    x = transform(x);
+    <span class="type">System</span>.out.println(<span class="str">&quot;alter: &quot;</span> + x);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> x = <span class="num">6</span>;
+    <span class="kw">int</span> y = transform(x);
+
+    alter(y);
+
+    <span class="type">System</span>.out.println(<span class="str">&quot;x: &quot;</span> + x);
+    <span class="type">System</span>.out.println(<span class="str">&quot;y: &quot;</span> + y);
+}</code></pre></div>
+<p>Complete four tasks:</p>
+<ol><li>predict every line printed,</li><li>draw separate conceptual stack frames for each active call,</li><li>explain every variable named <code>x</code>,</li><li>explain why assigning to one parameter does not modify another method's local variable.</li></ol>
+<p>Then run the program to verify your trace.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Checkout Discount Engine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">method contracts</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">conditional calculations</span><span class="badge topic-badge">composition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Checkout Discount Engine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An online store uses these rules:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>subtotal &gt;= $100 → 10% discount
+subtotal &gt;= $200 → 15% discount instead
+loyalty member   → additional 5% discount</code></pre></div>
+<p>Assume percentage discounts are all calculated from the original subtotal and then summed.</p>
+<p>Design methods that make the rules easy to understand from their names.</p>
+<p>At minimum, your program should separately determine:</p>
+<ul><li>purchase discount rate,</li><li>loyalty discount rate,</li><li>total discount amount,</li><li>final price.</li></ul>
+<p>For every method, document its contract:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Name
+Inputs
+Output
+Responsibility</code></pre></div>
+<p>Test important boundary values around <code>$100</code> and <code>$200</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Repair a Poorly Decomposed Program</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">refactoring</span><span class="badge topic-badge">single responsibility</span><span class="badge topic-badge">calculation/I/O separation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Repair a Poorly Decomposed Program as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer proposes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> doEverything() {
+    <span class="cmt">// read number of items</span>
+    <span class="cmt">// read price per item</span>
+    <span class="cmt">// calculate subtotal</span>
+    <span class="cmt">// calculate discount</span>
+    <span class="cmt">// calculate final amount</span>
+    <span class="cmt">// print all results</span>
+}</code></pre></div>
+<p>Redesign the program.</p>
+<p>Requirements:</p>
+<ol><li>identify at least three design weaknesses,</li><li>propose a set of focused methods,</li><li>create a contract for every proposed method,</li><li>implement the redesigned program,</li><li>keep calculation methods independent of console I/O,</li><li>make <code>main</code> communicate the high-level workflow.</li></ol>
+<p>Afterward, explain why your design is easier to test.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Call Stack with Repeated Calls</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">stack frames</span><span class="badge topic-badge">repeated method invocations</span><span class="badge topic-badge">nested calls</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Call Stack with Repeated Calls as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Trace:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> shift(<span class="kw">int</span> x) {
+    <span class="kw">int</span> y = x + <span class="num">2</span>;
+    <span class="kw">return</span> y;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> process(<span class="kw">int</span> x) {
+    <span class="kw">int</span> first = shift(x);
+    <span class="kw">int</span> second = shift(first);
+    <span class="kw">return</span> first + second;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> evaluate(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> process(a) - process(b);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> result = evaluate(<span class="num">8</span>, <span class="num">3</span>);
+    <span class="type">System</span>.out.println(result);
+}</code></pre></div>
+<p>Create a chronological table with these columns:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Step | Active Method | Parameters | Locals | Stack | Returned Value</code></pre></div>
+<p>Your trace must clearly show that separate calls to <code>shift</code> and <code>process</code> receive separate local environments.</p>
+<p>State the final output.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Fitness-Zone Calculator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">calculation methods</span><span class="badge topic-badge">data flow</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Fitness-Zone Calculator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Use this simplified model:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>estimated maximum heart rate = 220 - age
+lower training bound = 60% of maximum
+upper training bound = 80% of maximum</code></pre></div>
+<p>Design a program that:</p>
+<ol><li>reads an age,</li><li>calculates maximum heart rate,</li><li>calculates both training-zone bounds,</li><li>determines whether a supplied heart rate is inside the zone,</li><li>displays a report.</li></ol>
+<p>Use separate methods with clear inputs and outputs.</p>
+<p>The method that determines whether a heart rate is in the zone must return <code>boolean</code>.</p>
+<p>Document the data flow between methods.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Stack-Trace Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">runtime errors</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">stack traces</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Stack-Trace Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Study:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> divideValues(<span class="kw">int</span> total, <span class="kw">int</span> count) {
+    <span class="kw">return</span> total / count;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> calculateRate(<span class="kw">int</span> items, <span class="kw">int</span> groups) {
+    <span class="kw">return</span> divideValues(items, groups);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> createReport(<span class="kw">int</span> items, <span class="kw">int</span> groups) {
+    <span class="kw">int</span> rate = calculateRate(items, groups);
+    <span class="type">System</span>.out.println(rate);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    createReport(<span class="num">40</span>, <span class="num">0</span>);
+}</code></pre></div>
+<p>Without running it:</p>
+<ol><li>identify the runtime error,</li><li>describe the call sequence that leads to the failure,</li><li>draw the call stack at the moment of failure,</li><li>predict the order in which these methods would appear in a Java stack trace,</li><li>identify the method where the actual invalid operation occurs.</li></ol>
+<p>Then modify the design so division by zero is handled before the invalid calculation occurs.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Rental-Car Cost System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">top-down design</span><span class="badge topic-badge">multiple calculations</span><span class="badge topic-badge">method reuse</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Rental-Car Cost System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A rental-car company charges:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>base rental charge = $45 per day
+first 100 miles per day included
+excess mileage = $0.30 per excess mile</code></pre></div>
+<p>For example, a 3-day rental includes 300 miles.</p>
+<p>Design the solution using top-down decomposition.</p>
+<p>Your program should separately calculate:</p>
+<ul><li>base charge,</li><li>included mileage,</li><li>excess mileage,</li><li>mileage charge,</li><li>total charge.</li></ul>
+<p>At least one higher-level method must call lower-level methods.</p>
+<p>Before coding, draw a method hierarchy beginning with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>main</code></pre></div>
+<p>and showing which methods call which other methods.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Method Test Harness</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">method isolation</span><span class="badge topic-badge">boundaries</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Method Test Harness as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write these three methods:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>isLegalPercentage(<span class="kw">double</span> value)
+calculateMarkup(<span class="kw">double</span> cost, <span class="kw">double</span> rate)
+isMultipleOf(<span class="kw">int</span> number, <span class="kw">int</span> divisor)</code></pre></div>
+<p>Requirements:</p>
+<ul><li>a legal percentage is from <code>0.0</code> through <code>1.0</code>, inclusive,</li><li>markup is <code>cost * rate</code>,</li><li><code>isMultipleOf</code> returns whether <code>number</code> is evenly divisible by <code>divisor</code>; assume <code>divisor != 0</code>.</li></ul>
+<p>Create a <code>main</code> method whose primary purpose is to <strong>test</strong> these methods.</p>
+<p>For each method:</p>
+<ol><li>create at least five tests,</li><li>include boundary or special cases,</li><li>write the expected result before running,</li><li>print expected and actual results,</li><li>report whether each test passed.</li></ol>
+<p>Do not rely only on &quot;normal&quot; inputs.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Modular Payroll Calculator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">top-down decomposition</span><span class="badge topic-badge">method contracts</span><span class="badge topic-badge">conditional calculations</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Modular Payroll Calculator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a simplified weekly payroll program.</p>
+<p>Rules:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Up to 40 hours:
+    regular hourly rate
+
+Hours above 40:
+    1.5 × hourly rate
+
+Tax:
+    12% of gross pay
+
+Net pay:
+    gross pay - tax</code></pre></div>
+<p>Design the program before coding.</p>
+<p>Your solution must include separate responsibilities for:</p>
+<ul><li>regular hours,</li><li>overtime hours,</li><li>regular pay,</li><li>overtime pay,</li><li>gross pay,</li><li>tax,</li><li>net pay,</li><li>report output.</li></ul>
+<p>Requirements:</p>
+<ol><li>create a method hierarchy,</li><li>document every method's inputs and output,</li><li>use method composition where appropriate,</li><li>avoid duplicating formulas,</li><li>separate calculations from output,</li><li>test at least <code>0</code>, <code>40</code>, and <code>41</code> hours plus two additional cases,</li><li>keep <code>main</code> at the coordination level.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Parking Garage System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">conditional logic</span><span class="badge topic-badge">method reuse</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Parking Garage System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A garage charges:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>First hour             $4
+Each additional hour   $3
+Daily maximum          $25
+Lost ticket fee        $40 instead of normal parking charge</code></pre></div>
+<p>Assume parking duration is a positive whole number of hours.</p>
+<p>Design a decomposed program that calculates the correct amount.</p>
+<p>Your design should make it easy to answer:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Is this a lost-ticket case?
+What would the normal charge be?
+Has the normal charge exceeded the daily maximum?
+What is the final amount owed?</code></pre></div>
+<p>Use appropriately named methods instead of placing all logic into one large conditional.</p>
+<p>Include a comprehensive boundary test set.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Refactor a Travel Planner</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">refactoring</span><span class="badge topic-badge">program decomposition</span><span class="badge topic-badge">data flow</span><span class="badge topic-badge">single responsibility</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Refactor a Travel Planner as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A monolithic travel program currently does all of the following in <code>main</code>:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>reads trip distance
+reads average speed
+reads fuel efficiency
+reads fuel price
+calculates travel time
+calculates fuel required
+calculates fuel cost
+decides whether a rest stop is recommended
+prints a summary</code></pre></div>
+<p>A rest stop is recommended for trips lasting more than 4 hours.</p>
+<p>Refactor the conceptual program into a well-designed method-based application.</p>
+<p>Before writing code:</p>
+<ol><li>identify the conceptual operations,</li><li>produce a method-contract table,</li><li>draw the data flow between methods,</li><li>draw a method-call hierarchy.</li></ol>
+<p>Then implement it.</p>
+<p>Calculation and decision methods must not perform console output.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Four-Level Execution Trace</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">nested method calls</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">local environments</span><span class="badge topic-badge">expressions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Four-Level Execution Trace as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without executing:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> stepA(<span class="kw">int</span> x) {
+    <span class="kw">return</span> x + <span class="num">3</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> stepB(<span class="kw">int</span> x) {
+    <span class="kw">int</span> y = stepA(x);
+    <span class="kw">return</span> y * <span class="num">2</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> stepC(<span class="kw">int</span> x, <span class="kw">int</span> y) {
+    <span class="kw">return</span> stepB(x) + stepA(y);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> stepD(<span class="kw">int</span> x) {
+    <span class="kw">return</span> stepC(stepA(x), stepB(x));
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> answer = stepD(<span class="num">2</span>);
+    <span class="type">System</span>.out.println(answer);
+}</code></pre></div>
+<p>Produce a detailed manual trace.</p>
+<p>Your submission must show:</p>
+<ol><li>the exact order of calls,</li><li>every argument expression as it is evaluated,</li><li>parameter values for every invocation,</li><li>local variables,</li><li>every returned value,</li><li>the stack at every deepest point,</li><li>the final output.</li></ol>
+<p>Explain why multiple invocations of the same method do not share their parameters or local variables.</p>
+<p>Only run the program after completing the entire trace.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Subscription Pricing Engine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">Boolean methods</span><span class="badge topic-badge">method composition</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Subscription Pricing Engine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A service uses the following pricing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Basic plan       $12/month
+Standard plan    $20/month
+Premium plan     $32/month
+
+Annual payment:
+    10% discount on the 12-month base cost
+
+Student:
+    additional $24 discount from the annual total
+    or $2 discount from a monthly payment
+
+Minimum payment:
+    never below $0</code></pre></div>
+<p>Use an integer plan code such as <code>1</code>, <code>2</code>, or <code>3</code>.</p>
+<p>Design a collection of methods that allows the high-level program to ask meaningful questions such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>What is this plan's base monthly price?
+What is the annual base cost?
+What discount applies?
+What is the final charge?</code></pre></div>
+<p>Requirements:</p>
+<ul><li>no single method should implement the entire pricing system,</li><li>avoid repeating plan-price logic,</li><li>return calculations rather than printing them,</li><li>include a separate report method,</li><li>test monthly/annual and student/nonstudent combinations.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Debug and Redesign a Broken Utility Program</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">scope</span><span class="badge topic-badge">pass-by-value</span><span class="badge topic-badge">returns</span><span class="badge topic-badge">argument order</span><span class="badge topic-badge">decomposition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Debug and Redesign a Broken Utility Program as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze this intentionally poor program:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> applyBonus(<span class="kw">double</span> amount) {
+    amount = amount + <span class="num">25</span>;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> finalAmount(<span class="kw">double</span> fee, <span class="kw">double</span> balance) {
+    <span class="kw">double</span> result;
+
+    <span class="kw">if</span> (balance &gt; fee) {
+        result = balance - fee;
+    }
+
+    <span class="kw">return</span> result;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> showResult() {
+    <span class="type">System</span>.out.println(result);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">double</span> balance = <span class="num">100</span>;
+    <span class="kw">double</span> fee = <span class="num">20</span>;
+
+    applyBonus(balance);
+
+    <span class="kw">double</span> result = finalAmount(balance, fee);
+    showResult();
+
+    <span class="type">System</span>.out.println(balance);
+}</code></pre></div>
+<p>Identify <strong>every</strong> problem you can find.</p>
+<p>Your analysis must discuss:</p>
+<ul><li>primitive pass-by-value,</li><li>scope,</li><li>argument order,</li><li>definite assignment of local variables,</li><li>method inputs,</li><li>method outputs,</li><li>responsibilities.</li></ul>
+<p>Then redesign the program so that its intended workflow is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>start with balance
+apply a $25 bonus
+subtract the fee
+display the final balance</code></pre></div>
+<p>Do not solve the problems using global variables.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Multi-Stage Water-Bill Calculator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">conditional calculations</span><span class="badge topic-badge">method hierarchy</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Multi-Stage Water-Bill Calculator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A simplified water bill uses:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>First 2,000 gallons          $0.004 per gallon
+Next 3,000 gallons           $0.006 per gallon
+Gallons above 5,000          $0.009 per gallon
+Monthly service fee          $11.00</code></pre></div>
+<p>The tiers are cumulative. For example, usage above 5,000 gallons pays the appropriate rate for each portion of usage.</p>
+<p>Design a decomposed solution.</p>
+<p>Requirements:</p>
+<ol><li>separate the calculation of tier charges into meaningful methods,</li><li>calculate the usage charge,</li><li>calculate the final bill,</li><li>separate reporting from calculations,</li><li>draw the call hierarchy,</li><li>document method contracts,</li><li>test immediately below, exactly at, and immediately above both <code>2,000</code> and <code>5,000</code> gallons.</li></ol>
+<p>Avoid one giant method containing the complete calculation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: Method Design Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">software design</span><span class="badge topic-badge">method responsibilities</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">contracts</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: Method Design Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are reviewing this proposed design for a small order program:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>getData()
+calculate()
+check()
+doOrder()
+print()
+helper()
+processEverything()</code></pre></div>
+<p>No implementation is provided.</p>
+<p>The intended program must:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>read item price
+read quantity
+determine subtotal
+determine whether subtotal qualifies for free shipping
+calculate shipping charge
+calculate final total
+display an order summary</code></pre></div>
+<p>Free shipping applies when the subtotal is at least <code>$75</code>; otherwise shipping costs <code>$8</code>.</p>
+<p>Complete the following:</p>
+<ol><li>explain why the proposed method names communicate poorly,</li><li>replace them with a coherent method design,</li><li>give each method exactly one primary responsibility,</li><li>specify parameters,</li><li>specify return types,</li><li>write a contract for each method,</li><li>draw the data-flow diagram,</li><li>draw the call hierarchy,</li><li>implement the program,</li><li>justify which methods are <code>void</code> and which return values.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Call Stack and Runtime Failure</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">runtime errors</span><span class="badge topic-badge">stack traces</span><span class="badge topic-badge">nested calls</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Call Stack and Runtime Failure as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Study:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> ratio(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a / b;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> difference(<span class="kw">int</span> x, <span class="kw">int</span> y) {
+    <span class="kw">return</span> x - y;
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> analyze(<span class="kw">int</span> x) {
+    <span class="kw">int</span> divisor = difference(x, x);
+    <span class="kw">return</span> ratio(x * <span class="num">10</span>, divisor);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> prepare(<span class="kw">int</span> x) {
+    <span class="kw">return</span> analyze(x + <span class="num">2</span>);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[] args) {
+    <span class="kw">int</span> result = prepare(<span class="num">6</span>);
+    <span class="type">System</span>.out.println(result);
+}</code></pre></div>
+<p>Without executing it:</p>
+<ol><li>trace execution until it fails,</li><li>identify the exact expression causing the failure,</li><li>draw the call stack immediately before the exception,</li><li>list the likely method names in the stack trace from the failure outward,</li><li>explain why <code>System.out.println(result)</code> is never reached,</li><li>redesign the program so that the invalid calculation is detected cleanly.</li></ol>
+<p>Your redesign should preserve meaningful method decomposition rather than moving everything into <code>main</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Mini Capstone — Event Cost Estimator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">comprehensive Week 4 integration</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">contracts</span><span class="badge topic-badge">scope</span><span class="badge topic-badge">method composition</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Mini Capstone — Event Cost Estimator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a console-based event cost estimator.</p>
+<p>The event has:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>venue base fee                  $250
+food per attendee               $18
+attendee count over 50          additional $100 staffing fee
+weekend event                   additional $75 venue fee
+subtotal at least $1,500        5% discount</code></pre></div>
+<p>The discount is applied after the applicable fees have been added.</p>
+<p>Your program must calculate and report:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>venue cost
+food cost
+staffing fee
+weekend fee
+pre-discount subtotal
+discount
+final total</code></pre></div>
+<h4>Phase 1 — Design</h4>
+<p>Before writing Java code, create a table:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Method | Parameters | Return Type | Responsibility</code></pre></div>
+<p>Design enough methods that each has one clear responsibility.</p>
+<h4>Phase 2 — Call hierarchy</h4>
+<p>Draw a hierarchy beginning with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>main</code></pre></div>
+<p>Show which methods call other methods.</p>
+<h4>Phase 3 — Data flow</h4>
+<p>Show how values move through the program using:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>arguments → parameters → returned values</code></pre></div>
+<p>Identify which information is local to each method.</p>
+<h4>Phase 4 — Implementation</h4>
+<p>Implement the program.</p>
+<p>Requirements:</p>
+<ul><li>use <code>public static</code> methods,</li><li>calculation methods must return values,</li><li>use at least one Boolean-returning method,</li><li>use at least one <code>void</code> reporting method,</li><li>use a method with multiple parameters,</li><li>have at least one method call another method,</li><li>use a returned value inside another expression or method call,</li><li>keep calculation logic separate from console output,</li><li>do not use global variables to share calculation results,</li><li>make <code>main</code> read as the high-level story of the application.</li></ul>
+<h4>Phase 5 — Testing</h4>
+<p>Create at least eight test scenarios.</p>
+<p>Your tests must exercise:</p>
+<ul><li>exactly 50 attendees,</li><li>exactly 51 attendees,</li><li>weekday and weekend events,</li><li>a subtotal below the discount boundary,</li><li>a subtotal at or near the discount boundary,</li><li>a subtotal above the discount boundary.</li></ul>
+<p>For each test, predict the expected result before running the program.</p>
+<h4>Phase 6 — Reflection</h4>
+<p>Answer briefly:</p>
+<ol><li>Which information enters each major method?</li><li>Which information leaves each major method?</li><li>Which variables are local to <code>main</code>?</li><li>Give an example of a parameter that receives a copy of a primitive value.</li><li>Why would changing that parameter not automatically change the caller's variable?</li><li>Which methods could be tested independently?</li><li>How does your decomposition make debugging easier?</li><li>How does your <code>main</code> method communicate the program's overall workflow?</li></ol>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-03.html">← Week 3</a><a href="week-05.html">Week 5 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

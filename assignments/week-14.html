@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 14</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 14: Trees and Core Data-Structure Concepts</h2>
+      <div class="intro">
+<p>The following 50 assignments are based on the Week 14 lecture notes. They collectively cover hierarchical data, tree terminology, binary trees and BSTs, Java references, BST search/insertion/deletion, recursion and traversal, height and complexity, balancing, <code>TreeSet</code>/<code>TreeMap</code>, heaps, priority queues, and data-structure selection.</p>
+<p>The assignments deliberately use new trees, values, scenarios, and programming tasks rather than reproducing the worked examples and end-of-lecture questions. Difficulty increases from direct application at Level 1 to multi-concept design and implementation at Level 5.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Map a University Hierarchy</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Hierarchical data</span><span class="badge topic-badge">tree terminology</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Map a University Hierarchy as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider this university structure:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>University
+├── Science
+│   ├── Mathematics
+│   └── Computing
+└── Humanities
+    ├── History
+    └── Languages</code></pre></div>
+<p>Answer the following:</p>
+<ol><li>Identify the root.</li><li>List the children of <code>University</code>.</li><li>Identify the parent of <code>Computing</code>.</li><li>List all siblings of <code>History</code>.</li><li>List all leaves.</li><li>List all descendants of <code>Science</code>.</li><li>List all ancestors of <code>Languages</code>.</li><li>How many edges are in the tree?</li><li>What is the depth of <code>Mathematics</code>?</li><li>What is the height of <code>University</code> using the lecture's edge-based convention?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: Tree Vocabulary from Relationships</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Nodes</span><span class="badge topic-badge">edges</span><span class="badge topic-badge">parents</span><span class="badge topic-badge">children</span><span class="badge topic-badge">ancestors</span><span class="badge topic-badge">descendants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: Tree Vocabulary from Relationships as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A tree contains these directed parent-child relationships:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>R -&gt; J
+R -&gt; W
+J -&gt; D
+J -&gt; M
+W -&gt; T
+M -&gt; K</code></pre></div>
+<p>Without redrawing the tree first, determine:</p>
+<ol><li>The root.</li><li>The leaves.</li><li>The internal nodes.</li><li>The parent of <code>K</code>.</li><li>The siblings of <code>D</code>.</li><li>All ancestors of <code>K</code>.</li><li>All descendants of <code>J</code>.</li><li>The path from <code>R</code> to <code>K</code>.</li><li>The length of that path in edges.</li></ol>
+<p>Finally, draw the tree and verify your answers.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Binary or Not?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">General trees</span><span class="badge topic-badge">binary trees</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Binary or Not? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each description below, state whether the structure <strong>could be a binary tree</strong> and explain why.</p>
+<ol><li>Every node has zero children.</li><li>One node has three children.</li><li>Every internal node has exactly one child.</li><li>One node has a left child but no right child.</li><li>A node has two children, each of which has two children.</li><li>The root has no children.</li></ol>
+<p>Then write one sentence explaining what the word <strong>binary</strong> means in “binary tree.”</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: Build a Tree with Java References</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Java objects</span><span class="badge topic-badge">references</span><span class="badge topic-badge">binary trees</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: Build a Tree with Java References as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Use this node class:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">TreeNode</span> {
+    <span class="kw">int</span> value;
+    <span class="type">TreeNode</span> left;
+    <span class="type">TreeNode</span> right;
+
+    <span class="type">TreeNode</span>(<span class="kw">int</span> value) {
+        <span class="kw">this</span>.value = value;
+    }
+}</code></pre></div>
+<p>Write Java statements that construct exactly this binary tree:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>        42
+       /  \
+     17    68
+       \   /
+       25 55</code></pre></div>
+<p>Your code must begin with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">TreeNode</span> root = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">42</span>);</code></pre></div>
+<p>Do not use loops, arrays, or collections.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Follow the References</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Java references</span><span class="badge topic-badge">tree structure</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Follow the References as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose the following statements execute:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">TreeNode</span> root = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">90</span>);
+root.left = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">45</span>);
+root.right = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">120</span>);
+root.left.right = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">63</span>);
+root.right.left = <span class="kw">new</span> <span class="type">TreeNode</span>(<span class="num">105</span>);</code></pre></div>
+<ol><li>Draw the resulting tree.</li><li>What value is stored in <code>root.left.value</code>?</li><li>What value is stored in <code>root.right.left.value</code>?</li><li>What does <code>root.left.left</code> contain?</li><li>Which nodes are leaves?</li><li>What happens structurally if this executes?</li></ol>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>root.right.left = <span class="lit">null</span>;</code></pre></div>
+<p>Redraw the resulting tree.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: Is It a BST?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Binary search tree property</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: Is It a BST? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Determine whether each tree is a valid BST.</p>
+<h4>Tree A</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>       25
+      /  \
+    14    39
+   /     /  \
+  8     31   47</code></pre></div>
+<h4>Tree B</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>       25
+      /  \
+    14    39
+      \
+       28</code></pre></div>
+<h4>Tree C</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>       25
+      /  \
+    14    39
+   / \      \
+  9  19      52</code></pre></div>
+<p>For every invalid tree, identify the node that violates the BST property and explain which ancestor constraint it violates.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Trace BST Search</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">BST search</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Trace BST Search as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>          64
+        /    \
+      32      91
+     /  \    /  \
+   18   47  76  105</code></pre></div>
+<p>Trace searches for:</p>
+<ul><li><code>47</code></li><li><code>76</code></li><li><code>50</code></li></ul>
+<p>For each target:</p>
+<ol><li>List every node examined, in order.</li><li>State whether the search succeeds.</li><li>For each comparison, state whether the algorithm moves left or right.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Traversal Warm-Up</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Preorder</span><span class="badge topic-badge">inorder</span><span class="badge topic-badge">postorder</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Traversal Warm-Up as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>        15
+       /  \
+      7    24
+     /    /  \
+    3    19   31</code></pre></div>
+<p>Write the sequence produced by:</p>
+<ol><li>Preorder traversal.</li><li>Inorder traversal.</li><li>Postorder traversal.</li></ol>
+<p>Before solving, write the corresponding <code>NODE/LEFT/RIGHT</code> rule for each traversal.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Depth and Height Table</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Depth</span><span class="badge topic-badge">height</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Depth and Height Table as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>          P
+         / \
+        Q   R
+       /     \
+      S       T
+     /
+    U</code></pre></div>
+<p>Complete a table containing the <strong>depth</strong> and <strong>height</strong> of every node.</p>
+<p>Use:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>height(empty tree) = -1
+height(leaf) = 0</code></pre></div>
+<p>Then state the height of the entire tree.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Choose the Basic Structure</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Data-structure selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Choose the Basic Structure as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose the most natural structure from:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ArrayList
+Stack
+Queue
+HashSet
+HashMap
+TreeSet
+TreeMap
+PriorityQueue</code></pre></div>
+<p>for each situation:</p>
+<ol><li>Undo operations in a text editor.</li><li>Process customers in arrival order.</li><li>Store unique usernames when output order does not matter.</li><li>Store unique product codes and print them sorted.</li><li>Associate airport codes with airport names with fast average lookup as the priority.</li><li>Associate dates with events while maintaining dates in sorted order.</li><li>Repeatedly process the task with the smallest priority number.</li><li>Store a sequence requiring frequent indexed access.</li></ol>
+<p>Give a one-sentence justification for every answer.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Construct a BST by Hand</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">BST insertion</span><span class="badge topic-badge">tree shape</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Construct a BST by Hand as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Start with an empty BST and insert:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>46, 21, 73, 12, 35, 58, 88, 29</code></pre></div>
+<ol><li>Draw the tree after every insertion.</li><li>Give the final tree's height.</li><li>List its leaves.</li><li>Give its inorder traversal.</li><li>Trace a search for <code>29</code>.</li><li>Trace an unsuccessful search for <code>60</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Same Values, Different Shapes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Insertion order</span><span class="badge topic-badge">balanced/unbalanced trees</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Same Values, Different Shapes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create two BSTs containing exactly:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>11, 23, 37, 49, 62, 74, 89</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Tree A should have the smallest height you can achieve.</li><li>Tree B should have the largest height you can achieve.</li></ul>
+<p>For each tree:</p>
+<ol><li>Give an insertion order that produces it.</li><li>Draw it.</li><li>Calculate its height.</li><li>Trace a search for <code>89</code>.</li></ol>
+<p>Explain why identical stored values can produce different search costs.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Recursive vs. Iterative Search</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">BST search</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">iteration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Recursive vs. Iterative Search as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write both:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> containsRecursive(<span class="type">TreeNode</span> node, <span class="kw">int</span> target)</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> containsIterative(<span class="type">TreeNode</span> root, <span class="kw">int</span> target)</code></pre></div>
+<p>Test both implementations on a BST containing at least nine values of your choosing.</p>
+<p>Your test program must demonstrate:</p>
+<ul><li>finding the root,</li><li>finding a leaf,</li><li>finding an internal node,</li><li>searching for a value smaller than every stored value,</li><li>searching for a value larger than every stored value.</li></ul>
+<p>For each test, verify that both methods return the same result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Predict the Traversal</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Recursive traversal</span><span class="badge topic-badge">code tracing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Predict the Traversal as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> mystery(<span class="type">TreeNode</span> node) {
+    <span class="kw">if</span> (node == <span class="lit">null</span>) {
+        <span class="kw">return</span>;
+    }
+
+    mystery(node.right);
+    <span class="type">System</span>.out.print(node.value + <span class="str">&quot; &quot;</span>);
+    mystery(node.left);
+}</code></pre></div>
+<p>Use this BST:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>        36
+       /  \
+     18    57
+    / \    / \
+   9  27  44  71</code></pre></div>
+<ol><li>Predict the exact output.</li><li>Describe the traversal rule in words.</li><li>Explain why this produces a particular ordering when applied to a BST.</li><li>Is this preorder, inorder, or postorder as conventionally defined? Explain.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Count Internal Nodes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Recursive tree algorithms</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Count Internal Nodes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countInternal(<span class="type">TreeNode</span> node)</code></pre></div>
+<p>An internal node is any node with at least one child.</p>
+<p>Requirements:</p>
+<ul><li>Empty tree → <code>0</code></li><li>Leaf → <code>0</code></li><li>One-child node → counted</li><li>Two-child node → counted</li></ul>
+<p>Do not use static/global counters.</p>
+<p>Test the method on at least four differently shaped trees.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Find a BST Maximum Recursively</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">BST ordering</span><span class="badge topic-badge">recursion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Find a BST Maximum Recursively as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a recursive method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> findMax(<span class="type">TreeNode</span> node)</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Exploit the BST property.</li><li>Do <strong>not</strong> traverse both subtrees.</li><li>Throw <code>IllegalArgumentException</code> for an empty tree.</li></ul>
+<p>Then answer:</p>
+<ol><li>Why is following only one direction sufficient?</li><li>What is the running time in terms of tree height <code>h</code>?</li><li>What does that become for a balanced BST?</li><li>What does it become for a chain-shaped BST?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: Duplicate Policy Designer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">BST insertion</span><span class="badge topic-badge">duplicates</span><span class="badge topic-badge">design decisions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: Duplicate Policy Designer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose a BST must store exam scores, and repeated scores matter.</p>
+<p>Compare these policies:</p>
+<ul><li>ignore duplicate scores,</li><li>place duplicates consistently in one subtree,</li><li>store a frequency counter in each node.</li></ul>
+<p>For each policy:</p>
+<ol><li>Explain what the tree represents.</li><li>Give one advantage.</li><li>Give one disadvantage.</li></ol>
+<p>Then modify a node definition so it can support the frequency-counter policy:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">TreeNode</span> {
+    <span class="cmt">// your fields</span>
+}</code></pre></div>
+<p>Explain how insertion should behave when an equal value is encountered.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: <code>TreeSet</code> Deduplication</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">TreeSet</span><span class="badge topic-badge">sorted sets</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: TreeSet Deduplication as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java program that receives this data:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;kiwi&quot;, &quot;apple&quot;, &quot;pear&quot;, &quot;kiwi&quot;, &quot;orange&quot;, &quot;pear&quot;, &quot;banana&quot;</code></pre></div>
+<p>Store the values in a <code>TreeSet&lt;String&gt;</code>.</p>
+<p>Your program must:</p>
+<ol><li>Insert all seven inputs.</li><li>Print the number of unique values.</li><li>Print the values in their maintained order.</li><li>Test whether <code>&quot;mango&quot;</code> is present.</li><li>Remove <code>&quot;pear&quot;</code>.</li><li>Print the resulting set.</li></ol>
+<p>Explain why this problem benefits from set semantics plus ordering.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: Priority Queue of Deadlines</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Priority queues</span><span class="badge topic-badge">Java PriorityQueue</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: Priority Queue of Deadlines as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program stores integer values representing minutes until tasks are due:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>75, 12, 48, 5, 31, 90</code></pre></div>
+<p>Using <code>PriorityQueue&lt;Integer&gt;</code>:</p>
+<ol><li>Insert all values.</li><li>Print the result of <code>peek()</code>.</li><li>Repeatedly call <code>poll()</code> until the queue is empty.</li><li>Record the removal order.</li><li>Explain why the removal order differs from insertion order.</li><li>Explain what <code>poll()</code> returns after the queue becomes empty.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: ADT or Implementation?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Abstract data types</span><span class="badge topic-badge">implementations</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: ADT or Implementation? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Classify each item primarily as an <strong>ADT/conceptual behavior</strong>, an <strong>implementation/data structure</strong>, or a <strong>Java collection class</strong> in the context of this course:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>priority queue
+heap
+binary search tree
+set
+TreeSet
+TreeMap
+HashSet
+PriorityQueue</code></pre></div>
+<p>Then explain the distinction between:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;What operations does this structure promise?&quot;</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;How are those operations carried out internally?&quot;</code></pre></div>
+<p>Use at least two examples.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Build an Encapsulated BST</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">BST implementation</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Build an Encapsulated BST as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">IntBST</span></code></pre></div>
+<p>with a private nested node class and a private <code>root</code>.</p>
+<p>Provide these public operations:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">void</span> add(<span class="kw">int</span> value)
+<span class="kw">boolean</span> contains(<span class="kw">int</span> value)
+<span class="kw">int</span> size()
+<span class="kw">boolean</span> isEmpty()
+<span class="kw">int</span> min()
+<span class="kw">int</span> max()</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Clients may not access nodes.</li><li>Ignore duplicate values.</li><li><code>contains</code> may be recursive or iterative.</li><li><code>min</code> and <code>max</code> must exploit BST ordering rather than traverse every node.</li><li>Throw an appropriate exception for <code>min()</code> or <code>max()</code> on an empty tree.</li></ul>
+<p>Write a separate test class.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Count Nodes at a Given Depth</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Recursion</span><span class="badge topic-badge">depth</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Count Nodes at a Given Depth as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countAtDepth(<span class="type">TreeNode</span> node, <span class="kw">int</span> targetDepth)</code></pre></div>
+<p>The root passed to the method is considered depth <code>0</code>.</p>
+<p>Examples of expected behavior:</p>
+<ul><li>Negative target depth → <code>0</code></li><li>Empty tree → <code>0</code></li><li>Target depth <code>0</code> on a non-empty tree → <code>1</code></li></ul>
+<p>Do not first calculate every node's depth and store it in a collection. Solve the problem recursively.</p>
+<p>Explain your recursive decomposition.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Sum the Leaves</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Leaves</span><span class="badge topic-badge">recursive algorithms</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Sum the Leaves as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> sumLeaves(<span class="type">TreeNode</span> node)</code></pre></div>
+<p>The method should sum <strong>only leaf values</strong>, not all node values.</p>
+<p>Construct your own test tree containing:</p>
+<ul><li>at least 8 nodes,</li><li>at least 3 leaves,</li><li>at least one node with exactly one child.</li></ul>
+<p>Calculate the expected answer by hand before running your program.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Validate a BST Globally</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">BST property</span><span class="badge topic-badge">recursion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Validate a BST Globally as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isValidBST(<span class="type">TreeNode</span> root)</code></pre></div>
+<p>Your method must detect violations involving <strong>ancestors</strong>, not merely immediate parent-child relationships.</p>
+<p>Requirements:</p>
+<ul><li>Do not convert the entire tree into a collection first.</li><li>Use recursive reasoning.</li><li>Clearly document how allowable lower and upper bounds change during recursion.</li><li>Assume duplicate values are not permitted.</li></ul>
+<p>Test at least two valid and three invalid trees.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Tree Statistics</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Recursion</span><span class="badge topic-badge">node count</span><span class="badge topic-badge">leaves</span><span class="badge topic-badge">height</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Tree Statistics as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement these operations for one binary tree:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> size()
+<span class="kw">int</span> leafCount()
+<span class="kw">int</span> internalCount()
+<span class="kw">int</span> height()</code></pre></div>
+<p>Then construct three trees:</p>
+<ul><li>a single-node tree,</li><li>a roughly balanced tree with at least 9 nodes,</li><li>a chain-shaped tree with at least 6 nodes.</li></ul>
+<p>Produce a table showing all four statistics for each tree.</p>
+<p>Explain how tree shape affects height but not the relationship:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>size = leaves + internal nodes</code></pre></div>
+<p>for a non-empty tree.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Traversal Collector</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Traversals</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">ArrayList</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Traversal Collector as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Instead of printing during traversal, implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Integer</span>&gt; preorder()
+<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; inorder()
+<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; postorder()</code></pre></div>
+<p>Each method must return an <code>ArrayList&lt;Integer&gt;</code> containing the traversal result.</p>
+<p>Then:</p>
+<ol><li>Construct a BST containing at least 10 distinct values.</li><li>Print all three returned lists.</li><li>Verify programmatically that the inorder result is sorted.</li><li>Explain why the same sorted-order conclusion cannot be made for an arbitrary binary tree.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Analyze Search Cost Experimentally</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">BST complexity</span><span class="badge topic-badge">balancing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Analyze Search Cost Experimentally as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Modify BST search so that it counts how many nodes it examines.</p>
+<p>Construct:</p>
+<ul><li>Tree A from a carefully chosen insertion order that keeps the tree reasonably balanced.</li><li>Tree B using the same values inserted in ascending order.</li></ul>
+<p>Use at least <strong>31 distinct integers</strong>.</p>
+<p>Search both trees for:</p>
+<ul><li>the root value,</li><li>a middle-depth value,</li><li>the largest value,</li><li>an absent value.</li></ul>
+<p>Record the number of examined nodes.</p>
+<p>Explain the results using tree height and <code>O(h)</code> analysis.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: BST Deletion on Paper</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">BST deletion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: BST Deletion on Paper as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Construct a BST by inserting:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>54, 28, 79, 16, 41, 67, 92, 35, 46, 63, 72</code></pre></div>
+<p>Perform these deletions <strong>in order</strong>:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>16
+67
+28</code></pre></div>
+<p>For every deletion:</p>
+<ol><li>Draw the tree before deletion.</li><li>Classify the deletion as zero-child, one-child, or two-child.</li><li>Draw the resulting tree.</li><li>For a two-child deletion, identify the inorder successor you use.</li><li>Verify that the resulting tree still satisfies the BST property.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Sorted Word Frequencies</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">TreeMap</span><span class="badge topic-badge">maps</span><span class="badge topic-badge">sorted keys</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Sorted Word Frequencies as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>tree heap tree queue map heap tree stack queue tree</code></pre></div>
+<p>write a program using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">TreeMap</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt;</code></pre></div>
+<p>to build a frequency table.</p>
+<p>The program must:</p>
+<ol><li>Count every word.</li><li>Print each word and frequency.</li><li>Produce keys in the ordering maintained by <code>TreeMap</code>.</li><li>Identify the most frequent word using your own loop.</li></ol>
+<p>Then explain how the program's observable behavior would differ if <code>HashMap</code> were used instead.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Emergency Dispatch Queue</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Priority queues</span><span class="badge topic-badge">objects</span><span class="badge topic-badge">Comparable</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Emergency Dispatch Queue as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">EmergencyCall</span> <span class="kw">implements</span> <span class="type">Comparable</span>&lt;<span class="type">EmergencyCall</span>&gt;</code></pre></div>
+<p>with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>callerName
+priority</code></pre></div>
+<p>where a smaller priority number means a more urgent call.</p>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">PriorityQueue</span>&lt;<span class="type">EmergencyCall</span>&gt;</code></pre></div>
+<p>to process calls according to urgency.</p>
+<p>Requirements:</p>
+<ul><li>Create at least 8 calls.</li><li>Insert them in non-priority order.</li><li>Repeatedly remove and display the next call.</li><li>Explain why a normal FIFO <code>Queue</code> would behave differently.</li><li>Document how <code>compareTo</code> determines priority.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Recursive Range Query</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">BST ordering</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">pruning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Recursive Range Query as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">Integer</span>&gt; valuesBetween(<span class="kw">int</span> low, <span class="kw">int</span> high)</code></pre></div>
+<p>for a BST.</p>
+<p>Return all values <code>v</code> satisfying:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>low &lt;= v &amp;&amp; v &lt;= high</code></pre></div>
+<p>in sorted order.</p>
+<p>Requirements:</p>
+<ul><li>Exploit BST ordering.</li><li>Do not blindly traverse subtrees that cannot contain valid values.</li><li>Do not sort the resulting list afterward.</li><li>Explain why the algorithm can skip some subtrees.</li></ul>
+<p>Analyze its behavior in balanced and badly unbalanced trees.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Compare Two Tree Shapes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Recursion</span><span class="badge topic-badge">tree structure</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Compare Two Tree Shapes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> sameShape(<span class="type">TreeNode</span> a, <span class="type">TreeNode</span> b)</code></pre></div>
+<p>Two trees have the same shape if corresponding nodes exist in exactly the same positions; their stored values do <strong>not</strong> need to match.</p>
+<p>For example, these have the same shape:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>    10          99
+   /  \        /  \
+  4   20      7   150</code></pre></div>
+<p>Your solution must be recursive and must not use traversal strings as an intermediate representation.</p>
+<p>Write at least six tests, including empty trees.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Compute Every Node's Depth</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Depth</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">maps</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Compute Every Node's Depth as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a method that returns:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">Integer</span>, <span class="type">Integer</span>&gt;</code></pre></div>
+<p>mapping each distinct node value to its depth.</p>
+<p>Requirements:</p>
+<ul><li>Use a recursive helper.</li><li>Pass the current depth through recursive calls.</li><li>Do not calculate each node's depth by separately searching from the root.</li><li>Test on an unbalanced tree of at least 12 nodes.</li></ul>
+<p>Then determine the maximum depth from the returned map and verify that it agrees with your <code>height()</code> method.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Implement BST Deletion</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">BST deletion</span><span class="badge topic-badge">subtree-root pattern</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Implement BST Deletion as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Extend your BST class with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> remove(<span class="kw">int</span> value)</code></pre></div>
+<p>Support:</p>
+<ul><li>deleting a leaf,</li><li>deleting a node with only a left child,</li><li>deleting a node with only a right child,</li><li>deleting a node with two children,</li><li>deleting the root,</li><li>attempting to delete a missing value.</li></ul>
+<p>For two-child deletion, use the inorder successor.</p>
+<p>After each test deletion, verify that inorder traversal remains sorted.</p>
+<p>Explain why recursive deletion, like insertion, often returns the root of the updated subtree.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Find the Second-Smallest BST Value</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">BST ordering</span><span class="badge topic-badge">tree shape</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Find the Second-Smallest BST Value as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> secondSmallest()</code></pre></div>
+<p>without performing a complete inorder traversal or copying all values into a collection.</p>
+<p>Your algorithm must correctly handle cases where:</p>
+<ul><li>the minimum node has a right subtree,</li><li>the minimum node is a leaf,</li><li>the root itself is the minimum,</li><li>the tree contains fewer than two values.</li></ul>
+<p>Explain why finding the second-smallest value is more subtle than simply taking the parent of the minimum node.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Traversal Reconstruction</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Preorder</span><span class="badge topic-badge">inorder</span><span class="badge topic-badge">tree structure</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Traversal Reconstruction as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A binary tree with distinct values has:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Preorder:  45 22 11 30 28 37 74 61 58 69 90
+Inorder:   11 22 28 30 37 45 58 61 69 74 90</code></pre></div>
+<ol><li>Reconstruct the original tree.</li><li>Draw it.</li><li>Compute its postorder traversal.</li><li>Compute its height.</li><li>Determine whether it is a BST.</li><li>Explain how preorder identifies subtree roots while inorder identifies the values belonging to each side.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Heap or BST Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">BSTs</span><span class="badge topic-badge">min-heaps</span><span class="badge topic-badge">structural reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Heap or BST Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each tree, determine whether it could be:</p>
+<ul><li>a valid BST,</li><li>a valid min-heap according to the ordering property discussed in the lecture,</li><li>both,</li><li>neither.</li></ul>
+<h4>A</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>       6
+      / \
+     9   14
+    / \
+   18  11</code></pre></div>
+<h4>B</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>       20
+      /  \
+     8    31
+    / \   /
+   4  13 27</code></pre></div>
+<h4>C</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>       5
+      / \
+     8   7
+    / \
+   6  12</code></pre></div>
+<p>For every classification, justify your answer by referring to the <strong>global BST ordering rule</strong> versus the <strong>parent-child heap ordering rule</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Priority-Based Print Server</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">PriorityQueue</span><span class="badge topic-badge">custom objects</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Priority-Based Print Server as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">PrintJob</span></code></pre></div>
+<p>with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>documentName
+priority
+pageCount
+submissionNumber</code></pre></div>
+<p>Use a <code>PriorityQueue&lt;PrintJob&gt;</code> so that:</p>
+<ol><li>Lower priority numbers print first.</li><li>Equal-priority jobs print in submission order.</li></ol>
+<p>Implement a simulation that:</p>
+<ul><li>adds at least 12 jobs,</li><li>displays the next job without removing it,</li><li>processes jobs until empty,</li><li>records the processing order.</li></ul>
+<p>Explain why simply iterating over the <code>PriorityQueue</code> should <strong>not</strong> be used to obtain priority order.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Data-Structure Architecture Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Data-structure selection</span><span class="badge topic-badge">tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Data-Structure Architecture Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A campus application needs to support:</p>
+<ul><li>student records looked up by ID,</li><li>a sorted list of unique course codes,</li><li>browser-style back navigation,</li><li>students waiting for advising in arrival order,</li><li>scholarship applications processed by highest priority,</li><li>a sequence of recent notifications accessed by position.</li></ul>
+<p>For each requirement:</p>
+<ol><li>Choose a Java data structure.</li><li>Identify its most important operation.</li><li>State the relevant expected complexity discussed in the course where applicable.</li><li>Explain one plausible alternative.</li><li>Explain why the alternative is less suitable.</li></ol>
+<p>Your answer should demonstrate the principle that there is no universally best data structure; structures optimize different operations.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Empirical Complexity Study</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Complexity</span><span class="badge topic-badge">BSTs</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">experimental analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Empirical Complexity Study as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Compare membership testing using:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ArrayList&lt;Integer&gt;
+HashSet&lt;Integer&gt;
+your BST</code></pre></div>
+<p>Use increasingly large data sets.</p>
+<p>For the BST, run two experiments:</p>
+<ul><li>values inserted in an order intended to produce a reasonably balanced tree,</li><li>values inserted in ascending order.</li></ul>
+<p>Instrument your implementations to count relevant comparisons or visited nodes rather than relying only on clock time.</p>
+<p>Create a results table and explain how your observations relate to:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ArrayList search       O(n)
+HashSet membership     O(1) average
+balanced BST search    O(log n)
+unbalanced BST search  O(n) worst case</code></pre></div>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Tree Analytics Library</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Recursion</span><span class="badge topic-badge">traversals</span><span class="badge topic-badge">tree properties</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Tree Analytics Library as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a reusable <code>BinaryTreeAnalytics</code> utility supporting:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> size(<span class="type">TreeNode</span> root)
+<span class="kw">int</span> leafCount(<span class="type">TreeNode</span> root)
+<span class="kw">int</span> internalCount(<span class="type">TreeNode</span> root)
+<span class="kw">int</span> height(<span class="type">TreeNode</span> root)
+<span class="kw">int</span> sum(<span class="type">TreeNode</span> root)
+<span class="kw">int</span> maxDepth(<span class="type">TreeNode</span> root)
+<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; preorder(<span class="type">TreeNode</span> root)
+<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; inorder(<span class="type">TreeNode</span> root)
+<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; postorder(<span class="type">TreeNode</span> root)</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Every tree-processing operation must use recursion.</li><li>No global mutable counters.</li><li>Empty trees must be handled correctly.</li><li>Traversals return collections rather than print directly.</li><li>Include tests for balanced, unbalanced, one-node, and empty trees.</li></ul>
+<p>For each method, identify its time complexity and maximum recursion-stack usage in terms of <code>n</code> and <code>h</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Build a BST from a Sorted Array</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Balanced trees</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Build a BST from a Sorted Array as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">TreeNode</span> buildBalanced(<span class="kw">int</span>[] sorted)</code></pre></div>
+<p>Given a sorted array of distinct integers, recursively construct a BST with small height.</p>
+<p>Requirements:</p>
+<ol><li>Choose the middle value as a subtree root.</li><li>Recursively build left and right subtrees.</li><li>Do not repeatedly insert the values through a normal BST <code>add()</code> operation.</li><li>Test arrays of lengths 0, 1, 2, 7, 15, and 31.</li><li>Verify that inorder traversal reproduces the original array.</li><li>Report the resulting height.</li></ol>
+<p>Explain why repeatedly choosing a midpoint helps prevent chain-shaped behavior.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: BST Integrity Auditor</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">BST validation</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: BST Integrity Auditor as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a program that accepts a <code>TreeNode</code> reference and generates an integrity report containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>node count
+leaf count
+height
+minimum value
+maximum value
+valid BST? true/false</code></pre></div>
+<p>If the tree is not a BST, your program should additionally report at least one offending value and the allowable range it violated.</p>
+<p>Constraints:</p>
+<ul><li>Do not assume that local parent-child comparisons are sufficient.</li><li>Do not sort all values and compare afterward.</li><li>Handle integer boundary cases carefully.</li><li>Test intentionally corrupted trees.</li></ul>
+<p>Explain how carrying ancestor-derived bounds through recursion solves the global validation problem.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Operation-Counting BST Laboratory</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Complexity</span><span class="badge topic-badge">height</span><span class="badge topic-badge">insertion order</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Operation-Counting BST Laboratory as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that creates BSTs containing the same <code>n</code> distinct values using three insertion strategies:</p>
+<ol><li>ascending order,</li><li>descending order,</li><li>an order designed to produce a reasonably balanced tree.</li></ol>
+<p>Run the experiment for at least:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>n = 15, 31, 63, 127</code></pre></div>
+<p>For every resulting tree record:</p>
+<ul><li>height,</li><li>comparisons required to insert all values,</li><li>comparisons for a successful deep search,</li><li>comparisons for an unsuccessful search.</li></ul>
+<p>Produce a Markdown table of your results.</p>
+<p>Then write a 300–500 word analysis explaining why saying “BST operations are <code>O(log n)</code>” without qualification is incorrect.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Complete Ordered Integer Set</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">ADTs</span><span class="badge topic-badge">BSTs</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Complete Ordered Integer Set as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement your own:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">BSTSet</span></code></pre></div>
+<p>representing a set of integers using a BST.</p>
+<p>Provide:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> add(<span class="kw">int</span> value)
+<span class="kw">boolean</span> remove(<span class="kw">int</span> value)
+<span class="kw">boolean</span> contains(<span class="kw">int</span> value)
+<span class="kw">int</span> size()
+<span class="kw">boolean</span> isEmpty()
+<span class="kw">int</span> min()
+<span class="kw">int</span> max()
+<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; toSortedList()</code></pre></div>
+<p>Requirements:</p>
+<ul><li>No duplicates.</li><li>All node objects remain private.</li><li><code>remove</code> supports all three deletion cases.</li><li><code>toSortedList()</code> must use inorder traversal.</li><li>Do not use Java's existing <code>Set</code>, <code>TreeSet</code>, or <code>TreeMap</code> internally.</li></ul>
+<p>Then explain how this assignment illustrates the difference between an <strong>ADT</strong> and its <strong>implementation</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Hierarchical Storage Explorer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">General trees</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">hierarchical data</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Hierarchical Storage Explorer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Model a simplified directory hierarchy.</p>
+<p>Each node stores:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>name
+size
+children</code></pre></div>
+<p>A directory may have more than two children, so this is <strong>not</strong> a binary tree.</p>
+<p>Implement recursive operations to:</p>
+<ul><li>count all nodes,</li><li>count leaf nodes,</li><li>calculate total size,</li><li>calculate hierarchy height,</li><li>print the hierarchy with indentation based on depth,</li><li>find the deepest node or nodes.</li></ul>
+<p>Construct a hierarchy containing at least 20 nodes and at least four levels.</p>
+<p>Finally, compare this representation with a binary tree and explain why forcing the hierarchy into exactly <code>left</code> and <code>right</code> references would be unnatural.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Multi-Structure Task Manager</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">priority queues</span><span class="badge topic-badge">data-structure selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Multi-Structure Task Manager as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a task-management system where each task has:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>id
+description
+category
+priority</code></pre></div>
+<p>The system must efficiently support:</p>
+<ul><li>lookup by unique task ID,</li><li>preventing duplicate category names,</li><li>displaying category names in sorted order,</li><li>repeatedly processing the highest-priority task.</li></ul>
+<p>You may use multiple structures.</p>
+<p>Choose among:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ArrayList
+HashSet
+HashMap
+TreeSet
+TreeMap
+PriorityQueue</code></pre></div>
+<p>Implement a working Java prototype.</p>
+<p>In a design report, explain:</p>
+<ol><li>Which structure handles each requirement.</li><li>Why no single structure is ideal for all four requirements.</li><li>What consistency problems can arise when one logical object appears in multiple collections.</li><li>How your implementation keeps those collections synchronized.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: BST vs. Priority Queue Performance Model</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">BSTs</span><span class="badge topic-badge">heaps</span><span class="badge topic-badge">priority queues</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: BST vs. Priority Queue Performance Model as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A simulation repeatedly performs two operations:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>insert a value
+remove the smallest value</code></pre></div>
+<p>Compare two possible implementations:</p>
+<h4>Design A</h4>
+<p>A reasonably balanced BST.</p>
+<h4>Design B</h4>
+<p>A heap-based priority queue.</p>
+<p>Analyze both designs in terms of:</p>
+<ul><li>insertion,</li><li>locating the minimum,</li><li>removing the minimum,</li><li>arbitrary-value search,</li><li>ability to produce all values in sorted order.</li></ul>
+<p>Then implement a small Java prototype of each design using appropriate course-level structures and instrument the operations.</p>
+<p>Conclude which design you would choose when <strong>priority removal dominates the workload</strong>, and explain why.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Event Scheduling Engine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">TreeMap</span><span class="badge topic-badge">PriorityQueue</span><span class="badge topic-badge">ADTs</span><span class="badge topic-badge">design tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Event Scheduling Engine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a scheduler with two different requirements:</p>
+<ol><li>Users need to browse scheduled events chronologically.</li><li>The execution engine must repeatedly retrieve the next event due.</li></ol>
+<p>Create an <code>Event</code> class and investigate two implementations:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">TreeMap</span>&lt;<span class="type">LocalDateTime</span>, ...&gt;
+<span class="type">PriorityQueue</span>&lt;<span class="type">Event</span>&gt;</code></pre></div>
+<p>Your submission must:</p>
+<ul><li>implement both approaches,</li><li>support multiple events occurring at the same time,</li><li>add events,</li><li>retrieve the chronologically earliest event,</li><li>remove events,</li><li>display all scheduled events chronologically.</li></ul>
+<p>Compare the strengths and weaknesses of each implementation.</p>
+<p>Then propose whether the final system should use one structure or maintain both.</p>
+<p>Justify the additional complexity of your choice in terms of the operations the application needs most often.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Week 14 Data-Structure Capstone</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Entire Week 14</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Week 14 Data-Structure Capstone as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a Java application for a <strong>package-distribution center</strong>.</p>
+<p>Each package contains:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>trackingNumber
+destination
+weight
+priority
+arrivalNumber</code></pre></div>
+<p>The system must support:</p>
+<ul><li>fast lookup of a package by tracking number,</li><li>listing tracking numbers in sorted order,</li><li>processing packages according to priority,</li><li>preserving arrival order when two packages have equal priority,</li><li>reporting the number of packages currently stored,</li><li>removing a package after processing.</li></ul>
+<h4>Part A — Design</h4>
+<p>Choose appropriate structures from those studied in CSC 500.</p>
+<p>For every structure you select, document:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>What data does it store?
+What operations does it support?
+Why was it selected?
+What alternative did you reject?</code></pre></div>
+<h4>Part B — Implementation</h4>
+<p>Implement the system using Java collections.</p>
+<p>Create at least 25 packages and demonstrate all required operations.</p>
+<h4>Part C — Tree Connection</h4>
+<p>Choose one ordered component of your design and explain how its behavior relates conceptually to BST ordering.</p>
+<p>Explain why Java's tree-based collections let a programmer obtain ordered behavior without manually manipulating tree nodes.</p>
+<h4>Part D — Priority Connection</h4>
+<p>Explain how your priority-processing component relates to the heap/priority-queue concepts from Week 14.</p>
+<h4>Part E — Complexity</h4>
+<p>For each important operation, state its expected complexity based on the structures selected.</p>
+<h4>Part F — Alternative Design</h4>
+<p>Redesign the application under this new requirement:</p>
+<blockquote><p>Packages almost never need sorted output, but tracking-number membership and lookup happen extremely frequently.</p></blockquote>
+<p>Explain which structures you would change and why.</p>
+<h4>Part G — Reflection</h4>
+<p>In 300–500 words, answer:</p>
+<blockquote><p>Why is “Which data structure is fastest?” less useful than “Which operations does this program need to perform efficiently?”</p></blockquote>
+<p>Your response should connect trees, hashing, sequences, and priority queues.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-13.html">← Week 13</a><a href="week-15.html">Week 15 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

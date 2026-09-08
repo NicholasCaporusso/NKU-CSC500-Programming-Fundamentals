@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 5</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 5: Arrays and Strings</h2>
+      <div class="intro">
+<p>There are <strong>50 assignments</strong>, with exactly <strong>10 assignments at each difficulty level</strong>.</p>
+<p>Unless an assignment says otherwise:</p>
+<ul><li>use Java;</li><li>write methods for computational tasks rather than putting all logic in <code>main</code>;</li><li>do not use concepts substantially beyond Week 5 to replace the requested algorithm;</li><li>consider empty sequences and boundary cases where relevant;</li><li>test your solution with multiple inputs, not just one example.</li></ul>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1 — Array Construction and Inspection</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">array declaration</span><span class="badge topic-badge">creation</span><span class="badge topic-badge">initialization</span><span class="badge topic-badge">length</span><span class="badge topic-badge">indexing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1 — Array Construction and Inspection as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create three arrays:</p>
+<ol><li>an <code>int[]</code> containing six values of your choice;</li><li>a <code>double[]</code> created with <code>new</code> and length 4;</li><li>a <code>String[]</code> containing four city names.</li></ol>
+<p>For each array:</p>
+<ul><li>print its length;</li><li>print its first element;</li><li>print its last element without hard-coding the last index.</li></ul>
+<p>For the <code>double[]</code>, also print every element before assigning any values to it and explain the output in a comment.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2 — Index Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">zero-based indexing</span><span class="badge topic-badge">indices vs. values</span><span class="badge topic-badge">boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2 — Index Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] data = {<span class="num">14</span>, <span class="num">3</span>, <span class="num">27</span>, <span class="num">8</span>, <span class="num">19</span>, <span class="num">6</span>};</code></pre></div>
+<p>Without changing the array, write expressions that print:</p>
+<ul><li>the value at index <code>2</code>;</li><li>the value at index <code>5</code>;</li><li>the first value;</li><li>the final value using <code>data.length</code>;</li><li>the sum of the values at indices <code>1</code> and <code>4</code>;</li><li>the difference between the final value and the first value.</li></ul>
+<p>Then answer in comments:</p>
+<ol><li>What are all valid indices?</li><li>What is the array's length?</li><li>Why is <code>data[data.length]</code> invalid?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3 — Fill the Seats</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">modifying array elements</span><span class="badge topic-badge">indexed traversal</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3 — Fill the Seats as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span>[] occupied = <span class="kw">new</span> <span class="kw">boolean</span>[<span class="num">8</span>];</code></pre></div>
+<p>Treat each index as a numbered seat.</p>
+<p>Write code that:</p>
+<ul><li>marks seats 1, 4, and 6 as occupied;</li><li>traverses the array using an indexed <code>for</code> loop;</li><li>prints each seat number and whether it is occupied.</li></ul>
+<p>Display human-friendly seat numbers starting at <code>1</code>, while still using valid zero-based Java indices internally.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4 — Two Ways to Traverse</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">indexed for</span><span class="badge topic-badge">enhanced for</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4 — Two Ways to Traverse as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create an array containing seven decimal measurements.</p>
+<p>Print all measurements twice:</p>
+<ol><li>using a traditional indexed <code>for</code> loop;</li><li>using an enhanced <code>for</code> loop.</li></ol>
+<p>Then add comments explaining:</p>
+<ul><li>which loop gives you direct access to the index;</li><li>which is simpler when you only need values;</li><li>which you would choose if you needed to replace array elements.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5 — Apply a Service Charge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">array modification</span><span class="badge topic-badge">indexed loops</span><span class="badge topic-badge">enhanced-loop limitations</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5 — Apply a Service Charge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a <code>double[]</code> containing at least five prices.</p>
+<p>Increase every price by 5%.</p>
+<p>The original array itself must contain the updated values after the operation.</p>
+<p>Print the resulting array.</p>
+<p>Then explain briefly why assigning a new value to the loop variable in:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">double</span> price : prices)</code></pre></div>
+<p>would not update the primitive elements stored in the array.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6 — Product of the Values</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">traversal</span><span class="badge topic-badge">accumulator pattern</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6 — Product of the Values as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> product(<span class="kw">int</span>[] values)</code></pre></div>
+<p>that multiplies all elements together and returns the result.</p>
+<p>For example, an array containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>2, 3, 4</code></pre></div>
+<p>should produce <code>24</code>.</p>
+<p>Test the method with at least three different arrays.</p>
+<p>State what your method returns for an empty array and explain why your accumulator's initial value produces that result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7 — Count Multiples</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">counting pattern</span><span class="badge topic-badge">conditions</span><span class="badge topic-badge">arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7 — Count Multiples as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countMultiplesOf(<span class="kw">int</span>[] values, <span class="kw">int</span> divisor)</code></pre></div>
+<p>that returns how many elements are evenly divisible by <code>divisor</code>.</p>
+<p>For example, with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[12, 7, 18, 25, 30]</code></pre></div>
+<p>and divisor <code>6</code>, the result should be <code>3</code>.</p>
+<p>You may assume <code>divisor</code> is not zero.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8 — First and Last Character</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">length()</span><span class="badge topic-badge">charAt()</span><span class="badge topic-badge">boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8 — First and Last Character as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> describeWord(<span class="type">String</span> word)</code></pre></div>
+<p>For a nonempty string, print:</p>
+<ul><li>its length;</li><li>its first character;</li><li>its last character;</li><li>whether the first and last characters are the same.</li></ul>
+<p>Do not hard-code any indices except <code>0</code>.</p>
+<p>Test with strings of several different lengths, including a one-character string.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9 — Case Converter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">String</span><span class="badge topic-badge">immutability</span><span class="badge topic-badge">case-conversion methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9 — Case Converter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given a string supplied by the caller, produce:</p>
+<ul><li>an uppercase version;</li><li>a lowercase version;</li><li>the original string again.</li></ul>
+<p>Do not overwrite the original variable until after you have demonstrated that <code>toUpperCase()</code> and <code>toLowerCase()</code> return results rather than changing the existing <code>String</code> object.</p>
+<p>Include a short comment explaining <strong>String immutability</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10 — Safe Name Printer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">String[]</span><span class="badge topic-badge">null</span><span class="badge topic-badge">empty strings</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10 — Safe Name Printer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span>[] names = <span class="kw">new</span> <span class="type">String</span>[<span class="num">6</span>];</code></pre></div>
+<p>Assign actual strings to only some positions. Include at least:</p>
+<ul><li>one ordinary name;</li><li>one empty string <code>&quot;&quot;</code>;</li><li>one string containing only a space <code>&quot; &quot;</code>;</li><li>at least one element that remains <code>null</code>.</li></ul>
+<p>Traverse the array safely.</p>
+<p>For each position, print whether it contains:</p>
+<ul><li><code>null</code>;</li><li>an empty string;</li><li>a nonempty string.</li></ul>
+<p>Your program must not throw a <code>NullPointerException</code>.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11 — Range Counter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">traversal</span><span class="badge topic-badge">counting</span><span class="badge topic-badge">method parameters</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11 — Range Counter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countInRange(<span class="kw">int</span>[] values, <span class="kw">int</span> low, <span class="kw">int</span> high)</code></pre></div>
+<p>Return the number of elements satisfying:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>low &lt;= value &lt;= high</code></pre></div>
+<p>Both endpoints count as being inside the range.</p>
+<p>Test cases should include:</p>
+<ul><li>no matching values;</li><li>every value matching;</li><li>values exactly equal to each endpoint;</li><li>an empty array.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12 — Difference Between Extremes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">minimum</span><span class="badge topic-badge">maximum</span><span class="badge topic-badge">traversal</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12 — Difference Between Extremes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> range(<span class="kw">int</span>[] values)</code></pre></div>
+<p>where the result is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>maximum value - minimum value</code></pre></div>
+<p>Do not sort the array.</p>
+<p>Assume the array contains at least one element.</p>
+<p>Your solution should work correctly when:</p>
+<ul><li>every value is negative;</li><li>all values are equal;</li><li>the array contains one element.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13 — Last Occurrence</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">searching</span><span class="badge topic-badge">indices</span><span class="badge topic-badge">sentinel values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13 — Last Occurrence as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> lastIndexOf(<span class="kw">int</span>[] values, <span class="kw">int</span> target)</code></pre></div>
+<p>Return the index of the <strong>last</strong> occurrence of <code>target</code>, or <code>-1</code> if it does not occur.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>values = [5, 2, 8, 2, 9, 2]
+target = 2</code></pre></div>
+<p>should return <code>5</code>.</p>
+<p>Do not create another array.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14 — Adjacent Equal Pairs</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">neighboring elements</span><span class="badge topic-badge">loop boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14 — Adjacent Equal Pairs as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countAdjacentMatches(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Count how many neighboring pairs contain equal values.</p>
+<p>For:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[4, 4, 7, 2, 2, 2]</code></pre></div>
+<p>the matching pairs are:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>4,4
+2,2
+2,2</code></pre></div>
+<p>so the result is <code>3</code>.</p>
+<p>Your method must work safely for arrays of length <code>0</code> and <code>1</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15 — Build an Offset Array</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">methods returning arrays</span><span class="badge topic-badge">transformation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15 — Build an Offset Array as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] addOffset(<span class="kw">int</span>[] values, <span class="kw">int</span> offset)</code></pre></div>
+<p>Return a <strong>new array</strong> in which each element equals the corresponding original element plus <code>offset</code>.</p>
+<p>The original array must remain unchanged.</p>
+<p>Demonstrate this by printing both arrays after calling the method.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16 — Null-Safe Longest Name</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">arrays of object references</span><span class="badge topic-badge">null</span><span class="badge topic-badge">strings</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16 — Null-Safe Longest Name as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> longest(<span class="type">String</span>[] values)</code></pre></div>
+<p>Return the longest non-null string.</p>
+<p>Requirements:</p>
+<ul><li>skip <code>null</code> elements safely;</li><li>empty strings are legitimate strings;</li><li>if there are no non-null strings, return <code>null</code>;</li><li>if several strings have the same maximum length, return the first one.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17 — Locate the Separator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">indexOf()</span><span class="badge topic-badge">substring()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17 — Locate the Separator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A code has the form:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>department-number</code></pre></div>
+<p>such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>CSC-500</code></pre></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> splitCode(<span class="type">String</span> code)</code></pre></div>
+<p>Use <code>indexOf()</code> and <code>substring()</code> to print the portion before the first hyphen and the portion after it.</p>
+<p>If no hyphen occurs, print an appropriate message rather than attempting an invalid substring.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18 — Replace and Compare</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">replace()</span><span class="badge topic-badge">immutability</span><span class="badge topic-badge">.equals()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18 — Replace and Compare as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> changesWhenSpacesRemoved(<span class="type">String</span> text)</code></pre></div>
+<p>Create a version of <code>text</code> with all ordinary space characters removed using <code>replace()</code>.</p>
+<p>Return whether the resulting string differs in content from the original.</p>
+<p>Your solution must use <code>.equals()</code> appropriately.</p>
+<p>Also demonstrate that calling <code>replace()</code> did not mutate the original string.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19 — Case-Insensitive Membership</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">String[]</span><span class="badge topic-badge">.equalsIgnoreCase()</span><span class="badge topic-badge">linear traversal</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19 — Case-Insensitive Membership as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> containsName(<span class="type">String</span>[] names, <span class="type">String</span> target)</code></pre></div>
+<p>Return <code>true</code> if a non-null array element has the same contents as <code>target</code>, ignoring capitalization.</p>
+<p>Examples should demonstrate that:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;Maria&quot;
+&quot;MARIA&quot;
+&quot;maria&quot;</code></pre></div>
+<p>can be treated as equal for this search.</p>
+<p>Safely ignore <code>null</code> elements.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20 — Coordinate Table</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">two-dimensional arrays</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">indexing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20 — Coordinate Table as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a <code>4 × 5</code> integer array.</p>
+<p>Fill each position so that:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>matrix[row][col] = row * 10 + col</code></pre></div>
+<p>Then print the matrix using nested loops.</p>
+<p>Finally print:</p>
+<ul><li>the number of rows;</li><li>the length of each row;</li><li>the four corner values.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21 — Values Above the Mean</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">accumulation</span><span class="badge topic-badge">averaging</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">multiple traversals</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21 — Values Above the Mean as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] aboveMean(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Return a new array containing only values strictly greater than the arithmetic mean of the original array.</p>
+<p>Do not use <code>ArrayList</code>.</p>
+<p>You will need to determine the required output-array size before creating it.</p>
+<p>Define and document what happens for an empty input array.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22 — Longest Increasing Run</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">neighboring elements</span><span class="badge topic-badge">state tracking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22 — Longest Increasing Run as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> longestIncreasingRun(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Return the length of the longest contiguous run in which every value is strictly greater than the previous value.</p>
+<p>For:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[3, 5, 7, 2, 4, 8, 9, 1]</code></pre></div>
+<p>the longest increasing run is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>2, 4, 8, 9</code></pre></div>
+<p>with length <code>4</code>.</p>
+<p>Handle empty and one-element arrays explicitly.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23 — All Occurrence Positions</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">searching</span><span class="badge topic-badge">counting</span><span class="badge topic-badge">methods returning arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23 — All Occurrence Positions as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] allIndicesOf(<span class="kw">int</span>[] values, <span class="kw">int</span> target)</code></pre></div>
+<p>Return an array containing the index of <strong>every</strong> occurrence of <code>target</code>.</p>
+<p>For:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>values = [6, 3, 6, 8, 6]
+target = 6</code></pre></div>
+<p>return an array containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[0, 2, 4]</code></pre></div>
+<p>If the target is absent, return an empty array.</p>
+<p>Do not use dynamic collections.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24 — Sequence Prefix Comparison</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">comparing arrays</span><span class="badge topic-badge">indices</span><span class="badge topic-badge">sequence reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24 — Sequence Prefix Comparison as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isPrefix(<span class="kw">int</span>[] shortSequence, <span class="kw">int</span>[] longSequence)</code></pre></div>
+<p>Return <code>true</code> when every element of <code>shortSequence</code> matches the corresponding element at the beginning of <code>longSequence</code>.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[4, 8] is a prefix of [4, 8, 15, 16]
+[4, 9] is not</code></pre></div>
+<p>Define the result when <code>shortSequence</code> is empty.</p>
+<p>Do not use <code>Arrays.equals()</code> to perform the comparison.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25 — Independent Snapshot</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">reference types</span><span class="badge topic-badge">aliasing</span><span class="badge topic-badge">copying arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25 — Independent Snapshot as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] snapshot(<span class="kw">int</span>[] source)</code></pre></div>
+<p>that manually creates and returns an independent copy of <code>source</code>.</p>
+<p>Then demonstrate:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] original = ...;
+<span class="kw">int</span>[] copy = snapshot(original);</code></pre></div>
+<p>Modify an element through <code>copy</code>.</p>
+<p>Show that <code>original</code> is unaffected.</p>
+<p>Next create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] alias = original;</code></pre></div>
+<p>Modify an element through <code>alias</code> and show that <code>original</code> <strong>is</strong> affected.</p>
+<p>Include a short explanation of why these two cases behave differently.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26 — Word Initials Builder</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">String[]</span><span class="badge topic-badge">null</span><span class="badge topic-badge">charAt()</span><span class="badge topic-badge">StringBuilder</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26 — Word Initials Builder as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> initials(<span class="type">String</span>[] words)</code></pre></div>
+<p>Construct a string consisting of the first character of every non-null, nonempty string in the array.</p>
+<p>For example, an array conceptually containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;Central&quot;, &quot;Processing&quot;, &quot;&quot;, null, &quot;Unit&quot;</code></pre></div>
+<p>should produce:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>CPU</code></pre></div>
+<p>Use <code>StringBuilder</code> to construct the result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27 — Compress Repeated Spaces</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">string traversal</span><span class="badge topic-badge">neighboring characters</span><span class="badge topic-badge">StringBuilder</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27 — Compress Repeated Spaces as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> compressSpaces(<span class="type">String</span> text)</code></pre></div>
+<p>Replace each run of one or more ordinary spaces with exactly one space.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;red    green  blue&quot;</code></pre></div>
+<p>becomes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;red green blue&quot;</code></pre></div>
+<p>Do this by traversing the characters and constructing the result with <code>StringBuilder</code>.</p>
+<p>Do not use regular expressions or a one-call library solution that performs the entire transformation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28 — Extract File Extension</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">indexOf()</span><span class="badge topic-badge">substring reasoning</span><span class="badge topic-badge">searching strings</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28 — Extract File Extension as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> extension(<span class="type">String</span> filename)</code></pre></div>
+<p>Return the text after the <strong>final</strong> period in a filename.</p>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;report.pdf&quot;       -&gt; &quot;pdf&quot;
+&quot;archive.tar.gz&quot;   -&gt; &quot;gz&quot;
+&quot;README&quot;           -&gt; &quot;&quot;</code></pre></div>
+<p>You may use repeated calls to <code>indexOf()</code>, but do not use <code>lastIndexOf()</code>.</p>
+<p>Clearly define what your method does if the filename ends with a period.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29 — Row Totals</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">2-D arrays</span><span class="badge topic-badge">nested traversal</span><span class="badge topic-badge">methods returning arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29 — Row Totals as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] rowTotals(<span class="kw">int</span>[][] grid)</code></pre></div>
+<p>Return a one-dimensional array in which each element is the sum of one row.</p>
+<p>Your solution must use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>grid[row].length</code></pre></div>
+<p>rather than assuming every row has the same number of columns.</p>
+<p>Test your method with rows of different lengths, including an empty row.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30 — Best Store</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">parallel arrays</span><span class="badge topic-badge">aggregation</span><span class="badge topic-badge">positions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30 — Best Store as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span>[] stores</code></pre></div>
+<p>contains store names and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] sales</code></pre></div>
+<p>contains the corresponding daily sales total for each store.</p>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> bestStoreIndex(<span class="type">String</span>[] stores, <span class="kw">int</span>[] sales)</code></pre></div>
+<p>Return the index of the store with the highest sales.</p>
+<p>Assume both arrays are nonempty and have equal lengths.</p>
+<p>Then use the returned index to print both the winning store's name and its sales total.</p>
+<p>Explain why an indexed loop is more appropriate than two unrelated enhanced <code>for</code> loops.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31 — Remove a Value</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">filtering</span><span class="badge topic-badge">counting</span><span class="badge topic-badge">returning arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31 — Remove a Value as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] removeAll(<span class="kw">int</span>[] values, <span class="kw">int</span> target)</code></pre></div>
+<p>Return a new array containing every element except occurrences of <code>target</code>.</p>
+<p>Requirements:</p>
+<ul><li>preserve the original order;</li><li>do not modify <code>values</code>;</li><li>allocate an output array of exactly the necessary length;</li><li>do not use <code>ArrayList</code>.</li></ul>
+<p>Test cases must include:</p>
+<ul><li>target absent;</li><li>target appearing once;</li><li>target appearing several times;</li><li>every element equal to target;</li><li>empty input.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32 — Circular Neighbor Differences</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">neighboring elements</span><span class="badge topic-badge">boundary reasoning</span><span class="badge topic-badge">arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32 — Circular Neighbor Differences as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] circularDifferences(<span class="kw">int</span>[] values)</code></pre></div>
+<p>For each position <code>i</code>, calculate the absolute difference between <code>values[i]</code> and the value immediately after it.</p>
+<p>The final element's neighbor is the <strong>first</strong> element.</p>
+<p>For:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[10, 14, 9, 12]</code></pre></div>
+<p>the result is based on:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>|10 - 14|
+|14 - 9|
+|9 - 12|
+|12 - 10|</code></pre></div>
+<p>Define sensible behavior for arrays of length <code>0</code> and <code>1</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33 — Longest Repeated-Value Run</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">sequence processing</span><span class="badge topic-badge">neighboring elements</span><span class="badge topic-badge">state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33 — Longest Repeated-Value Run as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> longestConstantRun(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Return the length of the longest contiguous group of identical values.</p>
+<p>For:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[5, 5, 2, 8, 8, 8, 3, 3]</code></pre></div>
+<p>the result is <code>3</code>.</p>
+<p>Your algorithm should use one traversal and only a small fixed number of state variables.</p>
+<p>Explain what each state variable represents.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34 — Content Equality with Nulls</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">String[]</span><span class="badge topic-badge">sequence comparison</span><span class="badge topic-badge">null</span><span class="badge topic-badge">.equals()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34 — Content Equality with Nulls as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> sameStrings(<span class="type">String</span>[] a, <span class="type">String</span>[] b)</code></pre></div>
+<p>Two arrays count as having the same contents if:</p>
+<ul><li>they have the same length;</li><li>corresponding non-null strings have equal contents;</li><li>corresponding <code>null</code> elements match each other.</li></ul>
+<p>Thus two different <code>String[]</code> objects can still be considered equal by your method.</p>
+<p>Do not use <code>Arrays.equals()</code>.</p>
+<p>Your method must never call <code>.equals()</code> through a <code>null</code> reference.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35 — Normalize Identifier</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">character traversal</span><span class="badge topic-badge">Character</span><span class="badge topic-badge">StringBuilder</span><span class="badge topic-badge">case conversion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35 — Normalize Identifier as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> normalizeIdentifier(<span class="type">String</span> text)</code></pre></div>
+<p>Construct a normalized identifier according to these rules:</p>
+<ul><li>keep letters and digits;</li><li>convert letters to lowercase;</li><li>replace each run of whitespace with one underscore;</li><li>discard all other characters;</li><li>do not allow an underscore at the beginning or end.</li></ul>
+<p>For example, an input such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;  Final Project # 7! &quot;</code></pre></div>
+<p>should produce:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>final_project_7</code></pre></div>
+<p>Build the result through explicit traversal and <code>StringBuilder</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36 — Find a Subsequence Manually</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">searching</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">array comparison</span><span class="badge topic-badge">boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36 — Find a Subsequence Manually as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> findSequence(<span class="kw">int</span>[] values, <span class="kw">int</span>[] pattern)</code></pre></div>
+<p>Return the first index at which the entire <code>pattern</code> occurs contiguously inside <code>values</code>, or <code>-1</code>.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>values  = [7, 2, 4, 6, 2, 4, 9]
+pattern = [2, 4]</code></pre></div>
+<p>should return <code>1</code>.</p>
+<p>Do not convert the arrays to strings.</p>
+<p>Document your chosen behavior for an empty <code>pattern</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37 — Column Maximums</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">2-D arrays</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">maximums</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37 — Column Maximums as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For a nonempty <strong>rectangular</strong> <code>int[][]</code>, write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] columnMaximums(<span class="kw">int</span>[][] matrix)</code></pre></div>
+<p>Return an array containing the maximum value in each column.</p>
+<p>For example, a matrix with four columns must produce an output array of length four.</p>
+<p>Your algorithm must work when every number in a column is negative.</p>
+<p>Do not initialize maximums to zero.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38 — Ragged Grid Report</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">ragged 2-D arrays</span><span class="badge topic-badge">boundaries</span><span class="badge topic-badge">nested traversal</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38 — Ragged Grid Report as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A Java two-dimensional array can contain rows of different lengths.</p>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> describeRows(<span class="kw">int</span>[][] data)</code></pre></div>
+<p>Return a multi-line report in this form:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Row 0: length=4, sum=...
+Row 1: length=1, sum=...
+Row 2: length=0, sum=...</code></pre></div>
+<p>Use <code>StringBuilder</code>.</p>
+<p>Your method must correctly handle:</p>
+<ul><li>rows of different lengths;</li><li>empty rows;</li><li>an outer array containing zero rows.</li></ul>
+<p>Do not assume a fixed column count.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39 — Edit Log</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">StringBuilder</span><span class="badge topic-badge">mutable text</span><span class="badge topic-badge">insert/delete/setCharAt</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39 — Edit Log as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Start with a <code>StringBuilder</code> supplied to a method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> applyEdits(<span class="type">StringBuilder</span> text)</code></pre></div>
+<p>Perform a sequence of at least four meaningful edits involving all of the following:</p>
+<ul><li><code>append</code>;</li><li><code>insert</code>;</li><li><code>delete</code>;</li><li><code>setCharAt</code>.</li></ul>
+<p>The edits should transform a deliberately chosen starting phrase into a clearly different final phrase.</p>
+<p>Before coding, write down the exact index ranges each operation will affect.</p>
+<p>Afterward, explain why these operations can modify the same <code>StringBuilder</code> object while analogous <code>String</code> operations cannot modify an existing string.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40 — Text Search Without <code>contains</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">strings as sequences</span><span class="badge topic-badge">substring comparison</span><span class="badge topic-badge">search</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40 — Text Search Without contains as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> containsText(<span class="type">String</span> text, <span class="type">String</span> target)</code></pre></div>
+<p>that determines whether <code>target</code> occurs contiguously inside <code>text</code>.</p>
+<p>Restrictions:</p>
+<ul><li>do not use <code>contains()</code>;</li><li>do not use <code>indexOf()</code>;</li><li>do not use regular expressions.</li></ul>
+<p>Compare characters directly.</p>
+<p>Test boundary cases including:</p>
+<ul><li>target at the beginning;</li><li>target at the end;</li><li>target absent;</li><li>target longer than text;</li><li>empty target.</li></ul>
+<p>State and justify your chosen result for the empty target.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41 — Stable Partition by Sign</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">filtering</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">multiple traversals</span><span class="badge topic-badge">transformation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41 — Stable Partition by Sign as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] partitionBySign(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Return a new array containing:</p>
+<ol><li>all negative values in their original relative order;</li><li>then all zero values;</li><li>then all positive values in their original relative order.</li></ol>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[4, -2, 0, 7, -5, 0, 3]</code></pre></div>
+<p>becomes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[-2, -5, 0, 0, 4, 7, 3]</code></pre></div>
+<p>Do not sort the array and do not use dynamic collections.</p>
+<p>Explain how your traversal strategy preserves relative order.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42 — Longest Matching Region</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">comparing sequences</span><span class="badge topic-badge">nested traversal</span><span class="badge topic-badge">state tracking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42 — Longest Matching Region as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> longestSharedRun(<span class="kw">int</span>[] a, <span class="kw">int</span>[] b)</code></pre></div>
+<p>Return the length of the longest contiguous sequence of equal values appearing in both arrays.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>a = [8, 1, 4, 6, 3, 9]
+b = [2, 4, 6, 3, 7]</code></pre></div>
+<p>contains the shared contiguous run:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[4, 6, 3]</code></pre></div>
+<p>so the result is <code>3</code>.</p>
+<p>Do not convert the arrays to strings or use collection classes.</p>
+<p>Before coding, describe what indices your loops represent.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43 — Run-Length Text Encoding</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">neighboring characters</span><span class="badge topic-badge">traversal</span><span class="badge topic-badge">StringBuilder</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43 — Run-Length Text Encoding as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> encodeRuns(<span class="type">String</span> text)</code></pre></div>
+<p>Represent each contiguous run as the character followed by its count.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>aaabbccccdaa</code></pre></div>
+<p>becomes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>a3b2c4d1a2</code></pre></div>
+<p>Requirements:</p>
+<ul><li>use <code>StringBuilder</code>;</li><li>traverse the input systematically;</li><li>correctly finalize the final run;</li><li>handle an empty string;</li><li>do not use regular expressions or collections.</li></ul>
+<p>Explain why the final run is a common boundary-case source of bugs.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44 — Decode Run-Length Text</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">Character</span><span class="badge topic-badge">substring</span><span class="badge topic-badge">StringBuilder</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44 — Decode Run-Length Text as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> decodeRuns(<span class="type">String</span> encoded)</code></pre></div>
+<p>Decode strings produced by Assignment 43.</p>
+<p>Your decoder must support counts greater than 9.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>x12y3</code></pre></div>
+<p>represents twelve <code>x</code> characters followed by three <code>y</code> characters.</p>
+<p>You will therefore need to determine where a possibly multi-digit number ends.</p>
+<p>Assume the encoded input is valid.</p>
+<p>Use <code>StringBuilder</code> for the result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45 — Most Similar Neighboring Rows</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">2-D arrays</span><span class="badge topic-badge">sequence comparison</span><span class="badge topic-badge">neighboring rows</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45 — Most Similar Neighboring Rows as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given a rectangular <code>int[][]</code>, define the similarity of two neighboring rows as the number of columns in which their values are equal.</p>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mostSimilarNeighborPair(<span class="kw">int</span>[][] matrix)</code></pre></div>
+<p>Return the index of the <strong>first row</strong> in the neighboring pair with the greatest similarity.</p>
+<p>For example, if rows 2 and 3 are the most similar pair, return <code>2</code>.</p>
+<p>Assume the matrix has at least two rows.</p>
+<p>Your solution should separate the computation of pair similarity into a reusable method.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46 — Grid Neighborhood Sums</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">2-D arrays</span><span class="badge topic-badge">boundaries</span><span class="badge topic-badge">nested loops</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46 — Grid Neighborhood Sums as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[][] neighborhoodSums(<span class="kw">int</span>[][] grid)</code></pre></div>
+<p>Assume <code>grid</code> is rectangular.</p>
+<p>For every position, calculate the sum of:</p>
+<ul><li>the element itself;</li><li>the element above it, if one exists;</li><li>below it, if one exists;</li><li>left of it, if one exists;</li><li>right of it, if one exists.</li></ul>
+<p>Return a new 2-D array containing these sums.</p>
+<p>Do not modify the original grid.</p>
+<p>Your implementation must correctly handle corners and edges without accessing invalid indices.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47 — Column Search in a Ragged Array</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">ragged arrays</span><span class="badge topic-badge">searching</span><span class="badge topic-badge">boundaries</span><span class="badge topic-badge">sentinel values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47 — Column Search in a Ragged Array as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> firstRowContainingAtColumn(
+    <span class="kw">int</span>[][] data,
+    <span class="kw">int</span> column,
+    <span class="kw">int</span> target
+)</code></pre></div>
+<p>Search downward through a potentially ragged array.</p>
+<p>Return the first row index for which:</p>
+<ol><li>that row actually has the requested column; and</li><li>the element in that column equals <code>target</code>.</li></ol>
+<p>Return <code>-1</code> if no such row exists.</p>
+<p>Your program must not assume every row contains the requested column.</p>
+<p>Also define what happens when <code>column</code> is negative.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48 — Word Transition Analyzer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">String[]</span><span class="badge topic-badge">neighboring elements</span><span class="badge topic-badge">null</span><span class="badge topic-badge">string comparison</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48 — Word Transition Analyzer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countCaseOnlyTransitions(<span class="type">String</span>[] words)</code></pre></div>
+<p>Count neighboring pairs where both elements are non-null, their contents are equal ignoring case, but they are <strong>not</strong> equal with case considered.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[&quot;Java&quot;, &quot;JAVA&quot;, &quot;java&quot;, &quot;Python&quot;, null, &quot;PYTHON&quot;]</code></pre></div>
+<p>requires careful examination of each neighboring pair.</p>
+<p>Use both:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>equals()</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>equalsIgnoreCase()</code></pre></div>
+<p>appropriately.</p>
+<p>Your implementation must be safe around <code>null</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49 — Manual Text Replacement</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">searching strings</span><span class="badge topic-badge">substring reasoning</span><span class="badge topic-badge">StringBuilder</span><span class="badge topic-badge">sequence algorithms</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49 — Manual Text Replacement as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> replaceAllManual(
+    <span class="type">String</span> text,
+    <span class="type">String</span> target,
+    <span class="type">String</span> replacement
+)</code></pre></div>
+<p>Replace every non-overlapping occurrence of <code>target</code> with <code>replacement</code>.</p>
+<p>Restrictions:</p>
+<ul><li>do not use <code>String.replace()</code>;</li><li>do not use <code>replaceAll()</code>;</li><li>do not use regular expressions.</li></ul>
+<p>You may use character access and/or <code>substring()</code>.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>text        = &quot;one fish, two fish&quot;
+target      = &quot;fish&quot;
+replacement = &quot;cat&quot;</code></pre></div>
+<p>should produce:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>one cat, two cat</code></pre></div>
+<p>Assume <code>target</code> is nonempty.</p>
+<p>Your solution should use <code>StringBuilder</code> to construct the output efficiently.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50 — Sequence Analysis Toolkit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">integrated arrays and strings</span><span class="badge topic-badge">methods</span><span class="badge topic-badge">references</span><span class="badge topic-badge">searching</span><span class="badge topic-badge">aggregation</span><span class="badge topic-badge">null</span><span class="badge topic-badge">StringBuilder</span><span class="badge topic-badge">boundary cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50 — Sequence Analysis Toolkit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a small Java <strong>sequence-analysis toolkit</strong>.</p>
+<p>The program receives two parallel arrays:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span>[] labels;
+<span class="kw">int</span>[] values;</code></pre></div>
+<p>Each index represents one labeled measurement.</p>
+<p>Some labels may be <code>null</code>.</p>
+<p>Implement separate methods that:</p>
+<ol><li>return an independent copy of the numeric array;</li><li>calculate the total of all numeric values;</li><li>return the index of the smallest numeric value;</li><li>count how many values are above a caller-supplied threshold;</li><li>return the first index whose non-null label matches a target ignoring case;</li><li>count neighboring numeric pairs whose difference exceeds a supplied amount;</li><li>create a new <code>String[]</code> containing only non-null labels;</li><li>build a multi-line report with <code>StringBuilder</code>, showing each valid label beside its corresponding value.</li></ol>
+<p>Requirements:</p>
+<ul><li>computation should be separated from display where practical;</li><li>do not accidentally alias the numeric array when an independent copy is required;</li><li>safely handle <code>null</code> labels;</li><li>use <code>.equals()</code> or <code>.equalsIgnoreCase()</code> rather than <code>==</code> for string contents;</li><li>use correct index boundaries for every traversal;</li><li>document what each method does with empty arrays;</li><li>assume the two parallel input arrays have equal lengths.</li></ul>
+<p>Finally, answer these design questions in comments:</p>
+<ol><li>Which methods require indices, and which could use enhanced <code>for</code> loops?</li><li>Which methods use the accumulator, counting, searching, filtering, or neighboring-element patterns?</li><li>Which returned arrays are new objects?</li><li>Where could aliasing cause a bug?</li><li>Which boundary cases did you explicitly test?</li><li>How does processing the <code>String[]</code> resemble processing the <code>int[]</code> even though element access and comparison differ?</li></ol>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-04.html">← Week 4</a><a href="week-06.html">Week 6 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

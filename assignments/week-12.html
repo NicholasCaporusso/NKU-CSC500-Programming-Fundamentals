@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 12</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 12: Lists and Dynamic Data Structures</h2>
+      <div class="intro">
+<p><strong>Total assignments:</strong> 50<br>
+<strong>Difficulty scale:</strong> 1–5<br>
+<strong>Assignments per difficulty:</strong> 10</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1 — Fixed or Dynamic?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Arrays</span><span class="badge topic-badge">dynamic data structures</span><span class="badge topic-badge">representation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1 — Fixed or Dynamic? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each situation below, decide whether a fixed-size array or a dynamic list is more appropriate. Give <strong>one sentence of justification</strong> for each answer.</p>
+<ol><li>The seven days of the week.</li><li>The comments posted underneath a video.</li><li>The twelve months of a year.</li><li>The sequence of commands entered during an interactive program.</li><li>The 52 cards in a standard deck.</li><li>The customers currently waiting for technical support.</li></ol>
+<p>For each case, explicitly discuss whether the number of elements is known and fixed in advance.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2 — Describe the List ADT</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Lists</span><span class="badge topic-badge">ADTs</span><span class="badge topic-badge">abstraction versus implementation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2 — Describe the List ADT as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Imagine you are explaining a <strong>List ADT</strong> to a programmer who has never seen its implementation.</p>
+<p>Write a short specification describing:</p>
+<ul><li>what information a list represents;</li><li>why order matters;</li><li>at least five useful operations a list should provide;</li><li>what each operation means.</li></ul>
+<p>Then answer:</p>
+<blockquote><p>Why should your specification not say whether the elements are stored in an array or in nodes?</p></blockquote>
+<p>Your answer should clearly distinguish <strong>what a data structure does</strong> from <strong>how it does it</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3 — <code>ArrayList</code> Reading Log</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">add</span><span class="badge topic-badge">get</span><span class="badge topic-badge">set</span><span class="badge topic-badge">remove</span><span class="badge topic-badge">size</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3 — ArrayList Reading Log as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running the program, determine the contents of <code>codes</code> after <strong>every numbered statement</strong>.</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; codes = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+codes.add(<span class="str">&quot;R&quot;</span>);          <span class="cmt">// 1</span>
+codes.add(<span class="str">&quot;T&quot;</span>);          <span class="cmt">// 2</span>
+codes.add(<span class="str">&quot;V&quot;</span>);          <span class="cmt">// 3</span>
+codes.add(<span class="num">1</span>, <span class="str">&quot;S&quot;</span>);       <span class="cmt">// 4</span>
+codes.set(<span class="num">2</span>, <span class="str">&quot;U&quot;</span>);       <span class="cmt">// 5</span>
+codes.remove(<span class="num">0</span>);         <span class="cmt">// 6</span>
+codes.add(<span class="str">&quot;W&quot;</span>);          <span class="cmt">// 7</span></code></pre></div>
+<p>Create a table with:</p>
+<table><thead><tr><th>Statement</th><th>Contents</th><th>Size</th></tr></thead><tbody></tbody></table>
+<p>Then give the results of:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>codes.get(<span class="num">0</span>)
+codes.get(codes.size() - <span class="num">1</span>)</code></pre></div>
+<p>Do not execute the code until after completing your trace.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4 — <code>add</code> or <code>set</code>?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">indexing</span><span class="badge topic-badge">insertion</span><span class="badge topic-badge">replacement</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4 — add or set? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; planets = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+planets.add(<span class="str">&quot;Mercury&quot;</span>);
+planets.add(<span class="str">&quot;Venus&quot;</span>);
+planets.add(<span class="str">&quot;Mars&quot;</span>);</code></pre></div>
+<p>For each requested change below, write the <strong>single Java statement</strong> that performs it.</p>
+<ol><li>Replace <code>&quot;Venus&quot;</code> with <code>&quot;Earth&quot;</code>.</li><li>Insert <code>&quot;Venus&quot;</code> immediately before <code>&quot;Earth&quot;</code>.</li><li>Append <code>&quot;Jupiter&quot;</code>.</li><li>Replace the final element with <code>&quot;Saturn&quot;</code>.</li><li>Insert <code>&quot;Mars&quot;</code> between <code>&quot;Earth&quot;</code> and <code>&quot;Saturn&quot;</code>.</li></ol>
+<p>After all five operations, write the final contents of the list.</p>
+<p>Finally, explain in two or three sentences why <code>add(index, value)</code> and <code>set(index, value)</code> are fundamentally different operations.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5 — Wrapper Class Match-Up</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Generics</span><span class="badge topic-badge">wrapper classes</span><span class="badge topic-badge">autoboxing</span><span class="badge topic-badge">unboxing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5 — Wrapper Class Match-Up as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Correct each invalid or incomplete declaration.</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="kw">int</span>&gt; ages;
+<span class="type">ArrayList</span>&lt;<span class="kw">double</span>&gt; temperatures;
+<span class="type">ArrayList</span>&lt;<span class="kw">char</span>&gt; grades;
+<span class="type">ArrayList</span>&lt;<span class="kw">boolean</span>&gt; answers;</code></pre></div>
+<p>Then write declarations for lists storing:</p>
+<ol><li><code>String</code> objects;</li><li><code>Student</code> objects;</li><li>integer values;</li><li>decimal values.</li></ol>
+<p>Finally, identify where <strong>autoboxing</strong> and <strong>unboxing</strong> occur:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Integer</span>&gt; counts = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+counts.add(<span class="num">14</span>);
+<span class="kw">int</span> first = counts.get(<span class="num">0</span>);</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6 — Size and Capacity Snapshots</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">size</span><span class="badge topic-badge">capacity</span><span class="badge topic-badge">dynamic arrays</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6 — Size and Capacity Snapshots as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A conceptual dynamic array has capacity 10.</p>
+<p>Its storage currently looks like:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>+----+----+----+----+----+----+----+----+----+----+
+| P  | Q  | R  | S  |    |    |    |    |    |    |
++----+----+----+----+----+----+----+----+----+----+</code></pre></div>
+<p>Answer:</p>
+<ol><li>What is its <strong>size</strong>?</li><li>What is its <strong>capacity</strong>?</li><li>How many unused positions remain?</li><li>If one element is appended without resizing, what are the new size and capacity?</li><li>If three elements are removed, must the capacity automatically become smaller? Explain.</li><li>Why is capacity normally an implementation concern rather than part of the logical contents of a list?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7 — Reference or Object?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Java references</span><span class="badge topic-badge">aliasing</span><span class="badge topic-badge">objects</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7 — Reference or Object? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Book</span> p = <span class="kw">new</span> <span class="type">Book</span>(<span class="str">&quot;Orbit&quot;</span>);
+<span class="type">Book</span> q = p;
+<span class="type">Book</span> r = <span class="kw">new</span> <span class="type">Book</span>(<span class="str">&quot;Orbit&quot;</span>);
+
+q.setTitle(<span class="str">&quot;Nova&quot;</span>);</code></pre></div>
+<p>Without executing the code, answer:</p>
+<ol><li>How many <code>Book</code> objects were created?</li><li>Which variables are aliases?</li><li>What does <code>p.getTitle()</code> return?</li><li>What does <code>q.getTitle()</code> return?</li><li>What does <code>r.getTitle()</code> return?</li><li>Does <code>p == q</code> evaluate to <code>true</code> or <code>false</code>?</li><li>Does <code>p == r</code> necessarily evaluate to <code>true</code>?</li></ol>
+<p>Draw the variables and objects as a reference diagram.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8 — Build a Chain on Paper</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Nodes</span><span class="badge topic-badge">references</span><span class="badge topic-badge">next</span><span class="badge topic-badge">null</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8 — Build a Chain on Paper as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> red = <span class="kw">new</span> <span class="type">Node</span>(<span class="num">4</span>);
+<span class="type">Node</span> blue = <span class="kw">new</span> <span class="type">Node</span>(<span class="num">8</span>);
+<span class="type">Node</span> green = <span class="kw">new</span> <span class="type">Node</span>(<span class="num">15</span>);
+<span class="type">Node</span> yellow = <span class="kw">new</span> <span class="type">Node</span>(<span class="num">16</span>);</code></pre></div>
+<p>Write reference assignments that create:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>red -&gt; blue -&gt; green -&gt; yellow -&gt; null</code></pre></div>
+<p>Then draw the complete structure.</p>
+<p>Label:</p>
+<ul><li>each node's <code>data</code>;</li><li>each node's <code>next</code>;</li><li>the reference variables;</li><li>the location where <code>null</code> occurs.</li></ul>
+<p>Do not create any additional nodes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9 — Move the Pointer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">head</span><span class="badge topic-badge">traversal variables</span><span class="badge topic-badge">references</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9 — Move the Pointer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head
+ |
+ v
+[3] -&gt; [6] -&gt; [11] -&gt; [18] -&gt; null</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> cursor = head;</code></pre></div>
+<p>Draw the structure after each statement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>cursor = cursor.next;
+cursor = cursor.next;</code></pre></div>
+<p>Then answer:</p>
+<ol><li>What value does <code>cursor.data</code> contain?</li><li>Where does <code>head</code> still point?</li><li>Did either statement change a <code>next</code> field?</li><li>Did any node physically move?</li><li>Did the logical contents of the list change?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10 — Name the Complexity</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">linked lists</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10 — Name the Complexity as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each statement, choose either <strong>O(1)</strong> or <strong>O(n)</strong> and give a one-sentence explanation.</p>
+<ol><li>Reading <code>array[25]</code>.</li><li>Reading <code>arrayList.get(25)</code>.</li><li>Searching an unsorted <code>ArrayList</code>.</li><li>Traversing every node in a linked list.</li><li>Adding a node at the front of a singly linked list.</li><li>Finding the last node of a singly linked list that has no <code>tail</code>.</li><li>Returning a stored <code>size</code> field.</li><li>Counting nodes by traversal.</li><li>Removing the first element of an <code>ArrayList</code>.</li><li>Following a known node's <code>next</code> reference once.</li></ol>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11 — Dynamic Sensor History</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">iteration</span><span class="badge topic-badge">dynamic data</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11 — Dynamic Sensor History as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java program that stores an unknown number of integer sensor readings in an <code>ArrayList&lt;Integer&gt;</code>.</p>
+<p>Input ends when the user enters <code>-999</code>, which is <strong>not</strong> stored.</p>
+<p>After input ends, print:</p>
+<ul><li>the number of readings;</li><li>all readings in original order;</li><li>how many readings are negative;</li><li>how many are greater than 100;</li><li>the difference between the first and last reading, if at least two readings exist.</li></ul>
+<p>Handle the empty-list case explicitly.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12 — Remove Short Labels</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">removal</span><span class="badge topic-badge">indices</span><span class="badge topic-badge">iteration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12 — Remove Short Labels as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> removeShortStrings(
+        <span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; words, <span class="kw">int</span> minimumLength)</code></pre></div>
+<p>The method must remove every string whose length is less than <code>minimumLength</code>.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Input:  [sun, galaxy, io, comet, aster]
+minimumLength = 5
+
+Result: [galaxy, comet, aster]</code></pre></div>
+<p>You may use indexed access, but you may <strong>not</strong> create a second collection.</p>
+<p>Explain why careless forward iteration can skip elements after a removal.</p>
+<p>Test consecutive removable elements.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13 — Rotate Left</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">indexed operations</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13 — Rotate Left as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> rotateLeft(<span class="type">ArrayList</span>&lt;<span class="type">Integer</span>&gt; values)</code></pre></div>
+<p>It moves the first element to the end.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[14, 22, 31, 45] -&gt; [22, 31, 45, 14]</code></pre></div>
+<p>Requirements:</p>
+<ul><li>an empty list remains empty;</li><li>a one-element list remains unchanged;</li><li>do not create another collection.</li></ul>
+<p>After implementing it, state the Big-O complexity and explain what work the <code>ArrayList</code> performs internally.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14 — Manual Dynamic Array Simulation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Dynamic arrays</span><span class="badge topic-badge">capacity</span><span class="badge topic-badge">resizing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14 — Manual Dynamic Array Simulation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Simulate a simplified dynamic array with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>initial capacity = 3
+growth rule = double the capacity whenever full</code></pre></div>
+<p>Append the values:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>6, 12, 18, 24, 30, 36, 42, 48, 54</code></pre></div>
+<p>Create a table containing:</p>
+<table><thead><tr><th>Append</th><th>Size Before</th><th>Capacity Before</th><th>Resize?</th><th>Elements Copied</th><th>Capacity After</th></tr></thead><tbody></tbody></table>
+<p>Then calculate the <strong>total number of old elements copied because of resizing</strong>.</p>
+<p>Explain why the total work does not mean every append costs O(n).</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15 — Alias Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">References</span><span class="badge topic-badge">aliasing</span><span class="badge topic-badge">mutation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15 — Alias Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Trace:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> x = <span class="kw">new</span> <span class="type">Node</span>(<span class="num">2</span>);
+<span class="type">Node</span> y = <span class="kw">new</span> <span class="type">Node</span>(<span class="num">4</span>);
+<span class="type">Node</span> z = <span class="kw">new</span> <span class="type">Node</span>(<span class="num">6</span>);
+
+x.next = y;
+y.next = z;
+
+<span class="type">Node</span> a = x;
+<span class="type">Node</span> b = y;
+
+a.data = <span class="num">20</span>;
+b.next.data = <span class="num">60</span>;
+a = a.next;</code></pre></div>
+<p>Draw the state after every assignment beginning with <code>x.next = y</code>.</p>
+<p>At the end answer:</p>
+<ul><li>Which variables refer to the same node?</li><li>What are the three stored data values?</li><li>Which statements changed objects?</li><li>Which statements changed only variables?</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16 — Sum a Linked Chain</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Traversal</span><span class="badge topic-badge">singly linked lists</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16 — Sum a Linked Chain as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Inside a linked-list class, write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> sum()</code></pre></div>
+<p>that returns the sum of all node values.</p>
+<p>Constraints:</p>
+<ul><li>do not change <code>head</code>;</li><li>do not call <code>get</code>;</li><li>use one traversal;</li><li>return <code>0</code> for an empty list.</li></ul>
+<p>Then state the time complexity and explain why the method does not need indexed access.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17 — Count Matches</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Linked-list search</span><span class="badge topic-badge">traversal</span><span class="badge topic-badge">duplicates</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17 — Count Matches as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> countOccurrences(<span class="kw">int</span> target)</code></pre></div>
+<p>for a singly linked list.</p>
+<p>Unlike <code>contains</code>, this method must inspect the entire list and return the number of nodes whose data equals <code>target</code>.</p>
+<p>Test:</p>
+<ul><li>empty list;</li><li>no matches;</li><li>one match;</li><li>several matches;</li><li>every node matching.</li></ul>
+<p>Explain why returning immediately after the first match would be incorrect.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18 — Find the Last Value</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Linked lists</span><span class="badge topic-badge">traversal</span><span class="badge topic-badge">boundary cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18 — Find the Last Value as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> last()</code></pre></div>
+<p>for a singly linked list that stores only <code>head</code>.</p>
+<p>Requirements:</p>
+<ul><li>return the value stored in the final node;</li><li>throw <code>IllegalStateException</code> for an empty list;</li><li>do not use a stored <code>size</code>;</li><li>do not modify the list.</li></ul>
+<p>Explain why the loop condition for this operation differs from a traversal that processes every node.</p>
+<p>State the complexity.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19 — Invariant Inspector</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Structural invariants</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">head</span><span class="badge topic-badge">tail</span><span class="badge topic-badge">size</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19 — Invariant Inspector as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A list stores:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> head;
+<span class="type">Node</span> tail;
+<span class="kw">int</span> size;</code></pre></div>
+<p>For each state, determine whether it is valid. If invalid, identify the broken invariant.</p>
+<h4>State A</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head = null
+tail = null
+size = 0</code></pre></div>
+<h4>State B</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head -&gt; [7] -&gt; null
+tail -&gt; same [7] node
+size = 1</code></pre></div>
+<h4>State C</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head -&gt; [7] -&gt; [9] -&gt; null
+tail -&gt; [7]
+size = 2</code></pre></div>
+<h4>State D</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head -&gt; [7] -&gt; [9] -&gt; null
+tail -&gt; [9]
+size = 3</code></pre></div>
+<h4>State E</h4>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head = null
+tail -&gt; [5] -&gt; null
+size = 0</code></pre></div>
+<p>For every invalid state, describe the smallest correction that would restore consistency.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20 — Choose the Representation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Representation tradeoffs</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">linked lists</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20 — Choose the Representation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose among:</p>
+<ul><li>array;</li><li><code>ArrayList</code>;</li><li>singly linked list with <code>head</code>;</li><li>singly linked list with <code>head</code> and <code>tail</code>.</li></ul>
+<p>Recommend one representation for each workload:</p>
+<ol><li>Exactly 24 hourly measurements, frequently accessed by index.</li><li>A growing history where new records are appended and indexed access is frequent.</li><li>A structure repeatedly adding and removing at the front.</li><li>A growing structure where appending must be constant-time and indexed access is unimportant.</li><li>A fixed collection of primitive <code>double</code> values where memory overhead should be low.</li></ol>
+<p>For each, justify the choice using both <strong>operations</strong> and <strong>complexity</strong>.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21 — Stable Deduplication</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">traversal</span><span class="badge topic-badge">equality</span><span class="badge topic-badge">algorithm design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21 — Stable Deduplication as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> removeDuplicates(<span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt; values)</code></pre></div>
+<p>that removes duplicate strings while preserving the <strong>first occurrence</strong> and original order.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[red, blue, red, green, blue, blue]</code></pre></div>
+<p>becomes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[red, blue, green]</code></pre></div>
+<p>Constraints:</p>
+<ul><li>use only the supplied <code>ArrayList</code>;</li><li>do not use <code>HashSet</code>, <code>HashMap</code>, streams, or another collection;</li><li>compare strings by logical value.</li></ul>
+<p>Analyze the worst-case time complexity.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22 — Sorted Insertion into an <code>ArrayList</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">ordered data</span><span class="badge topic-badge">insertion</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22 — Sorted Insertion into an ArrayList as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Assume an <code>ArrayList&lt;Integer&gt;</code> is already sorted in ascending order.</p>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> insertSorted(
+        <span class="type">ArrayList</span>&lt;<span class="type">Integer</span>&gt; values, <span class="kw">int</span> value)</code></pre></div>
+<p>that inserts <code>value</code> while preserving sorted order.</p>
+<p>Duplicates are allowed.</p>
+<p>Test insertion:</p>
+<ul><li>before every existing value;</li><li>in the middle;</li><li>after every existing value;</li><li>into an empty list;</li><li>beside an equal value.</li></ul>
+<p>Separate your complexity discussion into:</p>
+<ol><li>locating the insertion index;</li><li>performing the insertion.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23 — Reverse Values Without Reversing Links</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Singly linked lists</span><span class="badge topic-badge">traversal</span><span class="badge topic-badge">indexed reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23 — Reverse Values Without Reversing Links as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Add:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> reverseData()</code></pre></div>
+<p>to a singly linked list.</p>
+<p>The <strong>node links must not change</strong>. Instead, the data values stored in the nodes must appear in reverse order afterward.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Before: [4] -&gt; [9] -&gt; [13] -&gt; [21]
+After:  [21] -&gt; [13] -&gt; [9] -&gt; [4]</code></pre></div>
+<p>You may use an <code>ArrayList&lt;Integer&gt;</code> as temporary storage.</p>
+<p>Explain:</p>
+<ul><li>why the nodes themselves remain in the same structural order;</li><li>the time complexity;</li><li>the additional space complexity.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24 — Penultimate Node</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Linked-list traversal</span><span class="badge topic-badge">boundary cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24 — Penultimate Node as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> secondToLast()</code></pre></div>
+<p>for a singly linked list.</p>
+<p>Requirements:</p>
+<ul><li>throw an exception if fewer than two nodes exist;</li><li>use a single traversal;</li><li>do not use <code>size</code>;</li><li>do not call <code>get</code>;</li><li>do not modify any links.</li></ul>
+<p>Develop a loop condition that stops at exactly the correct node and explain why it is safe from <code>NullPointerException</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25 — Insert Before a Known Value</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Linked-list insertion</span><span class="badge topic-badge">previous references</span><span class="badge topic-badge">boundary cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25 — Insert Before a Known Value as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> insertBefore(<span class="kw">int</span> target, <span class="kw">int</span> value)</code></pre></div>
+<p>It inserts <code>value</code> immediately before the <strong>first occurrence</strong> of <code>target</code>.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[8] -&gt; [14] -&gt; [20]
+insertBefore(14, 11)
+
+[8] -&gt; [11] -&gt; [14] -&gt; [20]</code></pre></div>
+<p>Requirements:</p>
+<ul><li>handle an empty list;</li><li>handle a target at the head;</li><li>handle a middle or final target;</li><li>return <code>false</code> if absent;</li><li>correctly maintain a stored <code>size</code>.</li></ul>
+<p>If your implementation has a <code>tail</code>, ensure it remains valid.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26 — Remove the Final Node</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Singly linked-list deletion</span><span class="badge topic-badge">tail</span><span class="badge topic-badge">boundary cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26 — Remove the Final Node as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> removeLast()</code></pre></div>
+<p>for a singly linked list containing:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> head;
+<span class="type">Node</span> tail;
+<span class="kw">int</span> size;</code></pre></div>
+<p>Requirements:</p>
+<ul><li>throw an exception for an empty list;</li><li>correctly handle a one-node list;</li><li>update both <code>head</code> and <code>tail</code> when necessary;</li><li>decrement <code>size</code> exactly once;</li><li>preserve <code>tail.next == null</code>.</li></ul>
+<p>Explain why having a <code>tail</code> does <strong>not</strong> by itself make removal of the final node O(1) in a singly linked list.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27 — Replace Every Match</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Linked-list traversal</span><span class="badge topic-badge">object mutation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27 — Replace Every Match as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> replaceAll(<span class="kw">int</span> oldValue, <span class="kw">int</span> newValue)</code></pre></div>
+<p>for a singly linked list.</p>
+<p>The method must:</p>
+<ul><li>replace every occurrence of <code>oldValue</code>;</li><li>return the number of replacements;</li><li>leave all links unchanged;</li><li>perform exactly one traversal.</li></ul>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[5] -&gt; [2] -&gt; [5] -&gt; [5] -&gt; [8]</code></pre></div>
+<p>with <code>replaceAll(5, 9)</code> becomes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[9] -&gt; [2] -&gt; [9] -&gt; [9] -&gt; [8]</code></pre></div>
+<p>Explain why this operation modifies node objects without modifying list structure.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28 — Find a Structural Corruption</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Debugging</span><span class="badge topic-badge">cycles</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28 — Find a Structural Corruption as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A student reports that this method never finishes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> display() {
+    <span class="type">Node</span> current = head;
+
+    <span class="kw">while</span> (current != <span class="lit">null</span>) {
+        <span class="type">System</span>.out.println(current.data);
+        current = current.next;
+    }
+}</code></pre></div>
+<p>The traversal itself is correct.</p>
+<p>The structure is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head
+ |
+ v
+[4] -&gt; [7] -&gt; [12] -&gt; [19]
+        ^              |
+        |______________|</code></pre></div>
+<p>Answer:</p>
+<ol><li>Why does the loop never terminate?</li><li>Which normal singly linked-list invariant is violated?</li><li>Why will adding another <code>current = current.next</code> not solve the underlying problem?</li><li>Give one debugging strategy for detecting this corruption without relying on printed output continuing forever.</li><li>Describe what reference must eventually be changed to restore a conventional null-terminated list.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29 — The Hidden Quadratic Algorithm</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Complexity</span><span class="badge topic-badge">linked-list indexed access</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29 — The Hidden Quadratic Algorithm as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A custom linked list provides:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> size()       <span class="cmt">// O(1)</span>
+<span class="kw">int</span> get(<span class="kw">int</span> i)   <span class="cmt">// O(n)</span></code></pre></div>
+<p>A programmer writes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; list.size(); i++) {
+    total += list.get(i);
+}</code></pre></div>
+<p>Answer:</p>
+<ol><li>What is the overall worst-case complexity?</li><li>Why is it not O(n)?</li><li>Approximately how many node-to-node link traversals occur as <code>n</code> grows?</li><li>Rewrite the algorithm conceptually using a traversal reference so it becomes O(n).</li><li>State the broader programming lesson demonstrated by this example.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30 — <code>List</code> as an Interface</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Java List</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">LinkedList</span><span class="badge topic-badge">abstraction</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30 — List as an Interface as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">List</span>&lt;<span class="type">String</span>&gt; a = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; b = <span class="kw">new</span> <span class="type">LinkedList</span>&lt;&gt;();</code></pre></div>
+<p>Write a short technical explanation addressing:</p>
+<ol><li>What type is used for each variable?</li><li>What concrete object is created in each statement?</li><li>Why can both objects support common list operations?</li><li>Why might client code prefer declaring the variable as <code>List&lt;String&gt;</code>?</li><li>Can the two implementations have different performance even when the same method calls compile?</li><li>Give one workload favoring the array-based implementation and one favoring the linked representation.</li></ol>
+<p>The emphasis is on <strong>interface versus implementation</strong>, not memorizing syntax.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31 — Generic Searchable Chain</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Generics</span><span class="badge topic-badge">linked lists</span><span class="badge topic-badge">.equals</span><span class="badge topic-badge">abstraction</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31 — Generic Searchable Chain as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">SearchableChain</span>&lt;<span class="type">T</span>&gt;</code></pre></div>
+<p>with a private generic node type.</p>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> addFront(<span class="type">T</span> value)
+<span class="kw">public</span> <span class="kw">boolean</span> contains(<span class="type">T</span> target)
+<span class="kw">public</span> <span class="kw">int</span> count(<span class="type">T</span> target)
+<span class="kw">public</span> <span class="kw">int</span> size()</code></pre></div>
+<p>Requirements:</p>
+<ul><li>the client must never manipulate nodes;</li><li>the implementation must support <code>String</code>, <code>Integer</code>, and a user-defined class;</li><li>use logical equality appropriately;</li><li>document how you handle <code>null</code> elements, either by supporting them deliberately or rejecting them.</li></ul>
+<p>Provide a short client program demonstrating at least two element types.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32 — <code>insertAt</code> with Full Boundary Handling</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Singly linked lists</span><span class="badge topic-badge">insertion</span><span class="badge topic-badge">indices</span><span class="badge topic-badge">head</span><span class="badge topic-badge">tail</span><span class="badge topic-badge">size</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32 — insertAt with Full Boundary Handling as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For a list with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> head;
+<span class="type">Node</span> tail;
+<span class="kw">int</span> size;</code></pre></div>
+<p>implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> insertAt(<span class="kw">int</span> index, <span class="kw">int</span> value)</code></pre></div>
+<p>Valid insertion indices are:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>0 through size</code></pre></div>
+<p>Requirements:</p>
+<ul><li>index <code>0</code> inserts at the front;</li><li>index <code>size</code> appends;</li><li>intermediate indices insert in the middle;</li><li>invalid indices throw <code>IndexOutOfBoundsException</code>;</li><li><code>head</code>, <code>tail</code>, and <code>size</code> must remain consistent;</li><li>no node may become unreachable accidentally.</li></ul>
+<p>After the code, explain the worst-case complexity for insertion at:</p>
+<ul><li>index <code>0</code>;</li><li>index <code>size</code> with a tail;</li><li>an arbitrary middle index.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33 — Remove at an Index</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Linked-list deletion</span><span class="badge topic-badge">index access</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33 — Remove at an Index as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">int</span> removeAt(<span class="kw">int</span> index)</code></pre></div>
+<p>for a singly linked list with <code>head</code>, <code>tail</code>, and <code>size</code>.</p>
+<p>Your implementation must correctly handle:</p>
+<ul><li>invalid indices;</li><li>removal from a one-node list;</li><li>index <code>0</code>;</li><li>a middle index;</li><li>the final index.</li></ul>
+<p>After every successful removal, these conditions must hold:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>size == number of reachable nodes
+empty implies head == null and tail == null
+non-empty implies tail.next == null</code></pre></div>
+<p>Include tests designed specifically to break each invariant.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34 — Split a List</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Reference manipulation</span><span class="badge topic-badge">linked-list structure</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34 — Split a List as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement an operation conceptually equivalent to:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="type">IntLinkedList</span> splitAfter(<span class="kw">int</span> index)</code></pre></div>
+<p>The original list keeps nodes from index <code>0</code> through <code>index</code>. The returned list receives all nodes after that position.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Original:
+[2] -&gt; [4] -&gt; [6] -&gt; [8] -&gt; [10]
+
+splitAfter(2)
+
+Original:
+[2] -&gt; [4] -&gt; [6]
+
+Returned:
+[8] -&gt; [10]</code></pre></div>
+<p>Requirements:</p>
+<ul><li><strong>reuse the existing nodes</strong>;</li><li>do not copy data into new nodes;</li><li>correctly maintain <code>head</code>, <code>tail</code>, and <code>size</code> in both lists;</li><li>decide and document behavior for invalid indices;</li><li>analyze complexity.</li></ul>
+<p>Draw the reference structure immediately before and after the critical link change.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35 — Append One Chain to Another</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Linked-list references</span><span class="badge topic-badge">tail</span><span class="badge topic-badge">ownership</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35 — Append One Chain to Another as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> appendAll(<span class="type">IntLinkedList</span> other)</code></pre></div>
+<p>that moves all nodes from <code>other</code> onto the end of the receiving list.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>A: [1] -&gt; [3]
+B: [5] -&gt; [7] -&gt; [9]
+
+A.appendAll(B)
+
+A: [1] -&gt; [3] -&gt; [5] -&gt; [7] -&gt; [9]
+B: empty</code></pre></div>
+<p>Constraints:</p>
+<ul><li>do not allocate replacement nodes;</li><li>after the operation, <code>other</code> must be empty;</li><li>handle either list being empty;</li><li>maintain both sizes and tails;</li><li>avoid accidentally making the two list objects share the same active chain.</li></ul>
+<p>Explain how <code>tail</code> makes the structural portion of this operation O(1).</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36 — Sentinel-Based List Design</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Sentinel nodes</span><span class="badge topic-badge">implementation choices</span><span class="badge topic-badge">boundary cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36 — Sentinel-Based List Design as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a singly linked integer list whose first node is a <strong>sentinel</strong> that does not represent user data.</p>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>addFront(<span class="kw">int</span> value)
+removeFront()
+contains(<span class="kw">int</span> value)
+isEmpty()</code></pre></div>
+<p>Then compare this design with a conventional <code>head</code> pointing directly to the first data node.</p>
+<p>Discuss:</p>
+<ul><li>representation of the empty list;</li><li>whether the sentinel ever disappears;</li><li>how front insertion changes;</li><li>how front deletion changes;</li><li>which boundary checks become simpler;</li><li>the additional memory cost.</li></ul>
+<p>Do not simply remove the sentinel and fall back to the ordinary representation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37 — Build an Invariant Validator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Structural invariants</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">linked lists</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37 — Build an Invariant Validator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For a list storing:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> head;
+<span class="type">Node</span> tail;
+<span class="kw">int</span> size;</code></pre></div>
+<p>write a debugging method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="kw">boolean</span> checkInvariants()</code></pre></div>
+<p>For an ordinary acyclic singly linked list, it should verify as many of these conditions as practical:</p>
+<ul><li>empty-state consistency;</li><li>correct number of reachable nodes;</li><li>correct <code>tail</code>;</li><li><code>tail.next == null</code>;</li><li>stored <code>size</code> agrees with reachable nodes.</li></ul>
+<p>You may assume there is no cycle for the first version.</p>
+<p>Then answer:</p>
+<blockquote><p>What problem occurs if your validator attempts an ordinary traversal on a cyclic list?</p></blockquote>
+<p>Propose a separate strategy or safety mechanism for dealing with that possibility.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38 — Doubly Linked Removal Analysis</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Singly versus doubly linked lists</span><span class="badge topic-badge">references</span><span class="badge topic-badge">tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38 — Doubly Linked Removal Analysis as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose a doubly linked node contains:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Node</span> previous;
+<span class="kw">int</span> data;
+<span class="type">Node</span> next;</code></pre></div>
+<p>You are given a direct reference <code>current</code> to a <strong>non-first, non-last</strong> node.</p>
+<ol><li>Draw a five-node doubly linked list.</li><li>Mark <code>current</code> at the middle node.</li><li>Write the reference assignments needed to remove <code>current</code>.</li><li>Draw the final structure.</li><li>Explain why both neighboring nodes must be updated.</li><li>Compare this with removing a known node from a singly linked list when only a reference to the target itself is available.</li><li>Explain the memory and implementation-complexity cost of the doubly linked representation.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39 — Workload Cost Model</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">data-structure selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39 — Workload Cost Model as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program performs the following operations on a collection of <code>n</code> elements:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>500,000 indexed reads
+10 appends
+5 front insertions
+5 front removals</code></pre></div>
+<p>Compare:</p>
+<h4>Design A</h4>
+<p><code>ArrayList</code></p>
+<h4>Design B</h4>
+<p>Singly linked list with <code>head</code> and <code>tail</code></p>
+<p>For each operation category:</p>
+<ol><li>state its typical complexity under each design;</li><li>estimate which category dominates as <code>n</code> becomes large;</li><li>recommend a representation;</li><li>explain why choosing solely based on &quot;linked-list insertion is O(1)&quot; would be misleading.</li></ol>
+<p>Then repeat your recommendation if the workload changes to:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>5 indexed reads
+10 appends
+500,000 front insertions/removals</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40 — Repair the Corrupted Mutator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Debugging</span><span class="badge topic-badge">head</span><span class="badge topic-badge">tail</span><span class="badge topic-badge">size</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40 — Repair the Corrupted Mutator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A student writes a method intended to insert a value after the first node containing <code>target</code>:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">boolean</span> addAfter(<span class="kw">int</span> target, <span class="kw">int</span> value) {
+    <span class="type">Node</span> current = head;
+
+    <span class="kw">while</span> (current != <span class="lit">null</span>) {
+        <span class="kw">if</span> (current.data == target) {
+            <span class="type">Node</span> n = <span class="kw">new</span> <span class="type">Node</span>(value);
+            current.next = n;
+            n.next = current.next;
+            size++;
+            <span class="kw">return</span> <span class="lit">true</span>;
+        }
+
+        current = current.next;
+    }
+
+    <span class="kw">return</span> <span class="lit">false</span>;
+}</code></pre></div>
+<p>Assume the class also stores <code>tail</code>.</p>
+<p>Do all of the following:</p>
+<ol><li>trace the method on a three-node list where the target is the middle node;</li><li>draw the corrupted result;</li><li>identify exactly which reference was overwritten too early;</li><li>repair the method;</li><li>handle insertion after the final node;</li><li>update <code>tail</code> when necessary;</li><li>state the invariants that should be checked after the method returns.</li></ol>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41 — Reverse a Singly Linked List In Place</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Advanced reference manipulation</span><span class="badge topic-badge">singly linked lists</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41 — Reverse a Singly Linked List In Place as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> reverse()</code></pre></div>
+<p>that reverses the <strong>links themselves</strong>.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Before:
+head -&gt; [4] -&gt; [7] -&gt; [12] -&gt; [19] -&gt; null
+
+After:
+head -&gt; [19] -&gt; [12] -&gt; [7] -&gt; [4] -&gt; null</code></pre></div>
+<p>Requirements:</p>
+<ul><li>O(n) time;</li><li>O(1) auxiliary space;</li><li>no arrays or collections;</li><li>no replacement nodes;</li><li>correctly maintain <code>head</code>;</li><li>correctly maintain <code>tail</code> if present;</li><li>correctly handle zero and one node.</li></ul>
+<p>Your submission must include a diagram showing <code>previous</code>, <code>current</code>, and any temporary reference during one middle iteration.</p>
+<p>Explain why changing the links without first preserving the next node can destroy access to the unprocessed portion.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42 — Merge Two Sorted Linked Lists by Reusing Nodes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Linked-list algorithms</span><span class="badge topic-badge">reference manipulation</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42 — Merge Two Sorted Linked Lists by Reusing Nodes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Two singly linked lists are sorted in ascending order.</p>
+<p>Design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">IntLinkedList</span> merge(
+        <span class="type">IntLinkedList</span> a, <span class="type">IntLinkedList</span> b)</code></pre></div>
+<p>that produces one sorted list.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>A: [2] -&gt; [7] -&gt; [11]
+B: [1] -&gt; [6] -&gt; [9] -&gt; [14]
+
+Result:
+[1] -&gt; [2] -&gt; [6] -&gt; [7] -&gt; [9] -&gt; [11] -&gt; [14]</code></pre></div>
+<p>Requirements:</p>
+<ul><li>reuse existing nodes rather than copying their values;</li><li>O(n + m) time;</li><li>correctly terminate the final chain with <code>null</code>;</li><li>maintain the resulting <code>head</code>, <code>tail</code>, and <code>size</code>;</li><li>document what state <code>a</code> and <code>b</code> are left in.</li></ul>
+<p>Explain why repeatedly calling an index-based <code>get</code> would be a poor approach.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43 — Remove Every Duplicate from a Linked List</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Nested traversal</span><span class="badge topic-badge">deletion</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43 — Remove Every Duplicate from a Linked List as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> removeDuplicates()</code></pre></div>
+<p>for an <strong>unsorted</strong> singly linked list.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[8] -&gt; [3] -&gt; [8] -&gt; [5] -&gt; [3] -&gt; [8]</code></pre></div>
+<p>becomes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[8] -&gt; [3] -&gt; [5]</code></pre></div>
+<p>Constraints:</p>
+<ul><li>preserve the first occurrence;</li><li>do not use arrays, <code>ArrayList</code>, <code>HashSet</code>, <code>HashMap</code>, or other collections;</li><li>reuse existing nodes;</li><li>maintain <code>size</code> and <code>tail</code>;</li><li>handle arbitrary runs and positions of duplicates.</li></ul>
+<p>Analyze the worst-case time complexity and explain why the constraints naturally lead to repeated traversal.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44 — Representation Benchmark and Explanation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Experimental analysis</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">LinkedList</span><span class="badge topic-badge">Big-O</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44 — Representation Benchmark and Explanation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a Java experiment comparing <code>ArrayList&lt;Integer&gt;</code> and Java's <code>LinkedList&lt;Integer&gt;</code>.</p>
+<p>Measure sufficiently large workloads involving:</p>
+<ol><li>repeated indexed reads;</li><li>repeated insertion at the front;</li><li>repeated removal from the front;</li><li>sequential traversal.</li></ol>
+<p>Requirements:</p>
+<ul><li>run multiple trials;</li><li>avoid drawing conclusions from a single tiny input;</li><li>report approximate timing results in a table;</li><li>identify sources of measurement noise;</li><li>connect the observed trends to the representations studied in Week 12.</li></ul>
+<p>Do <strong>not</strong> claim that timing proves Big-O complexity. Explain the distinction between empirical running time and asymptotic analysis.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45 — Design a Mutable Generic List ADT</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">ADTs</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">generics</span><span class="badge topic-badge">implementations</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45 — Design a Mutable Generic List ADT as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a Java interface:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">interface</span> <span class="type">SimpleList</span>&lt;<span class="type">T</span>&gt;</code></pre></div>
+<p>Choose and specify at least these conceptual capabilities:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>add
+insert
+get
+replace
+remove
+contains
+size
+isEmpty
+clear</code></pre></div>
+<p>For each operation:</p>
+<ul><li>define expected behavior;</li><li>define valid/invalid indices where applicable;</li><li>state what happens on invalid input.</li></ul>
+<p>Then sketch two implementations:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">DynamicArrayList</span>&lt;<span class="type">T</span>&gt;
+<span class="type">NodeLinkedList</span>&lt;<span class="type">T</span>&gt;</code></pre></div>
+<p>You do not need to fully implement every method, but you must explain how the internal representations differ and provide a complexity table for the major operations.</p>
+<p>Conclude with an explanation of why the <strong>interface is the abstraction</strong> while the two classes are implementations.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46 — Mutation Sequence Proof</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Invariants</span><span class="badge topic-badge">reference tracing</span><span class="badge topic-badge">correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46 — Mutation Sequence Proof as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Start with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head
+ |
+ v
+[10] -&gt; [20] -&gt; [30] -&gt; [40] -&gt; null
+                         ^
+                         |
+                        tail
+
+size = 4</code></pre></div>
+<p>Design a sequence of <strong>reference-level operations</strong> that transforms the list into:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>head
+ |
+ v
+[5] -&gt; [10] -&gt; [30] -&gt; [35] -&gt; [40] -&gt; null
+                                      ^
+                                      |
+                                     tail
+
+size = 5</code></pre></div>
+<p>Requirements:</p>
+<ul><li>create nodes only for <code>5</code> and <code>35</code>;</li><li>make the node containing <code>20</code> unreachable;</li><li>preserve all other node objects;</li><li>show the complete diagram after every reference assignment;</li><li>identify when <code>size</code> changes;</li><li>demonstrate after every step which nodes remain reachable from <code>head</code>.</li></ul>
+<p>Finish by arguing that the final structural invariants hold.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47 — Linked-List Code Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Debugging</span><span class="badge topic-badge">correctness</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47 — Linked-List Code Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Review the following intentionally unreliable method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> insertAt(<span class="kw">int</span> index, <span class="kw">int</span> value) {
+    <span class="type">Node</span> n = <span class="kw">new</span> <span class="type">Node</span>(value);
+
+    <span class="kw">if</span> (index == <span class="num">0</span>) {
+        head = n;
+        n.next = head;
+        size++;
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">Node</span> current = head;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; index; i++) {
+        current = current.next;
+    }
+
+    n.next = current.next;
+    current.next = n;
+}</code></pre></div>
+<p>Assume the class maintains <code>head</code>, <code>tail</code>, and <code>size</code>.</p>
+<p>Produce a formal code review that identifies <strong>every distinct correctness problem you can find</strong>, including:</p>
+<ul><li>reference-order errors;</li><li>index-navigation errors;</li><li>missing validation;</li><li><code>null</code> risks;</li><li>size maintenance;</li><li>tail maintenance;</li><li>empty-list behavior.</li></ul>
+<p>Then provide a corrected implementation and a focused test suite covering all structural boundaries.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48 — Memory-versus-Speed Architecture Decision</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Representation tradeoffs</span><span class="badge topic-badge">memory</span><span class="badge topic-badge">performance</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48 — Memory-versus-Speed Architecture Decision as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are designing three subsystems.</p>
+<h4>System A — Historical Samples</h4>
+<p>Millions of values are stored, rarely modified, and frequently read by numeric index.</p>
+<h4>System B — Editable Sequence</h4>
+<p>Items are frequently inserted or removed when the program already has a reference to the relevant neighboring node. Indexed access is rare.</p>
+<h4>System C — General Application List</h4>
+<p>The collection grows unpredictably, is traversed often, indexed regularly, and mostly appended to.</p>
+<p>For each system, choose among:</p>
+<ul><li>array;</li><li><code>ArrayList</code>;</li><li>singly linked list;</li><li>doubly linked list.</li></ul>
+<p>Write a short architecture memo for each choice considering:</p>
+<ul><li>indexed versus sequential access;</li><li>insertion/removal location;</li><li>memory overhead;</li><li>resizing;</li><li>references;</li><li>implementation complexity;</li><li>expected Big-O costs.</li></ul>
+<p>There is no credit for choosing a structure without explaining the workload-based tradeoff.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49 — Mini Library: Two Implementations, One Contract</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">ADTs</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">linked lists</span><span class="badge topic-badge">dynamic arrays</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49 — Mini Library: Two Implementations, One Contract as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a small list library containing:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">MiniList</span>&lt;<span class="type">T</span>&gt;
+<span class="type">MiniArrayList</span>&lt;<span class="type">T</span>&gt;
+<span class="type">MiniLinkedList</span>&lt;<span class="type">T</span>&gt;</code></pre></div>
+<p><code>MiniList&lt;T&gt;</code> must define a common public contract.</p>
+<p>Both implementations must support at least:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>add(<span class="type">T</span> value)
+get(<span class="kw">int</span> index)
+set(<span class="kw">int</span> index, <span class="type">T</span> value)
+removeAt(<span class="kw">int</span> index)
+size()
+isEmpty()
+contains(<span class="type">T</span> value)
+clear()</code></pre></div>
+<p>Requirements:</p>
+<ul><li><code>MiniArrayList&lt;T&gt;</code> must use an internal array that can be replaced by a larger array when needed;</li><li><code>MiniLinkedList&lt;T&gt;</code> must use linked nodes;</li><li>client code must be able to use either through a <code>MiniList&lt;T&gt;</code> reference;</li><li>write the same behavioral tests against both implementations;</li><li>document the expected complexity of every public operation.</li></ul>
+<p>Conclude by explaining how the project demonstrates that <strong>identical abstract behavior can be implemented by fundamentally different representations</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50 — Dynamic Data Structure Case Study</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Comprehensive Week 12 integration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50 — Dynamic Data Structure Case Study as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a small <strong>editing-history system</strong> that stores a changing ordered sequence of <code>Edit</code> objects.</p>
+<p>An <code>Edit</code> contains at least:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>timestamp
+description</code></pre></div>
+<p>The system must support:</p>
+<ul><li>adding a new edit;</li><li>displaying all edits in chronological order;</li><li>finding edits matching a description;</li><li>accessing an edit by position;</li><li>inserting a correction at a specified position;</li><li>deleting an edit;</li><li>reporting the number of edits;</li><li>clearing the history.</li></ul>
+<p>Before coding, compare these three representations:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>fixed array
+ArrayList&lt;Edit&gt;
+linked nodes</code></pre></div>
+<p>Your submission must contain:</p>
+<ol><li>a List ADT-style description of the required behavior;</li><li>a representation choice with justification;</li><li>a Big-O table for the required operations;</li><li>an implementation of your chosen design;</li><li>boundary-case tests;</li><li>at least one reference diagram if you choose a linked representation, or a size/capacity diagram if you choose an <code>ArrayList</code>;</li><li>a discussion of memory/performance tradeoffs;</li><li>an explanation of why another representation might become preferable if the workload changed.</li></ol>
+<p>The goal is not merely to produce working code. Your design must demonstrate that <strong>the representation of a list determines the costs of the operations performed on it</strong>.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-11.html">← Week 11</a><a href="week-13.html">Week 13 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

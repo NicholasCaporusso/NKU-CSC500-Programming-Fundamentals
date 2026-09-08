@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 11</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 11: Algorithm Analysis, Searching, and Sorting</h2>
+      <div class="intro">
+<p>These 50 assignments provide additional practice with the concepts from Week 11. There are exactly 10 assignments at each difficulty level.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Algorithm or Implementation?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Algorithms</span><span class="badge topic-badge">implementations</span><span class="badge topic-badge">correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Algorithm or Implementation? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each item below, state whether it describes an <strong>algorithm</strong>, an <strong>implementation detail</strong>, or a <strong>desired property of an algorithm</strong>.</p>
+<ol><li>Examine each temperature and remember the lowest one seen.</li><li>Use an <code>int[]</code> to store the temperatures.</li><li>The procedure must eventually terminate.</li><li>Return the remembered temperature after all values have been examined.</li><li>Implement the procedure using a Java <code>for</code> loop.</li><li>The procedure must work for arrays of many different lengths.</li></ol>
+<p>Then write 2–3 sentences explaining why an algorithm is not the same thing as its Java implementation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: What Does <code>n</code> Mean?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Input size</span><span class="badge topic-badge">algorithm analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: What Does n Mean? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each problem, define an appropriate meaning for <code>n</code>.</p>
+<ol><li>Determine whether a username occurs in an array of usernames.</li><li>Count the vowels in a <code>String</code>.</li><li>Process every transaction stored in a file.</li><li>Examine every cell in one row of a matrix.</li><li>Sort an array of exam scores.</li><li>Search a collection of customer records.</li></ol>
+<p>For each answer, use the form:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>n = ...</code></pre></div>
+<p>Finally, explain why defining <code>n</code> should happen before assigning a Big-O complexity.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Choose the Basic Operation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Basic operations</span><span class="badge topic-badge">algorithm analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Choose the Basic Operation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each task, identify one useful <strong>basic operation</strong> that could be counted when analyzing the algorithm.</p>
+<ol><li>Count how many array elements are negative.</li><li>Find whether a word occurs in an array of words.</li><li>Find the smallest exam score.</li><li>Count adjacent pairs that are out of order.</li><li>Insert a value into the correct location within a sorted portion of an array.</li></ol>
+<p>For each task:</p>
+<ul><li>name the operation;</li><li>explain why it represents useful work;</li><li>state what input size <code>n</code> represents.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: Growth-Rate Sorting</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Complexity classes</span><span class="badge topic-badge">asymptotic growth</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: Growth-Rate Sorting as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Arrange these complexity classes from <strong>slowest-growing</strong> to <strong>fastest-growing</strong>:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>O(n²)
+O(1)
+O(n log n)
+O(log n)
+O(n)</code></pre></div>
+<p>Then answer:</p>
+<ol><li>Which complexity changes least as <code>n</code> grows?</li><li>Which changes most rapidly among these five?</li><li>If <code>n</code> doubles, which class represents work that approximately doubles?</li><li>Which class is associated with repeatedly cutting a problem by a constant factor?</li><li>Why can two algorithms in the same class still have different actual runtimes?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Simplify the Growth Expressions</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">dominant terms</span><span class="badge topic-badge">constant factors</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Simplify the Growth Expressions as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Give the simplest Big-O classification for each expression.</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>A. 9
+B. 14n + 3
+C. 2n² + 40
+D. 75n + 600
+E. 8n² + 2n + 900
+F. 6n log n + 25n
+G. 200 log n + 17
+H. n² + 500n</code></pre></div>
+<p>For three of your answers, explicitly identify:</p>
+<ul><li>the dominant term;</li><li>any constant multiplier being ignored;</li><li>any lower-order terms being ignored.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: Predict the Scaling</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Growth rates</span><span class="badge topic-badge">Big-O intuition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: Predict the Scaling as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose an algorithm processes <code>n = 1,000</code> items.</p>
+<p>Without measuring actual time, describe approximately what should happen to the amount of work when the input grows to <code>n = 2,000</code> if the algorithm is:</p>
+<ol><li><code>O(1)</code></li><li><code>O(n)</code></li><li><code>O(n²)</code></li></ol>
+<p>Then explain why the answer for <code>O(log n)</code> is very different from the answer for <code>O(n)</code>.</p>
+<p>No exact timing measurements are required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Best Case or Worst Case?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Best case</span><span class="badge topic-badge">worst case</span><span class="badge topic-badge">searching</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Best Case or Worst Case? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider a linear search through an array of 20 city codes.</p>
+<p>Describe an input situation representing:</p>
+<ol><li>the best case;</li><li>a successful search requiring substantial work;</li><li>an unsuccessful worst case.</li></ol>
+<p>For each situation, state the approximate number of comparisons and the corresponding Big-O class.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Search Requirements Card</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Linear search</span><span class="badge topic-badge">binary search</span><span class="badge topic-badge">preconditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Search Requirements Card as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a comparison card for <strong>linear search</strong> and <strong>binary search</strong> containing:</p>
+<ul><li>whether sorted data is required;</li><li>best-case complexity;</li><li>worst-case complexity;</li><li>whether the algorithm works directly on unsorted data;</li><li>what causes the algorithm to terminate successfully;</li><li>what causes it to report failure.</li></ul>
+<p>Finish with one sentence describing the most important precondition of binary search.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Sorting Vocabulary</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Sorting</span><span class="badge topic-badge">in-place algorithms</span><span class="badge topic-badge">stability</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Sorting Vocabulary as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Define each term in your own words:</p>
+<ol><li>sorted region;</li><li>unsorted region;</li><li>in-place sorting;</li><li>stable sorting;</li><li>comparison;</li><li>swap;</li><li>shift;</li><li>invariant.</li></ol>
+<p>Then explain why <strong>stability</strong> can matter even when two records have equal sorting keys.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Selection vs. Insertion Concept Map</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Selection sort</span><span class="badge topic-badge">insertion sort</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Selection vs. Insertion Concept Map as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a two-column concept map comparing selection sort and insertion sort.</p>
+<p>Include:</p>
+<ul><li>the main idea of each algorithm;</li><li>what the processed region represents;</li><li>comparisons;</li><li>swaps versus shifts;</li><li>best-case time;</li><li>worst-case time;</li><li>extra space;</li><li>behavior on already sorted input.</li></ul>
+<p>Finish with two similarities and two differences.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Application</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Count the Real Work</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Basic operations</span><span class="badge topic-badge">loop analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Count the Real Work as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; data.length; i++) {
+    <span class="kw">if</span> (data[i] % <span class="num">3</span> == <span class="num">0</span>) {
+        count++;
+    }
+}</code></pre></div>
+<p>Answer:</p>
+<ol><li>What does <code>n</code> represent?</li><li>Choose a useful basic operation.</li><li>How many times is the divisibility test performed?</li><li>What is the worst-case Big-O complexity?</li><li>Does the number of values divisible by 3 change the number of divisibility tests?</li><li>What is the additional space complexity?</li></ol>
+<p>Justify every answer.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: A Loop That Grows by Three</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Logarithmic loops</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: A Loop That Grows by Three as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> value = <span class="num">1</span>; value &lt; n; value *= <span class="num">3</span>) {
+    <span class="type">System</span>.out.println(value);
+}</code></pre></div>
+<p>For <code>n = 100</code>, list the values printed.</p>
+<p>Then:</p>
+<ul><li>explain why the loop is not <code>O(n)</code>;</li><li>describe how the number of iterations changes when <code>n</code> becomes much larger;</li><li>give its Big-O complexity;</li><li>compare the pattern with repeated division by 3.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Mixed Consecutive Work</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Consecutive loops</span><span class="badge topic-badge">dominant terms</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Mixed Consecutive Work as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    taskA();
+}
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        taskB();
+    }
+}
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">25</span>; i++) {
+    taskC();
+}</code></pre></div>
+<p>Determine:</p>
+<ol><li>the complexity of each block;</li><li>an expression representing the combined work;</li><li>the dominant term;</li><li>the overall Big-O complexity.</li></ol>
+<p>Explain why simply saying &quot;there are four loops&quot; is not a valid analysis.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Search Comparison Counter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Linear search</span><span class="badge topic-badge">instrumentation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Search Comparison Counter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> linearSearchCount(
+        <span class="kw">int</span>[] data, <span class="kw">int</span> target)</code></pre></div>
+<p>Instead of returning the target's index, return the number of element-to-target comparisons performed before the search terminates.</p>
+<p>Test it using an array of at least 12 values with:</p>
+<ul><li>a target at the beginning;</li><li>a target near the middle;</li><li>a target at the end;</li><li>an absent target.</li></ul>
+<p>Report the four comparison counts and explain how they illustrate best- and worst-case behavior.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Search for the Last Occurrence</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Linear search</span><span class="badge topic-badge">duplicates</span><span class="badge topic-badge">specifications</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Search for the Last Occurrence as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> lastIndexOf(
+        <span class="kw">int</span>[] data, <span class="kw">int</span> target)</code></pre></div>
+<p>The method must return the <strong>last</strong> index containing <code>target</code>, or <code>-1</code> if the target does not occur.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Input:  [6, 2, 6, 9, 6, 3]
+Target: 6
+Return: 4</code></pre></div>
+<p>Requirements:</p>
+<ul><li>do not sort the array;</li><li>analyze best- and worst-case time;</li><li>explain how this specification differs from a linear search that immediately returns after finding a match.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Repair the Search Boundary</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Binary search</span><span class="badge topic-badge">off-by-one errors</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Repair the Search Boundary as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer writes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> brokenSearch(<span class="kw">int</span>[] data, <span class="kw">int</span> target) {
+    <span class="kw">int</span> low = <span class="num">0</span>;
+    <span class="kw">int</span> high = data.length - <span class="num">1</span>;
+
+    <span class="kw">while</span> (low &lt; high) {
+        <span class="kw">int</span> mid = low + (high - low) / <span class="num">2</span>;
+
+        <span class="kw">if</span> (data[mid] == target) {
+            <span class="kw">return</span> mid;
+        } <span class="kw">else</span> <span class="kw">if</span> (target &lt; data[mid]) {
+            high = mid - <span class="num">1</span>;
+        } <span class="kw">else</span> {
+            low = mid + <span class="num">1</span>;
+        }
+    }
+
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</code></pre></div>
+<p>Find an input where the method incorrectly reports that a present value is absent.</p>
+<p>Then:</p>
+<ol><li>trace <code>low</code>, <code>high</code>, and <code>mid</code>;</li><li>identify the defect;</li><li>repair the method;</li><li>explain why the repaired loop condition is correct.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: Halving Without Code</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Binary search</span><span class="badge topic-badge">logarithmic growth</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: Halving Without Code as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A sorted collection contains 4,096 values.</p>
+<p>Answer without implementing a program:</p>
+<ol><li>Approximately how many times can a candidate region of 4,096 elements be halved before only one candidate remains?</li><li>Repeat for 65,536 elements.</li><li>By what factor did the input size increase?</li><li>How much did the approximate number of halvings increase?</li><li>Explain how the results demonstrate logarithmic growth.</li></ol>
+<p>Show your reasoning using powers of two.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: Selection Sort Operation Accounting</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Selection sort</span><span class="badge topic-badge">comparisons</span><span class="badge topic-badge">swaps</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: Selection Sort Operation Accounting as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Modify a selection-sort implementation so that it counts separately:</p>
+<ul><li>element comparisons;</li><li>swaps.</li></ul>
+<p>Run it on three arrays of the same length:</p>
+<ul><li>ascending;</li><li>descending;</li><li>randomly ordered.</li></ul>
+<p>Record the counts.</p>
+<p>Then explain:</p>
+<ol><li>why the comparison counts are similar or identical;</li><li>whether the swap counts must be identical;</li><li>why Big-O does not capture every difference you observed.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: Insertion Sort Shift Counter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Insertion sort</span><span class="badge topic-badge">best/worst case</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: Insertion Sort Shift Counter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Modify insertion sort to count the number of times an existing array element is shifted one position to the right.</p>
+<p>Run it on:</p>
+<ol><li>an ascending array;</li><li>a descending array;</li><li>an array in which only two neighboring values are out of order.</li></ol>
+<p>Use at least 10 elements.</p>
+<p>Explain why the input arrangement affects insertion sort much more noticeably than it affects selection sort's comparison count.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: Build a Sorting Test Suite</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Testing</span><span class="badge topic-badge">sorting correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: Build a Sorting Test Suite as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a test suite that could be used with either selection sort or insertion sort.</p>
+<p>Include at least these categories:</p>
+<ul><li>empty array;</li><li>one element;</li><li>two elements already ordered;</li><li>two elements reversed;</li><li>duplicate values;</li><li>negative values;</li><li>all equal values;</li><li>already sorted;</li><li>reverse sorted;</li><li>mixed positive and negative values.</li></ul>
+<p>For every test:</p>
+<ul><li>provide the input;</li><li>provide the expected output;</li><li>state what kind of defect the test could help reveal.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate Problem Solving</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Exact Count Before Big-O</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Counting operations</span><span class="badge topic-badge">asymptotic analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Exact Count Before Big-O as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; i * <span class="num">2</span>; j++) {
+        doWork();
+    }
+}</code></pre></div>
+<p>Derive an expression for the approximate number of calls to <code>doWork()</code>.</p>
+<p>Then simplify the expression to a Big-O class.</p>
+<p>Your solution must show:</p>
+<ol><li>the work performed for several early values of <code>i</code>;</li><li>the summation pattern;</li><li>the dominant term;</li><li>the final complexity.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Linear Plus Logarithmic</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Sequential complexity</span><span class="badge topic-badge">logarithmic loops</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Linear Plus Logarithmic as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    process(i);
+}
+
+<span class="kw">int</span> remaining = n;
+<span class="kw">while</span> (remaining &gt; <span class="num">0</span>) {
+    inspect(remaining);
+    remaining /= <span class="num">2</span>;
+}</code></pre></div>
+<p>Determine:</p>
+<ul><li>the complexity of the first block;</li><li>the complexity of the second block;</li><li>the combined growth expression;</li><li>the final Big-O complexity.</li></ul>
+<p>Then explain why the logarithmic block does not determine the overall complexity.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: First Occurrence with Binary Search</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Binary search</span><span class="badge topic-badge">duplicates</span><span class="badge topic-badge">algorithm modification</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: First Occurrence with Binary Search as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> firstOccurrence(
+        <span class="kw">int</span>[] sortedData, <span class="kw">int</span> target)</code></pre></div>
+<p>The array is sorted but may contain duplicates.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Input:  [1, 3, 3, 3, 7, 9, 9]
+Target: 3
+Return: 1</code></pre></div>
+<p>A basic binary search may stop at any matching <code>3</code>. Your method must find the <strong>first</strong> one while preserving logarithmic worst-case complexity.</p>
+<p>Requirements:</p>
+<ul><li>do not perform a linear scan after finding a match;</li><li>explain how the search interval changes after a match;</li><li>state the invariant used by your algorithm;</li><li>analyze time and additional space.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Binary Search Failure Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Binary search</span><span class="badge topic-badge">sorted-data precondition</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Binary Search Failure Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create an experiment demonstrating why binary search cannot safely operate on arbitrary unsorted arrays.</p>
+<p>Construct <strong>three different unsorted arrays</strong> where binary search fails to find a value that is actually present.</p>
+<p>For each:</p>
+<ol><li>give the array and target;</li><li>trace the search;</li><li>identify the point where a valid candidate is incorrectly discarded;</li><li>explain exactly which ordering assumption would have justified that discard if the array had been sorted.</li></ol>
+<p>Do not use an example from the lecture.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Search All Matching Indices</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Search specifications</span><span class="badge topic-badge">duplicates</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Search All Matching Indices as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span>[] findAll(
+        <span class="kw">int</span>[] data, <span class="kw">int</span> target)</code></pre></div>
+<p>The method returns an array containing every matching index in increasing order.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Input:  [5, 2, 5, 8, 5]
+Target: 5
+Output: [0, 2, 4]</code></pre></div>
+<p>Requirements:</p>
+<ul><li>do not modify <code>data</code>;</li><li>correctly handle no matches;</li><li>analyze time complexity;</li><li>analyze additional space in terms of both <code>n</code> and the number of matches;</li><li>explain why an ordinary early-return linear search cannot satisfy this specification.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Prove a Selection-Sort Pass</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Selection sort</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Prove a Selection-Sort Pass as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a short correctness argument for <strong>one complete outer-loop pass</strong> of selection sort.</p>
+<p>Your argument must explain:</p>
+<ol><li>what is assumed to be true before the pass;</li><li>what the inner loop discovers;</li><li>why the swap puts the correct value at position <code>i</code>;</li><li>what is true after the pass;</li><li>why repeating this process eventually sorts the entire array.</li></ol>
+<p>Do not merely describe the Java statements. Explain <strong>why</strong> the algorithm works.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Prove an Insertion-Sort Pass</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Insertion sort</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Prove an Insertion-Sort Pass as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Using the insertion-sort invariant, explain why inserting <code>current</code> into the already sorted prefix preserves sorted order.</p>
+<p>Your explanation must address:</p>
+<ul><li>why values larger than <code>current</code> are shifted;</li><li>why smaller or equal values can remain where they are;</li><li>why <code>j + 1</code> is the correct final location;</li><li>what happens when <code>current</code> is the smallest value processed so far;</li><li>what happens when no shift is necessary.</li></ul>
+<p>Include one original example array to support the argument.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Stability Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Stable sorting</span><span class="badge topic-badge">selection sort</span><span class="badge topic-badge">insertion sort</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Stability Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Represent records as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>(label, priority)</code></pre></div>
+<p>where sorting uses only <code>priority</code>.</p>
+<p>Construct an input containing at least six records and at least two duplicated priority values.</p>
+<p>Then:</p>
+<ol><li>manually process the records using ordinary swap-based selection sort;</li><li>show a case in which equal-priority records can change relative order;</li><li>process an appropriate input using insertion sort with a strict <code>&gt;</code> comparison;</li><li>show how equal-priority records retain their relative order;</li><li>explain why changing the insertion comparison from <code>&gt;</code> to <code>&gt;=</code> can affect stability.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Nearly Sorted Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Insertion sort</span><span class="badge topic-badge">selection sort</span><span class="badge topic-badge">empirical analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Nearly Sorted Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Generate arrays of 100, 500, 1,000, and 2,000 integers that begin sorted and then have exactly five randomly selected pairs swapped.</p>
+<p>Instrument both selection sort and insertion sort to count their important operations.</p>
+<p>For each input size:</p>
+<ul><li>record selection-sort comparisons;</li><li>record insertion-sort comparisons;</li><li>record insertion-sort shifts;</li><li>verify that both outputs are sorted.</li></ul>
+<p>Explain which algorithm benefits more from the nearly sorted structure and connect the observation to the lecture's theoretical analysis.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Timing Methodology Audit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">System.nanoTime()</span><span class="badge topic-badge">experimental methodology</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Timing Methodology Audit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A student benchmarks two sorting algorithms as follows:</p>
+<ol><li>create one random array;</li><li>time Algorithm A on it;</li><li>immediately time Algorithm B on the same array;</li><li>perform one trial;</li><li>conclude that the algorithm with the smaller nanosecond value has the better Big-O complexity.</li></ol>
+<p>Write a critique identifying <strong>at least five problems</strong> with this experiment.</p>
+<p>Then design an improved procedure that includes:</p>
+<ul><li>equivalent starting inputs;</li><li>repeated trials;</li><li>multiple input sizes;</li><li>correctness checks;</li><li>appropriate interpretation of timing measurements.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced Analysis and Design</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Hybrid Loop Analysis</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Nested loops</span><span class="badge topic-badge">logarithmic growth</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Hybrid Loop Analysis as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">1</span>; j &lt; n; j *= <span class="num">2</span>) {
+        doWork(i, j);
+    }
+}</code></pre></div>
+<p>Derive the complexity rather than guessing from the presence of two loops.</p>
+<p>Your explanation must include:</p>
+<ol><li>outer-loop iterations;</li><li>inner-loop iterations for one outer iteration;</li><li>the combined work;</li><li>the final Big-O class;</li><li>a comparison with a traditional <code>n</code>-by-<code>n</code> nested loop.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Three-Level Growth Puzzle</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Loop analysis</span><span class="badge topic-badge">dominant terms</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Three-Level Growth Puzzle as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; i; j++) {
+        <span class="kw">for</span> (<span class="kw">int</span> k = <span class="num">0</span>; k &lt; <span class="num">4</span>; k++) {
+            doWork();
+        }
+    }
+}</code></pre></div>
+<p>Determine the asymptotic complexity.</p>
+<p>Show:</p>
+<ul><li>how many times the innermost statement runs for a fixed <code>i</code>;</li><li>the resulting sum across all <code>i</code>;</li><li>why the constant-size third loop does or does not add another factor of <code>n</code>;</li><li>the simplified Big-O class.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Iterative vs. Recursive Binary Search</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Binary search</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">space complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Iterative vs. Recursive Binary Search as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement both:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>binarySearchIterative(...)
+binarySearchRecursive(...)</code></pre></div>
+<p>Instrument both versions to count how many search steps they perform.</p>
+<p>Test successful and unsuccessful searches on sorted arrays of multiple sizes.</p>
+<p>Compare:</p>
+<ul><li>returned results;</li><li>number of search steps;</li><li>worst-case time complexity;</li><li>additional space requirements;</li><li>implementation risks such as boundary errors.</li></ul>
+<p>Explain why two different implementations can represent the same underlying algorithm.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Search Workload Break-Even Model</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Algorithm choice</span><span class="badge topic-badge">sorting cost</span><span class="badge topic-badge">repeated searching</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Search Workload Break-Even Model as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program receives an unsorted array of <code>n</code> values and will perform <code>q</code> searches.</p>
+<p>Compare these strategies:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Strategy A:
+Perform q linear searches.
+
+Strategy B:
+Sort once using an O(n log n) sort,
+then perform q binary searches.</code></pre></div>
+<p>Construct symbolic expressions describing the approximate asymptotic work of both strategies.</p>
+<p>Then discuss how the preferred strategy changes when:</p>
+<ul><li><code>q = 1</code>;</li><li><code>q</code> is small;</li><li><code>q</code> is comparable to <code>n</code>;</li><li><code>q</code> is extremely large.</li></ul>
+<p>Your answer should focus on the <strong>entire workload</strong>, not simply state that binary search is faster.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Maintain a Sorted Dataset or Not?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Algorithm selection</span><span class="badge topic-badge">tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Maintain a Sorted Dataset or Not? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design an algorithm policy for an application storing product prices.</p>
+<p>The application repeatedly performs two operations:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>SEARCH(price)
+ADD(newPrice)</code></pre></div>
+<p>Consider three workloads:</p>
+<ol><li>searches are extremely common and additions are rare;</li><li>additions are extremely common and searches are rare;</li><li>searches and additions occur at similar rates.</li></ol>
+<p>For each workload, discuss whether keeping the array sorted is likely to be worthwhile.</p>
+<p>Address:</p>
+<ul><li>binary-search benefits;</li><li>cost of maintaining order;</li><li>linear search;</li><li>input size;</li><li>frequency of operations;</li><li>implementation complexity.</li></ul>
+<p>No single strategy must be chosen for all three workloads.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Stable Multi-Key Records</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Stable sorting</span><span class="badge topic-badge">objects</span><span class="badge topic-badge">insertion sort</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Stable Multi-Key Records as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a simple Java class:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Ticket</span> {
+    <span class="type">String</span> department;
+    <span class="kw">int</span> priority;
+    <span class="kw">int</span> arrivalNumber;
+}</code></pre></div>
+<p>Create at least 12 tickets, including multiple tickets with the same priority.</p>
+<p>Implement a stable insertion sort that sorts tickets by <code>priority</code>.</p>
+<p>Requirements:</p>
+<ul><li>equal-priority tickets must remain in original arrival order;</li><li>verify stability programmatically;</li><li>explain why the comparison condition preserves stability;</li><li>state the algorithm's best- and worst-case time;</li><li>state its additional space complexity.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Make Selection Sort Stable</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Selection sort</span><span class="badge topic-badge">stability</span><span class="badge topic-badge">algorithm modification</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Make Selection Sort Stable as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ordinary swap-based selection sort is generally unstable.</p>
+<p>Design a <strong>stable variant</strong> of selection sort.</p>
+<p>Instead of swapping the selected minimum directly into position, consider how elements could be moved so that equal-key records retain their relative order.</p>
+<p>Requirements:</p>
+<ol><li>describe your modified algorithm;</li><li>implement it in Java;</li><li>demonstrate stability using labeled records with duplicate keys;</li><li>analyze time complexity;</li><li>analyze additional space;</li><li>discuss the extra data movement introduced by preserving stability.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Empirical Growth-Ratio Experiment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Timing</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">experimental analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Empirical Growth-Ratio Experiment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose either selection sort or insertion sort on random input.</p>
+<p>Benchmark it at input sizes such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>500
+1,000
+2,000
+4,000</code></pre></div>
+<p>Perform multiple trials at every size and compute an average elapsed time.</p>
+<p>For each doubling, calculate:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>average time at 2n
+------------------
+average time at n</code></pre></div>
+<p>Then answer:</p>
+<ol><li>What ratio would quadratic growth roughly suggest?</li><li>Do your measurements match perfectly?</li><li>What environmental factors can create noise?</li><li>Why does the experiment support or fail to support the theoretical analysis?</li><li>Why can timing alone never constitute a proof of Big-O complexity?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Search Algorithm Validation Harness</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Testing</span><span class="badge topic-badge">linear search</span><span class="badge topic-badge">binary search</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Search Algorithm Validation Harness as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a Java test harness that automatically compares your own search methods against expected results.</p>
+<p>Generate many arrays and targets covering:</p>
+<ul><li>empty arrays;</li><li>one-element arrays;</li><li>absent values;</li><li>duplicate values;</li><li>targets at boundaries;</li><li>negative values;</li><li>randomly generated values.</li></ul>
+<p>For binary search, ensure its input satisfies its sorted-data precondition.</p>
+<p>Your harness should report a failure with enough information to reproduce the test.</p>
+<p>Explain how systematic testing differs from trying a few convenient examples manually.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Instrumented Algorithm Laboratory</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Experimental analysis</span><span class="badge topic-badge">comparisons</span><span class="badge topic-badge">sorting</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Instrumented Algorithm Laboratory as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build an instrumentation framework for selection sort and insertion sort.</p>
+<p>For each run, collect:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>input size
+comparisons
+swaps
+shifts
+elapsed nanoseconds
+whether output is sorted</code></pre></div>
+<p>Test at least three input arrangements:</p>
+<ul><li>random;</li><li>sorted;</li><li>reverse sorted.</li></ul>
+<p>Use at least four input sizes.</p>
+<p>Write a short analysis explaining:</p>
+<ul><li>which metrics match theoretical predictions;</li><li>which metrics distinguish algorithms that share <code>O(n²)</code> worst-case time;</li><li>why operation counts may sometimes be easier to interpret than elapsed time.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging Integration</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Binary Search Invariant and Correctness Argument</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Binary search</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Binary Search Invariant and Correctness Argument as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a structured correctness argument for iterative binary search.</p>
+<p>Use this invariant:</p>
+<blockquote><p>If the target occurs in the array and has not already been found, a valid target position remains within the current interval from <code>low</code> through <code>high</code>.</p></blockquote>
+<p>Your argument must address:</p>
+<ol><li>why the invariant is true initially;</li><li>why it remains true when the middle value is too small;</li><li>why it remains true when the middle value is too large;</li><li>why returning <code>mid</code> is correct on equality;</li><li>why <code>low &gt; high</code> proves failure;</li><li>why each iteration makes progress toward termination.</li></ol>
+<p>Finish by connecting correctness to the requirement that the array be sorted.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Binary Search for a Boundary</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Binary search</span><span class="badge topic-badge">algorithm adaptation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Binary Search for a Boundary as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given a sorted array, write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> firstAtLeast(
+        <span class="kw">int</span>[] data, <span class="kw">int</span> target)</code></pre></div>
+<p>Return the index of the first element whose value is <strong>greater than or equal to</strong> <code>target</code>.</p>
+<p>If no such element exists, return <code>-1</code>.</p>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>data = [2, 4, 4, 7, 11]
+
+target = 4  -&gt; 1
+target = 5  -&gt; 3
+target = 12 -&gt; -1
+target = 1  -&gt; 0</code></pre></div>
+<p>Requirements:</p>
+<ul><li>worst-case <code>O(log n)</code> time;</li><li>no linear scan;</li><li>correct duplicate handling;</li><li>explain the search invariant;</li><li>provide at least eight edge-case tests.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Comparison-Count Prediction vs. Measurement</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Theoretical analysis</span><span class="badge topic-badge">empirical validation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Comparison-Count Prediction vs. Measurement as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For selection sort, derive the exact number of element comparisons as a function of <code>n</code>.</p>
+<p>Then:</p>
+<ol><li>calculate the predicted comparison counts for five chosen values of <code>n</code>;</li><li>instrument your Java implementation;</li><li>measure the actual comparison counts;</li><li>compare predicted and measured results;</li><li>explain any discrepancy;</li><li>simplify the exact expression to Big-O.</li></ol>
+<p>Repeat a smaller version of the investigation for insertion sort on:</p>
+<ul><li>sorted input;</li><li>reverse-sorted input.</li></ul>
+<p>Discuss why insertion sort does not have one fixed comparison count independent of input arrangement.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Design an Adaptive Search Service</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Searching</span><span class="badge topic-badge">sorting</span><span class="badge topic-badge">workload analysis</span><span class="badge topic-badge">algorithm choice</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Design an Adaptive Search Service as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a Java component that receives an integer dataset and a sequence of search requests.</p>
+<p>The component may choose between:</p>
+<ul><li>linear searching the original data;</li><li>sorting a copy and using binary search.</li></ul>
+<p>Your design should consider:</p>
+<ul><li>dataset size;</li><li>expected number of searches;</li><li>whether the original order must be preserved;</li><li>sorting cost;</li><li>search cost;</li><li>extra memory;</li><li>frequency of data changes.</li></ul>
+<p>Define a decision policy explaining when the component switches strategies.</p>
+<p>Then implement a prototype and experimentally evaluate at least three different workload patterns.</p>
+<p>The goal is not to discover a universally optimal threshold, but to justify your design using both theory and measurements.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Adaptive Sorting Strategy</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Selection sort</span><span class="badge topic-badge">insertion sort</span><span class="badge topic-badge">algorithm selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Adaptive Sorting Strategy as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a method that examines an array and chooses either selection sort or insertion sort based on a quick estimate of how ordered the input already is.</p>
+<p>For example, your preliminary scan might measure adjacent inversions:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>data[i] &gt; data[i + 1]</code></pre></div>
+<p>Requirements:</p>
+<ol><li>design the heuristic;</li><li>analyze the cost of performing the preliminary scan;</li><li>implement the adaptive sorter;</li><li>test sorted, nearly sorted, random, and reverse-sorted arrays;</li><li>compare its behavior with always using selection sort;</li><li>compare it with always using insertion sort;</li><li>discuss cases where your heuristic makes a poor choice.</li></ol>
+<p>Explain why the extra decision step can still leave the overall worst-case complexity at <code>O(n²)</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Correctness Before Optimization</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Correctness</span><span class="badge topic-badge">efficiency</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">optimization</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Correctness Before Optimization as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A developer proposes an &quot;optimized&quot; search that examines only every second element:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; data.length; i += <span class="num">2</span>) {
+    <span class="kw">if</span> (data[i] == target) {
+        <span class="kw">return</span> i;
+    }
+}
+<span class="kw">return</span> -<span class="num">1</span>;</code></pre></div>
+<p>Develop a complete technical evaluation.</p>
+<p>Your submission must:</p>
+<ol><li>identify the class of inputs for which it can return an incorrect result;</li><li>construct a minimal counterexample;</li><li>analyze its runtime;</li><li>compare its runtime with correct linear search;</li><li>explain why a smaller constant factor does not justify incorrectness;</li><li>redesign the algorithm so that it is correct;</li><li>build tests demonstrating the original defect and the corrected behavior.</li></ol>
+<p>Conclude with a discussion of why performance optimization must preserve the problem specification.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Sort-and-Search Experimental Study</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Searching</span><span class="badge topic-badge">sorting</span><span class="badge topic-badge">timing</span><span class="badge topic-badge">workload tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Sort-and-Search Experimental Study as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Conduct an experiment comparing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>A. Repeated linear searches on unsorted data
+
+B. Sort once, then perform repeated binary searches</code></pre></div>
+<p>Use multiple values for:</p>
+<ul><li><code>n</code>, the number of data elements;</li><li><code>q</code>, the number of search requests.</li></ul>
+<p>Measure the <strong>complete workload</strong>, including sorting time for Strategy B.</p>
+<p>Requirements:</p>
+<ul><li>use equivalent datasets and target sequences;</li><li>repeat trials;</li><li>check correctness;</li><li>report average measurements;</li><li>identify situations where Strategy A wins;</li><li>identify situations where Strategy B wins;</li><li>explain the results using asymptotic reasoning.</li></ul>
+<p>Your conclusion must distinguish theoretical growth from machine-dependent elapsed time.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: Stability Regression Test Framework</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Stability</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">sorting algorithms</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: Stability Regression Test Framework as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create records containing:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Record</span> {
+    <span class="kw">int</span> key;
+    <span class="kw">int</span> originalPosition;
+}</code></pre></div>
+<p>Build an automated method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> isStableResult(<span class="type">Record</span>[] data)</code></pre></div>
+<p>that determines whether equal-key records remain in increasing <code>originalPosition</code> order after sorting.</p>
+<p>Use the framework to test:</p>
+<ul><li>standard stable insertion sort;</li><li>insertion sort modified to use a non-strict comparison;</li><li>ordinary swap-based selection sort;</li><li>your stable selection-sort variant, if implemented.</li></ul>
+<p>Generate randomized tests containing many duplicate keys.</p>
+<p>Explain why checking only that the keys are numerically sorted is insufficient to test stability.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Algorithm Analysis Report</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Comprehensive algorithm analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Algorithm Analysis Report as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose one of the following:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>linear search
+binary search
+selection sort
+insertion sort</code></pre></div>
+<p>Write a technical analysis report containing:</p>
+<ol><li>exact problem specification;</li><li>preconditions;</li><li>input-size definition;</li><li>useful basic operation;</li><li>algorithm description independent of Java;</li><li>Java implementation;</li><li>correctness argument;</li><li>termination argument;</li><li>best-case analysis;</li><li>worst-case analysis;</li><li>additional space analysis;</li><li>edge cases;</li><li>systematic test plan;</li><li>empirical timing methodology;</li><li>limitations of timing evidence;</li><li>situations where the algorithm is appropriate;</li><li>situations where another algorithm is preferable.</li></ol>
+<p>The report must distinguish clearly between the <strong>algorithm</strong> and its particular Java implementation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Week 11 Algorithm Engineering Project</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Comprehensive integration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Week 11 Algorithm Engineering Project as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a Java program called:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>AlgorithmWorkbench</code></pre></div>
+<p>The program should allow a user to create or load an integer dataset and perform algorithm experiments.</p>
+<p>At minimum, support:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1. Linear search
+2. Binary search
+3. Selection sort
+4. Insertion sort
+5. Check whether data is sorted
+6. Generate a random dataset
+7. Generate a sorted dataset
+8. Generate a reverse-sorted dataset
+9. Display operation counts
+10. Run timing experiments</code></pre></div>
+<h4>Requirements</h4>
+<p>The program must:</p>
+<ul><li>prevent or appropriately handle binary search on unsorted data;</li><li>preserve equivalent starting inputs when comparing sorting algorithms;</li><li>count meaningful basic operations;</li><li>measure elapsed time with <code>System.nanoTime()</code>;</li><li>verify sorting correctness;</li><li>test duplicate values;</li><li>handle empty and one-element arrays;</li><li>report relevant theoretical Big-O complexities;</li><li>distinguish empirical measurements from theoretical complexity;</li><li>use methods to keep the program organized.</li></ul>
+<h4>Analysis Component</h4>
+<p>Run experiments using several input sizes and arrangements.</p>
+<p>Write a report answering:</p>
+<ol><li>How does linear search scale?</li><li>How does binary search scale?</li><li>How do their preconditions differ?</li><li>How do selection sort and insertion sort compare on random data?</li><li>How do they compare on sorted data?</li><li>How do they compare on reverse-sorted data?</li><li>Which algorithms are in-place?</li><li>Which implementation studied is stable?</li><li>Where do theoretical predictions agree with operation counts?</li><li>Where are timing measurements noisy?</li><li>Why can algorithms with the same Big-O still behave differently?</li><li>How should workload characteristics influence algorithm choice?</li></ol>
+<p>Conclude by answering:</p>
+<blockquote><p><strong>How much work does each solution perform, how does that work grow, and when is each algorithm an appropriate choice?</strong></p></blockquote>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-10.html">← Week 10</a><a href="week-12.html">Week 12 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

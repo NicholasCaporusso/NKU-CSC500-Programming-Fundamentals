@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 9</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 9: Exceptions, File I/O, Defensive Programming, and Testing</h2>
+      <div class="intro">
+<p>This document contains <strong>50 practice assignments</strong> for Week 9, with <strong>10 assignments at each difficulty level (1–5)</strong>.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Introductory</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1 — Error Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Syntax errors</span><span class="badge topic-badge">logic errors</span><span class="badge topic-badge">runtime errors</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1 — Error Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each code fragment below, classify the problem as a <strong>syntax error</strong>, <strong>logic error</strong>, or <strong>runtime error</strong>. Briefly explain your choice.</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="cmt">// A</span>
+<span class="kw">int</span> quantity = <span class="num">8</span>
+<span class="type">System</span>.out.println(quantity);
+
+<span class="cmt">// B</span>
+<span class="kw">int</span>[] scores = {<span class="num">4</span>, <span class="num">7</span>, <span class="num">9</span>};
+<span class="type">System</span>.out.println(scores[<span class="num">5</span>]);
+
+<span class="cmt">// C</span>
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> rectangleArea(<span class="kw">double</span> width, <span class="kw">double</span> height) {
+    <span class="kw">return</span> width + height;
+}
+
+<span class="cmt">// D</span>
+<span class="type">String</span> city = <span class="lit">null</span>;
+<span class="type">System</span>.out.println(city.toUpperCase());
+
+<span class="cmt">// E</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">5</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<p>For fragment E, assume the requirement is to print the integers <code>0</code> through <code>4</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2 — Predict the Exception</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Common runtime exceptions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2 — Predict the Exception as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each statement, identify the exception that will occur, if any.</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Integer</span>.parseInt(<span class="str">&quot;12x&quot;</span>);</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span> word = <span class="lit">null</span>;
+<span class="kw">int</span> length = word.length();</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] data = {<span class="num">2</span>, <span class="num">4</span>};
+<span class="kw">int</span> x = data[-<span class="num">1</span>];</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">25</span> / <span class="num">0</span>;</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">throw</span> <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(<span class="str">&quot;Quantity is invalid&quot;</span>);</code></pre></div>
+<p>Choose among:</p>
+<ul><li><code>ArithmeticException</code></li><li><code>ArrayIndexOutOfBoundsException</code></li><li><code>NullPointerException</code></li><li><code>NumberFormatException</code></li><li><code>IllegalArgumentException</code></li><li>no exception</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3 — Trace a Catch</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">try</span><span class="badge topic-badge">catch</span><span class="badge topic-badge">control flow</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3 — Trace a Catch as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running the program, write its exact output.</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(<span class="str">&quot;Start&quot;</span>);
+
+<span class="kw">try</span> {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Reading&quot;</span>);
+    <span class="kw">int</span> value = <span class="type">Integer</span>.parseInt(<span class="str">&quot;oops&quot;</span>);
+    <span class="type">System</span>.out.println(<span class="str">&quot;Value = &quot;</span> + value);
+}
+<span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Invalid number&quot;</span>);
+}
+
+<span class="type">System</span>.out.println(<span class="str">&quot;End&quot;</span>);</code></pre></div>
+<p>Then identify which statement causes control to leave the <code>try</code> block.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4 — Throw or Throws?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">throw</span><span class="badge topic-badge">throws</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4 — Throw or Throws? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Fill each blank with either <code>throw</code> or <code>throws</code>.</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> save() ______ <span class="type">FileNotFoundException</span> {
+    <span class="cmt">// ...</span>
+}</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">if</span> (quantity &lt; <span class="num">0</span>) {
+    ______ <span class="kw">new</span> <span class="type">IllegalArgumentException</span>(<span class="str">&quot;Negative quantity&quot;</span>);
+}</code></pre></div>
+<p>Then explain in one or two sentences what each keyword does.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5 — Checked or Unchecked?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Checked and unchecked exceptions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5 — Checked or Unchecked? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Classify each exception as <strong>checked</strong> or <strong>unchecked</strong>:</p>
+<ol><li><code>FileNotFoundException</code></li><li><code>IOException</code></li><li><code>NumberFormatException</code></li><li><code>NullPointerException</code></li><li><code>IllegalArgumentException</code></li><li><code>ArrayIndexOutOfBoundsException</code></li><li><code>ArithmeticException</code></li></ol>
+<p>Then state what Java requires a programmer to do when an operation can produce a checked exception.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6 — Reading a Shopping List</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">text files</span><span class="badge topic-badge">try-with-resources</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6 — Reading a Shopping List as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that reads a file named:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>shopping.txt</code></pre></div>
+<p>one line at a time and prints every line to the console.</p>
+<p>Requirements:</p>
+<ul><li>use <code>Scanner</code>;</li><li>use a relative file path;</li><li>use try-with-resources;</li><li>handle <code>FileNotFoundException</code>;</li><li>print <code>Shopping list unavailable.</code> if the file cannot be opened.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7 — Write a Daily Log</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">PrintWriter</span><span class="badge topic-badge">file output</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7 — Write a Daily Log as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that creates:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>daily.txt</code></pre></div>
+<p>and writes these three lines:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Tasks completed: 6
+Tasks remaining: 2
+Status: productive</code></pre></div>
+<p>Use <code>PrintWriter</code> and try-with-resources. Handle failure to create the file with an appropriate message.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8 — Relative or Absolute?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">File paths</span><span class="badge topic-badge">working directory</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8 — Relative or Absolute? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Classify each path as <strong>relative</strong> or <strong>absolute</strong>.</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>records/orders.txt</code></pre></div>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>C:\course\data\orders.txt</code></pre></div>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>output.txt</code></pre></div>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>/home/student/project/input.txt</code></pre></div>
+<p>Then explain why a relative path is generally more portable for a course project.</p>
+<p>Finally, explain what Java's <strong>current working directory</strong> has to do with finding <code>output.txt</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9 — Choose the Test Cases</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Normal</span><span class="badge topic-badge">boundary</span><span class="badge topic-badge">edge</span><span class="badge topic-badge">invalid tests</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9 — Choose the Test Cases as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> validRating(<span class="kw">int</span> rating)</code></pre></div>
+<p>The valid range is <code>1</code> through <code>5</code>, inclusive.</p>
+<p>Design <strong>seven test cases</strong> containing:</p>
+<ul><li>two normal cases;</li><li>the two boundaries;</li><li>two invalid cases immediately outside the boundaries;</li><li>one additional edge or unusual case.</li></ul>
+<p>For every test, give the input and expected result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10 — First JUnit Tests</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">JUnit</span><span class="badge topic-badge">assertEquals</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10 — First JUnit Tests as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose this method already exists:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> triple(<span class="kw">int</span> value) {
+    <span class="kw">return</span> value * <span class="num">3</span>;
+}</code></pre></div>
+<p>Write JUnit tests for:</p>
+<ul><li>a positive integer;</li><li>zero;</li><li>a negative integer;</li><li><code>Integer.MAX_VALUE / 3</code>.</li></ul>
+<p>Use <code>assertEquals</code> and descriptive test method names.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11 — Catch Ordering Repair</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Exception inheritance</span><span class="badge topic-badge">multiple catches</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11 — Catch Ordering Repair as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following code does not compile:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="kw">int</span> code = <span class="type">Integer</span>.parseInt(text);
+    <span class="type">System</span>.out.println(codes[code]);
+}
+<span class="kw">catch</span> (<span class="type">Exception</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;General failure&quot;</span>);
+}
+<span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Bad number&quot;</span>);
+}
+<span class="kw">catch</span> (<span class="type">ArrayIndexOutOfBoundsException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Bad code&quot;</span>);
+}</code></pre></div>
+<p>Rewrite the exception handlers so the catches are ordered correctly.</p>
+<p>Then explain why the original order is invalid.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12 — Finally Flow Table</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">try</span><span class="badge topic-badge">catch</span><span class="badge topic-badge">finally</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12 — Finally Flow Table as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">try</span> {
+    <span class="type">System</span>.out.println(<span class="str">&quot;A&quot;</span>);
+    <span class="kw">int</span> n = <span class="type">Integer</span>.parseInt(text);
+    <span class="type">System</span>.out.println(<span class="str">&quot;B&quot;</span>);
+}
+<span class="kw">catch</span> (<span class="type">NumberFormatException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;C&quot;</span>);
+}
+<span class="kw">finally</span> {
+    <span class="type">System</span>.out.println(<span class="str">&quot;D&quot;</span>);
+}
+
+<span class="type">System</span>.out.println(<span class="str">&quot;E&quot;</span>);</code></pre></div>
+<p>Determine the output when <code>text</code> is:</p>
+<ol><li><code>&quot;42&quot;</code></li><li><code>&quot;forty-two&quot;</code></li></ol>
+<p>Explain when the <code>finally</code> block executes in each case.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13 — Defensive Ticket Quantity</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Preconditions</span><span class="badge topic-badge">validation</span><span class="badge topic-badge">IllegalArgumentException</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13 — Defensive Ticket Quantity as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> ticketCost(<span class="kw">int</span> quantity, <span class="kw">double</span> price)</code></pre></div>
+<p>Contract:</p>
+<ul><li><code>quantity</code> must be between <code>1</code> and <code>12</code>;</li><li><code>price</code> must be greater than <code>0</code>;</li><li>otherwise throw <code>IllegalArgumentException</code>;</li><li>valid calls return <code>quantity * price</code>.</li></ul>
+<p>Write at least five manual test cases covering valid and invalid arguments.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14 — Protect an Inventory Invariant</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Invariants</span><span class="badge topic-badge">constructors</span><span class="badge topic-badge">defensive programming</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14 — Protect an Inventory Invariant as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create an <code>InventoryItem</code> class containing:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">private</span> <span class="type">String</span> name;
+<span class="kw">private</span> <span class="kw">int</span> quantity;</code></pre></div>
+<p>Maintain these invariants:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>name is non-null and nonblank
+quantity &gt;= 0</code></pre></div>
+<p>Validate constructor arguments and implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> remove(<span class="kw">int</span> amount)</code></pre></div>
+<p>The operation must not permit the quantity to become negative.</p>
+<p>Use <code>IllegalArgumentException</code> to reject invalid requests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15 — Parse a Movie Record</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Parsing</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">validation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15 — Parse a Movie Record as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printMovie(<span class="type">String</span> line)</code></pre></div>
+<p>The input format is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>title,year</code></pre></div>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Arrival,2016</code></pre></div>
+<p>Requirements:</p>
+<ul><li>exactly two fields must exist;</li><li>the title cannot be blank;</li><li>the year must parse as an integer;</li><li>the year must be between <code>1888</code> and <code>2100</code>;</li><li>invalid values must be rejected with an appropriate exception.</li></ul>
+<p>Test at least six different records.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16 — Count Lines from a File</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">File input</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">loops</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16 — Count Lines from a File as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countLines(<span class="type">String</span> filename)
+        <span class="kw">throws</span> <span class="type">FileNotFoundException</span></code></pre></div>
+<p>The method should open the specified text file and return the number of lines it contains.</p>
+<p>Requirements:</p>
+<ul><li>use try-with-resources;</li><li>allow <code>FileNotFoundException</code> to propagate;</li><li>correctly return <code>0</code> for an empty file.</li></ul>
+<p>Explain why propagating the exception is reasonable for this method.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17 — Export Multiplication Results</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">PrintWriter</span><span class="badge topic-badge">file output</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17 — Export Multiplication Results as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> writeTable(<span class="type">String</span> filename, <span class="kw">int</span> number)</code></pre></div>
+<p>The method should create a file containing the first ten multiples of <code>number</code>.</p>
+<p>For <code>number == 4</code>, the file should begin:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>4 x 1 = 4
+4 x 2 = 8
+4 x 3 = 12</code></pre></div>
+<p>Use try-with-resources and handle file-creation failure.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18 — Test a Password-Length Rule</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">JUnit</span><span class="badge topic-badge">Boolean testing</span><span class="badge topic-badge">boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18 — Test a Password-Length Rule as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> validPasswordLength(<span class="type">String</span> password)</code></pre></div>
+<p>returns <code>true</code> when the password contains between 8 and 20 characters, inclusive.</p>
+<p>Write JUnit tests using <code>assertTrue</code> and <code>assertFalse</code> for passwords of lengths:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>7
+8
+9
+19
+20
+21</code></pre></div>
+<p>Also test the empty string.</p>
+<p>Explain which tests are boundary tests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19 — Expected Exception Tests</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">assertThrows</span><span class="badge topic-badge">method contracts</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19 — Expected Exception Tests as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> percent(<span class="kw">int</span> part, <span class="kw">int</span> whole)</code></pre></div>
+<p>Requirements:</p>
+<ul><li><code>part &gt;= 0</code>;</li><li><code>whole &gt; 0</code>;</li><li><code>part &lt;= whole</code>;</li><li>invalid arguments throw <code>IllegalArgumentException</code>;</li><li>valid input returns the integer percentage.</li></ul>
+<p>Write JUnit tests for successful calculations and each category of invalid argument using <code>assertThrows</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20 — Fix Exception-Driven Logic</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Exceptions vs ordinary control flow</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20 — Fix Exception-Driven Logic as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer writes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> i = <span class="num">0</span>;
+
+<span class="kw">try</span> {
+    <span class="kw">while</span> (<span class="lit">true</span>) {
+        <span class="kw">if</span> (names[i].startsWith(<span class="str">&quot;A&quot;</span>)) {
+            <span class="type">System</span>.out.println(names[i]);
+        }
+        i++;
+    }
+}
+<span class="kw">catch</span> (<span class="type">ArrayIndexOutOfBoundsException</span> e) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Finished&quot;</span>);
+}</code></pre></div>
+<p>Rewrite the program without using an exception to terminate the loop.</p>
+<p>Then explain why the revised solution better expresses the program's ordinary control flow.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21 — Stack Trace Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Stack traces</span><span class="badge topic-badge">propagation</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21 — Stack Trace Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Study this stack trace:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Exception in thread &quot;main&quot; java.lang.NumberFormatException: For input string: &quot;9O&quot;
+    at java.base/java.lang.Integer.parseInt(Integer.java:...)
+    at ProductParser.parseQuantity(ProductParser.java:27)
+    at OrderLoader.loadOrder(OrderLoader.java:51)
+    at StoreApp.main(StoreApp.java:14)</code></pre></div>
+<p>Answer:</p>
+<ol><li>What exception occurred?</li><li>What input appears responsible?</li><li>What is the first relevant line in the programmer's own code?</li><li>What sequence of application method calls led to the failure?</li><li>Which method would you inspect first?</li><li>Where might it make sense to catch the exception if the application's policy is to skip malformed orders?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22 — Propagation Experiment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Exception propagation</span><span class="badge topic-badge">stack unwinding</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22 — Propagation Experiment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>main -&gt; loadSettings -&gt; parsePort -&gt; Integer.parseInt</code></pre></div>
+<p><code>parsePort</code> should attempt to parse a supplied string.</p>
+<p>Do not catch <code>NumberFormatException</code> in <code>parsePort</code>.</p>
+<p>Catch it in <code>main</code>.</p>
+<p>Add print statements before and after each method call. Run the program once with a valid port and once with invalid text.</p>
+<p>Submit the output and explain which statements are skipped during stack unwinding.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23 — Package Dimensions Contract</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Defensive programming</span><span class="badge topic-badge">invariants</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23 — Package Dimensions Contract as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a <code>Package</code> class with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> length;
+<span class="kw">double</span> width;
+<span class="kw">double</span> height;</code></pre></div>
+<p>Every dimension must be strictly positive.</p>
+<p>Implement a constructor and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">double</span> volume()</code></pre></div>
+<p>Then write JUnit tests verifying:</p>
+<ul><li>normal construction;</li><li>volume calculation;</li><li>rejection of zero in each dimension;</li><li>rejection of negative dimensions;</li><li>object state for valid instances.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24 — Parse Employee Hours</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Structured text</span><span class="badge topic-badge">parsing</span><span class="badge topic-badge">malformed records</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24 — Parse Employee Hours as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> parseHours(<span class="type">String</span> <span class="kw">record</span>)</code></pre></div>
+<p>Records use:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>employeeId,hours</code></pre></div>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>E104,37.5</code></pre></div>
+<p>Rules:</p>
+<ul><li>exactly two fields;</li><li>employee ID cannot be blank;</li><li>hours must be numeric;</li><li>hours must be between <code>0</code> and <code>80</code>.</li></ul>
+<p>Distinguish malformed numeric text from values that parse successfully but violate the allowed range.</p>
+<p>Write JUnit tests for both categories.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25 — Process a Sensor File</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">File I/O</span><span class="badge topic-badge">malformed data</span><span class="badge topic-badge">error policy</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25 — Process a Sensor File as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A file contains one sensor reading per line.</p>
+<p>Write a program that:</p>
+<ul><li>reads the file with <code>Scanner</code>;</li><li>parses each line as a <code>double</code>;</li><li>accepts readings from <code>-50.0</code> through <code>150.0</code>;</li><li>skips malformed or out-of-range readings;</li><li>counts valid and invalid records separately;</li><li>computes the minimum and maximum valid reading;</li><li>behaves sensibly when the file contains no valid readings.</li></ul>
+<p>Place record-level exception handling so one bad record does not stop processing.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26 — Clean-Record Exporter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Reading and writing files</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">PrintWriter</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26 — Clean-Record Exporter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Input records use:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>username,score</code></pre></div>
+<p>Write a program that reads <code>raw-scores.txt</code> and writes only valid records to <code>clean-scores.txt</code>.</p>
+<p>A valid record has:</p>
+<ul><li>exactly two fields;</li><li>a nonblank username;</li><li>an integer score from <code>0</code> through <code>500</code>.</li></ul>
+<p>Invalid records should not appear in the output file.</p>
+<p>At the end, print how many records were accepted and rejected.</p>
+<p>Use try-with-resources for both resources.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27 — Append an Audit Log</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">File writing</span><span class="badge topic-badge">append vs overwrite</span><span class="badge topic-badge">error handling</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27 — Append an Audit Log as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> logEvent(<span class="type">String</span> message)</code></pre></div>
+<p>Each call should <strong>append</strong>, rather than overwrite, a line to:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>audit.txt</code></pre></div>
+<p>Reject <code>null</code> or blank messages.</p>
+<p>Demonstrate the method with three calls and verify that all three entries remain in the file.</p>
+<p>Explain what would happen if ordinary <code>new PrintWriter(&quot;audit.txt&quot;)</code> were used for every call instead.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28 — Test the Boundaries of Shipping</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Test design</span><span class="badge topic-badge">boundary testing</span><span class="badge topic-badge">JUnit</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28 — Test the Boundaries of Shipping as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A method has this contract:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">double</span> shippingCost(<span class="kw">double</span> weight)</code></pre></div>
+<p>Rules:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>0 &lt; weight &lt;= 1       -&gt; $5
+1 &lt; weight &lt;= 5       -&gt; $8
+5 &lt; weight &lt;= 20      -&gt; $15
+weight &gt; 20           -&gt; $25
+weight &lt;= 0           -&gt; IllegalArgumentException</code></pre></div>
+<p>Design and implement a JUnit suite that systematically tests the boundaries separating every region.</p>
+<p>Include normal, boundary, and invalid cases.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29 — Testing State Changes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Unit testing classes</span><span class="badge topic-badge">invariants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29 — Testing State Changes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a <code>ParkingMeter</code> class that stores <code>minutesRemaining</code>.</p>
+<p>Requirements:</p>
+<ul><li>initial minutes must be between <code>0</code> and <code>120</code>;</li><li><code>addMinutes(int minutes)</code> accepts positive values;</li><li>total time may never exceed <code>120</code>;</li><li>invalid operations throw <code>IllegalArgumentException</code>.</li></ul>
+<p>Write JUnit tests that verify both successful state changes and rejected operations.</p>
+<p>Also verify that a rejected operation does <strong>not</strong> corrupt the object's existing state.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30 — Catch or Propagate Design Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Exception policy</span><span class="badge topic-badge">design reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30 — Catch or Propagate Design Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider an application with these methods:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>main()
+    -&gt; importCatalog()
+        -&gt; readRecord()
+            -&gt; parsePrice()</code></pre></div>
+<p><code>parsePrice()</code> may encounter invalid numeric text, and <code>importCatalog()</code> knows the application's policy is to skip invalid catalog records and continue.</p>
+<p>Design where the exception should be:</p>
+<ul><li>initially thrown;</li><li>allowed to propagate;</li><li>ultimately caught.</li></ul>
+<p>Provide pseudocode or Java code illustrating your design.</p>
+<p>Explain why catching the exception at every level would be inferior.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31 — Robust Contact Importer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">File I/O</span><span class="badge topic-badge">parsing</span><span class="badge topic-badge">validation</span><span class="badge topic-badge">exception policy</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31 — Robust Contact Importer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a contact importer for records of the form:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>name,email,age</code></pre></div>
+<p>Rules:</p>
+<ul><li>exactly three fields;</li><li>name cannot be blank;</li><li>email must contain <code>@</code>;</li><li>age must be an integer between <code>0</code> and <code>120</code>.</li></ul>
+<p>The importer must:</p>
+<ul><li>continue after malformed records;</li><li>distinguish invalid numeric data from other validation failures;</li><li>count accepted and rejected records;</li><li>print accepted contacts;</li><li>provide a useful message for rejected records;</li><li>handle a missing input file cleanly;</li><li>use try-with-resources.</li></ul>
+<p>Create your own input file containing at least 12 records covering multiple failure modes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32 — Transaction Class with Invariants</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Defensive programming</span><span class="badge topic-badge">class invariants</span><span class="badge topic-badge">JUnit</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32 — Transaction Class with Invariants as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a <code>Transaction</code> class with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span> id;
+<span class="kw">double</span> amount;
+<span class="type">String</span> category;</code></pre></div>
+<p>Define and document reasonable invariants for all three fields.</p>
+<p>Then:</p>
+<ol><li>enforce them in the constructor;</li><li>add at least one mutator method;</li><li>ensure the mutator preserves all relevant invariants;</li><li>throw meaningful exceptions for contract violations;</li><li>write a JUnit suite covering normal, boundary, invalid, and state-preservation cases.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33 — Configuration Loader</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Structured files</span><span class="badge topic-badge">parsing</span><span class="badge topic-badge">defensive programming</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33 — Configuration Loader as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Process a configuration file containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>key=value</code></pre></div>
+<p>Supported keys are:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>maxUsers
+timeout
+mode</code></pre></div>
+<p>Rules:</p>
+<ul><li><code>maxUsers</code> must be a positive integer;</li><li><code>timeout</code> must be between <code>1</code> and <code>300</code>;</li><li><code>mode</code> must be <code>basic</code> or <code>advanced</code>;</li><li>malformed lines must be reported;</li><li>unknown keys must be rejected;</li><li>duplicate keys must be detected.</li></ul>
+<p>Design an error policy and implement the loader.</p>
+<p>Your solution should separate file reading from individual-line parsing.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34 — Diagnose the Hidden Null</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">NullPointerException</span><span class="badge topic-badge">stack traces</span><span class="badge topic-badge">fail-fast design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34 — Diagnose the Hidden Null as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Construct a small three-class program in which a <code>null</code> value enters through a constructor, travels through at least two method calls, and eventually produces a <code>NullPointerException</code>.</p>
+<p>Then:</p>
+<ol><li>capture the stack trace;</li><li>identify where the exception occurred;</li><li>identify where the invalid state actually entered the program;</li><li>redesign the constructor to fail fast;</li><li>write a JUnit test verifying the new behavior with <code>assertThrows</code>.</li></ol>
+<p>The final version should prevent the later <code>NullPointerException</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35 — Fault-Tolerant Statistics</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">File processing</span><span class="badge topic-badge">robustness</span><span class="badge topic-badge">correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35 — Fault-Tolerant Statistics as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a program that reads numerical observations from a text file and reports:</p>
+<ul><li>number of valid observations;</li><li>number of rejected observations;</li><li>sum;</li><li>average;</li><li>minimum;</li><li>maximum.</li></ul>
+<p>Your design must correctly handle:</p>
+<ul><li>an empty file;</li><li>a file containing only malformed records;</li><li>nonnumeric lines;</li><li>valid negative values;</li><li>zero;</li><li>a missing file.</li></ul>
+<p>Define what counts as a valid observation before implementing the program.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36 — Separate I/O from Computation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Testability</span><span class="badge topic-badge">separation of concerns</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36 — Separate I/O from Computation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You inherit a method that simultaneously:</p>
+<ul><li>reads product prices from a file;</li><li>parses the prices;</li><li>rejects negative prices;</li><li>calculates their total;</li><li>prints the result.</li></ul>
+<p>Refactor the design into separate responsibilities.</p>
+<p>At minimum, create independently testable methods for:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>parsing/validation
+computation</code></pre></div>
+<p>Keep file interaction at a separate layer.</p>
+<p>Write JUnit tests for the non-I/O methods and explain why the refactored version is easier to test.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37 — Exception Policy Comparison</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Error-handling policy</span><span class="badge topic-badge">robustness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37 — Exception Policy Comparison as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program imports 5,000 inventory records. Some records may be malformed.</p>
+<p>Implement or pseudocode <strong>two versions</strong>:</p>
+<p><strong>Version A:</strong> terminate on the first malformed record.</p>
+<p><strong>Version B:</strong> report malformed records and continue.</p>
+<p>For each version:</p>
+<ul><li>identify where exceptions are caught;</li><li>explain what happens after an invalid record;</li><li>explain the consequences for data completeness and reliability.</li></ul>
+<p>Then identify one realistic application for which each policy would be preferable.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38 — Test a Parser Thoroughly</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">JUnit</span><span class="badge topic-badge">parsing</span><span class="badge topic-badge">boundary tests</span><span class="badge topic-badge">exception tests</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38 — Test a Parser Thoroughly as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> parsePercentage(<span class="type">String</span> text)</code></pre></div>
+<p>Contract:</p>
+<ul><li>surrounding whitespace is permitted;</li><li>the remaining text must represent an integer;</li><li>valid range is <code>0</code> through <code>100</code>;</li><li>nonnumeric input produces <code>NumberFormatException</code>;</li><li>numeric but out-of-range input produces <code>IllegalArgumentException</code>.</li></ul>
+<p>Create a JUnit suite with <strong>at least 15 tests</strong>.</p>
+<p>Categorize every test as:</p>
+<ul><li>normal;</li><li>boundary;</li><li>edge;</li><li>invalid;</li><li>exception.</li></ul>
+<p>Use multiple JUnit assertion types where appropriate.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39 — Debug from Failing Tests</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Testing vs debugging</span><span class="badge topic-badge">logic errors</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39 — Debug from Failing Tests as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A method is supposed to return whether a year is in the range <code>2000</code> through <code>2099</code>, inclusive:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> supportedYear(<span class="kw">int</span> year) {
+    <span class="kw">return</span> year &gt; <span class="num">2000</span> &amp;&amp; year &lt; <span class="num">2099</span>;
+}</code></pre></div>
+<p>Do not immediately modify the method.</p>
+<p>First:</p>
+<ol><li>design a systematic test suite;</li><li>run or reason through the tests;</li><li>identify which cases fail;</li><li>classify the defect;</li><li>explain why compilation could not detect it;</li><li>fix the implementation;</li><li>rerun the test suite.</li></ol>
+<p>Submit the tests, diagnosis, and corrected implementation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40 — Resource Management Comparison</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">finally</span><span class="badge topic-badge">try-with-resources</span><span class="badge topic-badge">file cleanup</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40 — Resource Management Comparison as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write two versions of a method that reads the first line from a file:</p>
+<ol><li>a version that manually manages cleanup using <code>finally</code>;</li><li>a version using try-with-resources.</li></ol>
+<p>Both should deal appropriately with a missing file.</p>
+<p>Compare the implementations in terms of:</p>
+<ul><li>readability;</li><li>cleanup;</li><li>behavior when an exception occurs;</li><li>risk of forgetting to close the resource.</li></ul>
+<p>State which version you would choose for future Week 9 file-processing programs and why.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41 — Resilient Book Catalog Pipeline</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Files</span><span class="badge topic-badge">parsing</span><span class="badge topic-badge">defensive programming</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41 — Resilient Book Catalog Pipeline as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a program that processes records:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>isbn,title,price,stock</code></pre></div>
+<p>Define sensible validity rules for each field.</p>
+<p>The program must:</p>
+<ul><li>read an input file;</li><li>parse records independently;</li><li>reject malformed records;</li><li>distinguish numeric parsing failures from domain validation failures;</li><li>preserve valid records even when other records fail;</li><li>write valid records to a clean output file;</li><li>write or display useful diagnostics for invalid records;</li><li>report import statistics.</li></ul>
+<p>Separate parsing, validation, computation, and I/O so important logic can be unit tested.</p>
+<p>Write a JUnit suite for the parser and validation rules.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42 — Bank Transfer Contract</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Invariants</span><span class="badge topic-badge">fail-fast design</span><span class="badge topic-badge">state testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42 — Bank Transfer Contract as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design an <code>Account</code> class and a transfer operation between two accounts.</p>
+<p>Required invariants include:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>balance &gt;= 0</code></pre></div>
+<p>Define additional reasonable preconditions.</p>
+<p>A failed transfer must not leave either account in an invalid or partially updated state.</p>
+<p>Test:</p>
+<ul><li>normal transfer;</li><li>transfer of the entire available balance;</li><li>zero amount;</li><li>negative amount;</li><li>insufficient funds;</li><li>transfer involving an invalid account reference.</li></ul>
+<p>For every failed operation, verify the state of both objects afterward.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43 — Multi-Stage Data Validation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Parsing</span><span class="badge topic-badge">validation boundaries</span><span class="badge topic-badge">exception propagation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43 — Multi-Stage Data Validation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Process application records:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>applicantId,name,examScore,experienceYears</code></pre></div>
+<p>Design the program as stages:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>raw line
+-&gt; field extraction
+-&gt; type conversion
+-&gt; domain validation
+-&gt; accepted record</code></pre></div>
+<p>Each stage should make its assumptions explicit.</p>
+<p>Requirements:</p>
+<ul><li>malformed structure must be detected;</li><li>numeric conversion failures must be distinguished from range violations;</li><li>names and IDs must be validated;</li><li>the caller must decide whether rejected records stop or continue processing;</li><li>error messages should identify the reason for rejection.</li></ul>
+<p>Explain where exceptions originate, propagate, and are caught.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44 — Regression Test Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Logic errors</span><span class="badge topic-badge">systematic testing</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44 — Regression Test Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are given this buggy method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countInRange(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> low,
+        <span class="kw">int</span> high) {
+
+    <span class="kw">int</span> count = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; values.length - <span class="num">1</span>; i++) {
+        <span class="kw">if</span> (values[i] &gt; low &amp;&amp; values[i] &lt; high) {
+            count++;
+        }
+    }
+
+    <span class="kw">return</span> count;
+}</code></pre></div>
+<p>The intended contract is to count values from <code>low</code> through <code>high</code>, <strong>inclusive</strong>.</p>
+<p>Your task is to:</p>
+<ol><li>identify all independent defects you can find;</li><li>create JUnit tests that expose each defect;</li><li>include empty, one-element, boundary, duplicate, and ordinary arrays;</li><li>correct the implementation;</li><li>demonstrate that the tests now pass;</li><li>explain how the tests protect against the defects returning later.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45 — Robust Reservation Importer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">File I/O</span><span class="badge topic-badge">exceptions</span><span class="badge topic-badge">error policy</span><span class="badge topic-badge">testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45 — Robust Reservation Importer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a reservation importer using:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>reservationId,guestName,partySize</code></pre></div>
+<p>Requirements:</p>
+<ul><li>IDs and names cannot be blank;</li><li>party size must be an integer from <code>1</code> through <code>20</code>;</li><li>duplicate reservation IDs must be detected;</li><li>malformed records must not crash the program;</li><li>missing input files must be handled separately from malformed records;</li><li>valid records must still be processed when appropriate;</li><li>accepted records must be written to an output file.</li></ul>
+<p>Create a deliberately hostile input file with at least <strong>20 records</strong>, including valid and invalid cases.</p>
+<p>Write tests for the parsing and validation logic.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46 — Design for Testability Refactor</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Separation of concerns</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">defensive programming</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46 — Design for Testability Refactor as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Start with this design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> run() {
+    <span class="cmt">// opens a file</span>
+    <span class="cmt">// reads customer records</span>
+    <span class="cmt">// parses each record</span>
+    <span class="cmt">// validates each customer</span>
+    <span class="cmt">// computes membership fees</span>
+    <span class="cmt">// prints results</span>
+    <span class="cmt">// writes a report</span>
+    <span class="cmt">// handles all exceptions</span>
+}</code></pre></div>
+<p>Refactor this monolithic design into a set of focused methods/classes.</p>
+<p>Your submission must include:</p>
+<ul><li>a responsibility diagram;</li><li>method signatures;</li><li>explanation of which methods perform I/O;</li><li>explanation of which methods perform computation;</li><li>explanation of where validation occurs;</li><li>explanation of where exceptions are caught or propagated;</li><li>at least 12 JUnit tests for logic that no longer depends directly on files.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47 — Error-Handling Architecture</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Catch vs propagate</span><span class="badge topic-badge">exception design</span><span class="badge topic-badge">software design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47 — Error-Handling Architecture as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design an application with this call structure:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>main
+  -&gt; processFile
+      -&gt; parseRecord
+          -&gt; parseQuantity
+          -&gt; parsePrice</code></pre></div>
+<p>Failures may include:</p>
+<ul><li>missing file;</li><li>wrong number of fields;</li><li>malformed quantity;</li><li>malformed price;</li><li>negative quantity;</li><li>negative price.</li></ul>
+<p>For each failure, decide:</p>
+<ul><li>where it originates;</li><li>what exception represents it;</li><li>whether it propagates;</li><li>where it is caught;</li><li>what the program does afterward.</li></ul>
+<p>Implement the design and provide a short rationale for every catch location.</p>
+<p>Avoid broad or empty catch blocks.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48 — Test Suite as Specification</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">JUnit</span><span class="badge topic-badge">contracts</span><span class="badge topic-badge">boundary analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48 — Test Suite as Specification as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Before implementing the method, write its complete JUnit test suite:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> calculateDiscount(
+        <span class="kw">int</span> customerYears,
+        <span class="kw">int</span> purchaseAmount)</code></pre></div>
+<p>Contract:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>customerYears &gt;= 0
+purchaseAmount &gt;= 0
+
+customerYears 0–1       -&gt; 0% discount
+customerYears 2–4       -&gt; 5%
+customerYears 5–9       -&gt; 10%
+customerYears &gt;= 10     -&gt; 15%
+
+purchaseAmount &gt;= 1000 adds another 5 percentage points.
+
+Maximum discount = 20%.</code></pre></div>
+<p>Invalid negative arguments must throw <code>IllegalArgumentException</code>.</p>
+<p>Your test suite must systematically cover every logical region and boundary.</p>
+<p>Only after completing the tests should you implement the method.</p>
+<p>Submit both and explain how the tests act as an executable version of the contract.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49 — Failure Injection</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Robustness</span><span class="badge topic-badge">testing</span><span class="badge topic-badge">file failures</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49 — Failure Injection as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a small file-processing application and systematically investigate what happens under these conditions:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>valid file
+empty file
+missing file
+malformed first record
+malformed middle record
+malformed final record
+all records malformed
+valid structure but invalid values</code></pre></div>
+<p>For each scenario:</p>
+<ol><li>predict the expected behavior;</li><li>run the scenario;</li><li>record the actual behavior;</li><li>compare expected and actual behavior;</li><li>modify the implementation if necessary.</li></ol>
+<p>Your final program should have an explicit, documented error-handling policy.</p>
+<p>Explain how this exercise demonstrates the difference between <strong>correctness</strong> and <strong>robustness</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50 — Week 9 Capstone: Defensive Data Processor</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Exceptions</span><span class="badge topic-badge">file I/O</span><span class="badge topic-badge">defensive programming</span><span class="badge topic-badge">JUnit</span><span class="badge topic-badge">testability</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50 — Week 9 Capstone: Defensive Data Processor as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a small data-processing application for a domain <strong>other than grades, temperatures, books, contacts, reservations, or inventory</strong>.</p>
+<p>Your records must contain at least four fields, including at least two fields requiring numeric conversion.</p>
+<p>The program must demonstrate all of the following:</p>
+<ul><li>text-file input using <code>Scanner</code>;</li><li>structured record parsing;</li><li>validation at program boundaries;</li><li>explicit preconditions;</li><li>at least one class invariant;</li><li>deliberate use of <code>IllegalArgumentException</code>;</li><li>handling of a numeric parsing exception;</li><li>handling of a checked file exception;</li><li>sensible catch-versus-propagate decisions;</li><li>try-with-resources;</li><li>continued processing after recoverable malformed records;</li><li>text-file output using <code>PrintWriter</code>;</li><li>a deliberate overwrite-or-append decision;</li><li>separation of I/O, parsing, validation, and computation;</li><li>normal, boundary, edge, invalid, and exception tests;</li><li>JUnit assertions including <code>assertEquals</code>, Boolean assertions, and <code>assertThrows</code>.</li></ul>
+<p>Create an input file containing <strong>at least 25 records</strong>, with multiple deliberately malformed cases.</p>
+<p>Your submission should include the Java source files, sample input and output files, JUnit tests, and a short design note explaining the program's <strong>error-handling policy</strong>.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-08.html">← Week 8</a><a href="week-10.html">Week 10 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

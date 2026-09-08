@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 2</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 2: Decisions and Boolean Logic</h2>
+      <div class="intro">
+<p>Complete the following 50 assignments using the Java concepts introduced in Week 2. Unless an assignment explicitly asks only for an expression, trace, or explanation, write a complete Java program.</p>
+<p>There are <strong>10 assignments at each difficulty level</strong>.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Museum Admission Check</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Relational operators</span><span class="badge topic-badge">if</span><span class="badge topic-badge">boundary conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Museum Admission Check as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A museum allows children aged <strong>12 or younger</strong> to enter a special exhibit.</p>
+<p>Write a program that:</p>
+<ol><li>stores a visitor's age in an <code>int</code>;</li><li>uses an <code>if</code> statement to determine whether the visitor qualifies;</li><li>prints <code>&quot;Special exhibit access&quot;</code> when the visitor qualifies.</li></ol>
+<p>Test your program with ages:</p>
+<ul><li>11</li><li>12</li><li>13</li></ul>
+<p>Explain why age 12 is an important test case.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: Battery Warning</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Boolean expressions</span><span class="badge topic-badge">relational operators</span><span class="badge topic-badge">if-else</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: Battery Warning as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A device should display a low-battery warning whenever its battery percentage is <strong>15 or less</strong>.</p>
+<p>Write a program that stores the battery percentage and prints exactly one of:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Low battery
+Battery level OK</code></pre></div>
+<p>Test the program with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>14
+15
+16</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Package Weight Limit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Relational operators</span><span class="badge topic-badge">boundary vocabulary</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Package Weight Limit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A shipping kiosk accepts packages weighing <strong>no more than 25 kilograms</strong>.</p>
+<p>Write the Java Boolean expression representing this rule using a variable named:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> weight;</code></pre></div>
+<p>Then write an <code>if-else</code> statement that prints either:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Package accepted</code></pre></div>
+<p>or:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Package too heavy</code></pre></div>
+<p>Test exactly at the weight limit.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: Light Switch</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">boolean</span><span class="badge topic-badge">!</span><span class="badge topic-badge">Boolean variables</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: Light Switch as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a Boolean variable:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> lightOn;</code></pre></div>
+<p>Write a program that prints:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>The room is dark</code></pre></div>
+<p>when the light is <strong>not</strong> on.</p>
+<p>Do not write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>lightOn == <span class="lit">false</span></code></pre></div>
+<p>Use the Boolean variable directly with the logical NOT operator.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Locker Number Match</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Equality</span><span class="badge topic-badge">==</span><span class="badge topic-badge">assignment versus comparison</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Locker Number Match as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A student has been assigned locker number 214.</p>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> assignedLocker = <span class="num">214</span>;
+<span class="kw">int</span> enteredLocker = ...;</code></pre></div>
+<p>Use an equality comparison to determine whether the entered locker number matches the assigned locker.</p>
+<p>Print either:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Correct locker</code></pre></div>
+<p>or:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Wrong locker</code></pre></div>
+<p>In a comment, explain the difference between:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>enteredLocker = <span class="num">214</span>;</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>enteredLocker == <span class="num">214</span></code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: Elevator Direction</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">if-else-if</span><span class="badge topic-badge">relational operators</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: Elevator Direction as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An elevator compares its current floor with a requested floor.</p>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> currentFloor;
+<span class="kw">int</span> requestedFloor;</code></pre></div>
+<p>print exactly one of:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Go up
+Go down
+Already there</code></pre></div>
+<p>Do not assume that the requested floor is always different from the current floor.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Door Status</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Boolean variables</span><span class="badge topic-badge">if-else</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Door Status as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> doorLocked;</code></pre></div>
+<p>If the door is locked, print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Unlock required</code></pre></div>
+<p>Otherwise print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Door can be opened</code></pre></div>
+<p>Write the condition using <code>doorLocked</code> directly rather than comparing it with <code>true</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Letter Command</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">char comparison</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Letter Command as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A small program recognizes the command character <code>'Q'</code> as a request to quit.</p>
+<p>Create a <code>char</code> variable named <code>command</code>.</p>
+<p>If its value is <code>'Q'</code>, print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Quit requested</code></pre></div>
+<p>Otherwise print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Continue</code></pre></div>
+<p>Then explain why <code>'Q'</code> uses single quotes rather than double quotes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Exact Inventory Target</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">==</span><span class="badge topic-badge">!=</span><span class="badge topic-badge">primitive comparison</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Exact Inventory Target as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A warehouse shelf is supposed to contain exactly 40 items.</p>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> itemCount;</code></pre></div>
+<p>write a program that prints:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Target reached</code></pre></div>
+<p>when there are exactly 40 items and:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Inventory adjustment needed</code></pre></div>
+<p>otherwise.</p>
+<p>Test with 39, 40, and 41.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Boolean Expression Predictions</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Boolean expressions</span><span class="badge topic-badge">relational operators</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Boolean Expression Predictions as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running Java first, determine whether each expression is <code>true</code> or <code>false</code> when:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> x = <span class="num">14</span>;
+<span class="kw">int</span> y = <span class="num">9</span>;</code></pre></div>
+<p>Evaluate:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>x &gt; y
+x == y
+x != <span class="num">14</span>
+y &lt;= <span class="num">9</span>
+x &lt; <span class="num">20</span>
+x + y &gt;= <span class="num">25</span></code></pre></div>
+<p>After making your predictions, write a Java program that prints each expression and verify your answers.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Swimming Pool Temperature</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Ranges</span><span class="badge topic-badge">&amp;&amp;</span><span class="badge topic-badge">input validation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Swimming Pool Temperature as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A swimming pool is considered comfortable when its temperature is between <strong>78°F and 84°F inclusive</strong>.</p>
+<p>Write a program that reads a temperature and prints either:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Comfortable
+Outside comfortable range</code></pre></div>
+<p>Your condition must use <code>&amp;&amp;</code>.</p>
+<p>Test:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>77
+78
+81
+84
+85</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Storage Capacity Alert</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Ranges</span><span class="badge topic-badge">||</span><span class="badge topic-badge">outside-range logic</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Storage Capacity Alert as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A storage system expects utilization percentages between 0 and 100 inclusive.</p>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> utilization;</code></pre></div>
+<p>detect invalid values by testing whether the value is <strong>outside</strong> the permitted interval.</p>
+<p>Your invalidity condition must use <code>||</code>.</p>
+<p>Test at least:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>-0.1
+0
+50
+100
+100.1</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Café Size Selection</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">String comparison</span><span class="badge topic-badge">.equalsIgnoreCase()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Café Size Selection as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A café accepts the size commands:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>small
+medium
+large</code></pre></div>
+<p>Read a <code>String</code> from the user.</p>
+<p>Print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Size recognized</code></pre></div>
+<p>if the input matches any of those three commands regardless of capitalization.</p>
+<p>Otherwise print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Unknown size</code></pre></div>
+<p>For this assignment, combine <code>.equalsIgnoreCase()</code> comparisons with <code>||</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Concert Wristband</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">&amp;&amp;</span><span class="badge topic-badge">Boolean variables</span><span class="badge topic-badge">compound conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Concert Wristband as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A concert attendee may enter a restricted section only when:</p>
+<ul><li>the attendee is at least 16;</li><li>the attendee has a wristband;</li><li>the wristband has not been revoked.</li></ul>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> age;
+<span class="kw">boolean</span> hasWristband;
+<span class="kw">boolean</span> wristbandRevoked;</code></pre></div>
+<p>Construct one Boolean expression representing the complete rule.</p>
+<p>Store the result in a meaningfully named Boolean variable before using it in an <code>if</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Independent Appliance Alerts</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Independent if statements</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Independent Appliance Alerts as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A smart refrigerator can report several problems simultaneously.</p>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> doorOpen;
+<span class="kw">boolean</span> filterNeedsReplacement;
+<span class="kw">boolean</span> temperatureTooHigh;</code></pre></div>
+<p>print a separate warning for every condition that is true.</p>
+<p>For example, if all three conditions are true, all three warnings must appear.</p>
+<p>Explain why an <code>if-else-if</code> chain would be inappropriate.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Theater Seat Category</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">if-else-if</span><span class="badge topic-badge">ordering</span><span class="badge topic-badge">mutually exclusive categories</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Theater Seat Category as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A theater assigns rows to sections:</p>
+<ul><li>rows 1–5: <code>&quot;Front&quot;</code></li><li>rows 6–15: <code>&quot;Middle&quot;</code></li><li>rows 16–25: <code>&quot;Rear&quot;</code></li><li>anything outside 1–25: <code>&quot;Invalid row&quot;</code></li></ul>
+<p>Write an <code>if-else-if</code> chain that produces exactly one classification.</p>
+<p>Try to take advantage of information established by earlier failed conditions rather than repeating both ends of every interval.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: Delivery Day</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">||</span><span class="badge topic-badge">equality comparisons</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: Delivery Day as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Assume days of the week are represented by integers:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1 = Monday
+2 = Tuesday
+...
+7 = Sunday</code></pre></div>
+<p>A business does not deliver on Saturday or Sunday.</p>
+<p>Write a program that prints:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>No delivery</code></pre></div>
+<p>for days 6 or 7 and:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Delivery available</code></pre></div>
+<p>for days 1 through 5.</p>
+<p>Also detect numbers outside 1–7 and print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Invalid day</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: Printer Readiness</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Logical operators</span><span class="badge topic-badge">readable Boolean variables</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: Printer Readiness as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A printer can begin a job only when:</p>
+<ul><li>it has paper;</li><li>it has ink;</li><li>it is online;</li><li>its cover is not open.</li></ul>
+<p>Create four Boolean variables representing those facts.</p>
+<p>Then create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> readyToPrint;</code></pre></div>
+<p>containing the complete condition.</p>
+<p>Use <code>readyToPrint</code> in the final <code>if-else</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: Decimal Measurement Comparison</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">double</span><span class="badge topic-badge">approximate equality</span><span class="badge topic-badge">tolerance</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: Decimal Measurement Comparison as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Two sensors measure the same object.</p>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> measurement1;
+<span class="kw">double</span> measurement2;</code></pre></div>
+<p>consider the readings a match when their absolute difference is less than:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>0.001</code></pre></div>
+<p>Use <code>Math.abs()</code> rather than comparing the two <code>double</code> values directly with <code>==</code>.</p>
+<p>Test readings that are:</p>
+<ol><li>exactly the same;</li><li>slightly different but within tolerance;</li><li>outside the tolerance.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: Ternary Status Message</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Conditional operator ?:</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: Ternary Status Message as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A server stores:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> online;</code></pre></div>
+<p>Use Java's conditional operator to assign either:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;Available&quot;</code></pre></div>
+<p>or:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;Offline&quot;</code></pre></div>
+<p>to a <code>String</code> variable named <code>status</code>.</p>
+<p>Print the resulting status.</p>
+<p>Then rewrite the same logic using <code>if-else</code> and briefly compare the two versions.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Drone Flight Authorization</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Compound Boolean expressions</span><span class="badge topic-badge">&amp;&amp;</span><span class="badge topic-badge">!</span><span class="badge topic-badge">ranges</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Drone Flight Authorization as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A training drone may launch only when all of the following are true:</p>
+<ul><li>battery percentage is at least 30;</li><li>wind speed is no more than 20;</li><li>the operator is certified;</li><li>the emergency stop is not active;</li><li>altitude limit is between 10 and 120 meters inclusive.</li></ul>
+<p>Create variables for these facts and construct a readable Boolean expression representing launch authorization.</p>
+<p>Use intermediate Boolean variables to separate:</p>
+<ol><li>equipment readiness;</li><li>operator readiness;</li><li>flight-limit validity.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Parking Garage Fee Category</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Validation</span><span class="badge topic-badge">if-else-if</span><span class="badge topic-badge">boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Parking Garage Fee Category as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A parking garage classifies a parking duration as:</p>
+<ul><li>less than 0 hours → invalid;</li><li>0 through 1 hour → <code>&quot;Short stay&quot;</code></li><li>more than 1 through 4 hours → <code>&quot;Standard stay&quot;</code></li><li>more than 4 through 12 hours → <code>&quot;Long stay&quot;</code></li><li>more than 12 hours → <code>&quot;Extended stay&quot;</code></li></ul>
+<p>Write a program that reads a <code>double</code> number of hours and prints exactly one classification.</p>
+<p>Design boundary tests for:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>0
+1
+4
+12</code></pre></div>
+<p>and values immediately around each boundary.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Two-Factor Security Decision</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Nested conditionals</span><span class="badge topic-badge">String comparison</span><span class="badge topic-badge">Boolean logic</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Two-Factor Security Decision as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A system asks for:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span> accessCode;
+<span class="kw">boolean</span> deviceRecognized;
+<span class="kw">boolean</span> secondFactorApproved;</code></pre></div>
+<p>The rules are:</p>
+<ul><li>if the access code is wrong, print <code>&quot;Invalid access code&quot;</code>;</li><li>if the code is correct but the device is unrecognized, print <code>&quot;Device verification required&quot;</code>;</li><li>if the device is recognized but second-factor approval is missing, print <code>&quot;Second factor required&quot;</code>;</li><li>otherwise print <code>&quot;Access granted&quot;</code>.</li></ul>
+<p>Use nested conditional logic so that later checks occur only after earlier requirements succeed.</p>
+<p>Use <code>.equals()</code> for the access-code comparison.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Wildlife Observation Classification</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Multiple alternatives</span><span class="badge topic-badge">compound conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Wildlife Observation Classification as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A wildlife-monitoring station classifies an observation using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> weight;
+<span class="kw">boolean</span> canFly;
+<span class="kw">boolean</span> nocturnal;</code></pre></div>
+<p>Use these artificial classification rules:</p>
+<ul><li>weight must be positive or the observation is invalid;</li><li>an animal that can fly and is nocturnal is <code>&quot;Type A&quot;</code>;</li><li>an animal that can fly but is not nocturnal is <code>&quot;Type B&quot;</code>;</li><li>an animal that cannot fly and weighs at least 50 kg is <code>&quot;Type C&quot;</code>;</li><li>all other valid observations are <code>&quot;Type D&quot;</code>.</li></ul>
+<p>Write a program that produces exactly one result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Arcade Access Rules</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Operator precedence</span><span class="badge topic-badge">parentheses</span><span class="badge topic-badge">translating requirements</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Arcade Access Rules as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An arcade allows access when either:</p>
+<ul><li>a customer is at least 13 <strong>and</strong> has a paid pass;</li></ul>
+<p><strong>or</strong></p>
+<ul><li>the customer has a special event invitation.</li></ul>
+<p>However, a banned customer may never enter.</p>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> age;
+<span class="kw">boolean</span> paidPass;
+<span class="kw">boolean</span> specialInvitation;
+<span class="kw">boolean</span> banned;</code></pre></div>
+<p>Write a single Boolean expression representing the complete policy.</p>
+<p>Use parentheses so the intended grouping is obvious.</p>
+<p>Create at least six test cases that exercise different combinations.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Negate the Rules</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">De Morgan's laws</span><span class="badge topic-badge">negating comparisons</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Negate the Rules as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each expression below, write a logically equivalent expression that does <strong>not</strong> place <code>!</code> around the entire compound expression.</p>
+<h4>A</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>!(speed &gt;= <span class="num">20</span> &amp;&amp; speed &lt;= <span class="num">70</span>)</code></pre></div>
+<h4>B</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>!(hasKey || knowsCode)</code></pre></div>
+<h4>C</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>!(quantity &gt; <span class="num">0</span> &amp;&amp; inStock)</code></pre></div>
+<h4>D</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>!(level &lt; <span class="num">5</span> || level &gt; <span class="num">15</span>)</code></pre></div>
+<p>For each pair, construct a truth table or representative test cases demonstrating that the original and transformed versions always agree.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Safe Ratio Evaluation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Short-circuit evaluation</span><span class="badge topic-badge">safe condition ordering</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Safe Ratio Evaluation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> totalPoints;
+<span class="kw">int</span> possiblePoints;</code></pre></div>
+<p>a program should print <code>&quot;High ratio&quot;</code> only if:</p>
+<ol><li><code>possiblePoints</code> is not zero; and</li><li><code>totalPoints / possiblePoints</code> is greater than <code>0.8</code>.</li></ol>
+<p>Use a <code>double</code> calculation so integer division does not distort the result.</p>
+<p>Write the condition so short-circuit evaluation protects the division.</p>
+<p>Then explain why reversing the two parts of the condition is unsafe.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Workshop Registration</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Complex Boolean rules</span><span class="badge topic-badge">exceptions</span><span class="badge topic-badge">parentheses</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Workshop Registration as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A participant can attend a workshop when:</p>
+<ul><li>seats are available <strong>and</strong> payment is complete;</li></ul>
+<p><strong>or</strong></p>
+<ul><li>the participant is a speaker.</li></ul>
+<p>However, the participant must have accepted the safety policy in either case.</p>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> seatsAvailable;
+<span class="kw">boolean</span> paymentComplete;
+<span class="kw">boolean</span> speaker;
+<span class="kw">boolean</span> acceptedSafetyPolicy;</code></pre></div>
+<p>Translate the rule into one Boolean expression.</p>
+<p>Then rewrite the solution using meaningful intermediate Boolean variables.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Conditional Trace Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Code tracing</span><span class="badge topic-badge">current variable values</span><span class="badge topic-badge">independent decisions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Conditional Trace Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running the code, trace it:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> a = <span class="num">6</span>;
+<span class="kw">int</span> b = <span class="num">11</span>;
+<span class="kw">boolean</span> flag = <span class="lit">false</span>;
+
+<span class="kw">if</span> (a &lt; b) {
+    a = a + <span class="num">4</span>;
+    flag = <span class="lit">true</span>;
+}
+
+<span class="kw">if</span> (flag &amp;&amp; a &gt;= <span class="num">10</span>) {
+    b = b - <span class="num">3</span>;
+}
+
+<span class="kw">if</span> (a == b) {
+    a = a * <span class="num">2</span>;
+} <span class="kw">else</span> {
+    b = b + <span class="num">2</span>;
+}
+
+<span class="type">System</span>.out.println(a);
+<span class="type">System</span>.out.println(b);
+<span class="type">System</span>.out.println(flag);</code></pre></div>
+<p>Create a trace table showing the values of all three variables after every decision or assignment.</p>
+<p>Then run the code and verify your prediction.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Quality-Control Validator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Input validation</span><span class="badge topic-badge">ranges</span><span class="badge topic-badge">multiple rules</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Quality-Control Validator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A manufactured component is acceptable only when:</p>
+<ul><li>length is from 9.95 through 10.05 cm inclusive;</li><li>mass is from 19.8 through 20.2 g inclusive;</li><li>defect code is <code>'N'</code>.</li></ul>
+<p>Write a program that stores all three measurements and determines whether the component passes.</p>
+<p>If it fails, print an independent message for <strong>each</strong> failed requirement.</p>
+<p>Example failure messages might identify length, mass, and defect-code problems separately.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Debug the Theme-Park Validator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Debugging</span><span class="badge topic-badge">ranges</span><span class="badge topic-badge">String comparison</span><span class="badge topic-badge">independent conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Debug the Theme-Park Validator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following program is intended to determine whether a visitor may ride:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">if</span> (height &gt;= <span class="num">120</span> || height &lt;= <span class="num">200</span>) {
+    <span class="kw">if</span> (ticketType == <span class="str">&quot;ride&quot;</span>) {
+        allowed = <span class="lit">true</span>;
+    }
+}
+
+<span class="kw">if</span> (medicalRestriction = <span class="lit">true</span>) {
+    allowed = <span class="lit">false</span>;
+}</code></pre></div>
+<p>The intended requirements are:</p>
+<ul><li>height must be from 120 through 200 cm inclusive;</li><li><code>ticketType</code> must contain the text <code>&quot;ride&quot;</code>;</li><li>the visitor must not have a medical restriction.</li></ul>
+<p>Identify <strong>every logical or Java error</strong> in the code.</p>
+<p>Write a corrected version and explain each correction.</p>
+<p>Develop a set of boundary tests that would expose the original bugs.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Equipment Rental Decision Engine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Nested decisions</span><span class="badge topic-badge">validation</span><span class="badge topic-badge">compound conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Equipment Rental Decision Engine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An equipment-rental company uses these rules:</p>
+<ol><li>Age must be nonnegative.</li><li>Rental hours must be greater than zero and no more than 72.</li><li>Customers under 21 may rent only standard equipment.</li><li>Customers 21 or older may rent standard or advanced equipment.</li><li>Advanced equipment additionally requires certification.</li><li>Suspended customers cannot rent anything.</li></ol>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> age;
+<span class="kw">double</span> rentalHours;
+<span class="type">String</span> equipmentType;
+<span class="kw">boolean</span> certified;
+<span class="kw">boolean</span> suspended;</code></pre></div>
+<p>Write a program that either approves the rental or prints a meaningful reason for rejection.</p>
+<p>Use <code>.equalsIgnoreCase()</code> where appropriate.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Boolean Equivalence Investigator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Truth tables</span><span class="badge topic-badge">De Morgan's laws</span><span class="badge topic-badge">Boolean reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Boolean Equivalence Investigator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> expression1 = !(a &amp;&amp; b) || c;
+<span class="kw">boolean</span> expression2 = (!a || !b) || c;</code></pre></div>
+<p>Determine whether the expressions are logically equivalent for every possible combination of <code>a</code>, <code>b</code>, and <code>c</code>.</p>
+<p>Create a complete truth table containing all eight input combinations.</p>
+<p>Then investigate:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> expression3 = !(a || (b &amp;&amp; c));</code></pre></div>
+<p>Rewrite <code>expression3</code> without applying <code>!</code> to a compound parenthesized expression.</p>
+<p>Demonstrate the equivalence with another truth table.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Data-Center Cooling Controller</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Independent conditions</span><span class="badge topic-badge">compound logic</span><span class="badge topic-badge">prioritization</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Data-Center Cooling Controller as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A data center stores:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> temperature;
+<span class="kw">double</span> humidity;
+<span class="kw">boolean</span> primaryFanWorking;
+<span class="kw">boolean</span> backupFanWorking;</code></pre></div>
+<p>Rules:</p>
+<ul><li>temperature below 0 or above 60 is considered an invalid sensor reading;</li><li>temperature of 35 or higher requires cooling;</li><li>humidity above 80 requires a humidity warning independently of cooling;</li><li>if cooling is required and the primary fan works, use the primary fan;</li><li>otherwise, if cooling is required and the backup fan works, use the backup fan;</li><li>if cooling is required and neither fan works, print an emergency warning.</li></ul>
+<p>Design the branching structure carefully so that independent warnings and mutually exclusive fan choices are handled appropriately.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Tournament Division Assignment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Validation</span><span class="badge topic-badge">nested conditionals</span><span class="badge topic-badge">multiple criteria</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Tournament Division Assignment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A tournament assigns competitors based on both age and experience.</p>
+<p>Input:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> age;
+<span class="kw">int</span> yearsExperience;</code></pre></div>
+<p>Rules:</p>
+<ul><li>negative age or experience is invalid;</li><li>competitors under 14 are <code>&quot;Junior&quot;</code> regardless of experience;</li><li>competitors from 14 through 17 are:</li><li><code>&quot;Junior Advanced&quot;</code> with 3 or more years of experience;</li><li><code>&quot;Junior&quot;</code> otherwise;</li><li>competitors 18 or older are:</li><li><code>&quot;Elite&quot;</code> with 5 or more years;</li><li><code>&quot;Adult Advanced&quot;</code> with 2–4 years;</li><li><code>&quot;Adult Novice&quot;</code> otherwise.</li></ul>
+<p>Write the classification program.</p>
+<p>Create a boundary-focused test plan before running it.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Refactor an Unreadable Access Rule</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Readability</span><span class="badge topic-badge">intermediate Boolean variables</span><span class="badge topic-badge">precedence</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Refactor an Unreadable Access Rule as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You encounter:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">if</span> (age &gt;= <span class="num">21</span> &amp;&amp; verified &amp;&amp; !blocked &amp;&amp; balance &gt;= <span class="num">0</span> ||
+    employee &amp;&amp; supervisorApproved &amp;&amp; !blocked ||
+    emergencyOverride &amp;&amp; !blocked) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Allowed&quot;</span>);
+}</code></pre></div>
+<p>Assume the intended policy is:</p>
+<blockquote><p>Access is permitted to a normal qualified customer, an approved employee, or someone with an emergency override. No blocked person may ever enter.</p></blockquote>
+<p>Refactor the condition using at least four meaningfully named Boolean variables.</p>
+<p>Your final <code>if</code> condition should be simple and readable.</p>
+<p>Then explain whether the original expression correctly enforced the blocked-person rule.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Shipping Container Inspection</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Multi-rule validation</span><span class="badge topic-badge">chars</span><span class="badge topic-badge">Strings</span><span class="badge topic-badge">numeric ranges</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Shipping Container Inspection as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A shipping container passes inspection only when:</p>
+<ul><li>weight is greater than 0 and at most 30,000 kg;</li><li>height is greater than 0 and at most 2.9 m;</li><li>seal status is <code>'I'</code> for intact;</li><li>destination code equals <code>&quot;DOM&quot;</code> or <code>&quot;INT&quot;</code>, ignoring capitalization;</li><li>hazardous containers require an additional permit.</li></ul>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> weight;
+<span class="kw">double</span> height;
+<span class="kw">char</span> sealStatus;
+<span class="type">String</span> destinationCode;
+<span class="kw">boolean</span> hazardous;
+<span class="kw">boolean</span> hazardousPermit;</code></pre></div>
+<p>Print either:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Inspection passed</code></pre></div>
+<p>or every reason that the container failed.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Short-Circuit Safety Analysis</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Short-circuit evaluation</span><span class="badge topic-badge">evaluation order</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Short-Circuit Safety Analysis as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze each condition below.</p>
+<h4>Condition A</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>index &gt;= <span class="num">0</span> &amp;&amp; index &lt; size &amp;&amp; value / index &gt; <span class="num">2</span></code></pre></div>
+<h4>Condition B</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>value / index &gt; <span class="num">2</span> &amp;&amp; index &gt;= <span class="num">0</span> &amp;&amp; index &lt; size</code></pre></div>
+<p>Assume integer division by zero is possible.</p>
+<p>For each condition:</p>
+<ol><li>identify circumstances that could cause a runtime error;</li><li>explain which operands may be skipped;</li><li>rewrite the expression into the safest reasonable order;</li><li>explain whether checking <code>index &gt;= 0</code> is sufficient protection against division by zero.</li></ol>
+<p>Then create a small Java program demonstrating the safe version.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Sensor Agreement System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Floating-point tolerance</span><span class="badge topic-badge">compound conditions</span><span class="badge topic-badge">validation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Sensor Agreement System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Three temperature sensors produce:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> sensorA;
+<span class="kw">double</span> sensorB;
+<span class="kw">double</span> sensorC;</code></pre></div>
+<p>A sensor value is individually valid only when it lies between -50 and 150 inclusive.</p>
+<p>The system considers two readings to agree when their difference is less than <code>0.05</code>.</p>
+<p>Design a program that:</p>
+<ol><li>validates all three readings;</li><li>determines whether A agrees with B;</li><li>determines whether A agrees with C;</li><li>determines whether B agrees with C;</li><li>reports <code>&quot;Consensus&quot;</code> if at least two sensors agree;</li><li>reports <code>&quot;No consensus&quot;</code> otherwise.</li></ol>
+<p>Do not use exact <code>double</code> equality to compare measurements.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Conditional Logic Test Designer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Boundary testing</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">systematic testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Conditional Logic Test Designer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program uses this rule:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> accepted =
+    quantity &gt;= <span class="num">5</span> &amp;&amp;
+    quantity &lt;= <span class="num">50</span> &amp;&amp;
+    unitPrice &gt; <span class="num">0</span> &amp;&amp;
+    unitPrice &lt;= <span class="num">100</span> &amp;&amp;
+    (member || couponValid);</code></pre></div>
+<p>Do not rewrite the program initially.</p>
+<p>Instead, design a systematic test suite capable of exposing mistakes involving:</p>
+<ul><li><code>&lt;</code> versus <code>&lt;=</code>;</li><li><code>&gt;</code> versus <code>&gt;=</code>;</li><li><code>&amp;&amp;</code> versus <code>||</code>;</li><li>incorrect negation;</li><li>missing membership/coupon alternatives.</li></ul>
+<p>For every test case, provide:</p>
+<ol><li><code>quantity</code>;</li><li><code>unitPrice</code>;</li><li><code>member</code>;</li><li><code>couponValid</code>;</li><li>expected result;</li><li>the specific logical behavior being tested.</li></ol>
+<p>Include at least 12 carefully selected test cases.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Campus Building Access System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Complex Boolean rules</span><span class="badge topic-badge">nested conditionals</span><span class="badge topic-badge">exceptions</span><span class="badge topic-badge">Strings</span><span class="badge topic-badge">validation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Campus Building Access System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a Java program for a fictional campus building.</p>
+<p>Inputs:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">String</span> role;
+<span class="kw">int</span> hour;
+<span class="kw">boolean</span> hasBadge;
+<span class="kw">boolean</span> badgeSuspended;
+<span class="kw">boolean</span> specialEvent;
+<span class="kw">boolean</span> eventPass;</code></pre></div>
+<p>Use a 24-hour clock where valid hours are 0–23.</p>
+<p>Rules:</p>
+<ul><li>invalid hours must be rejected before access is evaluated;</li><li>suspended badges never grant normal badge access;</li><li>faculty may enter from 6 through 22 with a valid badge;</li><li>students may enter from 7 through 20 with a valid badge;</li><li>staff may enter at any valid hour with a valid badge;</li><li>during a special event, anyone with an event pass may enter from 18 through 23 even without normal role access;</li><li>role comparison should ignore capitalization.</li></ul>
+<p>Design the program for readability rather than attempting to place the entire policy inside one enormous <code>if</code>.</p>
+<p>Create a test matrix that exercises every rule and important boundary.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Boolean Policy Simplification</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Boolean algebra</span><span class="badge topic-badge">De Morgan's laws</span><span class="badge topic-badge">truth tables</span><span class="badge topic-badge">readability</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Boolean Policy Simplification as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A system contains:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> allowed =
+    (registered &amp;&amp; paid &amp;&amp; !suspended) ||
+    (registered &amp;&amp; paid &amp;&amp; administrator) ||
+    (administrator &amp;&amp; !suspended);</code></pre></div>
+<p>Analyze this policy.</p>
+<p>Your tasks:</p>
+<ol><li>translate the expression into plain English;</li><li>construct a complete truth table;</li><li>determine whether any parts are redundant;</li><li>simplify the expression if possible;</li><li>verify your simplified expression against the original truth table;</li><li>rewrite the result using descriptive intermediate Boolean variables.</li></ol>
+<p>Do not assume what the policy <em>should</em> mean. Analyze exactly what the expression actually says.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Multi-Stage Manufacturing Decision</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Validation</span><span class="badge topic-badge">nested branching</span><span class="badge topic-badge">independent conditions</span><span class="badge topic-badge">floating-point tolerance</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Multi-Stage Manufacturing Decision as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A component has:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> diameter;
+<span class="kw">double</span> mass;
+<span class="kw">char</span> surfaceCode;
+<span class="kw">boolean</span> crackDetected;
+<span class="kw">boolean</span> manualOverride;</code></pre></div>
+<p>Requirements:</p>
+<ul><li>diameter must be positive;</li><li>mass must be positive;</li><li>target diameter is <code>8.500</code> with tolerance <code>&lt; 0.005</code>;</li><li>target mass is <code>125.0</code> with tolerance <code>&lt; 0.2</code>;</li><li>acceptable surface codes are <code>'A'</code> and <code>'B'</code>;</li><li>any detected crack normally causes rejection;</li><li>a manual override may waive only the surface-code requirement;</li><li>an override may <strong>not</strong> waive invalid measurements or a crack.</li></ul>
+<p>Write a program that:</p>
+<ol><li>validates physically meaningful input first;</li><li>evaluates every quality requirement;</li><li>prints every failed requirement;</li><li>produces one final <code>&quot;ACCEPT&quot;</code> or <code>&quot;REJECT&quot;</code> decision.</li></ol>
+<p>Design test cases demonstrating that the override affects exactly one rule.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Rewrite the Buggy Reservation System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Comprehensive debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Rewrite the Buggy Reservation System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A developer wrote:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> approved = <span class="lit">false</span>;
+
+<span class="kw">if</span> (guests &gt; <span class="num">1</span> || guests &lt; <span class="num">12</span>) {
+    approved = <span class="lit">true</span>;
+}
+
+<span class="kw">if</span> (roomType == <span class="str">&quot;premium&quot;</span>) {
+    <span class="kw">if</span> (depositPaid = <span class="lit">true</span>) {
+        approved = <span class="lit">true</span>;
+    }
+}
+
+<span class="kw">if</span> (blacklisted == <span class="lit">false</span>);
+{
+    <span class="type">System</span>.out.println(<span class="str">&quot;Reservation status: &quot;</span> + approved);
+}</code></pre></div>
+<p>The actual requirements are:</p>
+<ul><li>guest count must be from 1 through 12 inclusive;</li><li>room type must be <code>&quot;standard&quot;</code> or <code>&quot;premium&quot;</code>, ignoring case;</li><li>premium reservations require a paid deposit;</li><li>standard reservations do not require a deposit;</li><li>blacklisted customers can never be approved.</li></ul>
+<p>Perform a complete debugging analysis.</p>
+<p>Identify syntax/style problems, Boolean-logic problems, comparison problems, and structural problems.</p>
+<p>Then produce a corrected program and a minimum set of test cases that demonstrates all major paths.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Emergency Dispatch Classification</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Complex branching</span><span class="badge topic-badge">prioritization</span><span class="badge topic-badge">validation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Emergency Dispatch Classification as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A fictional dispatch program receives:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> severity;
+<span class="kw">boolean</span> immediateDanger;
+<span class="kw">boolean</span> injuryReported;
+<span class="kw">boolean</span> propertyDamage;
+<span class="kw">boolean</span> callerSafe;</code></pre></div>
+<p>Valid severity values are 1 through 5.</p>
+<p>Classification rules:</p>
+<ul><li>invalid severity → <code>&quot;Invalid report&quot;</code>;</li><li>immediate danger → <code>&quot;Priority 1&quot;</code>;</li><li>otherwise, severity 5 with an injury → <code>&quot;Priority 2&quot;</code>;</li><li>otherwise, severity 4 or 5 → <code>&quot;Priority 3&quot;</code>;</li><li>otherwise, an injury or unsafe caller → <code>&quot;Priority 4&quot;</code>;</li><li>otherwise, property damage → <code>&quot;Priority 5&quot;</code>;</li><li>otherwise → <code>&quot;Information only&quot;</code>.</li></ul>
+<p>Write the classifier.</p>
+<p>Then explain why the order of the branches is essential and provide two examples where rearranging branches would change the result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Expression Equivalence Test Harness</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Truth tables</span><span class="badge topic-badge">Boolean equivalence</span><span class="badge topic-badge">Java testing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Expression Equivalence Test Harness as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java program that tests whether these two expressions are equivalent:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>(a &amp;&amp; (b || c))</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>(a &amp;&amp; b) || (a &amp;&amp; c)</code></pre></div>
+<p>Your program should print a truth table containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>a
+b
+c
+expression1
+expression2
+sameResult</code></pre></div>
+<p>Since loops have not yet been introduced for this course, explicitly evaluate the eight possible combinations.</p>
+<p>Next investigate whether:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>a || (b &amp;&amp; c)</code></pre></div>
+<p>is equivalent to:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>(a || b) &amp;&amp; c</code></pre></div>
+<p>Use the generated results to justify your conclusion.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Rule Translation Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">English-to-Boolean translation</span><span class="badge topic-badge">exceptions</span><span class="badge topic-badge">precedence</span><span class="badge topic-badge">intermediate variables</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Rule Translation Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Translate this fictional policy into Java:</p>
+<blockquote><p>A user may publish a document if the account is active and the user is either an editor or an author who owns the document. Administrators may also publish documents they do not own. However, nobody may publish while the document is locked unless emergency publishing has been enabled.</p></blockquote>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">boolean</span> accountActive;
+<span class="kw">boolean</span> editor;
+<span class="kw">boolean</span> author;
+<span class="kw">boolean</span> ownsDocument;
+<span class="kw">boolean</span> administrator;
+<span class="kw">boolean</span> documentLocked;
+<span class="kw">boolean</span> emergencyPublishing;</code></pre></div>
+<p>Your submission must contain:</p>
+<ol><li>a decomposition of the English requirement into individual facts;</li><li>a first Boolean expression;</li><li>a version using meaningful intermediate Boolean variables;</li><li>at least 10 test cases;</li><li>an explanation of how the exception involving the locked document affects every type of user.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: Diagnose a Boundary Failure</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Boundary testing</span><span class="badge topic-badge">systematic debugging</span><span class="badge topic-badge">Boolean reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: Diagnose a Boundary Failure as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A laboratory program accepts a reading only when:</p>
+<ul><li>pressure is from 90.0 through 110.0 inclusive;</li><li>temperature is greater than -20.0 but less than 80.0;</li><li>quality level is an integer from 1 through 5 inclusive.</li></ul>
+<p>A programmer reports:</p>
+<blockquote><p>&quot;It works for pressure 100, temperature 25, and quality 3, so the condition must be correct.&quot;</p></blockquote>
+<p>Design a testing strategy demonstrating why this conclusion is inadequate.</p>
+<p>Create a table containing values immediately below, exactly on, and immediately above every relevant boundary.</p>
+<p>Then write the correct Boolean expression and explain the expected result for each boundary test.</p>
+<p>Your test plan should be capable of distinguishing inclusive boundaries from exclusive boundaries.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Decision-System Code Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Debugging</span><span class="badge topic-badge">readability</span><span class="badge topic-badge">short-circuiting</span><span class="badge topic-badge">branch structure</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Decision-System Code Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Review the following code:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">if</span> (active == <span class="lit">true</span>) {
+    <span class="kw">if</span> (credits &gt;= <span class="num">12</span> || credits &lt;= <span class="num">18</span>) {
+        <span class="kw">if</span> (balance == <span class="num">0.0</span>) {
+            eligible = <span class="lit">true</span>;
+        }
+    }
+}
+
+<span class="kw">if</span> (override == <span class="lit">true</span>) {
+    eligible = <span class="lit">true</span>;
+}
+
+<span class="kw">if</span> (suspended) {
+    eligible = <span class="lit">false</span>;
+}</code></pre></div>
+<p>Assume the intended rule is:</p>
+<blockquote><p>A person is eligible when the account is active, enrollment is between 12 and 18 credits inclusive, and the balance is approximately zero within a tolerance of 0.01. An override can bypass the normal eligibility requirements, but a suspension always prevents eligibility.</p></blockquote>
+<p>Perform a code review that addresses:</p>
+<ul><li>unnecessary Boolean comparisons;</li><li>incorrect range logic;</li><li>floating-point comparison;</li><li>readability;</li><li>initialization of <code>eligible</code>;</li><li>whether nesting is necessary;</li><li>the interaction between override and suspension;</li><li>branch ordering.</li></ul>
+<p>Produce a revised implementation and a comprehensive set of tests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Design a Rule-Based Admission System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Comprehensive Week 2 integration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Design a Rule-Based Admission System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a complete Java console program for admission to a fictional technology competition.</p>
+<p>The program reads:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> age;
+<span class="kw">double</span> qualifyingScore;
+<span class="type">String</span> registrationType;
+<span class="kw">char</span> conductRating;
+<span class="kw">boolean</span> feePaid;
+<span class="kw">boolean</span> specialInvitation;
+<span class="kw">boolean</span> banned;</code></pre></div>
+<p>Use these rules:</p>
+<h4>Input validity</h4>
+<ul><li>age must be from 10 through 100 inclusive;</li><li>qualifying score must be from 0.0 through 100.0 inclusive;</li><li>registration type must be <code>&quot;regular&quot;</code> or <code>&quot;guest&quot;</code>, ignoring capitalization;</li><li>conduct rating must be <code>'A'</code>, <code>'B'</code>, or <code>'C'</code>.</li></ul>
+<p>If any input is invalid, the program must report the invalid field before attempting normal admission.</p>
+<h4>Normal admission</h4>
+<p>A regular participant qualifies when:</p>
+<ul><li>age is at least 16;</li><li>qualifying score is at least 70;</li><li>the fee has been paid;</li><li>conduct rating is <code>'A'</code> or <code>'B'</code>.</li></ul>
+<h4>Guest admission</h4>
+<p>A guest qualifies when:</p>
+<ul><li>age is at least 18;</li><li>qualifying score is at least 80;</li><li>conduct rating is <code>'A'</code>.</li></ul>
+<p>Guests do not need to pay the normal fee.</p>
+<h4>Special invitation</h4>
+<p>A special invitation bypasses the score and fee requirements but does <strong>not</strong> bypass:</p>
+<ul><li>the minimum age of 16;</li><li>valid input requirements;</li><li>the ban rule.</li></ul>
+<h4>Ban rule</h4>
+<p>A banned participant can never be admitted.</p>
+<h4>Required output</h4>
+<p>Print exactly one final decision:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ADMITTED</code></pre></div>
+<p>or:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>NOT ADMITTED</code></pre></div>
+<p>When the participant is not admitted, also print meaningful information describing the failed requirement or requirements.</p>
+<h4>Design requirements</h4>
+<p>Your solution must demonstrate appropriate use of:</p>
+<ul><li>Boolean variables;</li><li>relational operators;</li><li><code>&amp;&amp;</code>;</li><li><code>||</code>;</li><li><code>!</code>;</li><li><code>if</code>;</li><li><code>if-else</code>;</li><li><code>if-else-if</code> where appropriate;</li><li>String comparison;</li><li><code>char</code> comparison;</li><li>input validation;</li><li>range checks;</li><li>readable parentheses;</li><li>meaningful Boolean variable names;</li><li>boundary testing.</li></ul>
+<h4>Testing requirement</h4>
+<p>Before running the program, design a test table with <strong>at least 15 cases</strong>.</p>
+<p>Your tests must include:</p>
+<ul><li>minimum and maximum valid ages;</li><li>values just outside the valid age range;</li><li>score boundaries;</li><li>both registration types;</li><li>all three conduct ratings;</li><li>paid and unpaid fees;</li><li>special invitations;</li><li>banned participants;</li><li>invalid registration types;</li><li>cases where several requirements fail simultaneously.</li></ul>
+<p>For each test case, predict the result before executing the program.</p>
+<p>After testing, document any discrepancy between your predicted and actual results and explain how you debugged it.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-01.html">← Week 1</a><a href="week-03.html">Week 3 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

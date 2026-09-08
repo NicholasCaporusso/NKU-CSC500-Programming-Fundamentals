@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 3</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 3: Loops and Iteration</h2>
+      <div class="intro">
+<p>Unless an assignment says otherwise, write the solution in <strong>Java</strong>. You may use concepts introduced through Week 3, but do not use arrays, collections, methods beyond <code>main</code>, or other later-course features to replace the intended loop practice.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Fundamentals</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Counting by Threes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">for loops</span><span class="badge topic-badge">initialization</span><span class="badge topic-badge">condition</span><span class="badge topic-badge">update</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Counting by Threes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that prints:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>3 6 9 12 15 18 21 24 27 30</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Use a <code>for</code> loop.</li><li>Do not write ten separate <code>print</code> statements.</li><li>Identify in comments the initialization, condition, and update portions of your loop.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: The Temperature Countdown</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">while loops</span><span class="badge topic-badge">decrementing</span><span class="badge topic-badge">termination</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: The Temperature Countdown as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A machine begins at a temperature of <code>45</code> degrees and cools by <code>3</code> degrees during each cycle.</p>
+<p>Write a program using a <code>while</code> loop that prints every temperature beginning with <code>45</code> and ending with <code>0</code>.</p>
+<p>After the loop, print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Cooling complete.</code></pre></div>
+<p>In a comment, explain why the loop is guaranteed to terminate.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Predict Before Running</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">tracing</span><span class="badge topic-badge">loop execution</span><span class="badge topic-badge">off-by-one reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Predict Before Running as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running the following code, determine exactly what it prints:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> value = <span class="num">4</span>;
+
+<span class="kw">while</span> (value &lt;= <span class="num">19</span>) {
+    <span class="type">System</span>.out.print(value + <span class="str">&quot; &quot;</span>);
+    value += <span class="num">3</span>;
+}</code></pre></div>
+<p>Create a trace table containing:</p>
+<table><thead><tr><th>Iteration</th><th><code>value</code> before condition</th><th>Condition result</th><th>Printed value</th><th><code>value</code> after update</th></tr></thead><tbody></tbody></table>
+<p>Then run the program and compare the actual output with your prediction.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: How Many Iterations?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">for loops</span><span class="badge topic-badge">boundaries</span><span class="badge topic-badge">iteration counting</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: How Many Iterations? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> k = <span class="num">7</span>; k &lt; <span class="num">31</span>; k += <span class="num">4</span>) {
+    <span class="type">System</span>.out.println(k);
+}</code></pre></div>
+<p>Without running it:</p>
+<ol><li>List every value of <code>k</code> for which the body executes.</li><li>State the number of iterations.</li><li>State the value of <code>k</code> when the condition first becomes false.</li><li>Explain whether changing <code>&lt; 31</code> to <code>&lt;= 31</code> changes the output and why.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Loop Anatomy</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">initialization</span><span class="badge topic-badge">condition</span><span class="badge topic-badge">body</span><span class="badge topic-badge">update</span><span class="badge topic-badge">loop control variable</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Loop Anatomy as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> boxes = <span class="num">24</span>;
+
+<span class="kw">while</span> (boxes &gt; <span class="num">3</span>) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Boxes remaining: &quot;</span> + boxes);
+    boxes -= <span class="num">4</span>;
+}</code></pre></div>
+<p>Identify:</p>
+<ol><li>The initialization.</li><li>The loop condition.</li><li>The loop body.</li><li>The update.</li><li>The loop control variable.</li><li>The values printed.</li><li>Why the loop terminates.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: Zero Times or One Time?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">while</span><span class="badge topic-badge">do-while</span><span class="badge topic-badge">pre-test vs. post-test loops</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: Zero Times or One Time? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write two short programs starting with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> fuel = <span class="num">0</span>;</code></pre></div>
+<p>The first must use <code>while</code> and the second <code>do-while</code>. Both should contain a body that prints:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Engine running</code></pre></div>
+<p>Use the condition:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>fuel &gt; <span class="num">0</span></code></pre></div>
+<p>Before running either program, predict how many times the message will appear in each version. Then explain the difference.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Choose the Loop</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">loop selection</span><span class="badge topic-badge">counter-controlled vs. condition-controlled repetition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Choose the Loop as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each situation below, choose <code>for</code>, <code>while</code>, or <code>do-while</code> and give a one-sentence justification.</p>
+<ol><li>Print exactly 40 shipping labels.</li><li>Keep requesting a password length until it is at least 12.</li><li>Display a game menu that must appear before the player can choose Exit.</li><li>Process numbers until the user enters a stopping value.</li><li>Visit every integer from 50 through 80.</li><li>Repeat an experiment exactly 500 times.</li></ol>
+<p>Also classify each situation as primarily <strong>counter-controlled</strong> or <strong>condition-controlled</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Fix the Boundary</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">off-by-one errors</span><span class="badge topic-badge">loop boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Fix the Boundary as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer wants the body to execute for the values:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>12 13 14 15 16 17</code></pre></div>
+<p>but writes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">12</span>; i &lt; <span class="num">17</span>; i++) {
+    <span class="type">System</span>.out.println(i);
+}</code></pre></div>
+<ol><li>Explain the error.</li><li>Correct the loop.</li><li>State exactly how many iterations the corrected loop performs.</li><li>Give a second correct loop that uses <code>&lt;</code> rather than <code>&lt;=</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Ticket Counter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">loops</span><span class="badge topic-badge">conditional counting</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Ticket Counter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that examines the integers from <code>1</code> through <code>60</code>.</p>
+<p>Count how many of them are divisible by <code>4</code>.</p>
+<p>At the end, print only the count.</p>
+<p>Requirements:</p>
+<ul><li>Use a loop.</li><li>Use a separate counter variable.</li><li>Do not calculate the answer manually and simply print it.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Running Product</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">products</span><span class="badge topic-badge">identity values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Running Product as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Use a loop to calculate:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>3 × 6 × 9 × 12</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Store the running result in an accumulator named <code>product</code>.</li><li>Initialize the accumulator correctly.</li><li>Print the final product.</li><li>In a comment, explain why initializing <code>product</code> to <code>0</code> would make the program incorrect.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Shipping Weight Summary</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">fixed repetition</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">averages</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Shipping Weight Summary as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user to enter the weights of exactly <strong>8 packages</strong>.</p>
+<p>Report:</p>
+<ul><li>Total weight.</li><li>Average weight.</li><li>Number of packages weighing more than <code>20.0</code>.</li><li>Number weighing <code>20.0</code> or less.</li></ul>
+<p>Requirements:</p>
+<ul><li>Use one loop to process all eight packages.</li><li>Do not store all eight values separately.</li><li>Make sure the average can contain a fractional part.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Range Statistics</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">loops</span><span class="badge topic-badge">conditional counting</span><span class="badge topic-badge">accumulators</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Range Statistics as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for two integers <code>start</code> and <code>end</code>, where <code>start &lt; end</code>.</p>
+<p>Process every integer from <code>start</code> through <code>end</code>, inclusive, and report:</p>
+<ul><li>How many are divisible by <code>4</code>.</li><li>How many are divisible by <code>6</code>.</li><li>The sum of the numbers divisible by both <code>4</code> and <code>6</code>.</li></ul>
+<p>Assume the user supplies a valid range.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Password-Length Validator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">input validation</span><span class="badge topic-badge">while</span><span class="badge topic-badge">conditions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Password-Length Validator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Repeatedly ask the user for an integer representing a proposed password length.</p>
+<p>A valid length is from <strong>12 through 64</strong>, inclusive.</p>
+<p>Continue asking while the input is invalid. Once a valid value is entered, print:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Accepted length: X</code></pre></div>
+<p>Also write the Boolean expression representing:</p>
+<ol><li>A valid length.</li><li>An invalid length.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Fuel Log Sentinel</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">sentinel-controlled loops</span><span class="badge topic-badge">priming read</span><span class="badge topic-badge">accumulators</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Fuel Log Sentinel as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A driver enters fuel purchases one at a time. The value <code>0</code> means there are no more purchases.</p>
+<p>Write a program that reports:</p>
+<ul><li>Number of purchases entered.</li><li>Total amount of fuel purchased.</li></ul>
+<p>The sentinel <code>0</code> must <strong>not</strong> be included in either calculation.</p>
+<p>Your solution must use the <strong>priming-read pattern</strong> rather than <code>while (true)</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: First and Last Trace</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">tracing</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">conditional logic</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: First and Last Trace as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Trace the following program manually:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;
+<span class="kw">int</span> hits = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> n = <span class="num">3</span>; n &lt;= <span class="num">18</span>; n += <span class="num">3</span>) {
+    <span class="kw">if</span> (n % <span class="num">4</span> != <span class="num">0</span>) {
+        total += n;
+        hits++;
+    }
+}</code></pre></div>
+<p>Create a trace table containing appropriate columns.</p>
+<p>Then determine:</p>
+<ul><li>Final value of <code>total</code>.</li><li>Final value of <code>hits</code>.</li><li>Number of loop iterations.</li><li>Which values do not contribute to <code>total</code>.</li></ul>
+<p>Do not run the code until your trace is complete.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Repair the Infinite Loop</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">infinite loops</span><span class="badge topic-badge">termination</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Repair the Infinite Loop as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following code is intended to print decreasing account balances until the balance reaches zero or below:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> balance = <span class="num">50</span>;
+
+<span class="kw">while</span> (balance &gt; <span class="num">0</span>) {
+    <span class="type">System</span>.out.println(balance);
+    balance += <span class="num">5</span>;
+}</code></pre></div>
+<ol><li>Explain precisely why the loop does not terminate.</li><li>Correct the program so that the balance decreases by <code>5</code>.</li><li>List the first three and final two values printed.</li><li>Explain how the update moves the state toward termination.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: <code>for</code> to <code>while</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">equivalent loop structures</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: for to while as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Rewrite this loop as an equivalent <code>while</code> loop:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="kw">int</span> level = <span class="num">30</span>; level &gt;= <span class="num">6</span>; level -= <span class="num">6</span>) {
+    <span class="type">System</span>.out.println(level);
+}</code></pre></div>
+<p>Your version must produce exactly the same output.</p>
+<p>Then identify where the <code>for</code> loop's initialization, condition, and update appear in your <code>while</code> version.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: <code>while</code> to <code>for</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">loop equivalence</span><span class="badge topic-badge">loop selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: while to for as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Rewrite:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> page = <span class="num">8</span>;
+
+<span class="kw">while</span> (page &lt;= <span class="num">48</span>) {
+    <span class="type">System</span>.out.println(<span class="str">&quot;Page &quot;</span> + page);
+    page += <span class="num">8</span>;
+}</code></pre></div>
+<p>as an equivalent <code>for</code> loop.</p>
+<p>Then answer:</p>
+<ul><li>Which version more clearly communicates that the program is stepping through a fixed numeric range?</li><li>Why?</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: First-Value Minimum</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">minimum values</span><span class="badge topic-badge">initialization from data</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: First-Value Minimum as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user to enter exactly <strong>7 daily low temperatures</strong>. Temperatures may be negative.</p>
+<p>Report the lowest temperature entered.</p>
+<p>Requirements:</p>
+<ul><li>Use the first actual temperature to initialize the minimum.</li><li>Do not initialize the minimum to <code>0</code>.</li><li>Process the remaining six temperatures with a loop.</li></ul>
+<p>Include a short explanation of why initializing the minimum to zero could fail.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: Skip Maintenance Days</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">continue</span><span class="badge topic-badge">loops</span><span class="badge topic-badge">conditional processing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: Skip Maintenance Days as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Process day numbers <code>1</code> through <code>21</code>.</p>
+<p>Days divisible by <code>7</code> are maintenance days and should not be printed. All other day numbers should be printed.</p>
+<p>Requirements:</p>
+<ul><li>Use <code>continue</code> to skip maintenance days.</li><li>Count how many normal days were printed.</li><li>Print the count afterward.</li><li>Explain why the loop still terminates even when <code>continue</code> executes.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Store Traffic Monitor</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">sentinel loops</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">min/max</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Store Traffic Monitor as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A store records the number of customers entering during successive time periods. The operator enters <code>-99</code> when data entry is complete.</p>
+<p>For all actual observations, report:</p>
+<ul><li>Number of periods recorded.</li><li>Total customers.</li><li>Average customers per period.</li><li>Smallest observation.</li><li>Largest observation.</li></ul>
+<p>Requirements:</p>
+<ul><li>Handle the case where <code>-99</code> is entered immediately.</li><li>Do not include the sentinel in any statistic.</li><li>Do not initialize minimum or maximum to arbitrary values such as zero.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Quality-Control Batch</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">fixed repetition</span><span class="badge topic-badge">validation</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">min/max</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Quality-Control Batch as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A factory tests exactly <strong>12 components</strong>. Each component receives a quality score from <code>1</code> through <code>10</code>.</p>
+<p>For each component:</p>
+<ol><li>Repeatedly request its score until a valid value is entered.</li><li>Count scores from <code>1–3</code> as <code>&quot;Reject&quot;</code>.</li><li>Count scores from <code>4–7</code> as <code>&quot;Review&quot;</code>.</li><li>Count scores from <code>8–10</code> as <code>&quot;Pass&quot;</code>.</li></ol>
+<p>After all 12 components, report the three counts and the highest and lowest valid scores.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Savings Target</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">condition-controlled loops</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">termination reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Savings Target as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask for:</p>
+<ul><li>An initial savings balance greater than or equal to <code>0</code>.</li><li>A positive amount saved each month.</li><li>A target balance greater than the initial balance.</li></ul>
+<p>Use a <code>while</code> loop to determine how many months are required for the balance to reach or exceed the target.</p>
+<p>Print the balance after each month.</p>
+<p>Do <strong>not</strong> use a formula to calculate the number of months.</p>
+<p>In comments, explain which state change guarantees termination under the stated input assumptions.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Stop at the First Threshold</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">break</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">searching</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Stop at the First Threshold as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Starting at <code>1</code>, repeatedly add consecutive <strong>odd numbers</strong> to a running total:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1, 3, 5, 7, ...</code></pre></div>
+<p>Stop as soon as the total becomes greater than <code>500</code>.</p>
+<p>Use <code>break</code> to leave the loop when the threshold is exceeded.</p>
+<p>Report:</p>
+<ul><li>The last odd number added.</li><li>The final total.</li><li>How many odd numbers were added.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Digit Classification</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">digit processing</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">%</span><span class="badge topic-badge">/</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Digit Classification as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for a positive integer.</p>
+<p>Process its digits from right to left and determine:</p>
+<ul><li>How many digits are even.</li><li>How many digits are odd.</li><li>How many digits are greater than <code>5</code>.</li></ul>
+<p>For example, the goal is <strong>not</strong> to count, sum, or reverse the digits; those exercises already appear in the lecture material.</p>
+<p>Do not convert the integer to a <code>String</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Largest Digit and Its Frequency</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">digit processing</span><span class="badge topic-badge">maximum</span><span class="badge topic-badge">counters</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Largest Digit and Its Frequency as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Read a positive integer and determine:</p>
+<ul><li>Its largest digit.</li><li>How many times that largest digit occurs.</li></ul>
+<p>For example, if the input were:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>482848</code></pre></div>
+<p>the largest digit would be <code>8</code>, and its frequency would be <code>3</code>.</p>
+<p>Requirements:</p>
+<ul><li>Use arithmetic digit processing with <code>% 10</code> and <code>/ 10</code>.</li><li>Do not convert the number to text.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Coordinate Grid</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">execution counting</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Coordinate Grid as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for positive integers <code>rows</code> and <code>columns</code>.</p>
+<p>Use nested loops to print every coordinate pair in the grid, such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>(1,1) (1,2) ...
+(2,1) (2,2) ...</code></pre></div>
+<p>Afterward, print the total number of coordinate pairs produced.</p>
+<p>Also explain why the number of inner-body executions equals <code>rows * columns</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Checkerboard Generator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">remainder operator</span><span class="badge topic-badge">text patterns</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Checkerboard Generator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for positive <code>rows</code> and <code>columns</code>.</p>
+<p>Generate a checkerboard using <code>X</code> and <code>O</code>, alternating characters across both rows and columns.</p>
+<p>For example, a portion might look like:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>XOXOXO
+OXOXOX
+XOXOXO</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Use nested loops.</li><li>Use the row and column values to decide which character to print.</li><li>The dimensions must come from user input.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Variable-Length Row Table</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">dependent inner-loop bounds</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Variable-Length Row Table as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask for a positive integer <code>n</code>.</p>
+<p>For row <code>1</code>, print the integers from <code>1</code> through <code>n</code>.<br>
+For row <code>2</code>, print the integers from <code>2</code> through <code>n</code>.<br>
+Continue until the final row contains only <code>n</code>.</p>
+<p>For <code>n = 5</code>, the structure would be:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1 2 3 4 5
+2 3 4 5
+3 4 5
+4 5
+5</code></pre></div>
+<p>Use nested loops whose inner-loop starting value depends on the outer-loop variable.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Coin-Toss Experiment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">simulation</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">fixed repetition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Coin-Toss Experiment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Simulate <strong>2,000 coin tosses</strong> using a random value to represent heads or tails.</p>
+<p>Report:</p>
+<ul><li>Number of heads.</li><li>Number of tails.</li><li>Percentage of tosses that were heads.</li><li>Difference between the number of heads and tails.</li></ul>
+<p>Use a loop for the trials and counters for the outcomes.</p>
+<p>Do not simulate dice; the lecture already contains dice simulations.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: First Repeated Random Value</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">simulation</span><span class="badge topic-badge">condition-controlled repetition</span><span class="badge topic-badge">break</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: First Repeated Random Value as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Generate random integers from <code>1</code> through <code>20</code>, one at a time.</p>
+<p>Keep track only of the <strong>previous</strong> generated value. Stop when the newly generated value is identical to the immediately preceding value.</p>
+<p>Report:</p>
+<ul><li>The repeated value.</li><li>Total number of generated values.</li><li>Number of nonmatching comparisons before the match.</li></ul>
+<p>You may not use an array or collection.</p>
+<p>Explain why the number of iterations cannot be known in advance.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Consecutive Heads</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">simulation</span><span class="badge topic-badge">condition-controlled loops</span><span class="badge topic-badge">counters</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Consecutive Heads as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Simulate coin tosses until <strong>four heads occur consecutively</strong>.</p>
+<p>Report:</p>
+<ul><li>Every simulated toss.</li><li>Total number of tosses.</li><li>Number of tails.</li><li>The longest run of heads observed before termination.</li></ul>
+<p>Your program must reset the current consecutive-head counter whenever tails occurs.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Valid Sentinel Data Pipeline</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">sentinel input</span><span class="badge topic-badge">validation</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">min/max</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Valid Sentinel Data Pipeline as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A sensor operator enters readings.</p>
+<p>Rules:</p>
+<ul><li><code>-999</code> ends input.</li><li>Actual readings must be from <code>-50</code> through <code>150</code>.</li><li>Any other value is invalid and must not affect statistics.</li></ul>
+<p>Continue until the sentinel is entered.</p>
+<p>For valid readings report:</p>
+<ul><li>Count.</li><li>Sum.</li><li>Average.</li><li>Minimum.</li><li>Maximum.</li></ul>
+<p>Also report the number of invalid entries.</p>
+<p>Handle the case where no valid readings are supplied.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Progressive Loan Repayment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">condition-controlled loops</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">min/max reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Progressive Loan Repayment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for a positive debt amount and a positive initial payment.</p>
+<p>During month 1, the user pays the initial payment. Each following month, the payment increases by <code>5</code>.</p>
+<p>Simulate payments until the debt is zero or less.</p>
+<p>For each month print:</p>
+<ul><li>Month number.</li><li>Payment attempted.</li><li>Remaining debt.</li></ul>
+<p>At the end report the number of months and total amount paid.</p>
+<p>Do not allow the reported final payment to exceed the remaining debt before that payment.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Number Guessing Analysis</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">do-while</span><span class="badge topic-badge">condition-controlled repetition</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">min/max</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Number Guessing Analysis as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Generate a secret random integer from <code>1</code> through <code>100</code>.</p>
+<p>Use a <code>do-while</code> loop to repeatedly request guesses until the secret number is guessed.</p>
+<p>For every incorrect guess print <code>&quot;Too high&quot;</code> or <code>&quot;Too low&quot;</code>.</p>
+<p>At the end report:</p>
+<ul><li>Number of guesses.</li><li>Lowest guess entered.</li><li>Highest guess entered.</li></ul>
+<p>Validate guesses so that values outside <code>1–100</code> do not count as attempts.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Nested Loop Work Analysis</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">tracing</span><span class="badge topic-badge">execution counts</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Nested Loop Work Analysis as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> row = <span class="num">1</span>; row &lt;= <span class="num">6</span>; row++) {
+    <span class="kw">for</span> (<span class="kw">int</span> column = <span class="num">1</span>; column &lt;= row + <span class="num">2</span>; column++) {
+        count++;
+    }
+}</code></pre></div>
+<p>Without running it:</p>
+<ol><li>Determine the number of inner-loop iterations for each outer-loop value.</li><li>Create a table showing <code>row</code>, inner iterations, and cumulative <code>count</code>.</li><li>Determine the final value of <code>count</code>.</li><li>Explain why simply calculating <code>6 * 8</code> would be incorrect.</li><li>Run the program only after completing your analysis.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Bordered Grid</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">decisions inside loops</span><span class="badge topic-badge">patterns</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Bordered Grid as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for a width and height, each at least <code>3</code>.</p>
+<p>Print a rectangular grid in which:</p>
+<ul><li>Border positions contain <code>#</code>.</li><li>Interior positions contain <code>.</code>.</li></ul>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>########
+#......#
+#......#
+########</code></pre></div>
+<p>The dimensions must be determined by user input.</p>
+<p>Use nested loops and determine whether each position is on a border.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Diagonal Matrix Pattern</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">row/column relationships</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Diagonal Matrix Pattern as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask for an odd positive integer <code>n</code>.</p>
+<p>Print an <code>n × n</code> text grid in which:</p>
+<ul><li>Positions on either diagonal contain <code>X</code>.</li><li>All other positions contain <code>.</code>.</li></ul>
+<p>For example, for <code>n = 5</code>:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>X...X
+.X.X.
+..X..
+.X.X.
+X...X</code></pre></div>
+<p>Use nested loops. Do not hard-code individual rows.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Debugging Clinic</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">infinite loops</span><span class="badge topic-badge">off-by-one errors</span><span class="badge topic-badge">continue</span><span class="badge topic-badge">scope</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Debugging Clinic as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following program contains multiple loop-related problems:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">0</span>;
+<span class="kw">int</span> i = <span class="num">1</span>;
+
+<span class="kw">while</span> (i &lt;= <span class="num">20</span>); {
+    <span class="kw">if</span> (i % <span class="num">5</span> == <span class="num">0</span>) {
+        <span class="kw">continue</span>;
+    }
+
+    total = i;
+    i++;
+}
+
+<span class="type">System</span>.out.println(total);</code></pre></div>
+<p>Perform a code review.</p>
+<ol><li>Identify every loop-related defect you can find.</li><li>Explain the effect of each defect.</li><li>Rewrite the program so it sums all integers from <code>1</code> through <code>20</code> <strong>except multiples of 5</strong>.</li><li>Explain why your corrected version terminates.</li><li>Trace the corrected version for <code>i = 4, 5, 6</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Dual-Sentinel Competition</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">sentinel loops</span><span class="badge topic-badge">break</span><span class="badge topic-badge">min/max</span><span class="badge topic-badge">counters</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Dual-Sentinel Competition as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Two players enter positive scores in alternating turns.</p>
+<p>The program ends when either:</p>
+<ul><li>A player enters <code>0</code>, or</li><li>A total of 20 valid scores have been entered.</li></ul>
+<p>At the end report:</p>
+<ul><li>Number of valid scores.</li><li>Sum of all valid scores.</li><li>Highest score.</li><li>Which stopping condition ended the loop.</li></ul>
+<p>Do not treat <code>0</code> as a score.</p>
+<p>Design the termination logic so that it is clear why the loop stops.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Collatz Process Analyzer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">condition-controlled loops</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">min/max</span><span class="badge topic-badge">termination reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Collatz Process Analyzer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for an integer greater than <code>1</code>.</p>
+<p>Repeatedly transform the current value:</p>
+<ul><li>If it is even, divide it by <code>2</code>.</li><li>If it is odd, replace it with <code>3 * value + 1</code>.</li></ul>
+<p>Stop when the value becomes <code>1</code>.</p>
+<p>Report:</p>
+<ul><li>Every value generated.</li><li>Number of transformations.</li><li>Largest value encountered.</li></ul>
+<p>Your implementation must use a loop and may not store the entire sequence.</p>
+<p>For this assignment, your program may assume the process reaches <code>1</code> for the supplied input; your termination explanation should describe what the <strong>program condition</strong> requires for the loop to stop rather than attempting to prove the Collatz conjecture.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Automated Teller Simulation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">do-while</span><span class="badge topic-badge">validation</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">menu repetition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Automated Teller Simulation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a small ATM simulation with an initial balance of <code>$500.00</code>.</p>
+<p>The menu must support:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1. Deposit
+2. Withdraw
+3. Show balance
+4. Show transaction summary
+5. Exit</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Use a <code>do-while</code> for the main menu.</li><li>Reject invalid menu choices.</li><li>Deposits must be positive.</li><li>Withdrawals must be positive and cannot exceed the current balance.</li><li>Track the number and total value of successful deposits.</li><li>Track the number and total value of successful withdrawals.</li><li>Invalid transactions must not affect statistics.</li><li>The program ends only when option <code>5</code> is selected.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Monte Carlo Coin Contest</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">simulation</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">averages</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Monte Carlo Coin Contest as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Run <strong>1,000 experiments</strong>.</p>
+<p>In each experiment:</p>
+<ol><li>Simulate coin tosses until either heads or tails has occurred <strong>three times</strong>.</li><li>Record which side reached three first.</li><li>Record how many tosses that experiment required.</li></ol>
+<p>After all experiments report:</p>
+<ul><li>Number of experiments won by heads.</li><li>Number won by tails.</li><li>Percentage won by each.</li><li>Average number of tosses per experiment.</li><li>Maximum tosses required by any experiment.</li></ul>
+<p>This requires an outer experiment loop and an inner condition-controlled simulation loop.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Multiplication Without Multiplication</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">algorithmic reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Multiplication Without Multiplication as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask for two positive integers <code>a</code> and <code>b</code>.</p>
+<p>First, compute <code>a * b</code> <strong>without using the <code>*</code> operator</strong>, using repeated addition.</p>
+<p>Then use repeated addition to print a table containing the products for every pair:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1..a</code></pre></div>
+<p>by:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1..b</code></pre></div>
+<p>Restrictions:</p>
+<ul><li>The <code>*</code> operator may not be used to calculate any product.</li><li>Use nested loops for the table.</li><li>Each displayed product must be produced through accumulation.</li></ul>
+<p>Explain how repeated addition implements multiplication.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Digit Run Analyzer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">digit processing</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">state tracking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Digit Run Analyzer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask the user for a positive integer.</p>
+<p>Process its digits arithmetically and determine the length of the longest run of identical adjacent digits.</p>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Input: 4555662
+Longest run length: 3</code></pre></div>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Input: 77717
+Longest run length: 3</code></pre></div>
+<p>Restrictions:</p>
+<ul><li>Do not convert the number to a <code>String</code>.</li><li>Do not use arrays.</li><li>Use <code>% 10</code> and <code>/ 10</code>.</li><li>Maintain only the state necessary to compare neighboring digits and track the longest run.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Numeric Palindrome Test</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">digit processing</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">loops</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Numeric Palindrome Test as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Determine whether a positive integer reads the same forward and backward.</p>
+<p>Examples of palindromes include:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1221
+73537
+8</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Do not convert the number to a <code>String</code>.</li><li>Preserve the original number for the final comparison.</li><li>Construct the reversed numeric value one digit at a time.</li><li>Print either <code>&quot;Palindrome&quot;</code> or <code>&quot;Not a palindrome&quot;</code>.</li></ul>
+<p>Then explain what role the loop's accumulator plays.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Common-Divisor Grid</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">nested loops</span><span class="badge topic-badge">%</span><span class="badge topic-badge">counting</span><span class="badge topic-badge">conditional output</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Common-Divisor Grid as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask for a positive integer <code>n</code> no greater than <code>15</code>.</p>
+<p>Generate an <code>n × n</code> grid. For each row <code>r</code> and column <code>c</code>, print:</p>
+<ul><li><code>#</code> if <code>r</code> and <code>c</code> have a common divisor greater than <code>1</code>.</li><li><code>.</code> otherwise.</li></ul>
+<p>You may determine whether a common divisor exists by using a third loop that tests candidate divisors.</p>
+<p>After generating the grid, report how many positions contained <code>#</code>.</p>
+<p>This assignment may therefore require <strong>three levels of iteration</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: First Factor Search</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">searching</span><span class="badge topic-badge">break</span><span class="badge topic-badge">nested/conditional iteration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: First Factor Search as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Ask for a positive integer greater than <code>1</code>.</p>
+<p>Search upward beginning with <code>2</code> for the <strong>smallest divisor</strong> of the number.</p>
+<p>As soon as a divisor is found, stop searching with <code>break</code>.</p>
+<p>Report:</p>
+<ul><li>The smallest divisor.</li><li>Number of candidate divisors tested.</li></ul>
+<p>Then classify the input as:</p>
+<ul><li><code>&quot;No smaller factor&quot;</code> if the smallest divisor equals the number.</li><li><code>&quot;Has a smaller factor&quot;</code> otherwise.</li></ul>
+<p>Do not generate a list of all divisors and do not implement the lecture's prime-number exercise.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Adaptive Random Walk</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">simulation</span><span class="badge topic-badge">condition-controlled repetition</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">min/max</span><span class="badge topic-badge">break</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Adaptive Random Walk as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A walker begins at position <code>0</code>.</p>
+<p>During each step, randomly choose:</p>
+<ul><li>Move <code>+1</code>, or</li><li>Move <code>-1</code>.</li></ul>
+<p>The simulation ends when:</p>
+<ul><li>The walker reaches <code>+10</code>, or</li><li>The walker reaches <code>-10</code>, or</li><li>1,000 steps have occurred.</li></ul>
+<p>Report:</p>
+<ul><li>Final position.</li><li>Number of steps.</li><li>Highest position reached.</li><li>Lowest position reached.</li><li>How many right moves occurred.</li><li>How many left moves occurred.</li><li>Which stopping condition ended the simulation.</li></ul>
+<p>Design the loop so all three termination possibilities are handled correctly.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Loop Systems Challenge — Service Queue</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">integrated loop design</span><span class="badge topic-badge">do-while</span><span class="badge topic-badge">sentinel concepts</span><span class="badge topic-badge">validation</span><span class="badge topic-badge">counters</span><span class="badge topic-badge">accumulators</span><span class="badge topic-badge">min/max</span><span class="badge topic-badge">simulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Loop Systems Challenge — Service Queue as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a text-based simulation of a service desk.</p>
+<p>The program repeatedly displays:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1. Record customer service time
+2. Simulate a service time
+3. Show statistics
+4. Reset statistics
+5. Exit</code></pre></div>
+<h4>Option 1 — Record</h4>
+<p>Ask for a service time from <code>1</code> through <code>120</code> minutes. Continue asking until a valid value is entered.</p>
+<h4>Option 2 — Simulate</h4>
+<p>Generate a random service time from <code>1</code> through <code>120</code>.</p>
+<h4>Option 3 — Statistics</h4>
+<p>For all recorded or simulated service times, display:</p>
+<ul><li>Number of customers.</li><li>Total service time.</li><li>Average service time.</li><li>Shortest service time.</li><li>Longest service time.</li><li>Number of customers whose service took more than 30 minutes.</li></ul>
+<p>If no customers have been processed, display an appropriate message instead.</p>
+<h4>Option 4 — Reset</h4>
+<p>Reset all statistics as though the program had just started.</p>
+<h4>Option 5 — Exit</h4>
+<p>Terminate the program.</p>
+<h4>Requirements</h4>
+<ul><li>Use a <code>do-while</code> loop for the menu.</li><li>Validate the menu choice.</li><li>Do not use arrays or collections.</li><li>Do not initialize minimum or maximum in a way that invents a data value.</li><li>Avoid division by zero.</li><li>Use descriptive loop and state variables.</li><li>Include comments identifying where counters, accumulators, validation loops, and condition-controlled repetition are used.</li><li>At the end of the source file, include a short comment explaining why every loop in your program terminates.</li></ul>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-02.html">← Week 2</a><a href="week-04.html">Week 4 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 8</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 8: Inheritance and Polymorphism</h2>
+      <div class="intro">
+<p>There are <strong>50 assignments</strong>, with exactly <strong>10 assignments at each difficulty level</strong>.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Introductory</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Classify the Relationship</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">is-a</span><span class="badge topic-badge">has-a</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">composition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Classify the Relationship as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each relationship below, classify it as primarily <strong>is-a</strong> or <strong>has-a</strong>.</p>
+<ol><li><code>Tablet</code> and <code>Battery</code></li><li><code>Violin</code> and <code>Instrument</code></li><li><code>Apartment</code> and <code>Kitchen</code></li><li><code>EBook</code> and <code>Publication</code></li><li><code>Bicycle</code> and <code>Wheel</code></li><li><code>ChessPlayer</code> and <code>Player</code></li><li><code>Order</code> and <code>Address</code></li><li><code>SmartWatch</code> and <code>ElectronicDevice</code></li></ol>
+<p>For every answer:</p>
+<ul><li>state whether inheritance or composition would normally be more appropriate;</li><li>write one sentence explaining your reasoning.</li></ul>
+<p>Do not write Java code.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: Identify the Superclass and Subclass</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">superclass</span><span class="badge topic-badge">subclass</span><span class="badge topic-badge">extends</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: Identify the Superclass and Subclass as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">Publication</span> {
+    <span class="kw">public</span> <span class="kw">void</span> open() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Opening publication&quot;</span>);
+    }
+}
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Magazine</span> <span class="kw">extends</span> <span class="type">Publication</span> {
+    <span class="kw">public</span> <span class="kw">void</span> flipPage() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Flipping page&quot;</span>);
+    }
+}</code></pre></div>
+<p>Answer the following:</p>
+<ol><li>Which class is the superclass?</li><li>Which class is the subclass?</li><li>What does <code>extends</code> express?</li><li>Which methods can be called on a variable declared as <code>Magazine</code>?</li><li>Does <code>Magazine</code> need to redefine <code>open()</code> in order to use it?</li><li>Write the is-a relationship represented by these classes.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Build Your First Subclass</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">extends</span><span class="badge topic-badge">inherited methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Build Your First Subclass as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a class named <code>Device</code> containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>brand</code></pre></div>
+<p>and a method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> turnOn()</code></pre></div>
+<p>that prints a short message.</p>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Phone</span></code></pre></div>
+<p>as a subclass of <code>Device</code>.</p>
+<p><code>Phone</code> should add:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>phoneNumber</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> makeCall()</code></pre></div>
+<p>Write a short <code>main</code> method that creates a <code>Phone</code> and demonstrates both its inherited and subclass-specific behavior.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: What Can the Subclass Access?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">private</span><span class="badge topic-badge">protected</span><span class="badge topic-badge">public</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: What Can the Subclass Access? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">AccountProfile</span> {
+    <span class="kw">private</span> <span class="type">String</span> username;
+    <span class="kw">protected</span> <span class="kw">int</span> loginCount;
+    <span class="kw">public</span> <span class="kw">boolean</span> active;
+}</code></pre></div>
+<p>Assume:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">class</span> <span class="type">PremiumProfile</span> <span class="kw">extends</span> <span class="type">AccountProfile</span> {
+}</code></pre></div>
+<p>For each field, state whether <code>PremiumProfile</code> can directly access it:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>username
+loginCount
+active</code></pre></div>
+<p>Then answer:</p>
+<ol><li>Why does inheritance not make a <code>private</code> field directly accessible?</li><li>What public method could <code>AccountProfile</code> provide to safely expose <code>username</code>?</li><li>Why might keeping <code>username</code> private be preferable to making it protected?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Constructor Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">constructors</span><span class="badge topic-badge">super(...)</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Constructor Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Appliance</span> {
+    <span class="kw">public</span> <span class="type">Appliance</span>(<span class="type">String</span> model) {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Appliance: &quot;</span> + model);
+    }
+}
+
+<span class="kw">class</span> <span class="type">Toaster</span> <span class="kw">extends</span> <span class="type">Appliance</span> {
+    <span class="kw">public</span> <span class="type">Toaster</span>(<span class="type">String</span> model) {
+        <span class="kw">super</span>(model);
+        <span class="type">System</span>.out.println(<span class="str">&quot;Toaster ready&quot;</span>);
+    }
+}</code></pre></div>
+<p>Without running the program, determine the output of:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">new</span> <span class="type">Toaster</span>(<span class="str">&quot;T-200&quot;</span>);</code></pre></div>
+<p>Then explain:</p>
+<ol><li>which constructor executes first;</li><li>why <code>super(model)</code> is necessary;</li><li>whether constructors themselves are inherited.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: Override a Behavior</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">@Override</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: Override a Behavior as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Notification</span></code></pre></div>
+<p>with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> send()</code></pre></div>
+<p>that prints:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Sending generic notification</code></pre></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">TextNotification</span> <span class="kw">extends</span> <span class="type">Notification</span></code></pre></div>
+<p>and override <code>send()</code> so that it prints:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Sending text notification</code></pre></div>
+<p>Requirements:</p>
+<ul><li>use <code>extends</code>;</li><li>use <code>@Override</code>;</li><li>demonstrate both implementations from <code>main</code>;</li><li>explain in one sentence what makes the second <code>send()</code> an override.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Override or Overload?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">overloading</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Override or Overload? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Converter</span> {
+    <span class="kw">public</span> <span class="type">String</span> convert(<span class="kw">int</span> value) {
+        <span class="kw">return</span> <span class="type">Integer</span>.toString(value);
+    }
+}
+
+<span class="kw">class</span> <span class="type">FancyConverter</span> <span class="kw">extends</span> <span class="type">Converter</span> {
+    <span class="kw">public</span> <span class="type">String</span> convert(<span class="kw">double</span> value) {
+        <span class="kw">return</span> <span class="type">Double</span>.toString(value);
+    }
+}</code></pre></div>
+<p>Answer:</p>
+<ol><li>Does <code>FancyConverter.convert(double)</code> override <code>convert(int)</code>?</li><li>If not, what relationship exists between these methods?</li><li>What would the method signature need to be to override the inherited method?</li><li>Add a correct override using <code>@Override</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Two Types, One Variable</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">reference type</span><span class="badge topic-badge">runtime type</span><span class="badge topic-badge">polymorphism</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Two Types, One Variable as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Message</span> {
+    <span class="kw">public</span> <span class="kw">void</span> display() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Message&quot;</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">WarningMessage</span> <span class="kw">extends</span> <span class="type">Message</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> display() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Warning&quot;</span>);
+    }
+}
+
+<span class="type">Message</span> m = <span class="kw">new</span> <span class="type">WarningMessage</span>();</code></pre></div>
+<p>Answer:</p>
+<ol><li>What is the reference type of <code>m</code>?</li><li>What is the runtime object type?</li><li>Is <code>m.display()</code> legal?</li><li>Which implementation of <code>display()</code> executes?</li><li>What Java mechanism selects that implementation?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Abstract or Concrete?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">abstract methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Abstract or Concrete? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose an application represents different kinds of tickets. Every ticket has a serial number, but there is no meaningful generic formula for calculating its price.</p>
+<p>Decide whether <code>Ticket</code> should be a regular class or an abstract class.</p>
+<p>Then write a skeleton definition containing:</p>
+<ul><li>a private <code>serialNumber</code> field;</li><li>a constructor;</li><li>a getter;</li><li>an abstract <code>getPrice()</code> method.</li></ul>
+<p>Finally, explain why this should fail:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Ticket</span> t = <span class="kw">new</span> <span class="type">Ticket</span>(<span class="str">&quot;X100&quot;</span>);</code></pre></div>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: A Simple Interface</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">implements</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: A Simple Interface as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Rechargeable</span></code></pre></div>
+<p>containing:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">void</span> recharge();</code></pre></div>
+<p>Create two otherwise unrelated classes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ElectricScooter
+WirelessHeadphones</code></pre></div>
+<p>that implement <code>Rechargeable</code>.</p>
+<p>Each class should print a different message from <code>recharge()</code>.</p>
+<p>Then create two <code>Rechargeable</code> references, one referring to each object, and call <code>recharge()</code> through those references.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Fix the Broken Constructor Chain</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">constructors</span><span class="badge topic-badge">implicit super()</span><span class="badge topic-badge">explicit super(...)</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Fix the Broken Constructor Chain as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following program does not compile:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Subscription</span> {
+    <span class="kw">private</span> <span class="type">String</span> customer;
+
+    <span class="kw">public</span> <span class="type">Subscription</span>(<span class="type">String</span> customer) {
+        <span class="kw">this</span>.customer = customer;
+    }
+}
+
+<span class="kw">class</span> <span class="type">PremiumSubscription</span> <span class="kw">extends</span> <span class="type">Subscription</span> {
+    <span class="kw">private</span> <span class="kw">int</span> bonusPoints;
+
+    <span class="kw">public</span> <span class="type">PremiumSubscription</span>(<span class="kw">int</span> bonusPoints) {
+        <span class="kw">this</span>.bonusPoints = bonusPoints;
+    }
+}</code></pre></div>
+<p>Your tasks:</p>
+<ol><li>Explain precisely why compilation fails.</li><li>Identify the superclass constructor Java attempts to call.</li><li>Correct <code>PremiumSubscription</code>.</li><li>Preserve encapsulation of <code>customer</code>.</li><li>Add a getter for <code>customer</code>.</li><li>Demonstrate construction from <code>main</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Encapsulation Repair</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">protected</span><span class="badge topic-badge">private</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Encapsulation Repair as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer writes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Membership</span> {
+    <span class="kw">protected</span> <span class="kw">int</span> rewardPoints;
+}
+
+<span class="kw">class</span> <span class="type">GoldMembership</span> <span class="kw">extends</span> <span class="type">Membership</span> {
+    <span class="kw">public</span> <span class="kw">void</span> reset() {
+        rewardPoints = -<span class="num">500</span>;
+    }
+}</code></pre></div>
+<p>Redesign these classes so subclasses cannot freely place <code>rewardPoints</code> into an invalid state.</p>
+<p>Requirements:</p>
+<ul><li>make the field private;</li><li>prevent negative point totals;</li><li>provide whatever superclass methods are necessary;</li><li>allow <code>GoldMembership</code> to award bonus points without directly accessing the field.</li></ul>
+<p>Briefly explain why your redesign provides stronger encapsulation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Extend the Superclass Behavior</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">super.methodName(...)</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Extend the Superclass Behavior as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a class:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Logger</code></pre></div>
+<p>with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> log(<span class="type">String</span> message)</code></pre></div>
+<p>that prints the message.</p>
+<p>Create:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>TimestampLogger</code></pre></div>
+<p>that overrides <code>log</code>.</p>
+<p>Its implementation must:</p>
+<ol><li>print <code>&quot;Beginning log&quot;</code>;</li><li>invoke the superclass implementation using <code>super.log(message)</code>;</li><li>print <code>&quot;Log complete&quot;</code>.</li></ol>
+<p>Demonstrate the method and explain why calling <code>super.log(...)</code> differs from calling <code>super(...)</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Compile or Fail?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">reference types</span><span class="badge topic-badge">compile-time checking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Compile or Fail? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Content</span> {
+    <span class="kw">public</span> <span class="kw">void</span> show() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Content&quot;</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">VideoContent</span> <span class="kw">extends</span> <span class="type">Content</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> show() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Video&quot;</span>);
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> play() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Playing&quot;</span>);
+    }
+}</code></pre></div>
+<p>For each statement below, state whether it compiles. If it compiles, state what happens.</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Content</span> a = <span class="kw">new</span> <span class="type">Content</span>();
+<span class="type">Content</span> b = <span class="kw">new</span> <span class="type">VideoContent</span>();
+<span class="type">VideoContent</span> c = <span class="kw">new</span> <span class="type">VideoContent</span>();
+
+a.show();
+b.show();
+c.show();
+b.play();
+c.play();</code></pre></div>
+<p>For every method call, separately identify:</p>
+<ul><li>the reference type used for compile-time checking;</li><li>the runtime object type;</li><li>the method implementation that executes.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Polymorphic Delivery Fees</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">polymorphism</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Polymorphic Delivery Fees as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Delivery</span></code></pre></div>
+<p>with a private <code>trackingNumber</code> and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> deliveryFee();</code></pre></div>
+<p>Create:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>StandardDelivery
+ExpressDelivery</code></pre></div>
+<p>with different fee calculations of your choosing.</p>
+<p>Then:</p>
+<ul><li>create at least four objects;</li><li>store them in a <code>Delivery[]</code>;</li><li>loop over the array;</li><li>print each tracking number and fee.</li></ul>
+<p>The loop must not use <code>instanceof</code> or check concrete class names.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Interface-Based Alerts</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">interface references</span><span class="badge topic-badge">polymorphism</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Interface-Based Alerts as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Alertable</span> {
+    <span class="kw">void</span> alert();
+}</code></pre></div>
+<p>Create three unrelated implementing classes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>DoorSensor
+CalendarReminder
+ServerMonitor</code></pre></div>
+<p>Give each a different <code>alert()</code> implementation.</p>
+<p>Store objects of all three classes in:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Alertable</span>[] alerts</code></pre></div>
+<p>and invoke <code>alert()</code> using one loop.</p>
+<p>Explain why the array can contain objects from classes that do not share your own custom superclass.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: One Class, Two Capabilities</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">multiple interfaces</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: One Class, Two Capabilities as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create these interfaces:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Connectable</span> {
+    <span class="kw">void</span> connect();
+}
+
+<span class="kw">interface</span> <span class="type">Resettable</span> {
+    <span class="kw">void</span> reset();
+}</code></pre></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Router</span></code></pre></div>
+<p>that implements both interfaces.</p>
+<p>Then demonstrate that the same <code>Router</code> object can be referenced through:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Router
+Connectable
+Resettable</code></pre></div>
+<p>For each reference type, list which operations the compiler permits.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: Safe Downcasting</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">upcasting</span><span class="badge topic-badge">downcasting</span><span class="badge topic-badge">instanceof</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: Safe Downcasting as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>GameCharacter
+WizardCharacter
+WarriorCharacter</code></pre></div>
+<p>where both specialized classes extend <code>GameCharacter</code>.</p>
+<p>Give <code>WizardCharacter</code> a method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>castSpell()</code></pre></div>
+<p>and <code>WarriorCharacter</code> a method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>swingSword()</code></pre></div>
+<p>Then:</p>
+<ol><li>assign a <code>WizardCharacter</code> object to a <code>GameCharacter</code> reference;</li><li>explain why calling <code>castSpell()</code> directly through that reference fails;</li><li>safely recover the wizard reference using <code>instanceof</code> and a downcast;</li><li>call <code>castSpell()</code>.</li></ol>
+<p>Also explain what could happen if you blindly cast a <code>WarriorCharacter</code> object to <code>WizardCharacter</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: Useful <code>toString()</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Object</span><span class="badge topic-badge">toString()</span><span class="badge topic-badge">overriding</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: Useful toString() as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Recipe</span></code></pre></div>
+<p>with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>name
+servings</code></pre></div>
+<p>First print a <code>Recipe</code> object without overriding <code>toString()</code> and observe the result.</p>
+<p>Then override <code>toString()</code> so printing the object produces a useful description such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Recipe{name='Soup', servings=4}</code></pre></div>
+<p>Finally:</p>
+<ol><li>assign the <code>Recipe</code> object to an <code>Object</code> reference;</li><li>print the <code>Object</code> reference;</li><li>explain why your <code>Recipe.toString()</code> implementation still executes.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: Final Restrictions</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">final classes</span><span class="badge topic-badge">final methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: Final Restrictions as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write two separate tiny programs that intentionally fail to compile.</p>
+<h4>Program A</h4>
+<p>Create a <code>final</code> class and attempt to extend it.</p>
+<h4>Program B</h4>
+<p>Create a superclass containing a <code>final</code> instance method and attempt to override that method.</p>
+<p>For each program:</p>
+<ul><li>identify the illegal line;</li><li>explain why Java rejects it;</li><li>modify the design so it compiles without removing <code>final</code>.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Three-Level Constructor Trace</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">constructor chaining</span><span class="badge topic-badge">super(...)</span><span class="badge topic-badge">inheritance levels</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Three-Level Constructor Trace as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Asset
+  ↑
+DigitalAsset
+  ↑
+EncryptedAsset</code></pre></div>
+<p>Each class must:</p>
+<ul><li>have at least one field of its own;</li><li>have a constructor requiring arguments;</li><li>print a message when its constructor executes.</li></ul>
+<p><code>EncryptedAsset</code> must initialize all three levels correctly.</p>
+<p>Before running your program:</p>
+<ol><li>predict the exact constructor execution order;</li><li>explain every <code>super(...)</code> call.</li></ol>
+<p>Then run the program and compare your prediction with the result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Dynamic Dispatch Trace</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">dynamic dispatch</span><span class="badge topic-badge">reference/runtime types</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Dynamic Dispatch Trace as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider this hierarchy:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Parser</span> {
+    <span class="kw">public</span> <span class="kw">void</span> parse() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Parser&quot;</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">JsonParser</span> <span class="kw">extends</span> <span class="type">Parser</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> parse() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;JSON&quot;</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">SecureJsonParser</span> <span class="kw">extends</span> <span class="type">JsonParser</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> parse() {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Secure JSON&quot;</span>);
+    }
+}</code></pre></div>
+<p>Without running the code, determine the output:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Parser</span> p1 = <span class="kw">new</span> <span class="type">Parser</span>();
+<span class="type">Parser</span> p2 = <span class="kw">new</span> <span class="type">JsonParser</span>();
+<span class="type">Parser</span> p3 = <span class="kw">new</span> <span class="type">SecureJsonParser</span>();
+<span class="type">JsonParser</span> p4 = <span class="kw">new</span> <span class="type">SecureJsonParser</span>();
+
+p1.parse();
+p2.parse();
+p3.parse();
+p4.parse();</code></pre></div>
+<p>For each variable, create a table containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>reference type
+runtime type
+compile-time legal method
+implementation executed</code></pre></div>
+<p>Then add a new method only to <code>SecureJsonParser</code> and explain through which references that method can be called without casting.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Abstract Transport Passes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">abstract class</span><span class="badge topic-badge">shared state</span><span class="badge topic-badge">polymorphism</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Abstract Transport Passes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">abstract</span> <span class="kw">class</span> <span class="type">TransitPass</span></code></pre></div>
+<p>with private common state such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>passId
+ownerName</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> fareForTrip(<span class="kw">double</span> distance);</code></pre></div>
+<p>Create at least three concrete subclasses with meaningfully different pricing rules.</p>
+<p>Requirements:</p>
+<ul><li>superclass state must remain private;</li><li>subclasses must initialize it through <code>super(...)</code>;</li><li>use <code>@Override</code>;</li><li>store mixed pass objects in <code>ArrayList&lt;TransitPass&gt;</code>;</li><li>calculate several fares polymorphically;</li><li>override <code>toString()</code> with a useful representation.</li></ul>
+<p>Do not use <code>instanceof</code> to calculate fares.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Interface-Based Export System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">programming to abstractions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Interface-Based Export System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Exportable</span> {
+    <span class="type">String</span> export();
+}</code></pre></div>
+<p>Create three unrelated classes representing different application concepts, such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Contact
+InventorySnapshot
+CalendarEntry</code></pre></div>
+<p>Each must implement <code>Exportable</code>.</p>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> saveExport(<span class="type">Exportable</span> item)</code></pre></div>
+<p>that prints or otherwise processes the result of <code>item.export()</code>.</p>
+<p>Demonstrate that the method works without depending on any of the three concrete types.</p>
+<p>Then explain why:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>saveExport(<span class="type">Exportable</span> item)</code></pre></div>
+<p>is more extensible than writing three separate methods tied to concrete classes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Abstract Class Plus Interface</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">extends</span><span class="badge topic-badge">implements</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Abstract Class Plus Interface as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">abstract</span> <span class="kw">class</span> <span class="type">SmartDevice</span></code></pre></div>
+<p>with common state and an abstract:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>performPrimaryFunction()</code></pre></div>
+<p>Define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Updateable</span> {
+    <span class="kw">void</span> updateSoftware();
+}</code></pre></div>
+<p>Create at least two concrete smart-device subclasses. At least one must implement <code>Updateable</code>.</p>
+<p>Demonstrate that one object can simultaneously be treated as:</p>
+<ul><li>its concrete type;</li><li>a <code>SmartDevice</code>;</li><li>an <code>Updateable</code>.</li></ul>
+<p>Explain which aspect represents <strong>what the object is</strong> and which represents <strong>what the object can do</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Casting Audit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">casting</span><span class="badge topic-badge">instanceof</span><span class="badge topic-badge">design quality</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Casting Audit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program contains:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">for</span> (<span class="type">Service</span> s : services) {
+    <span class="kw">if</span> (s <span class="kw">instanceof</span> <span class="type">CloudService</span>) {
+        <span class="type">CloudService</span> c = (<span class="type">CloudService</span>) s;
+        <span class="type">System</span>.out.println(c.monthlyCost());
+    } <span class="kw">else</span> <span class="kw">if</span> (s <span class="kw">instanceof</span> <span class="type">LocalService</span>) {
+        <span class="type">LocalService</span> l = (<span class="type">LocalService</span>) s;
+        <span class="type">System</span>.out.println(l.monthlyCost());
+    } <span class="kw">else</span> <span class="kw">if</span> (s <span class="kw">instanceof</span> <span class="type">PartnerService</span>) {
+        <span class="type">PartnerService</span> p = (<span class="type">PartnerService</span>) s;
+        <span class="type">System</span>.out.println(p.monthlyCost());
+    }
+}</code></pre></div>
+<p>Assume all three subclasses conceptually have a monthly cost.</p>
+<p>Your tasks:</p>
+<ol><li>explain the design smell;</li><li>redesign <code>Service</code> appropriately;</li><li>eliminate all three casts;</li><li>rewrite the loop polymorphically;</li><li>explain how your design handles a future <code>MobileService</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Overloading Meets Overriding</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">overloading</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">compile-time selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Overloading Meets Overriding as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Study:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Formatter</span> {
+    <span class="kw">public</span> <span class="kw">void</span> format(<span class="kw">int</span> value) {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Formatter int&quot;</span>);
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> format(<span class="type">String</span> value) {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Formatter String&quot;</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">SpecialFormatter</span> <span class="kw">extends</span> <span class="type">Formatter</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="kw">void</span> format(<span class="kw">int</span> value) {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Special int&quot;</span>);
+    }
+
+    <span class="kw">public</span> <span class="kw">void</span> format(<span class="kw">double</span> value) {
+        <span class="type">System</span>.out.println(<span class="str">&quot;Special double&quot;</span>);
+    }
+}</code></pre></div>
+<p>Analyze:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Formatter</span> f = <span class="kw">new</span> <span class="type">SpecialFormatter</span>();
+
+f.format(<span class="num">10</span>);
+f.format(<span class="str">&quot;ten&quot;</span>);</code></pre></div>
+<p>Determine what prints and explain why.</p>
+<p>Then answer:</p>
+<ol><li>Which methods are overloaded?</li><li>Which method is overridden?</li><li>Why can't <code>f.format(10.5)</code> simply use the subclass-only overload?</li><li>What changes if the reference is declared <code>SpecialFormatter</code>?</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Object Reference Collection</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Object</span><span class="badge topic-badge">toString()</span><span class="badge topic-badge">polymorphism</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Object Reference Collection as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create three unrelated classes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Coordinate
+Username
+TemperatureReading</code></pre></div>
+<p>Each must override <code>toString()</code>.</p>
+<p>Store instances of all three in:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Object</span>&gt;</code></pre></div>
+<p>Print every element in one loop.</p>
+<p>Then explain:</p>
+<ol><li>why every object can be stored in <code>ArrayList&lt;Object&gt;</code>;</li><li>why the appropriate <code>toString()</code> executes for each object;</li><li>what useful type-specific operations become unavailable through an <code>Object</code> reference;</li><li>why a more specific common interface could sometimes be better than using <code>Object</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Static Method Hiding Experiment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">static methods</span><span class="badge topic-badge">method hiding</span><span class="badge topic-badge">dynamic dispatch</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Static Method Hiding Experiment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">BaseTool</span></code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">SpecializedTool</span> <span class="kw">extends</span> <span class="type">BaseTool</span></code></pre></div>
+<p>Give both classes a static method named:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>identify()</code></pre></div>
+<p>Also give both an overridden instance method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>describe()</code></pre></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">BaseTool</span> tool = <span class="kw">new</span> <span class="type">SpecializedTool</span>();</code></pre></div>
+<p>Call the static and instance methods in several valid ways.</p>
+<p>Before running the program, predict the results.</p>
+<p>Write a short explanation contrasting:</p>
+<ul><li>static method hiding;</li><li>instance-method overriding;</li><li>dynamic method dispatch.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Field Hiding Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">fields versus polymorphic methods</span><span class="badge topic-badge">reference type</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Field Hiding Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a superclass and subclass that both declare a field named:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>status</code></pre></div>
+<p>with different values.</p>
+<p>Also give each class a <code>getStatus()</code> method, with the subclass overriding it.</p>
+<p>Using a superclass reference to a subclass object, compare:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>reference.status
+reference.getStatus()</code></pre></div>
+<p>Predict the results before executing them.</p>
+<p>Then refactor the classes to remove field hiding and explain why the refactored version is easier to reason about.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Notification Framework</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">polymorphic collections</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Notification Framework as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a notification framework without using the <code>Notification</code>/<code>TextNotification</code> design from Assignment 6.</p>
+<p>Create an abstract base:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>SystemAlert</code></pre></div>
+<p>with common state such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>recipient
+priority</code></pre></div>
+<p>and an abstract operation:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>deliver()</code></pre></div>
+<p>Create at least three concrete alert types with different delivery behavior.</p>
+<p>Also define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Schedulable</span></code></pre></div>
+<p>for alerts that can be scheduled.</p>
+<p>At least two alert types must implement it.</p>
+<p>Requirements:</p>
+<ul><li>private superclass fields;</li><li>constructor chaining;</li><li>method overriding;</li><li>at least one <code>super.methodName(...)</code> use;</li><li>a polymorphic <code>ArrayList&lt;SystemAlert&gt;</code>;</li><li>a useful <code>toString()</code>;</li><li>no type-checking chain for <code>deliver()</code>.</li></ul>
+<p>Explain your hierarchy in 150–250 words.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Refactor the Type-Code Design</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">polymorphism</span><span class="badge topic-badge">design smells</span><span class="badge topic-badge">dynamic dispatch</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Refactor the Type-Code Design as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A shipping application stores:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">PackageOption</span> {
+    <span class="type">String</span> type;
+    <span class="kw">double</span> weight;
+}</code></pre></div>
+<p>and calculates insurance using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">if</span> (option.type.equals(<span class="str">&quot;basic&quot;</span>)) {
+    ...
+} <span class="kw">else</span> <span class="kw">if</span> (option.type.equals(<span class="str">&quot;insured&quot;</span>)) {
+    ...
+} <span class="kw">else</span> <span class="kw">if</span> (option.type.equals(<span class="str">&quot;international&quot;</span>)) {
+    ...
+}</code></pre></div>
+<p>Redesign the application using polymorphism.</p>
+<p>Your solution must:</p>
+<ul><li>introduce an appropriate common abstraction;</li><li>place insurance calculation with the responsible objects;</li><li>support at least three concrete types;</li><li>process them through one collection;</li><li>make adding a fourth type require no modification to the processing loop.</li></ul>
+<p>Explain why the new design is preferable to the type-code conditional.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Plugin Architecture</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">abstractions</span><span class="badge topic-badge">extensibility</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Plugin Architecture as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a small plugin architecture.</p>
+<p>Define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Plugin</span> {
+    <span class="type">String</span> getName();
+    <span class="kw">void</span> execute();
+}</code></pre></div>
+<p>Create at least four unrelated plugin implementations.</p>
+<p>Write a <code>PluginManager</code> that stores:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Plugin</span>&gt;</code></pre></div>
+<p>and can:</p>
+<ul><li>register plugins;</li><li>list their names;</li><li>execute every registered plugin.</li></ul>
+<p>The manager must know nothing about the concrete plugin classes.</p>
+<p>Add a fifth plugin after the manager is complete and demonstrate that <code>PluginManager</code> requires no modification.</p>
+<p>Explain how this demonstrates programming to an abstraction.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Multi-Capability Robots</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">multiple interfaces</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">polymorphism</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Multi-Capability Robots as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Define capabilities such as:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Navigable</span>
+<span class="kw">interface</span> <span class="type">Recordable</span>
+<span class="kw">interface</span> <span class="type">Repairable</span></code></pre></div>
+<p>Create an abstract:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Robot</span></code></pre></div>
+<p>with shared identity/state.</p>
+<p>Create at least four robot subclasses implementing different combinations of the interfaces.</p>
+<p>Write separate methods that accept:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Navigable
+Recordable
+Repairable</code></pre></div>
+<p>rather than concrete robot classes.</p>
+<p>Demonstrate that the same object may be accepted by multiple methods because it implements multiple interfaces.</p>
+<p>Explain why Java's single class inheritance does not prevent this design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Hierarchy Debugging Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">constructor errors</span><span class="badge topic-badge">access control</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">abstract methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Hierarchy Debugging Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Construct a deliberately broken hierarchy containing at least <strong>eight distinct inheritance-related compile-time errors</strong>.</p>
+<p>Your errors must include examples involving:</p>
+<ul><li>inaccessible private state;</li><li>a missing valid superclass constructor call;</li><li><code>super(...)</code> in an illegal location;</li><li>a failed <code>@Override</code>;</li><li>reduced method visibility;</li><li>failure to implement an abstract method;</li><li>instantiating an abstract class;</li><li>attempting to override a final method.</li></ul>
+<p>Submit:</p>
+<ol><li>the broken version;</li><li>a numbered explanation of all eight errors;</li><li>the corrected version.</li></ol>
+<p>The scenario must be original and internally coherent.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Downcasting Failure Laboratory</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">upcasting</span><span class="badge topic-badge">downcasting</span><span class="badge topic-badge">instanceof</span><span class="badge topic-badge">runtime errors</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Downcasting Failure Laboratory as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>DataSource
+DatabaseSource
+FileSource
+ApiSource</code></pre></div>
+<p>with subclass-specific operations.</p>
+<p>Write experiments demonstrating:</p>
+<ol><li>automatic upcasting;</li><li>a legal downcast;</li><li>a cast that compiles but fails at runtime;</li><li>safe checking with <code>instanceof</code>;</li><li>why a superclass reference cannot directly call a subclass-only operation.</li></ol>
+<p>Then redesign at least one part of the program so a previously necessary cast is eliminated through a common polymorphic method.</p>
+<p>Conclude with a short explanation of when casting is justified and when it signals a weak abstraction.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Immutable Hierarchy Decisions</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">final</span><span class="badge topic-badge">inheritance design</span><span class="badge topic-badge">encapsulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Immutable Hierarchy Decisions as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a small security-policy model containing at least four classes.</p>
+<p>Decide deliberately where to use:</p>
+<ul><li>a <code>final</code> class;</li><li>a <code>final</code> method;</li><li>private fields;</li><li>an overridable method.</li></ul>
+<p>For each decision, provide a design justification.</p>
+<p>Then attempt to violate each <code>final</code> restriction in separate commented-out code and explain the resulting compiler problem.</p>
+<p>Your grade should depend not only on whether the code works but also on whether each use of <code>final</code> makes conceptual sense.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Template Behavior with <code>super</code></span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">super.methodName(...)</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Template Behavior with super as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a superclass:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>DocumentProcessor</code></pre></div>
+<p>with a method that performs a basic processing step.</p>
+<p>Create at least three specialized processors.</p>
+<p>Each subclass must override the method while reusing part of the superclass behavior with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">super</span>.methodName(...)</code></pre></div>
+<p>At least one subclass should perform work:</p>
+<ul><li>before the superclass behavior;</li><li>after the superclass behavior.</li></ul>
+<p>Create a superclass-typed collection and process all objects polymorphically.</p>
+<p>Explain the difference between <strong>extending superclass behavior</strong> and <strong>completely replacing superclass behavior</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Abstract Class or Interface? Architecture Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">design reasoning</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Abstract Class or Interface? Architecture Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are designing software containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>UserSession
+MobileSession
+BrowserSession
+Auditable
+Compressible
+EncryptionEngine</code></pre></div>
+<p>Design relationships among these concepts.</p>
+<p>Your solution must use all three of:</p>
+<ul><li>inheritance;</li><li>interfaces;</li><li>composition.</li></ul>
+<p>Produce:</p>
+<ol><li>a text-based hierarchy/relationship diagram;</li><li>Java class/interface skeletons;</li><li>a 250–400 word design rationale.</li></ol>
+<p>Your rationale must discuss:</p>
+<ul><li>is-a versus has-a;</li><li>shared state;</li><li>behavioral capabilities;</li><li>why Java's single-class-inheritance rule is not a problem;</li><li>which types should be used as polymorphic reference types.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Polymorphic Inventory Valuation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">collections</span><span class="badge topic-badge">dynamic dispatch</span><span class="badge topic-badge">toString()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Polymorphic Inventory Valuation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build an inventory valuation system.</p>
+<p>Define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">abstract</span> <span class="kw">class</span> <span class="type">InventoryItem</span></code></pre></div>
+<p>with private common fields and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">double</span> currentValue();</code></pre></div>
+<p>Create at least four concrete item categories with substantially different valuation rules.</p>
+<p>Requirements:</p>
+<ul><li>constructor chaining;</li><li>encapsulation;</li><li>overridden valuation;</li><li>overridden <code>toString()</code>;</li><li><code>ArrayList&lt;InventoryItem&gt;</code>;</li><li>total inventory value calculated polymorphically;</li><li>no <code>instanceof</code> chain;</li><li>no string field indicating an object's concrete type.</li></ul>
+<p>Finally, add a fifth category and document exactly which existing lines of processing code had to change.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: Smart-Building Object Model</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">inheritance</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">composition</span><span class="badge topic-badge">polymorphism</span><span class="badge topic-badge">architecture</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: Smart-Building Object Model as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a smart-building application containing several categories of equipment.</p>
+<p>Your model must contain:</p>
+<ul><li>at least one abstract superclass;</li><li>at least four concrete subclasses;</li><li>at least three capability interfaces;</li><li>at least one class implementing multiple interfaces;</li><li>at least two meaningful composition relationships;</li><li>polymorphic collections using both a superclass and an interface type.</li></ul>
+<p>Possible capabilities include monitoring, networking, scheduling, or energy reporting, but you must design the actual model.</p>
+<p>Requirements:</p>
+<ol><li>justify every inheritance relationship with an is-a argument;</li><li>justify every composition relationship with a has-a argument;</li><li>keep superclass state encapsulated;</li><li>use constructor chaining;</li><li>use dynamic dispatch for category-specific behavior;</li><li>avoid type-code conditionals;</li><li>provide useful <code>toString()</code> implementations;</li><li>demonstrate how a new equipment type can be added with minimal changes.</li></ol>
+<p>Submit code plus a design diagram and rationale.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Replace Casting with Polymorphism</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">instanceof</span><span class="badge topic-badge">downcasting</span><span class="badge topic-badge">refactoring</span><span class="badge topic-badge">abstractions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Replace Casting with Polymorphism as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Start with a deliberately poor design containing at least four subclasses and a processing method that relies on at least four <code>instanceof</code> branches and downcasts.</p>
+<p>The branches should invoke conceptually related operations.</p>
+<p>Then perform a complete refactoring.</p>
+<p>Your final design must:</p>
+<ul><li>eliminate at least 75% of the casts;</li><li>move common behavior into an appropriate abstraction;</li><li>use either an abstract class, interface, or both;</li><li>preserve program behavior;</li><li>make adding a new subtype easier.</li></ul>
+<p>Submit:</p>
+<ol><li>original code;</li><li>refactored code;</li><li>before/after class diagrams;</li><li>a written analysis identifying exactly why the original casting was a design smell;</li><li>one example of a cast you believe would still be reasonable, if any.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Extensible Game Action Engine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">polymorphic collections</span><span class="badge topic-badge">multiple capabilities</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Extensible Game Action Engine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build an extensible action engine for a game.</p>
+<p>The system must represent several unrelated objects that can perform one or more capabilities, such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Movable
+Damageable
+Interactable
+Renderable</code></pre></div>
+<p>You may choose different capability names if desired.</p>
+<p>Requirements:</p>
+<ul><li>at least four interfaces;</li><li>at least one abstract class providing shared state;</li><li>at least six concrete classes;</li><li>multiple classes implementing multiple interfaces;</li><li>methods that accept capability interfaces rather than concrete types;</li><li>at least two polymorphic collections;</li><li>no central switch or <code>if/else</code> chain based on concrete object type.</li></ul>
+<p>Add a new concrete object after completing the engine and demonstrate that existing capability-processing methods require no changes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Polymorphism Prediction Gauntlet</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">dynamic dispatch</span><span class="badge topic-badge">overloading</span><span class="badge topic-badge">method hiding</span><span class="badge topic-badge">fields</span><span class="badge topic-badge">reference types</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Polymorphism Prediction Gauntlet as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design an original three-level hierarchy:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Base
+  ↑
+Middle
+  ↑
+Derived</code></pre></div>
+<p>Your hierarchy must include:</p>
+<ul><li>one overridden instance method at all three levels;</li><li>one method overridden only at the middle level;</li><li>one overloaded method;</li><li>one static method hidden in a subclass;</li><li>one same-named field in two levels;</li><li>one call to <code>super.methodName()</code>.</li></ul>
+<p>Create at least eight variables using different combinations of reference and runtime types.</p>
+<p>Write at least <strong>20 expressions or method calls</strong> involving those variables.</p>
+<p>Before executing the program, predict every result.</p>
+<p>For each prediction, identify whether the result is determined primarily by:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>reference type
+runtime type
+overload resolution
+dynamic dispatch
+static method hiding
+field access
+explicit super call</code></pre></div>
+<p>Run the program only after completing the prediction table.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Framework with Protected Extension Points</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">encapsulation</span><span class="badge topic-badge">protected</span><span class="badge topic-badge">overriding</span><span class="badge topic-badge">final methods</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Framework with Protected Extension Points as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a processing framework in which subclasses may customize selected parts of an algorithm without gaining unrestricted access to superclass state.</p>
+<p>Your superclass must contain:</p>
+<ul><li>private fields;</li><li>at least one protected helper method;</li><li>at least one overridable protected method;</li><li>at least one final public method;</li><li>a constructor requiring state.</li></ul>
+<p>Create at least three subclasses that customize the permitted extension point.</p>
+<p>Explain:</p>
+<ol><li>why the fields remain private;</li><li>why selected methods are protected;</li><li>why the public operation is final;</li><li>how subclasses customize behavior without controlling the superclass representation;</li><li>how this differs from simply making every superclass member protected.</li></ol>
+<p>Demonstrate polymorphic execution of all subclasses.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Universal Processing Pipeline</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">programming to abstractions</span><span class="badge topic-badge">multiple implementations</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Universal Processing Pipeline as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a reusable processing pipeline whose core logic depends only on abstractions.</p>
+<p>Define interfaces representing at least three stages, for example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>InputProvider
+Transformer
+OutputConsumer</code></pre></div>
+<p>Provide at least two implementations of every interface.</p>
+<p>The pipeline class must depend only on the interfaces, not the concrete implementations.</p>
+<p>Demonstrate at least four different configurations by combining implementations differently.</p>
+<p>For example, the same transformer should be usable with multiple input and output implementations.</p>
+<p>Explain:</p>
+<ul><li>where interface polymorphism occurs;</li><li>how composition is used;</li><li>why inheritance between the concrete implementations would be unnecessary;</li><li>how this design makes components replaceable.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Hierarchy Evolution Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">inheritance design</span><span class="badge topic-badge">extensibility</span><span class="badge topic-badge">abstract classes</span><span class="badge topic-badge">interfaces</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Hierarchy Evolution Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design version 1 of a system containing at least five classes in a sensible hierarchy.</p>
+<p>Then imagine the requirements change:</p>
+<ul><li>a new type shares behavior with two existing types but does not fit cleanly under either;</li><li>one behavior that was previously universal is now optional;</li><li>one subclass needs a second independent capability.</li></ul>
+<p>Produce <strong>Version 2</strong> of the design.</p>
+<p>You may introduce interfaces, composition, or reorganize the hierarchy.</p>
+<p>Submit:</p>
+<ol><li>Version 1 diagram;</li><li>Version 1 code skeleton;</li><li>new requirements;</li><li>Version 2 diagram;</li><li>Version 2 code skeleton;</li><li>a 400–600 word explanation.</li></ol>
+<p>Your explanation must identify where blindly adding more inheritance would create a poor design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: <code>Object</code> and Mixed Abstractions</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Object</span><span class="badge topic-badge">toString()</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">casting</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: Object and Mixed Abstractions as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a heterogeneous registry capable of storing arbitrary Java objects using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Object</span>&gt;</code></pre></div>
+<p>Populate it with objects from at least five unrelated classes of your own design.</p>
+<p>Every class must provide a useful <code>toString()</code>.</p>
+<p>Next, introduce an interface representing a capability shared by only some registry entries.</p>
+<p>Implement a method that performs that capability only where appropriate.</p>
+<p>Compare two designs:</p>
+<h4>Design A</h4>
+<p>Use <code>Object</code>, <code>instanceof</code>, and casting.</p>
+<h4>Design B</h4>
+<p>Maintain a separate collection typed to the capability interface.</p>
+<p>Discuss the advantages and disadvantages of each approach, including:</p>
+<ul><li>compile-time safety;</li><li>available operations;</li><li>casting;</li><li>extensibility;</li><li>clarity of intent.</li></ul>
+<p>Conclude which design you would choose for capability-specific processing.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Inheritance Code Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">common mistakes</span><span class="badge topic-badge">design critique</span><span class="badge topic-badge">refactoring</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Inheritance Code Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create or analyze an original program containing at least <strong>12 inheritance/polymorphism problems</strong>.</p>
+<p>The problems must collectively include:</p>
+<ul><li>inheritance used for a has-a relationship;</li><li>inheritance used only for code reuse;</li><li>unnecessarily exposed protected state;</li><li>duplicated subclass behavior;</li><li>incorrect overriding;</li><li>confusion between overloading and overriding;</li><li>a constructor-chain error;</li><li>unsafe downcasting;</li><li>excessive <code>instanceof</code>;</li><li>concrete-type dependencies where an abstraction would work;</li><li>inappropriate field hiding;</li><li>unnecessary hierarchy depth.</li></ul>
+<p>For every problem:</p>
+<ol><li>identify it;</li><li>explain why it is problematic;</li><li>propose a correction.</li></ol>
+<p>Then provide a fully refactored design.</p>
+<p>Your final solution should favor meaningful abstractions and a relatively shallow hierarchy.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Week 8 Capstone — Extensible Service Platform</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">comprehensive Week 8 integration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Week 8 Capstone — Extensible Service Platform as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement an <strong>extensible service platform</strong>. The domain may involve cloud services, educational services, logistics services, entertainment services, or another domain approved by the instructor.</p>
+<p>Your application must demonstrate all of the following:</p>
+<h4>Inheritance</h4>
+<p>Create a meaningful superclass/subclass hierarchy justified by an <strong>is-a</strong> relationship.</p>
+<h4>Composition</h4>
+<p>Include at least two meaningful <strong>has-a</strong> relationships.</p>
+<h4>Encapsulation</h4>
+<p>Superclass fields must normally remain private and be accessed through appropriate behavior.</p>
+<h4>Constructor Chaining</h4>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">super</span>(...)</code></pre></div>
+<p>to initialize superclass state.</p>
+<h4>Method Overriding</h4>
+<p>At least three concrete subclasses must override inherited behavior using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="ann">@Override</span></code></pre></div>
+<h4>Superclass Behavior</h4>
+<p>At least one override must deliberately invoke:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">super</span>.methodName(...)</code></pre></div>
+<h4>Abstract Class</h4>
+<p>At least one important general type must be abstract and contain both:</p>
+<ul><li>concrete behavior;</li><li>abstract behavior.</li></ul>
+<h4>Interfaces</h4>
+<p>Define at least two capability interfaces.</p>
+<p>At least one class must implement multiple interfaces.</p>
+<h4>Polymorphism</h4>
+<p>Use both:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>superclass references
+interface references</code></pre></div>
+<p>to refer to concrete objects.</p>
+<h4>Dynamic Dispatch</h4>
+<p>Process multiple concrete objects without type-specific conditionals.</p>
+<h4>Polymorphic Collection</h4>
+<p>Use at least one:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">YourAbstraction</span>&gt;</code></pre></div>
+<p>containing multiple concrete runtime types.</p>
+<h4>Casting</h4>
+<p>Include one small example of justified downcasting guarded by <code>instanceof</code>, then explain why most of the application does <strong>not</strong> need casting.</p>
+<h4><code>Object</code> and <code>toString()</code></h4>
+<p>Override <code>toString()</code> for useful object descriptions and demonstrate polymorphic invocation through a general reference.</p>
+<h4><code>final</code></h4>
+<p>Use either a final class or final method where the restriction makes conceptual sense.</p>
+<h4>Extensibility Test</h4>
+<p>After the original system works, add one new concrete implementation.</p>
+<p>Document:</p>
+<ol><li>what new code was required;</li><li>what existing code changed;</li><li>what existing code did <strong>not</strong> change because it depended on abstractions.</li></ol>
+<h4>Design Report</h4>
+<p>Along with the Java program, submit a short report containing:</p>
+<ol><li>a class/interface diagram;</li><li>all important is-a relationships;</li><li>all important has-a relationships;</li><li>an explanation of where dynamic dispatch occurs;</li><li>an explanation of where composition is preferable to inheritance;</li><li>an explanation of why your abstract classes and interfaces were chosen;</li><li>one potential design mistake you deliberately avoided.</li></ol>
+<p>The goal is not to build the deepest possible hierarchy. The goal is to build the <strong>simplest sensible hierarchy that demonstrates correct inheritance, abstraction, and polymorphism</strong>.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-07.html">← Week 7</a><a href="week-09.html">Week 9 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

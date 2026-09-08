@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 13</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 13: Stacks, Queues, Sets, Maps, and Hashing</h2>
+      <div class="intro">
+<p>There are <strong>50 assignments</strong>, divided evenly among five difficulty levels.</p>
+<ul><li><strong>Difficulty 1:</strong> 10 assignments</li><li><strong>Difficulty 2:</strong> 10 assignments</li><li><strong>Difficulty 3:</strong> 10 assignments</li><li><strong>Difficulty 4:</strong> 10 assignments</li><li><strong>Difficulty 5:</strong> 10 assignments</li></ul>
+<p>Unless an assignment says otherwise, programming solutions should be written in <strong>Java</strong>.</p>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1 — ADT or Implementation?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Abstract Data Types</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">implementations</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1 — ADT or Implementation? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each item below, classify it as primarily an <strong>ADT/interface concept</strong> or a <strong>concrete implementation</strong>:</p>
+<ol><li>Stack</li><li>Queue</li><li><code>ArrayDeque</code></li><li>Set</li><li><code>HashSet</code></li><li>Map</li><li><code>HashMap</code></li><li>Deque</li></ol>
+<p>Then answer:</p>
+<ol><li>What information does an ADT specify?</li><li>What information does an ADT intentionally leave unspecified?</li><li>Why can two different implementations still represent the same ADT?</li><li>Explain the phrase <strong>&quot;program to an interface rather than an implementation&quot;</strong> in your own words.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2 — LIFO Trace: Loading Dock</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Stack</span><span class="badge topic-badge">LIFO</span><span class="badge topic-badge">push</span><span class="badge topic-badge">pop</span><span class="badge topic-badge">peek</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2 — LIFO Trace: Loading Dock as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A loading dock places containers onto a temporary stack.</p>
+<p>Starting with an empty stack, perform:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>push(&quot;Red&quot;)
+push(&quot;Blue&quot;)
+peek()
+push(&quot;Green&quot;)
+pop()
+push(&quot;Yellow&quot;)
+pop()
+peek()</code></pre></div>
+<p>For every operation:</p>
+<ol><li>Show the complete contents of the stack from top to bottom.</li><li>Record any value returned by <code>pop()</code> or <code>peek()</code>.</li><li>State the final stack contents.</li><li>Explain why the removal order demonstrates LIFO behavior.</li></ol>
+<p>Do not write Java code for this assignment.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3 — FIFO Trace: Support Tickets</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Queue</span><span class="badge topic-badge">FIFO</span><span class="badge topic-badge">offer</span><span class="badge topic-badge">poll</span><span class="badge topic-badge">peek</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3 — FIFO Trace: Support Tickets as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A technical-support system receives tickets in the following sequence:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>offer(&quot;T101&quot;)
+offer(&quot;T102&quot;)
+peek()
+offer(&quot;T103&quot;)
+poll()
+offer(&quot;T104&quot;)
+poll()
+peek()</code></pre></div>
+<p>For every operation:</p>
+<ol><li>Show the queue from front to back.</li><li>Record values returned by <code>poll()</code> and <code>peek()</code>.</li><li>Identify the final front of the queue.</li><li>Explain why the behavior is FIFO.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4 — One <code>ArrayDeque</code>, Two Behaviors</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Deque</span><span class="badge topic-badge">stack vs. queue</span><span class="badge topic-badge">interfaces</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4 — One ArrayDeque, Two Behaviors as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">String</span>&gt; a = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+<span class="type">Queue</span>&lt;<span class="type">String</span>&gt; b = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();</code></pre></div>
+<p>Answer the following:</p>
+<ol><li>What is the concrete implementation used by both variables?</li><li>Which variable is intended to expose deque behavior?</li><li>Which variable is intended to expose queue behavior?</li><li>Explain how an <code>ArrayDeque</code> can support both stack-like and queue-like operations.</li><li>Give one situation where restricting a variable to the <code>Queue</code> interface makes the programmer's intention clearer.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5 — Set Membership: Course Codes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Set</span><span class="badge topic-badge">HashSet</span><span class="badge topic-badge">uniqueness</span><span class="badge topic-badge">membership</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5 — Set Membership: Course Codes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java program that creates a:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">String</span>&gt;</code></pre></div>
+<p>containing course codes.</p>
+<p>Your program must:</p>
+<ol><li>Add at least six course codes.</li><li>Attempt to add one of them a second time.</li><li>Print the return value of the repeated <code>add()</code>.</li><li>Test whether two specified course codes are present using <code>contains()</code>.</li><li>Remove one course code.</li><li>Print the final number of elements.</li></ol>
+<p>In 2–3 sentences, explain why a set is more appropriate than a list if the only requirement is to record which course codes are offered.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6 — Map Lookup: Airport Codes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Map</span><span class="badge topic-badge">HashMap</span><span class="badge topic-badge">keys</span><span class="badge topic-badge">values</span><span class="badge topic-badge">lookup</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6 — Map Lookup: Airport Codes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;</code></pre></div>
+<p>where an airport code is the key and the city name is the value.</p>
+<p>Include at least five entries.</p>
+<p>Your program must demonstrate:</p>
+<ul><li><code>put()</code></li><li><code>get()</code></li><li><code>containsKey()</code></li><li><code>containsValue()</code></li><li><code>size()</code></li><li><code>remove()</code></li></ul>
+<p>Then explain the difference between these questions:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Does the code &quot;OMA&quot; exist?</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Does any airport map to &quot;Omaha&quot;?</code></pre></div>
+<p>Identify which map operation answers each question.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7 — Replacing a Map Value</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Map key uniqueness</span><span class="badge topic-badge">put()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7 — Replacing a Map Value as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; roomCapacity</code></pre></div>
+<p>containing at least four room names and capacities.</p>
+<p>Then:</p>
+<ol><li>Insert <code>&quot;Lab-A&quot;</code> with one capacity.</li><li>Insert <code>&quot;Lab-A&quot;</code> again with a different capacity.</li><li>Print the map's size before and after the second insertion.</li><li>Retrieve the final value associated with <code>&quot;Lab-A&quot;</code>.</li></ol>
+<p>Explain why the second <code>put()</code> does not create a duplicate key.</p>
+<p>Also explain why two different rooms are allowed to have the same capacity.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8 — Empty Collection Behavior</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Empty stacks and queues</span><span class="badge topic-badge">exceptions</span><span class="badge topic-badge">special values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8 — Empty Collection Behavior as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Answer what happens in each situation:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">Integer</span>&gt; stack = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+stack.pop();</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Queue</span>&lt;<span class="type">Integer</span>&gt; queue = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+queue.poll();</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Queue</span>&lt;<span class="type">Integer</span>&gt; queue = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+queue.peek();</code></pre></div>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Queue</span>&lt;<span class="type">Integer</span>&gt; queue = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();
+queue.remove();</code></pre></div>
+<p>For each operation:</p>
+<ol><li>State whether it returns a value, returns <code>null</code>, or throws an exception.</li><li>Rewrite the operation in a safe code fragment where appropriate.</li><li>Explain the practical difference between the exception-style and special-value-style queue methods.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9 — Hashing Vocabulary</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Hash functions</span><span class="badge topic-badge">hash codes</span><span class="badge topic-badge">buckets</span><span class="badge topic-badge">collisions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9 — Hashing Vocabulary as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Define each term in your own words:</p>
+<ul><li>hash function</li><li>hash code</li><li>bucket</li><li>collision</li></ul>
+<p>Then suppose a simplified hash table has 8 buckets and uses:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>bucket = hashCode % 8</code></pre></div>
+<p>Calculate the bucket for these positive hash codes:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>41
+18
+75
+64
+29</code></pre></div>
+<p>Identify any collision.</p>
+<p>Finally, explain why a collision is not automatically an error.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10 — Choose the Structure</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Data-structure selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10 — Choose the Structure as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose the most appropriate structure from:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ArrayList
+Stack
+Queue
+Deque
+Set
+Map</code></pre></div>
+<p>for each requirement:</p>
+<ol><li>Store the sequence of temperatures recorded every hour, including repeated values.</li><li>Process recently opened dialog boxes in reverse opening order.</li><li>Process submitted forms in arrival order.</li><li>Record which countries have appeared in a dataset.</li><li>Retrieve a book using its ISBN.</li><li>Add and remove objects efficiently from either end.</li><li>Preserve a sequence where duplicate values are meaningful.</li><li>Determine whether an email address has already been approved.</li></ol>
+<p>For each answer, give a <strong>one-sentence justification based on behavior</strong>, not merely on Big-O.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Applying Individual Structures</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11 — Back Button History</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Stack</span><span class="badge topic-badge">Deque</span><span class="badge topic-badge">LIFO</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11 — Back Button History as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement a simplified navigation-history component.</p>
+<p>Create a method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> visit(<span class="type">Deque</span>&lt;<span class="type">String</span>&gt; history, <span class="type">String</span> page)</code></pre></div>
+<p>that records a newly visited page.</p>
+<p>Create another method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> goBack(<span class="type">Deque</span>&lt;<span class="type">String</span>&gt; history)</code></pre></div>
+<p>that removes the current page and returns the previous page.</p>
+<p>Requirements:</p>
+<ul><li>Use a <code>Deque&lt;String&gt;</code> as a stack.</li><li>Handle histories containing zero or one page safely.</li><li>Do not use an <code>ArrayList</code> to simulate the stack.</li><li>Demonstrate at least five page visits and three back operations.</li></ul>
+<p>Explain why LIFO matches back-navigation behavior.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12 — Nested Folder Depth</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Stack</span><span class="badge topic-badge">nested structures</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12 — Nested Folder Depth as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A path description uses:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ENTER folderName
+EXIT</code></pre></div>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ENTER projects
+ENTER java
+EXIT
+ENTER python
+EXIT
+EXIT</code></pre></div>
+<p>Write a Java program that processes such commands with a stack.</p>
+<p>The program must:</p>
+<ol><li>Push a folder name for every <code>ENTER</code>.</li><li>Pop for every valid <code>EXIT</code>.</li><li>Report an error if <code>EXIT</code> occurs while the stack is empty.</li><li>Print the current nesting depth after every command.</li><li>Print the current folder, when one exists.</li></ol>
+<p>Do not solve the problem using bracket matching.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13 — Round-Robin Practice Queue</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Queue</span><span class="badge topic-badge">FIFO</span><span class="badge topic-badge">offer</span><span class="badge topic-badge">poll</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13 — Round-Robin Practice Queue as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Students wait to practice a presentation. After a student presents, they may request another turn and return to the back of the line.</p>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Queue</span>&lt;<span class="type">String</span>&gt; speakers = <span class="kw">new</span> <span class="type">ArrayDeque</span>&lt;&gt;();</code></pre></div>
+<p>Support these operations:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>JOIN name
+PRESENT
+NEXT</code></pre></div>
+<p>where:</p>
+<ul><li><code>JOIN</code> adds a speaker to the back.</li><li><code>PRESENT</code> removes and prints the front speaker.</li><li><code>NEXT</code> prints the front speaker without removing them.</li></ul>
+<p>Handle an empty queue safely.</p>
+<p>Demonstrate that a speaker who rejoins does not jump ahead of existing speakers.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14 — Deque From Both Ends</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Deque</span><span class="badge topic-badge">addFirst</span><span class="badge topic-badge">addLast</span><span class="badge topic-badge">removal from both ends</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14 — Deque From Both Ends as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A train has a short sequence of cars that can be attached or detached at either end.</p>
+<p>Write a program using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">String</span>&gt;</code></pre></div>
+<p>with operations:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ATTACH_FRONT car
+ATTACH_BACK car
+DETACH_FRONT
+DETACH_BACK</code></pre></div>
+<p>Requirements:</p>
+<ol><li>Implement all four operations.</li><li>Never remove from an empty deque.</li><li>Print the deque after every modification.</li><li>Demonstrate at least eight operations.</li></ol>
+<p>Explain why neither a pure stack nor a pure queue exposes all the behavior required by the problem.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15 — Permission Membership</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">HashSet</span><span class="badge topic-badge">membership</span><span class="badge topic-badge">add() return value</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15 — Permission Membership as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a simple permission system using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">String</span>&gt; permissions</code></pre></div>
+<p>Possible permissions might include:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>READ_REPORTS
+EDIT_USERS
+EXPORT_DATA
+VIEW_LOGS</code></pre></div>
+<p>Implement methods to:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>grantPermission(...)
+revokePermission(...)
+hasPermission(...)</code></pre></div>
+<p><code>grantPermission</code> must report whether the permission was newly added or was already present.</p>
+<p>Write a demonstration containing successful and repeated grants, removals, and membership tests.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16 — Compare Two Membership Strategies</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Set vs. list</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16 — Compare Two Membership Strategies as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose a program stores 100,000 blocked usernames and repeatedly asks whether a username is blocked.</p>
+<p>Compare these two designs:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt;</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">HashSet</span>&lt;<span class="type">String</span>&gt;</code></pre></div>
+<p>Your submission must include:</p>
+<ol><li>The expected complexity of membership testing for each.</li><li>Why the <code>HashSet</code> is normally attractive for this workload.</li><li>One requirement that could make a list preferable.</li><li>Why expected <code>O(1)</code> does not mean &quot;exactly one operation.&quot;</li><li>A short Java example performing the membership test with each structure.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17 — Map-Based Configuration</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">lookup</span><span class="badge topic-badge">updating</span><span class="badge topic-badge">missing keys</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17 — Map-Based Configuration as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Store application settings in:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; settings</code></pre></div>
+<p>Example keys might be:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>language
+theme
+timezone
+autosave</code></pre></div>
+<p>Write methods that:</p>
+<ol><li>Add or update a setting.</li><li>Retrieve a setting.</li><li>Test whether a setting exists.</li><li>Remove a setting.</li><li>Print all setting names.</li></ol>
+<p>Your retrieval method must distinguish between a missing key and a key that is actually mapped to <code>null</code>.</p>
+<p>Explain why <code>containsKey()</code> is useful for that distinction.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18 — Map Iteration Three Ways</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">keySet()</span><span class="badge topic-badge">values()</span><span class="badge topic-badge">entrySet()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18 — Map Iteration Three Ways as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a map from movie title to running time in minutes.</p>
+<p>Write three separate loops:</p>
+<ol><li>Print only movie titles using <code>keySet()</code>.</li><li>Calculate the total running time using <code>values()</code>.</li><li>Print each title together with its running time using <code>entrySet()</code>.</li></ol>
+<p>Then answer:</p>
+<ul><li>Which loop is most natural when only keys matter?</li><li>Which is most natural when only values matter?</li><li>Why is <code>entrySet()</code> appropriate when both are needed?</li></ul>
+<p>Do not assume any particular <code>HashMap</code> iteration order.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19 — Simple Hash-Bucket Simulation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Hashing</span><span class="badge topic-badge">buckets</span><span class="badge topic-badge">collisions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19 — Simple Hash-Bucket Simulation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Use a simplified table containing 7 buckets.</p>
+<p>For integer keys, define:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>bucket = key % 7</code></pre></div>
+<p>Process these keys:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>12, 26, 8, 19, 33, 14, 40, 5</code></pre></div>
+<p>Your submission must:</p>
+<ol><li>Calculate the bucket for every key.</li><li>Draw the final bucket table.</li><li>Identify every bucket containing a collision.</li><li>Explain why going to one bucket can still be much better than scanning every stored key.</li><li>Explain why a bucket may need to store more than one entry.</li></ol>
+<p>No Java implementation is required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20 — Queue API Choices</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">add</span><span class="badge topic-badge">offer</span><span class="badge topic-badge">remove</span><span class="badge topic-badge">poll</span><span class="badge topic-badge">element</span><span class="badge topic-badge">peek</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20 — Queue API Choices as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a table comparing these queue methods:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>add()
+offer()
+remove()
+poll()
+element()
+peek()</code></pre></div>
+<p>For each, record:</p>
+<ul><li>purpose,</li><li>whether it modifies the queue,</li><li>behavior when the relevant operation cannot be completed,</li><li>its corresponding method in the other method family.</li></ul>
+<p>Then write a short program using only the <strong>special-value-style</strong> operations for normal queue processing.</p>
+<p>Explain why that family can simplify some empty-queue handling.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Multi-Concept Problems</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21 — Document Navigation With Forward History</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Two stacks</span><span class="badge topic-badge">LIFO</span><span class="badge topic-badge">application design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21 — Document Navigation With Forward History as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement a document viewer with:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>OPEN document
+BACK
+FORWARD
+CURRENT</code></pre></div>
+<p>Use two stacks:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">String</span>&gt; backHistory
+<span class="type">Deque</span>&lt;<span class="type">String</span>&gt; forwardHistory</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Opening a new document clears forward history.</li><li><code>BACK</code> moves the current document into forward history.</li><li><code>FORWARD</code> reverses that movement.</li><li>Operations must be safe when no destination exists.</li><li>Do not use indexed list operations to simulate the stacks.</li></ul>
+<p>Explain why two LIFO collections naturally model the two navigation directions.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22 — Package Processing Center</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Queue</span><span class="badge topic-badge">objects</span><span class="badge topic-badge">simulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22 — Package Processing Center as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a class:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Package</span></code></pre></div>
+<p>containing:</p>
+<ul><li>tracking number,</li><li>arrival time,</li><li>processing duration.</li></ul>
+<p>Use a queue to simulate one processing station.</p>
+<p>Given packages in arrival-time order, calculate:</p>
+<ol><li>The time each package begins processing.</li><li>The time each package finishes.</li><li>The waiting time for each package.</li><li>The maximum queue length.</li><li>The average waiting time.</li></ol>
+<p>Explain which part of the problem is modeled by the <code>Package</code> objects and which part is modeled by the queue.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23 — Recent Search Terms</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Deque</span><span class="badge topic-badge">set</span><span class="badge topic-badge">combined structures</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23 — Recent Search Terms as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A search interface displays at most the <strong>five most recent distinct search terms</strong>.</p>
+<p>When a term is searched:</p>
+<ul><li>It must appear at the front of the recent list.</li><li>If it already appears, its old occurrence must disappear.</li><li>Only five terms may remain.</li></ul>
+<p>Design a solution using a combination of a:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">String</span>&gt;</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Set</span>&lt;<span class="type">String</span>&gt;</code></pre></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> search(<span class="type">String</span> term)</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">void</span> printRecent()</code></pre></div>
+<p>Explain what responsibility each collection has.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24 — Common Course Enrollment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Sets</span><span class="badge topic-badge">membership</span><span class="badge topic-badge">set relationships</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24 — Common Course Enrollment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Two course sections store student IDs in separate <code>HashSet&lt;String&gt;</code> objects.</p>
+<p>Write methods to determine:</p>
+<ol><li>Students appearing in both sections.</li><li>Students appearing only in the first section.</li><li>Students appearing in either section.</li><li>Whether the sections have any student in common.</li></ol>
+<p>Do not modify the original sets.</p>
+<p>For each operation, explain how membership and uniqueness make a set a natural representation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25 — First Missing Identifier</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">HashSet</span><span class="badge topic-badge">membership</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25 — First Missing Identifier as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An application receives an unsorted array of positive integer identifiers.</p>
+<p>Write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> firstMissingPositiveId(<span class="kw">int</span>[] ids)</code></pre></div>
+<p>that returns the smallest positive integer ID that does <strong>not</strong> occur in the input.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Input:  [4, 1, 7, 2]
+Output: 3</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Use a <code>HashSet&lt;Integer&gt;</code>.</li><li>Do not sort the input.</li><li>Explain the expected time and additional-space complexity.</li><li>Explain why duplicates in the input do not change the answer.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26 — Reverse Lookup Analysis</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">containsKey</span><span class="badge topic-badge">containsValue</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26 — Reverse Lookup Analysis as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A map stores:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>employeeNumber -&gt; department</code></pre></div>
+<p>The application frequently performs two queries:</p>
+<ol><li>Given an employee number, find the department.</li><li>Given a department, find all employee numbers in that department.</li></ol>
+<p>First implement both queries using only:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">Integer</span>, <span class="type">String</span>&gt;</code></pre></div>
+<p>Then analyze why the two operations have different performance characteristics.</p>
+<p>Finally, propose an additional data structure that would make repeated department-based queries more efficient.</p>
+<p>You do not need to implement the improved design, but describe it precisely.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27 — Group Items by Category</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">collections as values</span><span class="badge topic-badge">get()</span><span class="badge topic-badge">put()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27 — Group Items by Category as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a class:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Product</span></code></pre></div>
+<p>with:</p>
+<ul><li>product code,</li><li>name,</li><li>category.</li></ul>
+<p>Given a list of products, build:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">List</span>&lt;<span class="type">Product</span>&gt;&gt;</code></pre></div>
+<p>where each category maps to all products belonging to it.</p>
+<p>Requirements:</p>
+<ol><li>Every input product must appear exactly once in the resulting map.</li><li>Categories are discovered from the input.</li><li>Print each category and its products using <code>entrySet()</code>.</li><li>Do not assume the map prints categories in insertion or alphabetical order.</li></ol>
+<p>Explain why this is a map problem even though each value contains multiple objects.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28 — Equality of Coordinate Objects</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">equals()</span><span class="badge topic-badge">hashCode()</span><span class="badge topic-badge">logical equality</span><span class="badge topic-badge">HashSet</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28 — Equality of Coordinate Objects as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">Coordinate</span></code></pre></div>
+<p>with integer fields:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>x
+y</code></pre></div>
+<p>Two coordinates should be logically equal when both <code>x</code> and <code>y</code> are equal.</p>
+<p>Implement:</p>
+<ul><li>constructor,</li><li>getters,</li><li><code>equals()</code>,</li><li><code>hashCode()</code>,</li><li><code>toString()</code>.</li></ul>
+<p>Then add these to a <code>HashSet&lt;Coordinate&gt;</code>:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>(2, 5)
+(1, 9)
+(2, 5)
+(3, 4)
+(1, 9)</code></pre></div>
+<p>Verify that the set contains three logically distinct coordinates.</p>
+<p>Explain:</p>
+<ol><li>Why <code>==</code> is not the right test for logical coordinate equality.</li><li>Why equal coordinates must produce equal hash codes.</li><li>Why equal hash codes alone do not prove equality.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29 — Collision Experiment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Hash functions</span><span class="badge topic-badge">collisions</span><span class="badge topic-badge">distribution</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29 — Collision Experiment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For integer keys, compare these two simplified hash functions for a table of 10 buckets:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>H1(key) = key % 10
+H2(key) = (key / 10) % 10</code></pre></div>
+<p>Use this dataset:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>101, 111, 121, 131, 142, 153, 164, 175, 186, 197</code></pre></div>
+<p>For each function:</p>
+<ol><li>Calculate the bucket for every key.</li><li>Count the number of occupied buckets.</li><li>Identify collisions.</li><li>Compare the distributions.</li><li>Explain why a poor distribution can reduce hash-table performance.</li></ol>
+<p>Do not claim that a hash function is good merely because it is mathematically simple.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30 — Operation-Cost Audit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">stacks</span><span class="badge topic-badge">queues</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">maps</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30 — Operation-Cost Audit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each operation below, give its typical/expected complexity under the assumptions used in Week 13:</p>
+<ol><li>Push onto an <code>ArrayDeque</code> stack.</li><li>Pop from an <code>ArrayDeque</code> stack.</li><li>Inspect the front of a queue.</li><li>Search a stack for an arbitrary value.</li><li>Search a queue for an arbitrary value.</li><li><code>HashSet.contains()</code>.</li><li><code>HashSet.add()</code>.</li><li><code>HashMap.get()</code>.</li><li><code>HashMap.containsKey()</code>.</li><li>Linear search of an unsorted list.</li></ol>
+<p>Then write a short analysis explaining why saying:</p>
+<blockquote><p>&quot;<code>HashSet</code> is faster than a queue.&quot;</p></blockquote>
+<p>is an incomplete statement.</p>
+<p>Your explanation must identify <strong>which operation</strong> is being compared.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Design, Analysis, and Debugging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31 — Command History With Redo</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Stacks</span><span class="badge topic-badge">objects</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31 — Command History With Redo as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a small command-history system.</p>
+<p>Define:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">Command</span> {
+    <span class="kw">void</span> execute();
+    <span class="kw">void</span> undo();
+}</code></pre></div>
+<p>Maintain two stacks:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Deque</span>&lt;<span class="type">Command</span>&gt; undoStack
+<span class="type">Deque</span>&lt;<span class="type">Command</span>&gt; redoStack</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Executing a new command places it on the undo stack.</li><li>Undo moves a command to the redo stack.</li><li>Redo moves it back to the undo stack.</li><li>Executing a new command after undoing clears redo history.</li><li>Empty histories must be handled safely.</li></ul>
+<p>Create at least two concrete command classes and demonstrate the complete system.</p>
+<p>Explain why the stacks should be declared using the <code>Deque</code> interface rather than exposing unnecessary implementation details.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32 — Event Processing With Deferred Work</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Queue</span><span class="badge topic-badge">stack</span><span class="badge topic-badge">combined behavior</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32 — Event Processing With Deferred Work as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program receives events in arrival order. Most events are processed immediately, but some create temporary subtasks that must be completed in reverse creation order before the next event begins.</p>
+<p>Design a system using:</p>
+<ul><li>one queue for incoming events,</li><li>one stack for subtasks.</li></ul>
+<p>Create suitable <code>Event</code> and <code>Subtask</code> classes.</p>
+<p>Demonstrate at least five events, including two that create multiple subtasks.</p>
+<p>Your written analysis must explain why replacing both collections with one <code>ArrayList</code> would obscure the behavioral requirements even if it could be made to work.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33 — Sliding Window of Unique Device IDs</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Queue/deque</span><span class="badge topic-badge">map</span><span class="badge topic-badge">membership</span><span class="badge topic-badge">combined structures</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33 — Sliding Window of Unique Device IDs as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A monitoring system receives device IDs continuously. It must report how many <strong>distinct device IDs occurred among the most recent 20 observations</strong>.</p>
+<p>Design and implement an efficient solution.</p>
+<p>Your solution should use:</p>
+<ul><li>a queue/deque to remember observation order,</li><li>a map to track how many times each device ID occurs in the current window.</li></ul>
+<p>After each new observation:</p>
+<ol><li>Add it to the window.</li><li>Remove the oldest observation if the window exceeds 20.</li><li>Update counts.</li><li>Remove map entries whose count reaches zero.</li><li>Print the number of distinct IDs currently represented.</li></ol>
+<p>Explain why using only a set is insufficient.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34 — Bidirectional Membership Index</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">nested collections</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34 — Bidirectional Membership Index as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A university system must represent club membership.</p>
+<p>It must efficiently answer both:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Which students belong to club X?</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Which clubs does student Y belong to?</code></pre></div>
+<p>Design and implement two related maps:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Set</span>&lt;<span class="type">String</span>&gt;&gt; clubToStudents
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Set</span>&lt;<span class="type">String</span>&gt;&gt; studentToClubs</code></pre></div>
+<p>Support:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>JOIN student club
+LEAVE student club
+CLUB_MEMBERS club
+STUDENT_CLUBS student</code></pre></div>
+<p>Ensure both maps remain consistent after every update.</p>
+<p>Explain why maintaining two indexes trades additional memory and update work for faster lookup.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35 — Debug a Broken Hash Key</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">equals()</span><span class="badge topic-badge">hashCode()</span><span class="badge topic-badge">mutable keys</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35 — Debug a Broken Hash Key as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider a class used as a <code>HashMap</code> key:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">AccountKey</span> {
+    <span class="kw">private</span> <span class="type">String</span> region;
+    <span class="kw">private</span> <span class="kw">int</span> accountNumber;
+}</code></pre></div>
+<p>The intended logical identity is the pair:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>(region, accountNumber)</code></pre></div>
+<p>A programmer has implemented <code>equals()</code> using both fields but has implemented <code>hashCode()</code> using only <code>accountNumber</code>. They also provide setters for both fields.</p>
+<p>Write a technical analysis addressing:</p>
+<ol><li>Whether using only <code>accountNumber</code> in <code>hashCode()</code> necessarily violates the equality/hash-code contract.</li><li>Why it may still cause poor hash distribution.</li><li>What happens if a field involved in equality and hashing is changed after insertion into a hash-based collection.</li><li>How you would redesign the class.</li><li>How you would test that the corrected class behaves properly in a <code>HashSet</code> and a <code>HashMap</code>.</li></ol>
+<p>Implement the corrected class.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36 — Collision-Handling Table</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Hashing</span><span class="badge topic-badge">buckets</span><span class="badge topic-badge">collisions</span><span class="badge topic-badge">chaining</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36 — Collision-Handling Table as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement a simplified integer hash table using <strong>chaining</strong>.</p>
+<p>Requirements:</p>
+<ul><li>Use an array of bucket collections.</li><li>Use:</li></ul>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>bucket = Math.floorMod(key, tableSize)</code></pre></div>
+<ul><li>Support:</li><li><code>add(int key)</code></li><li><code>contains(int key)</code></li><li><code>remove(int key)</code></li><li>Prevent duplicate keys.</li><li>Correctly handle collisions.</li><li>Print the contents of every bucket.</li></ul>
+<p>Do <strong>not</strong> use <code>HashSet</code> or <code>HashMap</code> to implement the table itself.</p>
+<p>Afterward, explain why collisions are normal rather than evidence that the table is incorrect.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37 — Measure Collision Quality</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Hash functions</span><span class="badge topic-badge">performance</span><span class="badge topic-badge">experimental analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37 — Measure Collision Quality as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Extend Assignment 36 or build a separate simulator.</p>
+<p>Insert at least 1,000 integer keys into a fixed number of buckets.</p>
+<p>For each experiment, report:</p>
+<ul><li>number of occupied buckets,</li><li>largest bucket size,</li><li>average number of entries per occupied bucket,</li><li>number of collisions.</li></ul>
+<p>Run at least three input patterns, such as:</p>
+<ul><li>consecutive integers,</li><li>multiples of a constant,</li><li>pseudorandom integers.</li></ul>
+<p>Write a report explaining how input distribution and the bucket calculation interact.</p>
+<p>Relate your observations to the claim that hash-table operations are <strong>expected</strong> <code>O(1)</code> rather than unconditionally constant time.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38 — Data-Structure Design Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Choosing structures</span><span class="badge topic-badge">semantics</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38 — Data-Structure Design Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer proposes these designs:</p>
+<ol><li><code>ArrayList&lt;String&gt;</code> for millions of usernames repeatedly tested for membership.</li><li><code>HashSet&lt;Double&gt;</code> for preserving every sensor measurement in exact arrival order, including duplicates.</li><li><code>Stack&lt;Request&gt;</code> for processing requests first-come, first-served.</li><li><code>HashMap&lt;String, String&gt;</code> for storing paragraphs of a novel in reading order using arbitrary generated keys.</li><li><code>Queue&lt;Action&gt;</code> for implementing a conventional &quot;undo most recent action&quot; operation.</li></ol>
+<p>For every design:</p>
+<ol><li>Identify the behavioral mismatch.</li><li>Recommend a more suitable structure.</li><li>Explain which requirement drives the decision.</li><li>Discuss relevant complexity where appropriate.</li><li>State whether the original design could technically be forced to work and why that still may not make it good design.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39 — Cache Access Statistics</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">iteration</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39 — Cache Access Statistics as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A server receives resource names such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>/index
+/help
+/profile
+/api/status</code></pre></div>
+<p>Design a component that maintains:</p>
+<ul><li>a set of all resources ever encountered,</li><li>a map from resource to total access count,</li><li>a map from resource to most recent access timestamp.</li></ul>
+<p>Support:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>recordAccess(resource, timestamp)
+hasEverBeenAccessed(resource)
+getAccessCount(resource)
+getLastAccess(resource)</code></pre></div>
+<p>Also implement a report that prints every resource with its count and last-access time.</p>
+<p>Explain why the three collections represent different questions even though some information overlaps.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40 — Benchmark Membership Approaches</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Complexity</span><span class="badge topic-badge">ArrayList</span><span class="badge topic-badge">HashSet</span><span class="badge topic-badge">empirical analysis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40 — Benchmark Membership Approaches as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java experiment comparing membership queries using:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">ArrayList</span>&lt;<span class="type">Integer</span>&gt;</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">HashSet</span>&lt;<span class="type">Integer</span>&gt;</code></pre></div>
+<p>Test several input sizes, for example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1,000
+10,000
+100,000
+500,000</code></pre></div>
+<p>Perform enough membership queries to obtain meaningful timing measurements.</p>
+<p>Your submission must include:</p>
+<ol><li>The code.</li><li>A table of results.</li><li>Expected theoretical complexity.</li><li>A discussion of whether the measurements perfectly follow Big-O predictions.</li><li>At least three reasons timing experiments may vary.</li><li>An explanation of why Big-O and empirical timing answer related but different questions.</li></ol>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Integrated Challenges</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41 — Multi-Level Service Desk</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Queues</span><span class="badge topic-badge">maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">objects</span><span class="badge topic-badge">simulation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41 — Multi-Level Service Desk as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a service-desk simulator with multiple departments.</p>
+<p>Each request contains:</p>
+<ul><li>request ID,</li><li>customer ID,</li><li>department,</li><li>arrival time,</li><li>service duration.</li></ul>
+<p>Requirements:</p>
+<ul><li>Each department has its own FIFO queue.</li><li>A request ID may not be submitted twice.</li><li>The program must quickly locate the current status of a request by ID.</li><li>Completed request IDs remain known so they cannot be resubmitted accidentally.</li><li>Simulate processing over time.</li></ul>
+<p>Use an appropriate combination of queues, sets, and maps.</p>
+<p>Report:</p>
+<ul><li>requests completed per department,</li><li>average waiting time,</li><li>maximum queue length,</li><li>rejected duplicate request IDs.</li></ul>
+<p>Document why each data structure was selected.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42 — Dependency Execution Planner</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">queues</span><span class="badge topic-badge">data-structure selection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42 — Dependency Execution Planner as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Tasks have names and prerequisite tasks.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Compile -&gt; Parse
+Test -&gt; Compile
+Package -&gt; Compile
+Deploy -&gt; Test, Package</code></pre></div>
+<p>Design a program that produces a valid execution order in which a task is not executed until all prerequisites are complete.</p>
+<p>Use:</p>
+<ul><li>maps to represent relationships,</li><li>sets for completed or prerequisite membership,</li><li>a queue for tasks currently ready to execute.</li></ul>
+<p>Your program must:</p>
+<ol><li>Accept an arbitrary collection of tasks.</li><li>Produce a valid execution order when possible.</li><li>Detect when no remaining task can become ready.</li><li>Report unresolved tasks in that case.</li><li>Avoid executing any task twice.</li></ol>
+<p>Explain the role of every collection used.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43 — Message Deduplication Pipeline</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Queue</span><span class="badge topic-badge">set</span><span class="badge topic-badge">map</span><span class="badge topic-badge">bounded history</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43 — Message Deduplication Pipeline as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A server receives messages containing:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>messageId
+sender
+payload</code></pre></div>
+<p>Messages must normally be processed FIFO, but retransmissions may cause the same message ID to arrive multiple times.</p>
+<p>Build a pipeline that:</p>
+<ol><li>Processes accepted messages in arrival order.</li><li>Rejects recently seen message IDs.</li><li>Remembers only the most recent 10,000 processed IDs so memory does not grow forever.</li><li>Tracks the number of accepted messages per sender.</li><li>Tracks the number of rejected duplicates per sender.</li></ol>
+<p>Design the system using queues/deques, sets, and maps.</p>
+<p>Explain why a bounded queue plus a set can work together to maintain a fixed-size membership history.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44 — Custom Hash Map</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Maps</span><span class="badge topic-badge">hashing</span><span class="badge topic-badge">buckets</span><span class="badge topic-badge">collisions</span><span class="badge topic-badge">complexity</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44 — Custom Hash Map as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement a simplified generic map:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">class</span> <span class="type">SimpleHashMap</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></pre></div>
+<p>using an array of buckets and chaining.</p>
+<p>Support at least:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>put(<span class="type">K</span> key, <span class="type">V</span> value)
+get(<span class="type">K</span> key)
+containsKey(<span class="type">K</span> key)
+remove(<span class="type">K</span> key)
+size()
+isEmpty()</code></pre></div>
+<p>Requirements:</p>
+<ul><li>Equal keys replace their previous values.</li><li>Different keys with equal hash codes must coexist correctly.</li><li>Key comparison must use logical equality.</li><li>Bucket selection must be derived from <code>hashCode()</code>.</li><li>You may not use Java's <code>HashMap</code> internally.</li><li>Clearly document how collisions are handled.</li></ul>
+<p>Write tests involving deliberately colliding keys.</p>
+<p>Analyze the expected and unfavorable-case running times.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45 — Hash Contract Failure Laboratory</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">equals()</span><span class="badge topic-badge">hashCode()</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">custom objects</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45 — Hash Contract Failure Laboratory as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create three versions of a custom class representing a catalog identifier:</p>
+<h4>Version A</h4>
+<p>Overrides neither <code>equals()</code> nor <code>hashCode()</code>.</p>
+<h4>Version B</h4>
+<p>Overrides <code>equals()</code> but uses an inconsistent <code>hashCode()</code>.</p>
+<h4>Version C</h4>
+<p>Correctly overrides both.</p>
+<p>For each version:</p>
+<ol><li>Insert logically equivalent objects into a <code>HashSet</code>.</li><li>Use logically equivalent objects as <code>HashMap</code> keys.</li><li>Test membership and lookup using newly created equivalent objects.</li><li>Record the observed behavior.</li><li>Explain the behavior using buckets, hash codes, and logical equality.</li></ol>
+<p>Your final report must clearly state the Java contract:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>equal objects -&gt; equal hash codes</code></pre></div>
+<p>and explain why the reverse implication is not required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46 — Mutable-Key Failure Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Hash maps</span><span class="badge topic-badge">mutability</span><span class="badge topic-badge">equals()</span><span class="badge topic-badge">hashCode()</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46 — Mutable-Key Failure Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a class:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">EmployeeKey</span></code></pre></div>
+<p>whose logical equality depends on:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>companyId
+employeeNumber</code></pre></div>
+<p>Intentionally allow these fields to be changed.</p>
+<p>Then:</p>
+<ol><li>Insert an <code>EmployeeKey</code> into a <code>HashMap</code>.</li><li>Successfully retrieve its value.</li><li>Change one field involved in hashing/equality.</li><li>Attempt retrieval again.</li><li>Investigate the resulting behavior.</li><li>Iterate through the map and determine whether the entry still physically exists.</li><li>Restore or remove the entry safely.</li></ol>
+<p>Then redesign <code>EmployeeKey</code> as an immutable key and explain why the new design is safer.</p>
+<p>Your report must distinguish between what the map stores and what a mutated key's new hash code says about where Java should search.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47 — Adaptive Data-Structure Case Study</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Data-structure selection</span><span class="badge topic-badge">Big-O</span><span class="badge topic-badge">tradeoffs</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47 — Adaptive Data-Structure Case Study as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You are designing a system for a dataset containing ten million records.</p>
+<p>The system must support:</p>
+<ul><li>preserving every record in arrival order,</li><li>allowing duplicate records,</li><li>checking whether an identifier has ever occurred,</li><li>retrieving a record by unique ID,</li><li>processing pending records FIFO,</li><li>temporarily reversing the order of a batch,</li><li>counting records by category.</li></ul>
+<p>Design a collection architecture using multiple data structures.</p>
+<p>For every requirement:</p>
+<ol><li>Select the structure responsible for it.</li><li>Explain why one collection cannot conveniently satisfy all requirements.</li><li>Give expected complexity for the major operation.</li><li>Discuss memory tradeoffs caused by maintaining multiple representations.</li><li>Explain how consistency between the structures will be maintained when a record is inserted or removed.</li></ol>
+<p>Include a diagram of the proposed architecture.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48 — Hash Distribution Visualizer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Hashing</span><span class="badge topic-badge">collision analysis</span><span class="badge topic-badge">experimental programming</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48 — Hash Distribution Visualizer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a console-based program that investigates hash distribution.</p>
+<p>The program must:</p>
+<ol><li>Accept a table size.</li><li>Accept or generate a collection of keys.</li><li>Calculate a hash-derived bucket for every key.</li><li>Count how many keys enter each bucket.</li><li>Print a text histogram of bucket occupancy.</li><li>Report:</li></ol>
+<ul><li>empty buckets,</li><li>occupied buckets,</li><li>total collisions,</li><li>largest bucket,</li><li>average occupied-bucket size.</li></ul>
+<p>Run experiments with at least three different key types or key-generation strategies.</p>
+<p>Write an analysis discussing:</p>
+<ul><li>what a good distribution looks like,</li><li>why collisions cannot generally be eliminated,</li><li>why too many collisions affect performance,</li><li>why expected <code>O(1)</code> depends on assumptions about distribution.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49 — Collection API With Swappable Implementations</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">ADTs</span><span class="badge topic-badge">interfaces</span><span class="badge topic-badge">implementations</span><span class="badge topic-badge">abstraction</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49 — Collection API With Swappable Implementations as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a small application that emphasizes the difference between <strong>behavioral interfaces</strong> and <strong>concrete implementations</strong>.</p>
+<p>Create at least two application-level interfaces, such as:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">interface</span> <span class="type">PendingWork</span>&lt;<span class="type">E</span>&gt; {
+    <span class="kw">void</span> add(<span class="type">E</span> item);
+    <span class="type">E</span> next();
+    <span class="kw">boolean</span> isEmpty();
+}</code></pre></div>
+<p>Provide different implementations whose processing policies differ—for example, one where the oldest item is next and one where the newest item is next.</p>
+<p>Requirements:</p>
+<ol><li>Client code must depend on the interface rather than concrete classes.</li><li>Implementations must use appropriate Java collections internally.</li><li>Demonstrate that changing the implementation changes processing policy without requiring the client algorithm to understand internal storage.</li><li>Explain how this illustrates ADT vs. data structure.</li><li>Discuss which parts of the behavior should and should not be specified by the interface.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50 — Week 13 Integrated Data-Structure System</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">ADTs</span><span class="badge topic-badge">stacks</span><span class="badge topic-badge">queues</span><span class="badge topic-badge">deques</span><span class="badge topic-badge">sets</span><span class="badge topic-badge">maps</span><span class="badge topic-badge">hashing</span><span class="badge topic-badge">complexity</span><span class="badge topic-badge">design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50 — Week 13 Integrated Data-Structure System as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design and implement a small <strong>workflow-management system</strong>.</p>
+<p>Each workflow item contains:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>ID
+title
+owner
+category
+creation time
+status</code></pre></div>
+<p>The system must support:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>SUBMIT item
+PROCESS_NEXT
+CANCEL id
+FIND id
+HAS_OWNER owner
+RECENTLY_PROCESSED
+CATEGORY_COUNT category</code></pre></div>
+<p>Functional requirements:</p>
+<ol><li>New work is normally processed in submission order.</li><li>IDs must be unique.</li><li>Items must be retrievable efficiently by ID.</li><li>The program must know whether an owner has ever submitted work.</li><li>Recently processed items must be available in reverse processing order.</li><li>Category totals must be maintained.</li><li>Canceled items must not later be processed.</li><li>Empty-collection situations must be handled safely.</li></ol>
+<p>Use an appropriate combination of:</p>
+<ul><li><code>Queue</code></li><li><code>Deque</code></li><li><code>Set</code></li><li><code>Map</code></li></ul>
+<p>Your submission must include:</p>
+<h4>Part A — Design</h4>
+<p>For every collection, state:</p>
+<ul><li>its declared interface type,</li><li>its concrete implementation,</li><li>the information it stores,</li><li>the operations performed on it,</li><li>why its behavior matches the requirement.</li></ul>
+<h4>Part B — Implementation</h4>
+<p>Implement the complete Java program using multiple classes where appropriate.</p>
+<h4>Part C — Complexity Analysis</h4>
+<p>Give the expected running time of:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>SUBMIT
+PROCESS_NEXT
+CANCEL
+FIND
+HAS_OWNER
+CATEGORY_COUNT</code></pre></div>
+<p>Explain which results rely on expected hash-table performance.</p>
+<h4>Part D — Hashing Discussion</h4>
+<p>Explain how:</p>
+<ul><li>hash codes,</li><li>buckets,</li><li>collisions,</li><li><code>equals()</code>,</li><li><code>hashCode()</code></li></ul>
+<p>relate to the sets and maps in your design.</p>
+<p>If workflow items or custom identifiers are used as hash keys, define their logical equality carefully.</p>
+<h4>Part E — Design Reflection</h4>
+<p>Answer:</p>
+<ol><li>Why would one <code>ArrayList</code> be an awkward solution to all of these requirements?</li><li>Which requirements imply FIFO behavior?</li><li>Which imply LIFO behavior?</li><li>Which imply membership/uniqueness?</li><li>Which imply key-value association?</li><li>Which operations are expected <code>O(1)</code>?</li><li>Why does &quot;expected <code>O(1)</code>&quot; not mean every individual operation is guaranteed to take constant time?</li><li>How does this project demonstrate the principle that data-structure selection is part of algorithm design?</li></ol>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-12.html">← Week 12</a><a href="week-14.html">Week 14 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

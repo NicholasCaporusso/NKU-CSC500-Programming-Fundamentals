@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 1</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 1: Computational Thinking and Java Basics</h2>
+      <div class="intro">
+<p>These assignments are designed to reinforce the topics introduced in Week 1 without reproducing the examples, labs, or homework problems in the lecture notes.</p>
+<p>Unless an assignment explicitly asks only for analysis or pseudocode, write a complete Java program with an appropriately named <code>public</code> class and a <code>main</code> method.</p>
+<p>For programming assignments:</p>
+<ul><li>use meaningful variable names;</li><li>use consistent indentation;</li><li>include comments only where they explain useful intent, assumptions, or reasoning;</li><li>predict the program's important results before running it;</li><li>compile and test the program;</li><li>compare the actual behavior with your prediction.</li></ul>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1: Program, Algorithm, or Neither?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">programs</span><span class="badge topic-badge">algorithms</span><span class="badge topic-badge">computational thinking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1: Program, Algorithm, or Neither? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each item below, classify it as an <strong>algorithm</strong>, a <strong>program</strong>, or <strong>neither</strong>, and explain your answer in one or two sentences.</p>
+<ol><li>A numbered set of instructions for calculating the number of tiles needed to cover a floor.</li><li>A Java source file that reads two values and displays their product.</li><li>The statement “figure out the best answer.”</li><li>A finite sequence of precise steps for converting a measurement from one unit to another.</li><li>A <code>.class</code> file produced by <code>javac</code>.</li></ol>
+<p>Then write a short paragraph explaining the difference between an algorithm and a program.</p>
+<p>Do not write Java code for this assignment.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2: Decompose a Parking-Cost Problem</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">algorithm design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2: Decompose a Parking-Cost Problem as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A parking garage wants a program that calculates how much a customer owes when the parking duration and hourly price are already known.</p>
+<p>Before writing any Java, produce:</p>
+<ol><li>a one-sentence description of the problem;</li><li>the required inputs;</li><li>the required output;</li><li>a decomposition into at least four small computational steps;</li><li>a simple algorithm written in plain English.</li></ol>
+<p>Identify two pieces of information that might exist in the real parking-garage system but are irrelevant to this calculation. Explain why ignoring them is an example of abstraction.</p>
+<p>Do not implement the algorithm.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3: Java's Journey</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">source code</span><span class="badge topic-badge">compiler</span><span class="badge topic-badge">bytecode</span><span class="badge topic-badge">JVM</span><span class="badge topic-badge">JDK</span><span class="badge topic-badge">JRE</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3: Java's Journey as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Suppose a programmer creates a file named <code>Message.java</code>.</p>
+<p>Create a diagram showing what happens between writing the file and seeing the running program's output. Your diagram must correctly use these terms:</p>
+<ul><li>source code;</li><li><code>javac</code>;</li><li>compiler;</li><li>bytecode;</li><li><code>.class</code> file;</li><li>JVM;</li><li>execution;</li><li>output.</li></ul>
+<p>Then answer:</p>
+<ol><li>Which component actually compiles the source?</li><li>Which component executes Java bytecode?</li><li>Why does a student who develops Java programs need a JDK?</li><li>What did the traditional term JRE describe?</li><li>Why can an IDE's Run button hide important steps from a beginner?</li></ol>
+<p>No Java implementation is required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4: Build a Console Banner</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Java program structure</span><span class="badge topic-badge">print</span><span class="badge topic-badge">println</span><span class="badge topic-badge">string literals</span><span class="badge topic-badge">escape sequences</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4: Build a Console Banner as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java program named <code>CourseBanner</code> that displays a neatly formatted four-line banner containing:</p>
+<ul><li>the text <code>CSC 500 Practice</code>;</li><li>a row containing three tab-separated words;</li><li>a sentence containing quotation marks;</li><li>a Windows-style path containing backslashes.</li></ul>
+<p>Your program must demonstrate both:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.print(...)</code></pre></div>
+<p>and:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">System</span>.out.println(...)</code></pre></div>
+<p>Use escape sequences where necessary.</p>
+<p>Before running the program, write down the exact output you expect.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5: Variable Inventory</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">variables</span><span class="badge topic-badge">primitive types</span><span class="badge topic-badge">String</span><span class="badge topic-badge">declaration</span><span class="badge topic-badge">initialization</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5: Variable Inventory as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Imagine a program that stores information about a library book currently being processed.</p>
+<p>Declare and initialize variables representing:</p>
+<ul><li>number of pages;</li><li>replacement cost;</li><li>whether the book is currently available;</li><li>shelf section represented by a single letter;</li><li>book title.</li></ul>
+<p>Choose an appropriate Java type for every value.</p>
+<p>After the declarations, print each value with a descriptive label.</p>
+<p>Add a comment beside each declaration indicating whether the type is primitive or non-primitive.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6: State Changes</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">assignment</span><span class="badge topic-badge">program state</span><span class="badge topic-badge">sequential execution</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6: State Changes as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without running the following code first, create a trace table showing the value of <code>points</code> after every statement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> points = <span class="num">14</span>;
+points = points + <span class="num">6</span>;
+points = points - <span class="num">3</span>;
+points = points * <span class="num">2</span>;
+points = points / <span class="num">4</span>;</code></pre></div>
+<p>Then:</p>
+<ol><li>state the final value;</li><li>explain why assignment is different from mathematical equality;</li><li>explain what happens to an old value when a new value is assigned to the same variable.</li></ol>
+<p>After completing your prediction, run the code and verify your answer.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7: Expression Detective</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">expressions</span><span class="badge topic-badge">arithmetic operators</span><span class="badge topic-badge">precedence</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7: Expression Detective as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Predict the value of each Java expression without using Java first:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="num">18</span> - <span class="num">4</span> * <span class="num">2</span>
+(<span class="num">18</span> - <span class="num">4</span>) * <span class="num">2</span>
+<span class="num">24</span> / <span class="num">6</span> + <span class="num">3</span>
+<span class="num">24</span> / (<span class="num">6</span> + <span class="num">2</span>)
+<span class="num">7</span> + <span class="num">15</span> % <span class="num">4</span>
+<span class="num">30</span> / <span class="num">5</span> * <span class="num">3</span></code></pre></div>
+<p>For every expression:</p>
+<ol><li>show the evaluation order;</li><li>give the final result;</li><li>state which operator or parentheses determined the order.</li></ol>
+<p>Then write a tiny Java program that prints all six results and compare them with your predictions.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8: Integer Division Laboratory</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">integer division</span><span class="badge topic-badge">floating-point division</span><span class="badge topic-badge">types</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8: Integer Division Laboratory as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Predict the results of:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="num">9</span> / <span class="num">4</span>
+<span class="num">9.0</span> / <span class="num">4</span>
+<span class="num">9</span> / <span class="num">4.0</span>
+<span class="num">9.0</span> / <span class="num">4.0</span></code></pre></div>
+<p>Then write a program that displays all four values.</p>
+<p>In a short explanation, answer:</p>
+<ul><li>Why are some results different?</li><li>Why does storing an integer-division result in a <code>double</code> not recover the discarded fraction?</li></ul>
+<p>Include one additional example of your own that demonstrates the same rule.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9: Remainder Explorer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">%</span><span class="badge topic-badge">integer arithmetic</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9: Remainder Explorer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program named <code>RemainderExplorer</code> that begins with:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> value = <span class="num">347</span>;</code></pre></div>
+<p>Use <code>/</code> and <code>%</code> to calculate and display:</p>
+<ul><li>the number of complete groups of 10 in <code>value</code>;</li><li>the remainder after grouping by 10;</li><li>the final decimal digit of <code>value</code>.</li></ul>
+<p>Do not convert the number to a <code>String</code>.</p>
+<p>Explain in a comment why <code>% 10</code> reveals the final digit.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10: Keyboard Introduction Card</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">nextLine</span><span class="badge topic-badge">nextInt</span><span class="badge topic-badge">concatenation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10: Keyboard Introduction Card as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that asks the user for:</p>
+<ul><li>their full name;</li><li>their favorite whole number;</li><li>the name of a programming language they would like to learn someday.</li></ul>
+<p>Display the information as a three-line “profile card.”</p>
+<p>Use both <code>nextLine()</code> and <code>nextInt()</code>.</p>
+<p>Arrange the input operations so that the program correctly reads values containing spaces. If you place <code>nextInt()</code> before a later <code>nextLine()</code>, correctly handle the remaining newline.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11: Shipping Box Volume</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">input</span><span class="badge topic-badge">variables</span><span class="badge topic-badge">arithmetic expressions</span><span class="badge topic-badge">IPO model</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11: Shipping Box Volume as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program named <code>ShippingBox</code> that asks for the length, width, and height of a rectangular shipping box as decimal values.</p>
+<p>Calculate:</p>
+<ul><li>volume;</li><li>the sum of all three dimensions.</li></ul>
+<p>Display both results with labels.</p>
+<p>Before writing the program, include comments identifying its:</p>
+<ul><li>input;</li><li>processing;</li><li>output.</li></ul>
+<p>Do not calculate area or perimeter.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12: Weekly Commute Distance</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">expressions</span><span class="badge topic-badge">input</span><span class="badge topic-badge">meaningful names</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12: Weekly Commute Distance as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A commuter drives the same one-way distance to work on each workday.</p>
+<p>Write a program that reads:</p>
+<ul><li>one-way commuting distance;</li><li>number of workdays.</li></ul>
+<p>Calculate the total commuting distance assuming one trip to work and one trip home each day.</p>
+<p>Use an appropriately named <code>final</code> constant for the number of one-way trips per workday.</p>
+<p>The constant must replace an otherwise unexplained numeric literal in the calculation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13: Storage Capacity</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">integer division</span><span class="badge topic-badge">remainder</span><span class="badge topic-badge">constants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13: Storage Capacity as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A data device reports its capacity as a whole number of megabytes.</p>
+<p>Write a program that reads the total number of megabytes and reports:</p>
+<ul><li>how many complete 1024-megabyte units fit into the value;</li><li>how many megabytes remain.</li></ul>
+<p>Use:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">final</span> <span class="kw">int</span> <span class="type">MEGABYTES_PER_UNIT</span> = <span class="num">1024</span>;</code></pre></div>
+<p>Do not use loops or conditional statements.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14: Music Track Duration</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">division</span><span class="badge topic-badge">remainder</span><span class="badge topic-badge">console I/O</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14: Music Track Duration as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A recording duration is supplied as a whole number of milliseconds.</p>
+<p>Write a program that reports the duration as:</p>
+<ul><li>complete seconds;</li><li>remaining milliseconds.</li></ul>
+<p>For example, your output format might conceptually resemble:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>Complete seconds: ...
+Remaining milliseconds: ...</code></pre></div>
+<p>Do not reproduce any time-conversion exercise from the lecture involving total seconds.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15: Mixed-Type Prediction</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">expression types</span><span class="badge topic-badge">automatic conversion</span><span class="badge topic-badge">integer division</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15: Mixed-Type Prediction as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> packages = <span class="num">7</span>;
+<span class="kw">int</span> items = <span class="num">30</span>;
+<span class="kw">double</span> averageA = items / packages;
+<span class="kw">double</span> averageB = items / (<span class="kw">double</span>) packages;
+<span class="kw">double</span> averageC = (<span class="kw">double</span>) (items / packages);</code></pre></div>
+<p>Without executing the program:</p>
+<ol><li>predict all three values;</li><li>explain each result;</li><li>identify exactly when conversion to <code>double</code> occurs.</li></ol>
+<p>Then run the statements and confirm your analysis.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16: Casting a Measurement</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">explicit casts</span><span class="badge topic-badge">information loss</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16: Casting a Measurement as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that reads a decimal measurement from the user.</p>
+<p>Store:</p>
+<ul><li>the original value as a <code>double</code>;</li><li>the result of casting it to <code>int</code>;</li><li>the fractional amount discarded by the cast.</li></ul>
+<p>For example, if the input were <code>8.75</code>, the program should be able to determine that <code>8</code> is retained and approximately <code>0.75</code> is discarded.</p>
+<p>Do not use rounding functions.</p>
+<p>Explain why casting is not the same operation as rounding.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17: Event Ticket Revenue</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">arithmetic</span><span class="badge topic-badge">Scanner</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17: Event Ticket Revenue as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that reads:</p>
+<ul><li>number of tickets sold;</li><li>ticket price.</li></ul>
+<p>The venue also charges a fixed facility fee per ticket.</p>
+<p>Represent the facility fee with a named <code>final double</code> constant.</p>
+<p>Calculate:</p>
+<ul><li>ticket revenue before fees;</li><li>total facility fees;</li><li>combined amount collected.</li></ul>
+<p>Use meaningful variable names and no unexplained numeric constants in your formulas.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18: Formatting with Escape Sequences</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">escape sequences</span><span class="badge topic-badge">output</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18: Formatting with Escape Sequences as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java program that produces a small text-based directory listing containing:</p>
+<ul><li>a heading in quotation marks;</li><li>three rows of tab-separated labels and values;</li><li>a line showing a path such as <code>C:\projects\java</code>;</li><li>a blank line created using <code>\n</code>.</li></ul>
+<p>At least one output statement must contain three different escape sequences.</p>
+<p>Then explain the difference between the backslash used to begin an escape sequence and the backslash character you want the user to actually see.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19: Fix the Input Sequence</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">nextDouble</span><span class="badge topic-badge">nextLine</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19: Fix the Input Sequence as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following program is intended to read a product price and then a product description containing spaces:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="type">Scanner</span> input = <span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+
+<span class="type">System</span>.out.print(<span class="str">&quot;Price: &quot;</span>);
+<span class="kw">double</span> price = input.nextDouble();
+
+<span class="type">System</span>.out.print(<span class="str">&quot;Description: &quot;</span>);
+<span class="type">String</span> description = input.nextLine();
+
+<span class="type">System</span>.out.println(description + <span class="str">&quot; costs &quot;</span> + price);</code></pre></div>
+<p>The description may appear to be skipped.</p>
+<p>Your task is to:</p>
+<ol><li>explain precisely why;</li><li>correct the program;</li><li>test it using a description containing at least three words;</li><li>show the interaction produced by your corrected version.</li></ol>
+<p>Do not change the price input to <code>nextLine()</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20: Naming and Style Cleanup</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">identifiers</span><span class="badge topic-badge">camelCase</span><span class="badge topic-badge">readability</span><span class="badge topic-badge">comments</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20: Naming and Style Cleanup as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Rewrite the following fragment to improve its readability without changing what it computes:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> a=<span class="num">18.5</span>;
+<span class="kw">int</span> <span class="type">B</span>=<span class="num">4</span>;
+<span class="kw">double</span> c=a*<span class="type">B</span>;
+<span class="type">System</span>.out.println(<span class="str">&quot;x=&quot;</span>+c);</code></pre></div>
+<p>Your revised version must:</p>
+<ul><li>use meaningful camelCase variable names;</li><li>use conventional spacing;</li><li>replace the vague output label;</li><li>include one useful comment;</li><li>preserve the calculation.</li></ul>
+<p>Then explain three specific readability improvements you made.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21: Paint Mixture Calculator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">input</span><span class="badge topic-badge">arithmetic</span><span class="badge topic-badge">constants</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21: Paint Mixture Calculator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A paint mixture requires fixed amounts of three ingredients per batch.</p>
+<p>Create named constants for the amount of each ingredient needed for one batch.</p>
+<p>Ask the user for a decimal number of batches and calculate the total amount of each ingredient required.</p>
+<p>Before coding:</p>
+<ol><li>identify inputs and outputs;</li><li>state the general computational pattern shared by all three ingredient calculations;</li><li>explain how this illustrates pattern recognition.</li></ol>
+<p>Then implement the program.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22: Conference Badge Generator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">integer input</span><span class="badge topic-badge">newline issue</span><span class="badge topic-badge">output formatting</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22: Conference Badge Generator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that asks for:</p>
+<ol><li>attendee ID as an integer;</li><li>full name;</li><li>organization name;</li><li>session room represented by a single text entry.</li></ol>
+<p>Display a formatted conference badge using multiple output lines and tabs.</p>
+<p>Because the integer input comes first, correctly manage the transition to <code>nextLine()</code>.</p>
+<p>Include a short comment explaining why the extra input operation is needed.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23: Three-Digit Number Analyzer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">integer division</span><span class="badge topic-badge">remainder</span><span class="badge topic-badge">expressions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23: Three-Digit Number Analyzer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that reads a positive three-digit integer.</p>
+<p>Without converting it to a string, calculate:</p>
+<ul><li>hundreds digit;</li><li>tens digit;</li><li>ones digit;</li><li>sum of the three digits.</li></ul>
+<p>You may assume the user provides a valid three-digit integer; Week 1 does not yet require conditional input validation.</p>
+<p>Document the arithmetic reasoning used to isolate each digit.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24: Sequential State Puzzle</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">tracing</span><span class="badge topic-badge">assignment</span><span class="badge topic-badge">program state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24: Sequential State Puzzle as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Trace this program manually:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> alpha = <span class="num">9</span>;
+<span class="kw">int</span> beta = <span class="num">4</span>;
+<span class="kw">int</span> gamma = <span class="num">2</span>;
+
+alpha = alpha + beta;
+beta = alpha - gamma;
+gamma = beta / gamma;
+alpha = alpha % beta;
+beta = beta + gamma;</code></pre></div>
+<p>Create a trace table containing the values of all three variables after every statement.</p>
+<p>Then answer:</p>
+<ol><li>Which assignment depends on a value that was changed earlier?</li><li>Where does integer division occur?</li><li>What is the final program state?</li><li>How would the result differ if statements were evaluated as simultaneous mathematical equations?</li></ol>
+<p>Run the program only after completing the trace.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25: Precedence Repair Shop</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">operator precedence</span><span class="badge topic-badge">parentheses</span><span class="badge topic-badge">debugging formulas</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25: Precedence Repair Shop as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer wants to compute each of the following mathematical expressions:</p>
+<div class="math-block"><math display="block" aria-label="\frac{a+b}{c+d}"><mrow><mfrac><mrow><mi>a</mi><mo>+</mo><mi>b</mi></mrow><mrow><mi>c</mi><mo>+</mo><mi>d</mi></mrow></mfrac></mrow></math></div>
+<div class="math-block"><math display="block" aria-label="a(b+c)-d"><mrow><mi>a</mi><mo>(</mo><mi>b</mi><mo>+</mo><mi>c</mi><mo>)</mo><mo>-</mo><mi>d</mi></mrow></math></div>
+<div class="math-block"><math display="block" aria-label="\frac{a-b}{c}\times d"><mrow><mfrac><mrow><mi>a</mi><mo>-</mo><mi>b</mi></mrow><mrow><mi>c</mi></mrow></mfrac><mo>×</mo><mi>d</mi></mrow></math></div>
+<p>For each formula:</p>
+<ol><li>write a correct Java expression;</li><li>write one plausible but incorrect Java expression caused by missing or misplaced parentheses;</li><li>choose sample values;</li><li>show how the incorrect and correct versions produce different results.</li></ol>
+<p>Your goal is not merely to write syntax, but to demonstrate how precedence bugs arise.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26: Data-Usage Cost Model</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">input</span><span class="badge topic-badge">arithmetic</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26: Data-Usage Cost Model as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A simple internet plan charges:</p>
+<ul><li>a fixed monthly base price;</li><li>a fixed price per gigabyte used.</li></ul>
+<p>Write a program that asks the user for the number of gigabytes used and calculates the total monthly cost.</p>
+<p>Represent both rates with named constants.</p>
+<p>Then modify the program so that it also displays what percentage of the total charge comes from usage charges:</p>
+<div class="math-block"><math display="block" aria-label="\text{usage percentage} = \frac{\text{usage charge}}{\text{total charge}} \times 100"><mrow><mtext>usage percentage</mtext><mo>=</mo><mfrac><mrow><mtext>usage charge</mtext></mrow><mrow><mtext>total charge</mtext></mrow></mfrac><mo>×</mo><mn>100</mn></mrow></math></div>
+<p>Assume input values make the calculation valid.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27: Classify the Error</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">compile-time errors</span><span class="badge topic-badge">runtime errors</span><span class="badge topic-badge">logic errors</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27: Classify the Error as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each independent fragment below:</p>
+<ol><li>classify the error as compile-time, runtime, or logic;</li><li>explain why;</li><li>correct the problem.</li></ol>
+<h4>A</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> total = <span class="num">12</span>
+<span class="type">System</span>.out.println(total);</code></pre></div>
+<h4>B</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> quantity = <span class="num">0</span>;
+<span class="kw">int</span> result = <span class="num">50</span> / quantity;
+<span class="type">System</span>.out.println(result);</code></pre></div>
+<h4>C</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">double</span> side = <span class="num">6.0</span>;
+<span class="kw">double</span> squareArea = side + side;
+<span class="type">System</span>.out.println(squareArea);</code></pre></div>
+<h4>D</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> count = <span class="num">5</span>;
+<span class="type">System</span>.out.println(<span class="type">Count</span>);</code></pre></div>
+<h4>E</h4>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> seats = <span class="str">&quot;40&quot;</span>;</code></pre></div>
+<p>For the logic-error example, state why the compiler cannot know the programmer's intended calculation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28: Bytecode Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">command line</span><span class="badge topic-badge">JDK</span><span class="badge topic-badge">compiler</span><span class="badge topic-badge">bytecode</span><span class="badge topic-badge">JVM</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28: Bytecode Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a small Java program named <code>ExecutionDemo</code>.</p>
+<p>Perform the following steps from a command line or terminal:</p>
+<ol><li>verify that the <code>.java</code> source file exists;</li><li>compile it using <code>javac</code>;</li><li>identify the new file produced;</li><li>run the program using <code>java</code>;</li><li>deliberately introduce a syntax error and try compiling again;</li><li>restore the program and compile successfully.</li></ol>
+<p>Write a short report explaining:</p>
+<ul><li>which file contains source code;</li><li>which file contains bytecode;</li><li>when the JVM becomes involved;</li><li>whether a <code>.class</code> file is ordinary Java source code;</li><li>what changes when compilation fails.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29: Precision Surprise</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">floating-point approximation</span><span class="badge topic-badge">double</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29: Precision Surprise as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a Java program containing several decimal arithmetic expressions involving values such as <code>0.1</code>, <code>0.2</code>, and other simple decimal fractions.</p>
+<p>Before execution, predict which results you expect to display as exact-looking decimal values.</p>
+<p>Run the program and identify at least one result that reveals floating-point approximation.</p>
+<p>Write a short explanation addressing:</p>
+<ul><li>why a <code>double</code> may not represent every decimal fraction exactly;</li><li>why this is different from integer division;</li><li>why the result is not evidence that Java “forgot” arithmetic.</li></ul>
+<p>Do not use <code>BigDecimal</code>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30: Repair a Poorly Written Program</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">readability</span><span class="badge topic-badge">indentation</span><span class="badge topic-badge">identifiers</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30: Repair a Poorly Written Program as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Rewrite this program into clean, readable Java:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">import</span> java.util.<span class="type">Scanner</span>;
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">X</span>{
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="type">String</span>[]args){
+<span class="type">Scanner</span> q=<span class="kw">new</span> <span class="type">Scanner</span>(<span class="type">System</span>.in);
+<span class="type">System</span>.out.print(<span class="str">&quot;enter units &quot;</span>);
+<span class="kw">double</span> a=q.nextDouble();
+<span class="kw">double</span> b=a*<span class="num">2.75</span>;
+<span class="type">System</span>.out.println(<span class="str">&quot;result&quot;</span>+b);
+}}</code></pre></div>
+<p>Requirements:</p>
+<ul><li>rename the class appropriately;</li><li>use a descriptive <code>Scanner</code> variable;</li><li>replace <code>2.75</code> with a named constant whose meaning you invent and document;</li><li>use descriptive variable names;</li><li>improve spacing and indentation;</li><li>improve the prompt and output;</li><li>add one useful comment;</li><li>explain what computational problem your revised program represents.</li></ul>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31: Utility Consumption Report</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">IPO model</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">arithmetic</span><span class="badge topic-badge">casts</span><span class="badge topic-badge">input</span><span class="badge topic-badge">output</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31: Utility Consumption Report as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design a program that reads:</p>
+<ul><li>previous meter reading;</li><li>current meter reading;</li><li>price per unit.</li></ul>
+<p>Calculate:</p>
+<ul><li>units consumed;</li><li>exact cost as a <code>double</code>;</li><li>whole-dollar portion of the cost using a cast;</li><li>discarded fractional-dollar portion.</li></ul>
+<p>Before writing Java:</p>
+<ol><li>decompose the problem;</li><li>identify which values represent state supplied by the user and which are derived;</li><li>state where information loss occurs.</li></ol>
+<p>After implementation, explain why the cast should not be mistaken for monetary rounding.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32: Packaging Factory</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">integer division</span><span class="badge topic-badge">remainder</span><span class="badge topic-badge">decomposition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32: Packaging Factory as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A factory packs individual components into cartons containing a fixed number of components.</p>
+<p>The program receives:</p>
+<ul><li>total number of components produced;</li><li>components per carton.</li></ul>
+<p>Calculate:</p>
+<ul><li>complete cartons;</li><li>leftover components;</li><li>number of components contained in all complete cartons.</li></ul>
+<p>Use arithmetic only—no decisions or loops.</p>
+<p>Then prove using the program's variables that:</p>
+<div class="math-block"><math display="block" aria-label="\text{totalComponents} = (\text{completeCartons} \times \text{componentsPerCarton}) + \text{leftovers}"><mrow><mtext>totalComponents</mtext><mo>=</mo><mo>(</mo><mtext>completeCartons</mtext><mo>×</mo><mtext>componentsPerCarton</mtext><mo>)</mo><mo>+</mo><mtext>leftovers</mtext></mrow></math></div>
+<p>Display both sides of the equality as calculated values.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33: Recipe Scaling Model</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">computational thinking</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">pattern recognition</span><span class="badge topic-badge">expressions</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33: Recipe Scaling Model as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A recipe uses four ingredient quantities for one batch.</p>
+<p>Your task has two parts.</p>
+<h4>Part A — Design</h4>
+<p>Explain:</p>
+<ul><li>what information matters computationally;</li><li>what realistic recipe information can be abstracted away;</li><li>the repeated pattern shared by the four calculations;</li><li>the algorithm for scaling the recipe.</li></ul>
+<h4>Part B — Implementation</h4>
+<p>Write a Java program that:</p>
+<ul><li>stores the four per-batch ingredient amounts as constants;</li><li>reads the desired number of batches;</li><li>calculates all four scaled quantities;</li><li>prints a readable ingredient report.</li></ul>
+<p>Do not use arrays, loops, methods, or conditionals.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34: Predict, Execute, Explain</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">tracing</span><span class="badge topic-badge">evaluation order</span><span class="badge topic-badge">assignment</span><span class="badge topic-badge">integer division</span><span class="badge topic-badge">remainder</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34: Predict, Execute, Explain as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Analyze this code without executing it:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span> p = <span class="num">17</span>;
+<span class="kw">int</span> q = <span class="num">5</span>;
+<span class="kw">double</span> r = <span class="num">2.0</span>;
+
+p = p / q;
+q = q + p;
+r = q / p;
+p = q % p;
+r = r + p / <span class="num">2</span>;</code></pre></div>
+<p>Produce:</p>
+<ol><li>a statement-by-statement trace table;</li><li>the exact final values and types;</li><li>an explanation of every division;</li><li>an explanation of where an apparently surprising value may occur;</li><li>a revised version that changes only numeric types or casts so that the division assigned to <code>r</code> preserves a fractional result.</li></ol>
+<p>Run both versions afterward and compare.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35: Compiler Error Cascade</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">compile-time errors</span><span class="badge topic-badge">systematic debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35: Compiler Error Cascade as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Construct a small Java program containing at least four deliberate compile-time defects drawn from different categories, such as:</p>
+<ul><li>missing punctuation;</li><li>capitalization mismatch;</li><li>invalid identifier use;</li><li>incompatible types;</li><li>unpaired delimiter;</li><li>missing string quotation mark.</li></ul>
+<p>Compile the program and record the compiler messages.</p>
+<p>Then debug it systematically:</p>
+<ol><li>record the first reported problem;</li><li>change only one relevant defect;</li><li>compile again;</li><li>repeat until successful.</li></ol>
+<p>Write a short reflection explaining why several compiler messages can sometimes originate from one earlier mistake.</p>
+<p>Your final submission must include both the intentionally broken and corrected versions.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36: Input Bug Case Study</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">runtime behavior</span><span class="badge topic-badge">debugging strategy</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36: Input Bug Case Study as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a program that reads, in this exact order:</p>
+<ol><li>employee number using <code>nextInt()</code>;</li><li>hourly rate using <code>nextDouble()</code>;</li><li>employee full name using <code>nextLine()</code>;</li><li>department description using <code>nextLine()</code>.</li></ol>
+<p>First implement the program <strong>without</strong> correcting the newline issue.</p>
+<p>Before running it:</p>
+<ul><li>predict the interaction;</li><li>identify where you expect incorrect behavior.</li></ul>
+<p>Run it and record what happens.</p>
+<p>Then systematically diagnose and correct the problem.</p>
+<p>Submit:</p>
+<ul><li>original program;</li><li>prediction;</li><li>observed behavior;</li><li>hypothesis;</li><li>corrected program;</li><li>explanation of why the correction works.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37: Formula Translation Audit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">expressions</span><span class="badge topic-badge">precedence</span><span class="badge topic-badge">integer versus floating-point evaluation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37: Formula Translation Audit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A program needs to calculate:</p>
+<div class="math-block"><math display="block" aria-label="R = \frac{3(a+b)}{2(c-d)}"><mrow><mi>R</mi><mo>=</mo><mfrac><mrow><mn>3</mn><mo>(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo>)</mo></mrow><mrow><mn>2</mn><mo>(</mo><mi>c</mi><mo>-</mo><mi>d</mi><mo>)</mo></mrow></mfrac></mrow></math></div>
+<p>Write three Java implementations:</p>
+<ol><li>a correct implementation using <code>double</code> arithmetic;</li><li>an implementation that has incorrect grouping;</li><li>an implementation whose grouping is correct but that accidentally performs integer division somewhere significant.</li></ol>
+<p>Choose input values that make the differences easy to observe.</p>
+<p>For each version:</p>
+<ul><li>trace expression evaluation;</li><li>predict the value;</li><li>execute it;</li><li>explain the discrepancy.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38: Code Review — Human Readability</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">style</span><span class="badge topic-badge">comments</span><span class="badge topic-badge">identifiers</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">program structure</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38: Code Review — Human Readability as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a deliberately difficult-to-read but compilable Java program of approximately 15–20 statements.</p>
+<p>It must include:</p>
+<ul><li>inconsistent spacing;</li><li>meaningless variable names;</li><li>a magic number used multiple times;</li><li>poor output labels;</li><li>at least two useless comments;</li><li>no helpful explanation of the calculation.</li></ul>
+<p>Then produce a professionally cleaned-up version.</p>
+<p>Write a code-review report identifying at least eight improvements and categorize them as:</p>
+<ul><li>naming;</li><li>formatting;</li><li>constants;</li><li>comments;</li><li>output clarity;</li><li>computational clarity.</li></ul>
+<p>The cleaned program must compute exactly the same results as the original.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39: Resource Allocation Calculator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">arithmetic</span><span class="badge topic-badge">types</span><span class="badge topic-badge">casts</span><span class="badge topic-badge">%</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">program decomposition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39: Resource Allocation Calculator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A computing lab purchases a whole number of memory modules. Each machine requires a fixed number of modules.</p>
+<p>Write a program that reads:</p>
+<ul><li>total modules available;</li><li>modules required per machine;</li><li>cost per module.</li></ul>
+<p>Calculate:</p>
+<ul><li>number of fully equipped machines;</li><li>modules left unused;</li><li>total cost of all modules;</li><li>cost of the modules actually installed;</li><li>percentage of modules that are used.</li></ul>
+<p>Use integer arithmetic where appropriate and floating-point arithmetic where necessary.</p>
+<p>Before implementation, justify the type chosen for every variable.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40: Debugging a Multi-Defect Program</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">compile-time</span><span class="badge topic-badge">runtime and logic errors</span><span class="badge topic-badge">systematic debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40: Debugging a Multi-Defect Program as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create one small Java program that intentionally contains defects representing all three major Week 1 error categories.</p>
+<p>The intended computation should be something original, such as calculating a simple equipment rental charge.</p>
+<p>Your debugging report must show this sequence:</p>
+<ol><li>initial code;</li><li>compile-time defect and correction;</li><li>runtime defect and correction;</li><li>remaining logic defect;</li><li>method used to discover the logic defect;</li><li>final correct version.</li></ol>
+<p>For every defect, explain why it belongs to its error category.</p>
+<p>Do not fix several defects simultaneously.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41: From Ambiguous Request to Precise Algorithm</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">computational thinking</span><span class="badge topic-badge">decomposition</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">algorithm design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41: From Ambiguous Request to Precise Algorithm as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider this vague request:</p>
+<blockquote><p>“Create a program that tells a traveler how much a trip will cost.”</p></blockquote>
+<p>You may not use decisions, loops, methods, or objects beyond the basic Week 1 program structure.</p>
+<p>Transform the vague request into a precise Week 1-sized computational problem.</p>
+<p>Your submission must contain:</p>
+<ol><li>the assumptions you chose;</li><li>information you deliberately excluded through abstraction;</li><li>at least four required inputs;</li><li>at least three calculated intermediate values;</li><li>one final result;</li><li>a precise plain-English algorithm;</li><li>an IPO diagram;</li><li>a complete Java implementation.</li></ol>
+<p>Finally, explain why your implementation is a <strong>program</strong>, while your plain-English procedure is an <strong>algorithm</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42: Expression Semantics Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">types</span><span class="badge topic-badge">evaluation order</span><span class="badge topic-badge">concatenation</span><span class="badge topic-badge">precedence</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42: Expression Semantics Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Without initially running Java, analyze the following expressions:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="str">&quot;Answer: &quot;</span> + <span class="num">4</span> + <span class="num">6</span> * <span class="num">2</span>
+<span class="str">&quot;Answer: &quot;</span> + (<span class="num">4</span> + <span class="num">6</span>) * <span class="num">2</span>
+<span class="str">&quot;Answer: &quot;</span> + ((<span class="num">4</span> + <span class="num">6</span>) * <span class="num">2</span>)
+<span class="num">3</span> + <span class="num">4</span> + <span class="str">&quot;5&quot;</span>
+<span class="str">&quot;5&quot;</span> + <span class="num">3</span> * <span class="num">4</span>
+<span class="num">20</span> / <span class="num">6</span> + <span class="num">0.5</span>
+(<span class="kw">double</span>) (<span class="num">20</span> / <span class="num">6</span>)
+<span class="num">20</span> / (<span class="kw">double</span>) <span class="num">6</span></code></pre></div>
+<p>For each expression:</p>
+<ol><li>determine whether it compiles;</li><li>if it compiles, determine its type;</li><li>predict its exact or approximate value;</li><li>show the evaluation sequence;</li><li>explain the effect of strings, parentheses, casts, or operand types.</li></ol>
+<p>Then write a Java program that tests the valid expressions and reconcile every prediction with the actual result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43: Build a State-Transformation Challenge</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">program state</span><span class="badge topic-badge">assignment</span><span class="badge topic-badge">trace tables</span><span class="badge topic-badge">arithmetic</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43: Build a State-Transformation Challenge as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design your own Java fragment containing:</p>
+<ul><li>exactly four integer variables;</li><li>at least eight assignments after initialization;</li><li>addition;</li><li>subtraction;</li><li>multiplication;</li><li>integer division;</li><li>remainder;</li><li>at least one assignment whose result depends on a value changed by the immediately preceding statement.</li></ul>
+<p>The code must execute without error for your chosen initial values.</p>
+<p>Before executing:</p>
+<ol><li>create a complete trace table;</li><li>predict the final state.</li></ol>
+<p>Then ask another student to trace the code independently.</p>
+<p>Compare the two traces and explain any disagreement by referring to sequential execution and program state.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44: Numerical Representation Report</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">int</span><span class="badge topic-badge">double</span><span class="badge topic-badge">integer division</span><span class="badge topic-badge">casting</span><span class="badge topic-badge">floating-point approximation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44: Numerical Representation Report as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a Java investigation demonstrating <strong>four different forms of numerical information loss or surprise</strong>:</p>
+<ol><li>integer division discarding a fractional result;</li><li>casting a <code>double</code> to <code>int</code>;</li><li>storing an integer-division result in a <code>double</code>;</li><li>binary floating-point approximation.</li></ol>
+<p>For each case:</p>
+<ul><li>write a minimal Java example;</li><li>predict the result;</li><li>execute it;</li><li>explain exactly what caused the behavior;</li><li>provide a corrected or alternative form where appropriate.</li></ul>
+<p>Finish with a paragraph explaining why all four phenomena should not simply be described as “Java rounding errors.”</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45: Development Pipeline Failure Analysis</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">source code</span><span class="badge topic-badge">compilation</span><span class="badge topic-badge">bytecode</span><span class="badge topic-badge">JVM</span><span class="badge topic-badge">runtime errors</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45: Development Pipeline Failure Analysis as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a small Java application and investigate three stages of its life cycle.</p>
+<h4>Stage 1 — Successful build</h4>
+<p>Compile and run the correct program.</p>
+<p>Record:</p>
+<ul><li>source filename;</li><li>compiler command;</li><li>bytecode filename;</li><li>execution command;</li><li>output.</li></ul>
+<h4>Stage 2 — Compilation failure</h4>
+<p>Introduce a source-code defect that prevents compilation.</p>
+<p>Explain which stage of the source → bytecode → execution pipeline is blocked.</p>
+<h4>Stage 3 — Runtime failure</h4>
+<p>Repair compilation, but introduce an operation that compiles successfully and fails while executing.</p>
+<p>Explain why the compiler was still able to generate bytecode.</p>
+<p>Conclude by comparing the responsibilities of the compiler and JVM.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46: Scanner Interaction Forensics</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">Scanner</span><span class="badge topic-badge">input tokens</span><span class="badge topic-badge">lines</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46: Scanner Interaction Forensics as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write a program that asks the user for:</p>
+<ol><li>an integer record number;</li><li>a decimal measurement;</li><li>a full street address;</li><li>a multi-word description.</li></ol>
+<p>Use <code>nextInt()</code>, <code>nextDouble()</code>, and <code>nextLine()</code>.</p>
+<p>Your assignment is not merely to make the program work.</p>
+<p>Document the input stream conceptually after each read. Explain:</p>
+<ul><li>which characters or tokens have been consumed;</li><li>what remains after the numeric reads;</li><li>why <code>nextLine()</code> behaves differently;</li><li>exactly where the newline-cleanup call must occur.</li></ul>
+<p>Include a broken version and corrected version and explain both.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47: Magic-Number Elimination Project</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">constants</span><span class="badge topic-badge">abstraction</span><span class="badge topic-badge">naming</span><span class="badge topic-badge">maintainability</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47: Magic-Number Elimination Project as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create an original calculation program containing at least five meaningful fixed quantities—for example, conversion factors, standard charges, fixed capacities, or fixed rates.</p>
+<p>First write a version that embeds all five values directly as numeric literals.</p>
+<p>Then refactor it so that every meaningful fixed quantity is represented by a clearly named <code>final</code> constant.</p>
+<p>Requirements:</p>
+<ul><li>at least four user inputs;</li><li>at least five constants;</li><li>at least five derived values;</li><li>a final summary report.</li></ul>
+<p>Write an analysis explaining how the constants improve:</p>
+<ul><li>readability;</li><li>meaning;</li><li>maintainability;</li><li>resistance to accidental reassignment.</li></ul>
+<p>Do not reuse tax, restaurant bill, circle, temperature, distance-conversion, or grade examples from the notes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48: Independent Debugging Investigation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">debugging process</span><span class="badge topic-badge">prediction</span><span class="badge topic-badge">tracing</span><span class="badge topic-badge">error diagnosis</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48: Independent Debugging Investigation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write an original Java program of at least 20 executable statements using only Week 1 constructs.</p>
+<p>Ask another person—or deliberately modify the program yourself—to introduce three defects without documenting their exact locations:</p>
+<ul><li>one compile-time defect;</li><li>one arithmetic or input-related runtime defect;</li><li>one logic defect.</li></ul>
+<p>Debug the program using the following process:</p>
+<ol><li>identify the current error category;</li><li>inspect the first relevant diagnostic;</li><li>predict intended behavior;</li><li>trace important variables;</li><li>reduce the problem if necessary;</li><li>state a hypothesis;</li><li>test only the hypothesis;</li><li>repeat.</li></ol>
+<p>Submit a debugging journal showing the evidence that led to every correction.</p>
+<p>The quality of the debugging reasoning matters as much as the final program.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49: Week 1 Systems Model</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">integrated Week 1 concepts</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49: Week 1 Systems Model as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create a detailed conceptual model of what happens when a user runs an interactive Java program.</p>
+<p>Your model must connect all of the following ideas:</p>
+<ul><li>problem;</li><li>abstraction;</li><li>decomposition;</li><li>algorithm;</li><li>Java source code;</li><li>class;</li><li><code>main</code>;</li><li>statements;</li><li>compiler;</li><li>bytecode;</li><li>JVM;</li><li>program execution;</li><li><code>Scanner</code>;</li><li>variables;</li><li>types;</li><li>expressions;</li><li>assignment;</li><li>program state;</li><li>console output;</li><li>errors;</li><li>debugging.</li></ul>
+<p>Represent the model as a diagram or structured flow followed by a written explanation.</p>
+<p>Then create a small original Java program and annotate at least ten parts of the program or its execution with references back to your model.</p>
+<p>The goal is to show how Week 1's concepts fit together rather than treating them as isolated vocabulary.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50: Week 1 Mini-Capstone — Personal Resource Calculator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">integrated programming</span><span class="badge topic-badge">computational thinking</span><span class="badge topic-badge">Java basics</span><span class="badge topic-badge">tracing</span><span class="badge topic-badge">debugging</span><span class="badge topic-badge">style</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50: Week 1 Mini-Capstone — Personal Resource Calculator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design an original resource calculator for a context of your choice, such as:</p>
+<ul><li>energy usage;</li><li>printing supplies;</li><li>classroom materials;</li><li>computing resources;</li><li>manufacturing materials;</li><li>travel supplies;</li><li>event resources.</li></ul>
+<p>Do <strong>not</strong> reproduce any calculator already used in the Week 1 lecture notes.</p>
+<p>Your program must include:</p>
+<ul><li>at least four user inputs;</li><li>at least one <code>int</code>;</li><li>at least two <code>double</code> variables;</li><li>at least one <code>String</code>;</li><li>at least three named <code>final</code> constants;</li><li>addition;</li><li>subtraction;</li><li>multiplication;</li><li>division;</li><li><code>%</code>;</li><li>at least one explicit cast;</li><li>string concatenation;</li><li>both <code>print</code> and <code>println</code>;</li><li><code>Scanner</code>;</li><li>at least six derived values;</li><li>readable names and indentation;</li><li>at least two useful comments.</li></ul>
+<h4>Design submission</h4>
+<p>Before writing code, provide:</p>
+<ol><li>problem statement;</li><li>abstraction decisions;</li><li>decomposition;</li><li>inputs;</li><li>outputs;</li><li>algorithm;</li><li>expected behavior for one test case.</li></ol>
+<h4>Program-state submission</h4>
+<p>Select at least six important statements and create a trace table showing how the relevant variables change.</p>
+<h4>Testing submission</h4>
+<p>Use at least three different sets of input.</p>
+<p>For each test:</p>
+<ol><li>predict the important result before executing;</li><li>record the actual result;</li><li>explain any difference.</li></ol>
+<h4>Debugging submission</h4>
+<p>Introduce one deliberate defect after the correct version works.</p>
+<p>Identify whether it causes:</p>
+<ul><li>a compile-time error;</li><li>a runtime error; or</li><li>a logic error.</li></ul>
+<p>Use a systematic debugging process to locate and correct it.</p>
+<h4>Reflection</h4>
+<p>In approximately 200–300 words, explain how the final program demonstrates the Week 1 progression:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>problem
+→ computational thinking
+→ algorithm
+→ source code
+→ compilation
+→ execution
+→ changing program state
+→ output
+→ evaluation of correctness</code></pre></div>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><span></span><a href="week-02.html">Week 2 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>

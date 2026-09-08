@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assignments.css">
+  <title>CSC500 - Practice Assignments - Week 10</title>
+</head>
+<body>
+  <div class="page">
+    <article>
+      <p class="breadcrumb"><a href="index.html">Assignment index</a></p>
+      <h1>CSC 500 — Practice Assignments</h1>
+      <h2>Week 10: Recursion and Algorithmic Thinking</h2>
+      <div class="intro">
+<p><strong>Total assignments:</strong> 50<br>
+<strong>Difficulty scale:</strong> 1–5<br>
+<strong>Assignments per difficulty:</strong> 10</p>
+<p>Unless an assignment explicitly asks for iteration, methods whose purpose is to practice recursion should not use loops.</p>
+<p>For implementation assignments, students should be prepared to state:</p>
+<ul><li>the meaning of one invocation;</li><li>the base case(s);</li><li>the recursive case;</li><li>how the problem becomes smaller;</li><li>why the recursion terminates.</li></ul>
+<hr>
+      </div>
+      <div class="accordion-tools" aria-label="Accordion controls">
+        <button type="button" data-accordion-action="expand">Expand all assignments</button>
+        <button type="button" data-accordion-action="collapse">Collapse all assignments</button>
+      </div>
+<section class="difficulty-group" aria-labelledby="difficulty-1">
+  <h2 class="difficulty-heading" id="difficulty-1"><span>Difficulty 1 — Foundations</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-1" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 1 — Identify the Recursive Anatomy</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">base case</span><span class="badge topic-badge">recursive case</span><span class="badge topic-badge">progress</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 1 — Identify the Recursive Anatomy as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> steps(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">2</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">1</span> + steps(n - <span class="num">2</span>);
+}</code></pre></div>
+<p>Without running the code:</p>
+<ol><li>Identify the base case.</li><li>Identify the recursive case.</li><li>Identify the recursive call.</li><li>State what changes between calls.</li><li>Explain why the method terminates for every positive integer.</li><li>Determine the value of <code>steps(8)</code>.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-2" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 2 — Call-Stack Snapshot</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">stack frames</span><span class="badge topic-badge">local variables</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 2 — Call-Stack Snapshot as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> addFour(<span class="kw">int</span> n) {
+    <span class="kw">int</span> value = n + <span class="num">4</span>;
+
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span> value;
+    }
+
+    <span class="kw">return</span> value + addFour(n - <span class="num">2</span>);
+}</code></pre></div>
+<p>For the call:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>addFour(<span class="num">6</span>)</code></pre></div>
+<p>draw the call stack at the moment the base case is first reached.</p>
+<p>For every active frame, show:</p>
+<ul><li>the value of <code>n</code>;</li><li>the value of <code>value</code>;</li><li>what the invocation is waiting for.</li></ul>
+<p>Then determine the final returned value.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-3" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 3 — Descending or Unwinding?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">descending phase</span><span class="badge topic-badge">unwinding phase</span><span class="badge topic-badge">output tracing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 3 — Descending or Unwinding? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> markers(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="type">System</span>.out.print(<span class="str">&quot;X &quot;</span>);
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.print(<span class="str">&quot;D&quot;</span> + n + <span class="str">&quot; &quot;</span>);
+    markers(n - <span class="num">2</span>);
+    <span class="type">System</span>.out.print(<span class="str">&quot;U&quot;</span> + n + <span class="str">&quot; &quot;</span>);
+}</code></pre></div>
+<p>Trace:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>markers(<span class="num">6</span>);</code></pre></div>
+<p>Write the exact output and label every printed item as occurring during either:</p>
+<ul><li>descending;</li><li>the base case; or</li><li>unwinding.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-4" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 4 — What Does This Method Mean?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">method meaning</span><span class="badge topic-badge">recursive leap of faith</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 4 — What Does This Method Mean? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mystery(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">1</span> + mystery(n / <span class="num">10</span>);
+}</code></pre></div>
+<p>Assume <code>n</code> is nonnegative.</p>
+<ol><li>Calculate <code>mystery(80426)</code>.</li><li>Describe precisely what <code>mystery(n)</code> computes.</li><li>State what you assume <code>mystery(n / 10)</code> computes when applying the recursive leap of faith.</li><li>Explain how adding <code>1</code> turns the smaller answer into the current answer.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-5" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 5 — Repair the Progress Rule</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">debugging recursion</span><span class="badge topic-badge">unreachable base case</span><span class="badge topic-badge">progress</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 5 — Repair the Progress Rule as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>The following method is intended to print positive odd integers beginning at <code>n</code> and moving downward:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> printOdds(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="type">System</span>.out.println(n);
+    printOdds(n + <span class="num">2</span>);
+}</code></pre></div>
+<p>Assume <code>n</code> is positive and odd.</p>
+<ol><li>Explain exactly why the method fails.</li><li>Correct only the recursive call.</li><li>For <code>printOdds(9)</code>, list the parameter value in every invocation.</li><li>Explain why the corrected version must terminate.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-6" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 6 — Recursive Product Trace</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">recursive return values</span><span class="badge topic-badge">tracing</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 6 — Recursive Product Trace as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> productByTwo(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">2</span> * productByTwo(n - <span class="num">2</span>);
+}</code></pre></div>
+<p>Trace <code>productByTwo(7)</code> using a two-phase trace:</p>
+<p><strong>Descending:</strong> show every invocation.</p>
+<p><strong>Unwinding:</strong> show the value returned by every invocation.</p>
+<p>Finally, give the method's returned value.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-7" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 7 — Separate Local Variables</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">stack frames</span><span class="badge topic-badge">local variables</span><span class="badge topic-badge">unwinding</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 7 — Separate Local Variables as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> labels(<span class="kw">int</span> n) {
+    <span class="type">String</span> label = <span class="str">&quot;[&quot;</span> + n + <span class="str">&quot;]&quot;</span>;
+
+    <span class="kw">if</span> (n &gt; <span class="num">1</span>) {
+        labels(n - <span class="num">2</span>);
+    }
+
+    <span class="type">System</span>.out.print(label);
+}</code></pre></div>
+<p>For:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>labels(<span class="num">7</span>);</code></pre></div>
+<ol><li>List every invocation.</li><li>Give the value of <code>label</code> stored in each stack frame.</li><li>Predict the exact output.</li><li>Explain why the recursive calls do not overwrite one another's <code>label</code> variables.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-8" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 8 — Choose the Base Case</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">recursive design</span><span class="badge topic-badge">base cases</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 8 — Choose the Base Case as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>You want to write:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countDownByThree(<span class="kw">int</span> n)</code></pre></div>
+<p>that returns how many positive values appear in the sequence:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>n, n - 3, n - 6, ...</code></pre></div>
+<p>before the sequence becomes zero or negative.</p>
+<p>For example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>countDownByThree(10) → 4</code></pre></div>
+<p>because the positive values are <code>10, 7, 4, 1</code>.</p>
+<p>Do not write the complete Java method yet.</p>
+<p>Instead specify:</p>
+<ol><li>the exact meaning of one invocation;</li><li>the base-case condition;</li><li>the base-case answer;</li><li>the smaller recursive problem;</li><li>how the smaller answer is combined with the current step.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-9" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 9 — Direct or Indirect Recursion?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">direct recursion</span><span class="badge topic-badge">indirect recursion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 9 — Direct or Indirect Recursion? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Study:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> alpha(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    beta(n - <span class="num">1</span>);
+}
+
+<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> beta(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) {
+        <span class="kw">return</span>;
+    }
+
+    alpha(n - <span class="num">2</span>);
+}</code></pre></div>
+<p>Answer:</p>
+<ol><li>Is <code>alpha</code> directly recursive?</li><li>Is <code>beta</code> directly recursive?</li><li>Is the overall program recursive?</li><li>Draw the sequence of calls beginning with <code>alpha(7)</code>.</li><li>Explain what guarantees termination.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-10" data-difficulty="1">
+  <summary>
+    <span class="assignment-title">Assignment 10 — Recursion or Iteration?</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 1/5</span><span class="badge topic-badge">recursion versus iteration</span><span class="badge topic-badge">algorithmic thinking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 10 — Recursion or Iteration? as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each problem below, choose <strong>recursion</strong>, <strong>iteration</strong>, or <strong>either</strong> as the more natural introductory solution:</p>
+<ul><li>printing 500 identical separators;</li><li>processing a structure made of smaller structures of the same kind;</li><li>repeatedly dividing a sorted search interval in half;</li><li>reading 10 temperatures from the keyboard;</li><li>performing work that must happen in reverse order after nested calls finish.</li></ul>
+<p>For every choice, provide a two- or three-sentence justification involving the structure of the problem rather than merely saying that one approach is &quot;easier.&quot;</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-2">
+  <h2 class="difficulty-heading" id="difficulty-2"><span>Difficulty 2 — Developing Recursive Solutions</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-11" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 11 — Product of Array Elements</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">index parameters</span><span class="badge topic-badge">helper methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 11 — Product of Array Elements as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">long</span> product(<span class="kw">int</span>[] values)</code></pre></div>
+<p>recursively.</p>
+<p>Requirements:</p>
+<ul><li>use a private helper carrying an <code>index</code>;</li><li>do not create smaller arrays;</li><li>an empty array must return <code>1</code>;</li><li>do not use loops or static accumulator variables.</li></ul>
+<p>Before the implementation, write one sentence precisely defining what the helper invocation means.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-12" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 12 — Count Positive Digits</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">digit recursion</span><span class="badge topic-badge">integer division</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 12 — Count Positive Digits as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countDigit(<span class="kw">int</span> n, <span class="kw">int</span> target)</code></pre></div>
+<p>where <code>n &gt;= 0</code> and <code>target</code> is between <code>0</code> and <code>9</code>.</p>
+<p>The method returns how many times <code>target</code> occurs in the decimal representation of <code>n</code>.</p>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>countDigit(707040, 7) → 2
+countDigit(11111, 1)  → 5</code></pre></div>
+<p>Treat the integer <code>0</code> as containing one digit, <code>0</code>.</p>
+<p>Use <code>% 10</code> and <code>/ 10</code> to make the problem smaller.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-13" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 13 — Replace a Character Recursively</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">recursive decomposition</span><span class="badge topic-badge">unwinding</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 13 — Replace a Character Recursively as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> replaceChar(
+        <span class="type">String</span> text,
+        <span class="kw">char</span> oldChar,
+        <span class="kw">char</span> newChar)</code></pre></div>
+<p>recursively.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>replaceChar(&quot;pepper&quot;, 'p', 'x')
+→ &quot;xexxer&quot;</code></pre></div>
+<p>Requirements:</p>
+<ul><li>no loops;</li><li>no <code>String.replace</code>;</li><li>preserve character order;</li><li>handle the empty string.</li></ul>
+<p>Explain whether most of the resulting string is constructed during descending or unwinding.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-14" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 14 — Last Array Element Matching a Condition</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">return values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 14 — Last Array Element Matching a Condition as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> lastNegativeIndex(<span class="kw">int</span>[] values)</code></pre></div>
+<p>that returns the index of the final negative element, or <code>-1</code> if no negative value exists.</p>
+<p>Use recursion and a private helper.</p>
+<p>Do not scan the array backward with a loop.</p>
+<p>Design your recursion so that the returned value from the smaller problem matters to the current invocation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-15" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 15 — Recursive Range Sum</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">logical subproblems</span><span class="badge topic-badge">boundaries</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 15 — Recursive Range Sum as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> rangeSum(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> start,
+        <span class="kw">int</span> end)</code></pre></div>
+<p>where <code>start</code> and <code>end</code> are inclusive valid indexes and <code>start &lt;= end</code>.</p>
+<p>The method returns the sum of only that interval.</p>
+<p>For:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">int</span>[] data = {<span class="num">9</span>, <span class="num">2</span>, <span class="num">7</span>, <span class="num">4</span>, <span class="num">6</span>, <span class="num">1</span>};</code></pre></div>
+<p>the call:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>rangeSum(data, <span class="num">1</span>, <span class="num">4</span>)</code></pre></div>
+<p>returns <code>19</code>.</p>
+<p>Your explanation must identify which parameter represents progress toward the base case.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-16" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 16 — Recursive Vowel Counter</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">helper parameters</span><span class="badge topic-badge">recursive return values</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 16 — Recursive Vowel Counter as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countVowels(<span class="type">String</span> text)</code></pre></div>
+<p>recursively.</p>
+<p>Count the letters <code>a</code>, <code>e</code>, <code>i</code>, <code>o</code>, and <code>u</code>, ignoring case.</p>
+<p>Requirements:</p>
+<ul><li>public method has only the <code>String</code> parameter;</li><li>private helper may carry recursive state;</li><li>no loops;</li><li>do not create a new substring on every recursive call.</li></ul>
+<p>Include tests for empty, one-character, vowel-free, and mixed-case strings.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-17" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 17 — Debug the Lost Result</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">ignored recursive return values</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 17 — Debug the Lost Result as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A programmer wants to count negative elements:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> negativeCount(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> index) {
+
+    <span class="kw">if</span> (index == values.length) {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    negativeCount(values, index + <span class="num">1</span>);
+
+    <span class="kw">if</span> (values[index] &lt; <span class="num">0</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre></div>
+<p>Your task:</p>
+<ol><li>explain why the recursive result is being lost;</li><li>repair the method;</li><li>trace the corrected method on <code>{3, -2, 5, -8}</code>;</li><li>identify what each invocation receives from the invocation below it.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-18" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 18 — Every Other Character</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">string recursion</span><span class="badge topic-badge">problem reduction</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 18 — Every Other Character as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> alternateChars(<span class="type">String</span> text)</code></pre></div>
+<p>that returns characters at indexes <code>0, 2, 4, ...</code>.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>alternateChars(&quot;COMPUTER&quot;)
+→ &quot;CMUE&quot;</code></pre></div>
+<p>Requirements:</p>
+<ul><li>recursive implementation;</li><li>no loops;</li><li>handle strings of length 0 and 1 correctly.</li></ul>
+<p>Document how much smaller the input becomes on each recursive call.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-19" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 19 — Compare Two Implementations</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">recursion versus iteration</span><span class="badge topic-badge">stack space</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 19 — Compare Two Implementations as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write both recursive and iterative versions of:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countMultiplesOfFive(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Then compare them in approximately 150–250 words.</p>
+<p>Discuss:</p>
+<ul><li>where progress is stored in each implementation;</li><li>whether either version needs extra parameters;</li><li>call-stack usage;</li><li>readability;</li><li>which version you would choose for an extremely large array.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-20" data-difficulty="2">
+  <summary>
+    <span class="assignment-title">Assignment 20 — Termination Audit</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 2/5</span><span class="badge topic-badge">termination</span><span class="badge topic-badge">progress</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 20 — Termination Audit as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>For each recursive rule below, assume the base case is <code>n &lt;= 1</code>.</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>A. recurse(n - 4)
+B. recurse(n / 2)
+C. recurse(n + 3)
+D. recurse(n)
+E. recurse(n - 1)</code></pre></div>
+<p>Assume the initial <code>n</code> is a positive integer.</p>
+<p>For each rule:</p>
+<ol><li>state whether termination is guaranteed;</li><li>identify the changing quantity;</li><li>describe the sequence of values;</li><li>explain whether the sequence must reach the base case.</li></ol>
+<p>Then rank the terminating rules by how aggressively they reduce a large positive input.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-3">
+  <h2 class="difficulty-heading" id="difficulty-3"><span>Difficulty 3 — Intermediate Problem Solving</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-21" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 21 — Second-Largest Value</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">helper state</span><span class="badge topic-badge">recursive design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 21 — Second-Largest Value as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement a recursive method:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> secondLargest(<span class="kw">int</span>[] values)</code></pre></div>
+<p>Assume the array contains at least two <strong>distinct</strong> values.</p>
+<p>Requirements:</p>
+<ul><li>no sorting;</li><li>no loops;</li><li>do not create smaller arrays;</li><li>use a helper method to carry the recursive state you need.</li></ul>
+<p>Before coding, explicitly describe what information must be carried from one invocation to the next and why a single <code>index</code> is not necessarily sufficient for your chosen design.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-22" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 22 — Collapse Consecutive Duplicates</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">adjacent comparisons</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 22 — Collapse Consecutive Duplicates as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> collapseDuplicates(<span class="type">String</span> text)</code></pre></div>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;aaabbccccdaa&quot; → &quot;abcda&quot;
+&quot;bookkeeper&quot;   → &quot;bokeper&quot;
+&quot;&quot;             → &quot;&quot;</code></pre></div>
+<p>Only <strong>consecutive</strong> duplicate characters should be collapsed.</p>
+<p>Requirements:</p>
+<ul><li>recursion only;</li><li>no regular expressions;</li><li>no collection classes.</li></ul>
+<p>Explain the relationship between the current character and the smaller recursive result.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-23" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 23 — Recursive Greatest Common Divisor</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">integers</span><span class="badge topic-badge">dramatic problem reduction</span><span class="badge topic-badge">algorithmic thinking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 23 — Recursive Greatest Common Divisor as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement Euclid's recursive algorithm:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> gcd(<span class="kw">int</span> a, <span class="kw">int</span> b)</code></pre></div>
+<p>for nonnegative integers, not both zero.</p>
+<p>Use the rule:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>gcd(a, b) = gcd(b, a % b)</code></pre></div>
+<p>until the second value becomes zero.</p>
+<p>Then:</p>
+<ol><li>trace <code>gcd(252, 105)</code>;</li><li>identify the base case;</li><li>explain why the problem becomes smaller;</li><li>give an informal termination argument.</li></ol>
+  </div>
+</details>
+<details class="assignment" id="assignment-24" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 24 — Count Adjacent Increases</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">logical subproblem</span><span class="badge topic-badge">indexes</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 24 — Count Adjacent Increases as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countIncreases(<span class="kw">int</span>[] values)</code></pre></div>
+<p>The method counts adjacent pairs for which the next value is greater than the current value.</p>
+<p>For:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[4, 9, 3, 7, 8, 2]</code></pre></div>
+<p>the increasing pairs are:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>4→9
+3→7
+7→8</code></pre></div>
+<p>so the result is <code>3</code>.</p>
+<p>Use a private recursive helper and no loops.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-25" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 25 — Mirror-Pair Difference</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">shrinking both ends</span><span class="badge topic-badge">helper methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 25 — Mirror-Pair Difference as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> mirrorDifference(<span class="kw">int</span>[] values)</code></pre></div>
+<p>that computes the sum of the absolute differences between mirrored pairs.</p>
+<p>For:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[3, 8, 5, 2]</code></pre></div>
+<p>the result is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>|3 - 2| + |8 - 5| = 4</code></pre></div>
+<p>Use a helper with <code>left</code> and <code>right</code> indexes and recursively shrink both ends.</p>
+<p>Handle odd-length arrays correctly without double-counting the center.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-26" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 26 — Find the First Value Above a Threshold in Sorted Data</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">binary-search-style reduction</span><span class="badge topic-badge">sorted arrays</span><span class="badge topic-badge">searching</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 26 — Find the First Value Above a Threshold in Sorted Data as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given a sorted ascending integer array, implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> firstGreaterThan(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> threshold)</code></pre></div>
+<p>Return the index of the first value strictly greater than <code>threshold</code>, or <code>-1</code> if none exists.</p>
+<p>Requirements:</p>
+<ul><li>use recursive interval reduction;</li><li>do not perform ordinary left-to-right scanning;</li><li>use a private helper with boundaries;</li><li>handle duplicates correctly.</li></ul>
+<p>Explain why finding <em>any</em> value greater than the threshold is insufficient.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-27" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 27 — Recursive Decimal Digit Reversal</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">digits</span><span class="badge topic-badge">helper state</span><span class="badge topic-badge">recursion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 27 — Recursive Decimal Digit Reversal as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">long</span> reverseDigits(<span class="kw">int</span> n)</code></pre></div>
+<p>for nonnegative integers.</p>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>reverseDigits(3814) → 4183
+reverseDigits(900)  → 9</code></pre></div>
+<p>Do not convert the integer to a <code>String</code>.</p>
+<p>You may use a private recursive helper with an accumulator or positional information.</p>
+<p>Explain why the helper's extra state is useful.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-28" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 28 — Diagnose Five Recursive Bugs</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">common recursion errors</span><span class="badge topic-badge">debugging</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 28 — Diagnose Five Recursive Bugs as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Create five short recursive Java methods, each containing exactly one of these errors:</p>
+<ol><li>no base case;</li><li>unreachable base case;</li><li>unchanged recursive argument;</li><li>base-case check after the recursive call;</li><li>ignored recursive return value.</li></ol>
+<p>For each method:</p>
+<ul><li>identify the bug;</li><li>give an input that exposes it;</li><li>describe the resulting behavior;</li><li>repair the code;</li><li>explain why the repair works.</li></ul>
+<p>Your examples must be different from those appearing in the lecture notes.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-29" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 29 — Recursive Sorted Insertion Point</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">binary search</span><span class="badge topic-badge">problem representation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 29 — Recursive Sorted Insertion Point as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> insertionPoint(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target)</code></pre></div>
+<p>for an ascending sorted array.</p>
+<p>Return the index at which <code>target</code> could be inserted while keeping the array sorted.</p>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[2, 6, 10, 14], target 8  → 2
+[2, 6, 10, 14], target 20 → 4
+[2, 6, 10, 14], target 1  → 0</code></pre></div>
+<p>Use recursive binary-search-style interval reduction.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-30" data-difficulty="3">
+  <summary>
+    <span class="assignment-title">Assignment 30 — Correctness Argument</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 3/5</span><span class="badge topic-badge">recursive leap of faith</span><span class="badge topic-badge">correctness</span><span class="badge topic-badge">induction connection</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 30 — Correctness Argument as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider the problem:</p>
+<blockquote><p>Return the number of elements greater than <code>target</code> from position <code>index</code> through the end of an array.</p></blockquote>
+<p>Without writing Java first, construct a recursive design and then give an informal correctness argument containing:</p>
+<ol><li>a precise method meaning;</li><li>a correct base case;</li><li>the smaller recursive problem;</li><li>the assumption you make about the smaller call;</li><li>how the current invocation uses that answer;</li><li>a termination argument.</li></ol>
+<p>Only after the reasoning is complete should you provide the Java implementation.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-4">
+  <h2 class="difficulty-heading" id="difficulty-4"><span>Difficulty 4 — Advanced Recursive Design</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-31" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 31 — Recursive Run-Length Encoding</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">recursive state</span><span class="badge topic-badge">helper methods</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 31 — Recursive Run-Length Encoding as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="type">String</span> encodeRuns(<span class="type">String</span> text)</code></pre></div>
+<p>using a recursive helper.</p>
+<p>Examples:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;AAABBCCCCD&quot; → &quot;A3B2C4D1&quot;
+&quot;XYZ&quot;        → &quot;X1Y1Z1&quot;
+&quot;&quot;           → &quot;&quot;</code></pre></div>
+<p>Requirements:</p>
+<ul><li>no loops;</li><li>process runs recursively;</li><li>avoid global/static mutable state;</li><li>choose helper parameters that make the current run explicit.</li></ul>
+<p>Document the meaning of every helper parameter.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-32" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 32 — Search a Rotated Sorted Array</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">recursive searching</span><span class="badge topic-badge">interval reasoning</span><span class="badge topic-badge">binary-search adaptation</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 32 — Search a Rotated Sorted Array as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An ascending sorted array has been rotated once:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>[30, 40, 50, 5, 10, 20]</code></pre></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> rotatedSearch(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target)</code></pre></div>
+<p>using recursive interval reduction.</p>
+<p>Assume all values are distinct.</p>
+<p>At each invocation, determine which half is sorted and whether the target can lie in that half.</p>
+<p>Return the target index or <code>-1</code>.</p>
+<p>Include a written explanation of why each recursive call can safely discard part of the array.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-33" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 33 — Balanced Character Counts by Divide and Combine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">branching recursion</span><span class="badge topic-badge">divide and conquer</span><span class="badge topic-badge">strings</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 33 — Balanced Character Counts by Divide and Combine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> countLetters(<span class="type">String</span> text)</code></pre></div>
+<p>that counts alphabetic characters.</p>
+<p>Instead of processing one character at a time, recursively divide the interval approximately in half.</p>
+<p>Your helper should conceptually compute:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>number of letters between left and right</code></pre></div>
+<p>For a nontrivial interval:</p>
+<ol><li>split it into two smaller intervals;</li><li>recursively count each half;</li><li>combine their results.</li></ol>
+<p>Draw the recursion tree for an eight-character input and distinguish <strong>maximum recursion depth</strong> from <strong>total number of calls</strong>.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-34" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 34 — Fast Multiplication by Doubling</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">dramatic reduction</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">algorithm design</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 34 — Fast Multiplication by Doubling as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement multiplication of two nonnegative integers without using <code>*</code>:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">long</span> fastMultiply(<span class="kw">long</span> a, <span class="kw">long</span> b)</code></pre></div>
+<p>Design the recursion so that <code>b</code> is approximately halved at every call.</p>
+<p>Use the ideas:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>a × (2k)     = 2 × (a × k)
+a × (2k + 1) = a + 2 × (a × k)</code></pre></div>
+<p>Requirements:</p>
+<ul><li>no loops;</li><li>recursive depth should grow much more slowly than repeatedly subtracting one from <code>b</code>;</li><li>trace the method for one even and one odd multiplier.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-35" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 35 — Count Calls in Branching Recursion</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">branching recursion</span><span class="badge topic-badge">efficiency</span><span class="badge topic-badge">repeated work</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 35 — Count Calls in Branching Recursion as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Consider:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> branches(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> branches(n - <span class="num">1</span>)
+         + branches(n - <span class="num">3</span>);
+}</code></pre></div>
+<p>For <code>branches(6)</code>:</p>
+<ol><li>draw the complete call tree;</li><li>count total method invocations;</li><li>determine maximum recursion depth;</li><li>identify subproblems evaluated more than once;</li><li>explain why total calls and maximum depth are different measures;</li><li>propose an iterative strategy that avoids recomputing the same smaller results.</li></ol>
+<p>You do not need Big-O notation.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-36" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 36 — Recursive Equality of Array Ranges</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">indexes</span><span class="badge topic-badge">recursive state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 36 — Recursive Equality of Array Ranges as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> sameRange(
+        <span class="kw">int</span>[] first,
+        <span class="kw">int</span> firstStart,
+        <span class="kw">int</span>[] second,
+        <span class="kw">int</span> secondStart,
+        <span class="kw">int</span> length)</code></pre></div>
+<p>The method determines whether the specified ranges contain identical values in identical order.</p>
+<p>Example:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>first  = [9, 4, 7, 2, 8]
+second = [1, 7, 2, 6]</code></pre></div>
+<p>The two-element ranges beginning at <code>firstStart = 2</code> and <code>secondStart = 1</code> are equal.</p>
+<p>Requirements:</p>
+<ul><li>no loops;</li><li>stop early on mismatch;</li><li>validate range boundaries;</li><li>explain which parameters constitute the recursive state.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-37" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 37 — Lower Bound with Duplicates</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">binary search</span><span class="badge topic-badge">multiple stopping conditions</span><span class="badge topic-badge">duplicates</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 37 — Lower Bound with Duplicates as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement a recursive:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> lowerBound(
+        <span class="kw">int</span>[] values,
+        <span class="kw">int</span> target)</code></pre></div>
+<p>for ascending sorted data.</p>
+<p>Return the first index <code>i</code> such that:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>values[i] &gt;= target</code></pre></div>
+<p>If no such position exists, return <code>values.length</code>.</p>
+<p>Your method must work correctly when many duplicate values exist.</p>
+<p>Then explain how this problem differs from ordinary &quot;find target&quot; binary search and why finding an equal target is not necessarily enough to stop.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-38" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 38 — Mutual Recursion State Machine</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">indirect recursion</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">termination</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 38 — Mutual Recursion State Machine as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design two mutually recursive methods:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>processEvenStep(...)
+processOddStep(...)</code></pre></div>
+<p>that process an integer array from left to right.</p>
+<p>At even indexes, require the element to be nonnegative.<br>
+At odd indexes, require the element to be nonpositive.</p>
+<p>Return <code>true</code> only if the entire array follows the rule.</p>
+<p>Requirements:</p>
+<ul><li>the two methods must call one another;</li><li>no loops;</li><li>no shared static state;</li><li>provide a call trace for an array of at least six elements;</li><li>explain why this is indirect rather than direct recursion;</li><li>provide a termination argument.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-39" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 39 — Stack-Depth Experiment</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">recursion depth</span><span class="badge topic-badge">stack overflow</span><span class="badge topic-badge">Java tail recursion</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 39 — Stack-Depth Experiment as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Write two logically equivalent Java implementations of a simple long-running counting task:</p>
+<ol><li>iterative;</li><li>tail-recursive.</li></ol>
+<p>Experiment with increasingly large inputs.</p>
+<p>Record:</p>
+<ul><li>largest tested input completed by each version;</li><li>whether <code>StackOverflowError</code> occurs;</li><li>approximate recursive call depth at failure;</li><li>observations about JVM-dependent behavior.</li></ul>
+<p>Then write a short explanation of why making a Java method tail-recursive does not guarantee constant stack usage.</p>
+<p>Do not claim that your measured failure point is a universal Java limit.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-40" data-difficulty="4">
+  <summary>
+    <span class="assignment-title">Assignment 40 — Recursive Design Review</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 4/5</span><span class="badge topic-badge">algorithmic thinking</span><span class="badge topic-badge">code review</span><span class="badge topic-badge">correctness</span><span class="badge topic-badge">termination</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 40 — Recursive Design Review as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A teammate proposes this recursive strategy for finding the largest absolute value in an array:</p>
+<blockquote><p>Examine the current element, recursively solve the rest of the array, and combine the two answers.</p></blockquote>
+<p>Perform a complete design review <strong>before coding</strong>.</p>
+<p>Address:</p>
+<ol><li>method meaning;</li><li>valid and invalid inputs;</li><li>smallest meaningful problem;</li><li>recursive state;</li><li>progress measure;</li><li>termination;</li><li>how the smaller answer is combined;</li><li>whether early stopping is possible;</li><li>likely recursion depth;</li><li>whether iteration may be more appropriate for very large arrays.</li></ol>
+<p>Then implement the reviewed recursive solution.</p>
+  </div>
+</details>
+</section>
+<section class="difficulty-group" aria-labelledby="difficulty-5">
+  <h2 class="difficulty-heading" id="difficulty-5"><span>Difficulty 5 — Challenging Integration</span><span class="assignment-count">10 assignments</span></h2>
+<details class="assignment" id="assignment-41" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 41 — Recursive Peak Search</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">recursive searching</span><span class="badge topic-badge">divide and conquer</span><span class="badge topic-badge">algorithmic thinking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 41 — Recursive Peak Search as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>An array contains distinct integers. A <strong>peak</strong> is an element greater than its immediate neighbors. At the endpoints, compare only with the one existing neighbor.</p>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> findPeak(<span class="kw">int</span>[] values)</code></pre></div>
+<p>using recursive interval reduction rather than scanning every element.</p>
+<p>Use neighboring values around the midpoint to decide which side still contains a possible peak.</p>
+<p>Requirements:</p>
+<ul><li>return the index of any peak;</li><li>handle arrays of length 1 and 2;</li><li>use a private helper with interval boundaries;</li><li>justify why the discarded interval need not be searched;</li><li>give an informal termination and correctness argument.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-42" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 42 — Recursive String Segmentation</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">branching recursion</span><span class="badge topic-badge">multiple base cases</span><span class="badge topic-badge">algorithmic thinking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 42 — Recursive String Segmentation as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given a string consisting only of <code>'A'</code> and <code>'B'</code>, determine whether it can be completely divided into valid tokens:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;A&quot;
+&quot;AB&quot;
+&quot;BBA&quot;</code></pre></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> canSegment(<span class="type">String</span> text)</code></pre></div>
+<p>recursively.</p>
+<p>At a given position, more than one token may be possible, so the algorithm may need to explore multiple recursive subproblems.</p>
+<p>Requirements:</p>
+<ul><li>use an index rather than constructing every possible suffix;</li><li>stop early as soon as a valid complete segmentation is found;</li><li>identify all base cases;</li><li>draw the branching call structure for one input with multiple possible paths;</li><li>discuss how repeated subproblems could arise.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-43" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 43 — Recursive Partition Equality</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">branching recursion</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">algorithmic decomposition</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 43 — Recursive Partition Equality as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> canSplitEqually(<span class="kw">int</span>[] values)</code></pre></div>
+<p>for an array of nonnegative integers.</p>
+<p>Return <code>true</code> if each element can be assigned to one of two groups whose sums are equal.</p>
+<p>At each array position, recursively explore two choices:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>put current value in group A
+or
+put current value in group B</code></pre></div>
+<p>Requirements:</p>
+<ul><li>no loops in the recursive search;</li><li>use helper parameters to represent position and current totals;</li><li>include at least one early-stopping condition;</li><li>draw part of the recursion tree for a small example;</li><li>explain why this is branching recursion.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-44" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 44 — Recursive Change Construction</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">branching recursion</span><span class="badge topic-badge">repeated subproblems</span><span class="badge topic-badge">correctness versus efficiency</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 44 — Recursive Change Construction as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Given unlimited coins with values:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>1, 5, 10, 25</code></pre></div>
+<p>implement a recursive method that determines whether a target amount can be formed using <strong>at most <code>k</code> coins</strong>:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> canMakeAmount(
+        <span class="kw">int</span> amount,
+        <span class="kw">int</span> maxCoins)</code></pre></div>
+<p>Design helper state as needed.</p>
+<p>Requirements:</p>
+<ul><li>explore legitimate recursive choices;</li><li>reject impossible negative states;</li><li>identify multiple base cases;</li><li>demonstrate early termination;</li><li>trace one successful and one unsuccessful input;</li><li>identify repeated subproblems that could make the naive recursive solution inefficient.</li></ul>
+<p>No dynamic programming is required.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-45" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 45 — Recursive Expression Evaluator</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">recursive structure</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">helper state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 45 — Recursive Expression Evaluator as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Evaluate fully parenthesized expressions containing:</p>
+<ul><li>single-digit nonnegative integers;</li><li><code>+</code>;</li><li><code>*</code>;</li><li>parentheses.</li></ul>
+<p>Examples of the grammar include:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>&quot;7&quot;
+&quot;(2+5)&quot;
+&quot;((2+5)*3)&quot;</code></pre></div>
+<p>Design:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">int</span> evaluate(<span class="type">String</span> expression)</code></pre></div>
+<p>using recursion.</p>
+<p>You may create a small helper class or use helper parameters to track the current parsing position.</p>
+<p>Requirements:</p>
+<ul><li>no use of Java's scripting/evaluation facilities;</li><li>recursively evaluate nested expressions;</li><li>clearly define the meaning of one recursive parsing invocation;</li><li>explain how the recursive structure of the input matches the recursive structure of the algorithm;</li><li>reject malformed input.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-46" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 46 — Recursive Maze Paths</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">branching recursion</span><span class="badge topic-badge">backtracking preview</span><span class="badge topic-badge">recursive state</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 46 — Recursive Maze Paths as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A rectangular grid contains:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>'.' = open
+'#' = blocked</code></pre></div>
+<p>Starting in the upper-left corner, determine whether the lower-right corner can be reached when movement is restricted to:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>right
+down</code></pre></div>
+<p>Implement:</p>
+<div class="code-block" data-language="java"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code><span class="kw">public</span> <span class="kw">static</span> <span class="kw">boolean</span> pathExists(<span class="kw">char</span>[][] grid)</code></pre></div>
+<p>recursively.</p>
+<p>Requirements:</p>
+<ul><li>represent the current position using helper parameters;</li><li>identify out-of-bounds and blocked-cell base cases;</li><li>branch into the possible moves;</li><li>stop immediately when a successful path is found;</li><li>draw the recursive decision tree for a small grid;</li><li>explain why the search terminates.</li></ul>
+  </div>
+</details>
+<details class="assignment" id="assignment-47" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 47 — Compare Three Reduction Strategies</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">algorithm efficiency intuition</span><span class="badge topic-badge">recursion depth</span><span class="badge topic-badge">algorithmic thinking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 47 — Compare Three Reduction Strategies as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Design three recursive methods that solve comparable numerical repetition problems using these progress rules:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>A. n → n - 1
+B. n → n - 2
+C. n → n / 2</code></pre></div>
+<p>Instrument each implementation with a counter recording the number of invocations.</p>
+<p>Run them for several increasing input sizes, such as:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>16
+64
+256
+1024</code></pre></div>
+<p>Create a results table showing:</p>
+<ul><li>input size;</li><li>number of calls;</li><li>maximum recursion depth;</li><li>reduction strategy.</li></ul>
+<p>Without using formal Big-O notation, explain how the rate at which the remaining problem shrinks affects the amount of work and stack depth.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-48" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 48 — Optimize a Branching Recursion Conceptually</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">branching recursion</span><span class="badge topic-badge">repeated work</span><span class="badge topic-badge">recursion versus iteration</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 48 — Optimize a Branching Recursion Conceptually as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>A recursively defined sequence is:</p>
+<div class="code-block" data-language="text"><button class="copy-button" type="button" aria-label="Copy code" title="Copy code"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0-2-2V7a2 2 0 0 0 2-2h11a2 2 0 0 0 2 2v14zM8 7h11v14H8V7z"/></svg></button><pre class="code"><code>R(0) = 2
+R(1) = 3
+R(n) = R(n - 1) + 2 * R(n - 2)</code></pre></div>
+<p>Complete all of the following:</p>
+<ol><li>implement the direct branching-recursive definition;</li><li>draw the call tree for <code>R(5)</code>;</li><li>identify every repeated subproblem;</li><li>instrument the code to count calls;</li><li>implement an iterative version that computes each sequence value once;</li><li>compare the two implementations for progressively larger <code>n</code>;</li><li>explain why mathematical elegance does not imply computational efficiency.</li></ol>
+<p>Do not use Big-O notation unless it has already been introduced separately.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-49" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 49 — Recursive Algorithm Design Portfolio</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">systematic recursive design</span><span class="badge topic-badge">problem representation</span><span class="badge topic-badge">correctness</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 49 — Recursive Algorithm Design Portfolio as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Choose <strong>three</strong> of the following problem forms:</p>
+<ul><li>integer problem;</li><li>digit problem;</li><li>string problem;</li><li>array problem;</li><li>sorted-search problem.</li></ul>
+<p>For each, invent a recursive problem not previously solved in the Week 10 notes or assignments.</p>
+<p>For every problem submit:</p>
+<ol><li>problem statement;</li><li>input/output specification;</li><li>method meaning;</li><li>base case(s);</li><li>representation of the smaller problem;</li><li>recursive case;</li><li>progress rule;</li><li>termination argument;</li><li>Java implementation;</li><li>at least five tests;</li><li>recursion-depth discussion;</li><li>comparison with a plausible iterative approach.</li></ol>
+<p>At least one solution must shrink the problem by more than one unit per call.</p>
+  </div>
+</details>
+<details class="assignment" id="assignment-50" data-difficulty="5">
+  <summary>
+    <span class="assignment-title">Assignment 50 — Recursion Capstone: Recursive Data Explorer</span>
+    <span class="assignment-meta"><span class="badge difficulty-badge">Difficulty 5/5</span><span class="badge topic-badge">recursion</span><span class="badge topic-badge">arrays</span><span class="badge topic-badge">strings</span><span class="badge topic-badge">branching</span><span class="badge topic-badge">helpers</span><span class="badge topic-badge">call stack</span><span class="badge topic-badge">algorithmic thinking</span></span>
+  </summary>
+  <div class="assignment-body">
+    <div class="assignment-actions"><button class="print-assignment" type="button" aria-label="Print or save Assignment 50 — Recursion Capstone: Recursive Data Explorer as PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5a3 3 0 0 0-3 3v4h4v4h12v-4h4v-4a3 3 0 0 0-3-3zm-3 9H8v-5h8v5zm3-5a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM18 3H6v4h12V3z"/></svg><span>Print / Save as PDF</span></button></div>
+<p>Build a small Java program that analyzes a rectangular character grid.</p>
+<p>The grid may contain letters, digits, and punctuation.</p>
+<p>Your program must provide recursive methods that can:</p>
+<ol><li>count a chosen character within a specified rectangular region;</li><li>determine whether a row segment contains any digit;</li><li>compare two equal-length row segments recursively;</li><li>recursively divide a rectangular region into smaller regions and count its alphabetic characters;</li><li>search for a target character while avoiding unnecessary exploration once it is found.</li></ol>
+<p>Constraints:</p>
+<ul><li>recursive bookkeeping must be hidden behind clean public methods;</li><li>do not copy subarrays or substrings merely to make inputs smaller;</li><li>use indexes/boundaries to represent remaining logical problems;</li><li>at least one operation must use linear recursion;</li><li>at least one operation must use branching recursion;</li><li>no static mutable accumulator variables.</li></ul>
+<p>Submit a short design report explaining:</p>
+<ul><li>the meaning of each recursive helper;</li><li>its base case(s);</li><li>how it makes progress;</li><li>why it terminates;</li><li>expected recursion depth;</li><li>where descending versus unwinding matters;</li><li>where early stopping avoids work;</li><li>which operations might be clearer or safer iteratively for very large inputs.</li></ul>
+<p>Finish by explaining how the project demonstrates the principle that choosing the right representation of the remaining problem often makes a recursive solution easier to design.</p>
+  </div>
+</details>
+</section>
+      <nav class="week-nav" aria-label="Adjacent weeks"><a href="week-09.html">← Week 9</a><a href="week-11.html">Week 11 →</a></nav>
+    </article>
+  </div>
+  <script src="assignments.js"></script>
+</body>
+</html>
