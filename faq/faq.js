@@ -139,7 +139,7 @@
 
   function setAll(open) { entries.forEach(function (entry) { if (!entry.card.hidden) { entry.card.classList.toggle('is-open', open); entry.card.querySelector('.faq-question').setAttribute('aria-expanded', String(open)); } }); }
 
-  fetch('../faqs.json').then(function (response) { if (!response.ok) throw new Error('Could not load faqs.json'); return response.json(); }).then(function (data) {
+  fetch('./faqs.json').then(function (response) { if (!response.ok) throw new Error('Could not load faqs.json'); return response.json(); }).then(function (data) {
     data.weeks.forEach(function (week) { week.faqs.forEach(function (faq) { var item = { week: week.week, question: faq.question, answer: faq.answer }; var card = buildCard(item); list.appendChild(card); entries.push({ card: card }); }); });
     scope.addEventListener('change', refresh); search.addEventListener('input', refresh); expand.addEventListener('click', function () { setAll(true); }); collapse.addEventListener('click', function () { setAll(false); }); refresh();
   }).catch(function (error) { count.textContent = error.message + '. Start a local web server from the project root.'; });
